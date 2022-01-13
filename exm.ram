@@ -1,0 +1,6 @@
+push 100
+push 500
+add
+push 500
+add
+print

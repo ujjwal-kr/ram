@@ -1,13 +1,22 @@
-fn main() {
-    let mut program: Vec<&str> = vec![];
+use std::fs;
+use std::io;
+use std::io::prelude::*;
 
-    program.push("push 1000");
-    program.push("push 500");
-    program.push("add");
-    program.push("print");
+fn main() -> std::io::Result<()> {
+    println!("Enter the filename: ");
+    let mut filename = String::new();
+    io::stdin().read_line(&mut filename)?;
 
-    println!("{:?}", program);
-    read_statement(program);
+    let mut file = fs::File::open(filename.trim())?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+
+    let mut _program: Vec<&str> = contents.split("\n").collect();
+
+    println!("{:?}", _program);
+    read_statement(_program);
+
+    Ok(())
 }
 
 fn read_statement(program: Vec<&str>) {
@@ -24,7 +33,7 @@ fn read_statement(program: Vec<&str>) {
                 let result = stack[stack.len() - 1].parse::<i32>().unwrap() + stack[stack.len() - 2].parse::<i32>().unwrap();
                 stack.push(result.to_string());
             },
-            _ => println!("Program End")
+            _ => { println!("Cant recongize command '{}'", cmd[0]); break }
         }
     }
 }
