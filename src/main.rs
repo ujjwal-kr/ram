@@ -33,6 +33,10 @@ fn read_statement(program: Vec<&str>) {
                 let result = stack[stack.len() - 1].parse::<i32>().unwrap() + stack[stack.len() - 2].parse::<i32>().unwrap();
                 stack.push(result.to_string());
             },
+            "sub" => {
+                let result = stack[stack.len() - 2].parse::<i32>().unwrap() - stack[stack.len() - 1].parse::<i32>().unwrap();
+                stack.push(result.to_string());
+            }
             _ => { println!("Cant recongize command '{}'", cmd[0]); break }
         }
     }
