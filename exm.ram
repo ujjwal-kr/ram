@@ -1,6 +1,13 @@
-push 100
+push 5
 push 500
-add
+push 500
+cmp
+je 2
+
+push 400
+print
+
+push 300
 push 500
 add
 print

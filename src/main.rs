@@ -2,7 +2,8 @@ use std::fs;
 use std::io;
 use std::io::prelude::*;
 
-fn main() -> std::io::Result<()> {
+fn main() -> std::io::Result<()> 
+{
     println!("Enter the filename: ");
     let mut filename = String::new();
     io::stdin().read_line(&mut filename)?;
@@ -14,12 +15,13 @@ fn main() -> std::io::Result<()> {
     let mut _program: Vec<&str> = contents.split("\n").collect();
 
     println!("{:?}", _program);
-    read_statement(_program);
+    run_statement(_program);
 
     Ok(())
 }
 
-fn read_statement(program: Vec<&str>) {
+fn run_statement(program: Vec<&str>) 
+{
     let mut stack: Vec<String> = vec![];
 
     for statement in program {
@@ -36,6 +38,20 @@ fn read_statement(program: Vec<&str>) {
             "sub" => {
                 let result = stack[stack.len() - 2].parse::<i32>().unwrap() - stack[stack.len() - 1].parse::<i32>().unwrap();
                 stack.push(result.to_string());
+            },
+
+            "cmp" => {
+                if stack[stack.len() -2].parse::<i32>().unwrap() == stack[stack.len() - 1].parse::<i32>().unwrap()
+                {
+                    stack.push("0".to_string());
+                } else if stack[stack.len() -2].parse::<i32>().unwrap() < stack[stack.len() - 1].parse::<i32>().unwrap()
+                    {
+                        stack.push("-1".to_string())
+                    }
+                  else if stack[stack.len() -2].parse::<i32>().unwrap() > stack[stack.len() - 1].parse::<i32>().unwrap()
+                    {
+                        stack.push("1".to_string())                        
+                    }  
             }
             _ => { println!("Cant recongize command '{}'", cmd[0]); break }
         }
