@@ -4,6 +4,7 @@ use std::io::prelude::*;
 
 fn main() -> std::io::Result<()> 
 {
+    println!("Welcome to the Ram stack-based programming language.");
     println!("Enter the filename: ");
     let mut filename = String::new();
     io::stdin().read_line(&mut filename)?;
@@ -13,46 +14,44 @@ fn main() -> std::io::Result<()>
     file.read_to_string(&mut contents)?;
 
     let mut _program: Vec<&str> = contents.split("\n").collect();
-
+    run_statement(&_program);
     println!("{:?}", _program);
-    run_statement(_program);
-
     Ok(())
 }
 
-fn run_statement(program: Vec<&str>) 
+fn run_statement(program: &Vec<&str>) 
 {
-    let mut stack: Vec<String> = vec![];
+    let mut stack: Vec<i32> = vec![];
 
     for statement in program {
         let cmd: Vec<&str> = statement.split(" ").collect();
 
         match cmd[0] {
             "print" => println!("{}", stack[stack.len() - 1]),
-            "push" => stack.push(cmd[1].to_string()),
+            "push" => stack.push(cmd[1].parse::<i32>().unwrap()),
             "pop" => { stack.pop(); },
             "add" => {
-                let result = stack[stack.len() - 1].parse::<i32>().unwrap() + stack[stack.len() - 2].parse::<i32>().unwrap();
-                stack.push(result.to_string());
+                let result = stack[stack.len() - 1] + stack[stack.len() - 2];
+                stack.push(result);
             },
             "sub" => {
-                let result = stack[stack.len() - 2].parse::<i32>().unwrap() - stack[stack.len() - 1].parse::<i32>().unwrap();
-                stack.push(result.to_string());
+                let result = stack[stack.len() - 2]- stack[stack.len() - 1];
+                stack.push(result);
             },
 
             "cmp" => {
-                if stack[stack.len() -2].parse::<i32>().unwrap() == stack[stack.len() - 1].parse::<i32>().unwrap()
+                if stack[stack.len() -2] == stack[stack.len() - 1]
                 {
-                    stack.push("0".to_string());
-                } else if stack[stack.len() -2].parse::<i32>().unwrap() < stack[stack.len() - 1].parse::<i32>().unwrap()
+                    stack.push(0);
+                } else if stack[stack.len() -2] < stack[stack.len() - 1]
                     {
-                        stack.push("-1".to_string())
+                        stack.push(-1)
                     }
-                  else if stack[stack.len() -2].parse::<i32>().unwrap() > stack[stack.len() - 1].parse::<i32>().unwrap()
+                  else if stack[stack.len() -2] > stack[stack.len() - 1]
                     {
-                        stack.push("1".to_string())                        
+                        stack.push(1)                        
                     }  
-            }
+            },
             _ => { println!("Cant recongize command '{}'", cmd[0]); break }
         }
     }

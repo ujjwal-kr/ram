@@ -2,11 +2,8 @@ push 5
 push 500
 push 500
 cmp
-je 2
-
 push 400
 print
-
 push 300
 push 500
 add
