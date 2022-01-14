@@ -33,4 +33,6 @@ avg - takes out average of all the numbers in the stack (remember to run popall 
 cmp - pushes -1, 0, 1 to the stack based two numbers are smaller, equal or greater than each other. [Important before jne and je commands]
 jne <index> - jumps to a block by its index position if the previous cmp statement is not 0 [equal]
 je <index> - jumps to a block by its index position if the previous cmp statement is 0 [equal]
+jgr <index> - jumps to a block by its index position if the prev cmp statement is 1 [greater]
+jsm <index> - jumps to a block by its index position if the prev cmp statement is -1 [smaller]
 ```
