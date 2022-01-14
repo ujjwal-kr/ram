@@ -30,6 +30,7 @@ mul - subtracts the last number from the number added prior to it and pushes to 
 div - the number added prior to the last number / last number and pushes to stack
 sqr - squares the last number and pushes to stack
 squrt - square roots the last number and pushes to stack
+rand >> <num1, num2> - generates a random float specified in the range and pushes it to stack 
 round - rounds the last number pushed in the stack to decimals and pushes it to stack
 avg - takes out average of all the numbers in the stack (remember to run popall before it) and pushes to stack
 jmp <index> - jumps to the codeblock at the index position
