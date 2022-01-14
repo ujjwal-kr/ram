@@ -78,6 +78,34 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                 stack.push(total / i)
             },
 
+            "cmp" => {
+                if stack[stack.len() - 1] < stack[stack.len() - 2] {
+                    stack.push(1.0)
+                } else if stack[stack.len() - 1] > stack[stack.len() - 2] {
+                    stack.push(-1.0)
+                } else {
+                    stack.push(0.0)
+                }
+            }
+
+            "je" => {
+                if stack[stack.len() - 1] == 0.0 {
+                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    run_statement(blocks, &blocks[index]);
+                    stack.pop();
+                }
+                stack.pop();
+            }
+            
+            "jne" => {
+                if stack[stack.len() - 1] != 0.0 {
+                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    run_statement(blocks, &blocks[index]);
+                    stack.pop();
+                }
+                stack.pop();
+            }
+
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
                 run_statement(blocks, &blocks[index])

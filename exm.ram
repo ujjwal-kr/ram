@@ -1,11 +1,9 @@
-ram 500
-ram 200
-add
+ram 30
+ram 30
+cmp
+je 1
+ram 20
 print
-jmp 1
 
-ram 100
-ram 200
-mul
+ram 69
 print
-jmp 0
