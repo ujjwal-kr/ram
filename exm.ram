@@ -1,7 +1,9 @@
 ram 30
 ram 30
 cmp
-je 1
+je 2
+jmp 1
+
 ram 20
 print
 
