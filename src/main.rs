@@ -1,6 +1,7 @@
 use std::fs;
 use std::io;
 use std::f64;
+use rand::Rng;
 use std::io::prelude::*;
 
 fn main() -> std::io::Result<()> 
@@ -81,6 +82,15 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                 }
                 stack.push(total / i)
             },
+
+            "rand" => {
+                let rand_cmd: Vec<&str> = statement.split(">>").collect();
+                let numbers: Vec<&str> = rand_cmd[1].split(",").collect();
+
+                let mut rng = rand::thread_rng();
+                let random = rng.gen_range(numbers[0].trim().parse::<f64>().unwrap()..numbers[1].trim().parse::<f64>().unwrap());
+                stack.push(random);
+            }
 
             "cmp" => {
                 if stack[stack.len() - 1] < stack[stack.len() - 2] {

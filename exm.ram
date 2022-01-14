@@ -1,12 +1,9 @@
 printc >> Hello World
-ram 30
-ram 30
-cmp
-je 2
-jmp 1
-
-ram 20
+ram 1700
+ram 700
+ram 600
+avg
 print
-
-ram 69
+rand >> 100,500
+round
 print
