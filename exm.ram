@@ -1,5 +1,11 @@
-ram 3
-ram 3
-ram 3
-avg
+ram 500
+ram 200
+add
 print
+jmp 1
+
+ram 100
+ram 200
+mul
+print
+jmp 0

@@ -14,16 +14,19 @@ fn main() -> std::io::Result<()>
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let mut _program: Vec<&str> = contents.split("\n").collect();
-    run_statement(&_program);
-    println!("{:?}", _program);
+    let mut _program: Vec<&str> = contents.split("\n\n").collect();
+    let mut blocks: Vec<Vec<&str>> = vec![];
+    for block in &_program {
+        let block_vec: Vec<&str> = block.split("\n").collect();
+        blocks.push(block_vec);
+    }
+    run_statement(&blocks, &blocks[0]);
     Ok(())
 }
 
-fn run_statement(program: &Vec<&str>) {
+fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
     let mut stack: Vec<f64> = vec![];
-
-    for statement in program {
+    for statement in run_block {
         let cmd: Vec<&str> = statement.split(" ").collect();
 
         match cmd[0] {
@@ -73,6 +76,11 @@ fn run_statement(program: &Vec<&str>) {
                     total = total + num
                 }
                 stack.push(total / i)
+            },
+
+            "jmp" => {
+                let index: usize = cmd[1].parse::<usize>().unwrap();
+                run_statement(blocks, &blocks[index])
             }
             _ => { println!("Cant recongize command '{}'", cmd[0]); break }
         }
