@@ -1,0 +1,14 @@
+printc >> Let The game begin !
+rand >> 1,10
+round
+rand >> 1,10
+round
+print
+cmp 
+jgr 1
+cmp
+jsm 2
+
+printc >> heads
+
+printc >> tails
