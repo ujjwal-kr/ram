@@ -19,6 +19,8 @@ print
 ## More documentation
 
 ```
+print - prints the last number in the stack
+printc >> <characters> - prints chars
 ram <number>  - pushes a number on the stack
 pop - removes the last number added to the stack
 popall - removes all the numbers from the stack

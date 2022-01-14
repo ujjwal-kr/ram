@@ -1,3 +1,4 @@
+printc >> Hello World
 ram 30
 ram 30
 cmp

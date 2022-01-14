@@ -31,6 +31,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
 
         match cmd[0] {
             "print" => println!("{}", stack[stack.len() - 1]),
+            "printc" => {
+                let prntc_cmd: Vec<&str> = statement.split(">>").collect();
+                println!("{}", prntc_cmd[1].trim());
+            },
             "ram" => stack.push(cmd[1].parse::<f64>().unwrap()),
             "pop" => { stack.pop(); },
             "popall"  => { stack = vec![] }
