@@ -1,10 +1,5 @@
-push 5
-push 500
-push 500
-cmp
-push 400
-print
-push 300
-push 500
-add
+ram 3
+ram 3
+ram 3
+avg
 print
