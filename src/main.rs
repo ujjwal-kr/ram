@@ -104,6 +104,24 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                     stack.pop();
                 }
                 stack.pop();
+            },
+
+            "jgr" => {
+                if stack[stack.len() - 1] == 1.0 {
+                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    run_statement(blocks, &blocks[index]);
+                    stack.pop();
+                }
+                stack.pop();
+            },
+
+            "jsm" => {
+                if stack[stack.len() - 1] == -1.0 {
+                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    run_statement(blocks, &blocks[index]);
+                    stack.pop();
+                }
+                stack.pop();
             }
 
             "jmp" => {
