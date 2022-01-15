@@ -142,7 +142,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
                 run_statement(blocks, &blocks[index])
             }
-            _ => { println!("Cant recongize command '{}'", cmd[0]); break }
+            _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }
     }
 }
