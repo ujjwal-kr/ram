@@ -34,7 +34,7 @@ rand >> <num1, num2> - generates a random float specified in the range and pushe
 round - rounds the last number pushed in the stack to decimals and pushes it to stack
 avg - takes out average of all the numbers in the stack (remember to run popall before it) and pushes to stack
 jmp <index> - jumps to the codeblock at the index position
-cmp - pushes -1, 0, 1 to the stack based two numbers are smaller, equal or greater than each other. [Important before jne and je commands]
+cmp - pushes -1, 0, 1 to the stack if the last two numbers are smaller, equal or greater than each other. [Important before jne and je commands]
 jne <index> - jumps to a block by its index position if the previous cmp statement is not 0 [equal]
 je <index> - jumps to a block by its index position if the previous cmp statement is 0 [equal]
 jgr <index> - jumps to a block by its index position if the prev cmp statement is 1 [greater]
