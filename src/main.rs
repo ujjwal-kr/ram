@@ -4,6 +4,13 @@ use std::f64;
 use rand::Rng;
 use std::io::prelude::*;
 
+struct Vars {
+  rm: f64,
+  lx: f64,
+  rv: f64,
+  ha: f64, 
+}
+
 fn main() -> std::io::Result<()> 
 {
     println!("Welcome to the Ram stack-based programming language.");
@@ -21,11 +28,17 @@ fn main() -> std::io::Result<()>
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
-    run_statement(&blocks, &blocks[0]);
+    let vars = Vars {
+      rm: 0.0,
+      lx: 0.0,
+      rv: 0.0,
+      ha: 0.0,
+    };
+    run_statement(&blocks, &blocks[0], &vars);
     Ok(())
 }
 
-fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
+fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {    
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         let cmd: Vec<&str> = statement.split(" ").collect();
@@ -36,7 +49,9 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                 let prntc_cmd: Vec<&str> = statement.split(">>").collect();
                 println!("{}", prntc_cmd[1].trim());
             },
-            "ram" => stack.push(cmd[1].parse::<f64>().unwrap()),
+            "ram" => {
+              stack.push(cmd[1].parse::<f64>().unwrap())
+            },
             "pop" => { stack.pop(); },
             "popall"  => { stack = vec![] }
             "add" => {
@@ -44,7 +59,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
                 stack.push(result);
             },
             "sub" => {
-                let result = stack[stack.len() - 2]- stack[stack.len() - 1];
+                let result = stack[stack.len() - 2] - stack[stack.len() - 1];
                 stack.push(result);
             },
 
@@ -105,7 +120,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "je" => {
                 if stack[stack.len() - 1] == 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], &vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -114,7 +129,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jne" => {
                 if stack[stack.len() - 1] != 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], &vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -123,7 +138,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jgr" => {
                 if stack[stack.len() - 1] == 1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], &vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -132,7 +147,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jsm" => {
                 if stack[stack.len() - 1] == -1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], &vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -140,7 +155,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
 
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
-                run_statement(blocks, &blocks[index])
+                run_statement(blocks, &blocks[index], &vars)
             }
             _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }

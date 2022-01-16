@@ -1,0 +1,10 @@
+ram 1000
+ram 500
+cmp
+jgr 1
+cmp
+jsm 2
+
+printc >> okay
+
+printc >> smaller
