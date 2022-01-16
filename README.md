@@ -40,3 +40,11 @@ je <index> - jumps to a block by its index position if the previous cmp statemen
 jgr <index> - jumps to a block by its index position if the prev cmp statement is 1 [greater]
 jsm <index> - jumps to a block by its index position if the prev cmp statement is -1 [smaller]
 ```
+
+## TODO
+
+## Make some variables: `rm, lx, rv, ha`
+1. ram `<var>` 1000
+2. pop `<var>` nulls the var
+3. ram `<var>` 1000 changes value
+4. to be applied to all the operations in the syntax matcher
