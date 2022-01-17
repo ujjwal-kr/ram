@@ -1,9 +1,5 @@
-ram 1000
-ram 500
-cmp
-jgr 1
-cmp
-jsm 2
+ram rv 500
+print rv
 
 printc >> okay
 

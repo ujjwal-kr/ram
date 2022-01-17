@@ -4,11 +4,10 @@ use std::f64;
 use rand::Rng;
 use std::io::prelude::*;
 
+#[derive(Copy, Clone)]
 struct Vars {
-  rm: f64,
   lx: f64,
   rv: f64,
-  ha: f64, 
 }
 
 fn main() -> std::io::Result<()> 
@@ -28,29 +27,43 @@ fn main() -> std::io::Result<()>
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
+
     let vars = Vars {
-      rm: 0.0,
       lx: 0.0,
       rv: 0.0,
-      ha: 0.0,
     };
-    run_statement(&blocks, &blocks[0], &vars);
+    run_statement(&blocks, &blocks[0], vars);
     Ok(())
 }
 
-fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {    
+fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
+    let mut local_vars = Vars {
+      lx: vars.lx,
+      rv: vars.rv,
+    };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         let cmd: Vec<&str> = statement.split(" ").collect();
-
         match cmd[0] {
-            "print" => println!("{}", stack[stack.len() - 1]),
+            "print" => {
+              if cmd.len() == 1 {
+                println!("{}", stack[stack.len() - 1]);
+              } else {
+                if cmd[1] == "lx" { println!("{}", local_vars.lx) }
+                if cmd[1] == "rv" { println!("{}", local_vars.rv) }
+              }
+            }
             "printc" => {
                 let prntc_cmd: Vec<&str> = statement.split(">>").collect();
                 println!("{}", prntc_cmd[1].trim());
             },
             "ram" => {
-              stack.push(cmd[1].parse::<f64>().unwrap())
+              if cmd[1] == "lx" || cmd[1] == "rv" {
+                if cmd[1] == "lx" { local_vars.lx = cmd[2].parse::<f64>().unwrap() }
+                if cmd[1] == "rv" { local_vars.rv = cmd[2].parse::<f64>().unwrap() }
+              } else {
+                stack.push(cmd[1].parse::<f64>().unwrap())
+              }
             },
             "pop" => { stack.pop(); },
             "popall"  => { stack = vec![] }
@@ -120,7 +133,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {
             "je" => {
                 if stack[stack.len() - 1] == 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], &vars);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -129,7 +142,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {
             "jne" => {
                 if stack[stack.len() - 1] != 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], &vars);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -138,7 +151,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {
             "jgr" => {
                 if stack[stack.len() - 1] == 1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], &vars);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -147,7 +160,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {
             "jsm" => {
                 if stack[stack.len() - 1] == -1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], &vars);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -155,7 +168,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: &Vars) {
 
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
-                run_statement(blocks, &blocks[index], &vars)
+                run_statement(blocks, &blocks[index], local_vars)
             }
             _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }
