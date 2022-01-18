@@ -28,6 +28,7 @@ printc >> Tails
 
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
+
 The language has two variables `lx` and `rv` which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
 ### print
