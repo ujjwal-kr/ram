@@ -62,9 +62,23 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
                 if cmd.len() == 2 {
                   if cmd[1] == "lx" { stack.push(local_vars.lx) }
                   if cmd[1] == "rv" { stack.push(local_vars.rv) }
+                } else {
+                if cmd[1] == "lx" {
+                  if cmd[2] == "prev" {
+                    local_vars.lx = stack[stack.len() - 1];
+                  } else {
+                    local_vars.lx = cmd[2].parse::<f64>().unwrap();
+                  }
                 }
-                if cmd[1] == "lx" { local_vars.lx = cmd[2].parse::<f64>().unwrap() }
-                if cmd[1] == "rv" { local_vars.rv = cmd[2].parse::<f64>().unwrap() }
+                if cmd[1] == "rv" {
+                  if cmd[2] == "prev" {
+                    local_vars.rv = stack[stack.len() - 1];
+                  }
+                  else {
+                      local_vars.rv = cmd[2].parse::<f64>().unwrap(); 
+                  } 
+                }
+              }
               } else {
                 stack.push(cmd[1].parse::<f64>().unwrap())
               }

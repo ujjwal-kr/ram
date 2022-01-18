@@ -1,6 +1,5 @@
-ram rv 500
-print rv
-
-printc >> okay
+ram lx 500
+ram lx
+print
 
 printc >> smaller
