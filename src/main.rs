@@ -74,6 +74,9 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
             "add" => {
                 let result = stack[stack.len() - 1] + stack[stack.len() - 2];
                 stack.push(result);
+                if cmd.len() > 1 {
+                  stack.push(local_vars.lx + local_vars.rv);
+                }
             },
             "sub" => {
                 let result = stack[stack.len() - 2] - stack[stack.len() - 1];
@@ -83,6 +86,9 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
             "mul" => {
                 let result = stack[stack.len() -1] * stack[stack.len() -2];
                 stack.push(result);
+                if cmd.len() > 1 {
+                  stack.push(local_vars.lx * local_vars.rv);
+                }
             }
             
             "div" => {
@@ -91,18 +97,35 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
             },
 
             "sqr" => {
-                let result = stack[stack.len() -1] * stack[stack.len() - 1];
-                stack.push(result);
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx * local_vars.lx; }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv * local_vars.rv; }
+                } else {
+                  let result = stack[stack.len() -1] * stack[stack.len() - 1];
+                  stack.push(result);
+                }
             }
 
             "sqrt" => {
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx.sqrt(); }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv.sqrt(); }
+                } else {
+                  let result = stack[stack.len() - 1].sqrt();
+                  stack.push(result);                  
+                }
                 let result = stack[stack.len() - 1].sqrt();
                 stack.push(result);
             }
 
             "round" => {
-                let result = stack[stack.len() - 1].round();
-                stack.push(result);
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx.round(); }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv.round(); }
+                } else {
+                  let result = stack[stack.len() - 1].round();
+                  stack.push(result);
+                }
             },
             
             "avg" => {
