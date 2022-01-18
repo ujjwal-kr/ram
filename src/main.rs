@@ -4,6 +4,12 @@ use std::f64;
 use rand::Rng;
 use std::io::prelude::*;
 
+#[derive(Copy, Clone)]
+struct Vars {
+  lx: f64,
+  rv: f64,
+}
+
 fn main() -> std::io::Result<()> 
 {
     println!("Welcome to the Ram stack-based programming language.");
@@ -21,36 +27,82 @@ fn main() -> std::io::Result<()>
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
-    run_statement(&blocks, &blocks[0]);
+
+    let vars = Vars {
+      lx: 0.0,
+      rv: 0.0,
+    };
+    run_statement(&blocks, &blocks[0], vars);
     Ok(())
 }
 
-fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
+fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
+    let mut local_vars = Vars {
+      lx: vars.lx,
+      rv: vars.rv,
+    };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         let cmd: Vec<&str> = statement.split(" ").collect();
-
         match cmd[0] {
-            "print" => println!("{}", stack[stack.len() - 1]),
+            "print" => {
+              if cmd.len() == 1 {
+                println!("{}", stack[stack.len() - 1]);
+              } else {
+                if cmd[1] == "lx" { println!("{}", local_vars.lx) }
+                if cmd[1] == "rv" { println!("{}", local_vars.rv) }
+              }
+            }
             "printc" => {
                 let prntc_cmd: Vec<&str> = statement.split(">>").collect();
                 println!("{}", prntc_cmd[1].trim());
             },
-            "ram" => stack.push(cmd[1].parse::<f64>().unwrap()),
+            "ram" => {
+              if cmd[1] == "lx" || cmd[1] == "rv" {
+                if cmd.len() == 2 {
+                  if cmd[1] == "lx" { stack.push(local_vars.lx) }
+                  if cmd[1] == "rv" { stack.push(local_vars.rv) }
+                } else {
+                if cmd[1] == "lx" {
+                  if cmd[2] == "prev" {
+                    local_vars.lx = stack[stack.len() - 1];
+                  } else {
+                    local_vars.lx = cmd[2].parse::<f64>().unwrap();
+                  }
+                }
+                if cmd[1] == "rv" {
+                  if cmd[2] == "prev" {
+                    local_vars.rv = stack[stack.len() - 1];
+                  }
+                  else {
+                      local_vars.rv = cmd[2].parse::<f64>().unwrap(); 
+                  } 
+                }
+              }
+              } else {
+                stack.push(cmd[1].parse::<f64>().unwrap())
+              }
+            },
             "pop" => { stack.pop(); },
             "popall"  => { stack = vec![] }
             "add" => {
                 let result = stack[stack.len() - 1] + stack[stack.len() - 2];
                 stack.push(result);
+                if cmd.len() > 1 {
+                  stack.push(local_vars.lx + local_vars.rv);
+                }
             },
             "sub" => {
-                let result = stack[stack.len() - 2]- stack[stack.len() - 1];
+                let result = stack[stack.len() - 2] - stack[stack.len() - 1];
                 stack.push(result);
             },
 
             "mul" => {
                 let result = stack[stack.len() -1] * stack[stack.len() -2];
                 stack.push(result);
+                if cmd.len() > 1 {
+                  stack.push(local_vars.lx * local_vars.rv);
+                }
             }
             
             "div" => {
@@ -59,18 +111,35 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             },
 
             "sqr" => {
-                let result = stack[stack.len() -1] * stack[stack.len() - 1];
-                stack.push(result);
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx * local_vars.lx; }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv * local_vars.rv; }
+                } else {
+                  let result = stack[stack.len() -1] * stack[stack.len() - 1];
+                  stack.push(result);
+                }
             }
 
             "sqrt" => {
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx.sqrt(); }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv.sqrt(); }
+                } else {
+                  let result = stack[stack.len() - 1].sqrt();
+                  stack.push(result);                  
+                }
                 let result = stack[stack.len() - 1].sqrt();
                 stack.push(result);
             }
 
             "round" => {
-                let result = stack[stack.len() - 1].round();
-                stack.push(result);
+                if cmd[1] == "lx" || cmd[1] == "rv" {
+                  if cmd[1] == "lx" { local_vars.lx = local_vars.lx.round(); }
+                  if cmd[1] == "rv" { local_vars.rv = local_vars.rv.round(); }
+                } else {
+                  let result = stack[stack.len() - 1].round();
+                  stack.push(result);
+                }
             },
             
             "avg" => {
@@ -105,7 +174,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "je" => {
                 if stack[stack.len() - 1] == 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -114,7 +183,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jne" => {
                 if stack[stack.len() - 1] != 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -123,7 +192,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jgr" => {
                 if stack[stack.len() - 1] == 1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -132,7 +201,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
             "jsm" => {
                 if stack[stack.len() - 1] == -1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index]);
+                    run_statement(blocks, &blocks[index], local_vars);
                     stack.pop();
                 }
                 stack.pop();
@@ -140,7 +209,7 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>) {
 
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
-                run_statement(blocks, &blocks[index])
+                run_statement(blocks, &blocks[index], local_vars)
             }
             _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }
