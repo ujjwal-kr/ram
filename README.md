@@ -36,6 +36,9 @@ Official documentation of the RAM programming language. Please open an issue if 
 ### printc >> characters
 Prints the characters specified on the screen
 
+### stdin
+`stdin lx/rv` sets the value of the standard input provided in the next line to the specified variable.
+
 ### ram
 - `ram <number>` adds the number to the stack.
 - `ram lx/rv <number>` assigns the number to the variable
