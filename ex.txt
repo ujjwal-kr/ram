@@ -1,5 +1,10 @@
-ram lx 500
-ram lx
-print
+ram 100
+ram 100
+cmp
+jne 1
+cmp
+je 2
 
-printc >> smaller
+printc >> Not Equal
+
+printc >> Equal
