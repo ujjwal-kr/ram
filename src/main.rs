@@ -36,7 +36,7 @@ fn main() -> std::io::Result<()>
     Ok(())
 }
 
-fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
+fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> std::io::Result<()> {
     let mut local_vars = Vars {
       lx: vars.lx,
       rv: vars.rv,
@@ -82,6 +82,15 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
               } else {
                 stack.push(cmd[1].parse::<f64>().unwrap())
               }
+            },
+            "stdin" => {
+              // stdin lx
+              if cmd.len() != 2 { println!("Invalid stdin statement"); break; }
+              let mut input = String::new();
+              io::stdin().read_line(&mut input)?;
+              let number: f64 = input.trim().parse().expect("Input a number");
+              if cmd[1] == "lx" { local_vars.lx = number }
+              if cmd[1] == "rv" { local_vars.rv = number }
             },
             "pop" => { stack.pop(); },
             "popall"  => { stack = vec![] }
@@ -211,9 +220,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
 
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
-                run_statement(blocks, &blocks[index], local_vars)
+                run_statement(blocks, &blocks[index], local_vars);
             }
             _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }
     }
+    Ok(())
 }
