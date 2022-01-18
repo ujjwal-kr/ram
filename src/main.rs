@@ -133,10 +133,12 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) {
             }
 
             "round" => {
+              if cmd.len() > 1 {
                 if cmd[1] == "lx" || cmd[1] == "rv" {
                   if cmd[1] == "lx" { local_vars.lx = local_vars.lx.round(); }
                   if cmd[1] == "rv" { local_vars.rv = local_vars.rv.round(); }
-                } else {
+                }
+              } else {
                   let result = stack[stack.len() - 1].round();
                   stack.push(result);
                 }

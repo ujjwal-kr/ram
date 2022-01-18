@@ -1,14 +1,14 @@
-printc >> Let The game begin !
-rand >> 1,10
+printc >> Coin Flip
+rand >> 0,1
 round
-rand >> 1,10
-round
-print
-cmp 
-jgr 1
+ram 1
 cmp
-jsm 2
+je 1
+pop
+ram 0
+cmp
+je 2
 
-printc >> heads
+printc >> Heads
 
-printc >> tails
+printc >> Tails
