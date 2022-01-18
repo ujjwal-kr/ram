@@ -57,7 +57,7 @@ subtracts the last number from the number added prior to it and pushes to stack
 
 ### mul
 - `mul` multiplies the last two numbers in the stack and adds the result to the stack
-- `mul rv lv` multiplies lx and rv and pushes the result to the stack.
+- `mul rv lx` multiplies lx and rv and pushes the result to the stack.
 
 ### div
 the number added prior to the last number / last number and pushes to stack.
