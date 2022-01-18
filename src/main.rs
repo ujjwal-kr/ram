@@ -32,7 +32,10 @@ fn main() -> std::io::Result<()>
       lx: 0.0,
       rv: 0.0,
     };
-    run_statement(&blocks, &blocks[0], vars);
+    match run_statement(&blocks, &blocks[0], vars) {
+      Ok(()) => (),
+      _ => println!("Something went wrong"),
+    }
     Ok(())
 }
 
@@ -84,7 +87,6 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
               }
             },
             "stdin" => {
-              // stdin lx
               if cmd.len() != 2 { println!("Invalid stdin statement"); break; }
               let mut input = String::new();
               io::stdin().read_line(&mut input)?;
@@ -185,7 +187,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
             "je" => {
                 if stack[stack.len() - 1] == 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], local_vars);
+                   match run_statement(blocks, &blocks[index], local_vars) {
+                      Ok(()) => (),
+                      _ => println!("Something went wrong"),
+                    }
                     stack.pop();
                 }
                 stack.pop();
@@ -194,7 +199,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
             "jne" => {
                 if stack[stack.len() - 1] != 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], local_vars);
+                    match run_statement(blocks, &blocks[index], local_vars) {
+                      Ok(()) => (),
+                      _ => println!("Something went wrong"),
+                    }
                     stack.pop();
                 }
                 stack.pop();
@@ -203,7 +211,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
             "jgr" => {
                 if stack[stack.len() - 1] == 1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], local_vars);
+                    match run_statement(blocks, &blocks[index], local_vars) {
+                      Ok(()) => (),
+                      _ => println!("Something went wrong"),
+                    }
                     stack.pop();
                 }
                 stack.pop();
@@ -212,7 +223,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
             "jsm" => {
                 if stack[stack.len() - 1] == -1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
-                    run_statement(blocks, &blocks[index], local_vars);
+                    match run_statement(blocks, &blocks[index], local_vars) {
+                      Ok(()) => (),
+                      _ => println!("Something went wrong"),
+                    }
                     stack.pop();
                 }
                 stack.pop();
@@ -220,7 +234,10 @@ fn run_statement(blocks: &Vec<Vec<&str>>, run_block: &Vec<&str>, vars: Vars) -> 
 
             "jmp" => {
                 let index: usize = cmd[1].parse::<usize>().unwrap();
-                run_statement(blocks, &blocks[index], local_vars);
+                match run_statement(blocks, &blocks[index], local_vars) {
+                  Ok(()) => (),
+                  _ => println!("Something went wrong"),
+                }
             }
             _ => { println!("Cant recognize command '{}'", cmd[0]); break }
         }

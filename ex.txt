@@ -1,8 +1,1 @@
-printc >> Input your age:
-stdin lx
-ram lx
-ram 17
-cmp
-jgr 1
-
-printc >> Can Drive
+ram 121d
