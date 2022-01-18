@@ -114,5 +114,11 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 
 #### TODO
 - Implement better error handling
+- imports
+- loops
+- comments
+- standard library code
+
+
 
 
