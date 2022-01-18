@@ -27,7 +27,7 @@ printc >> Tails
 5. Die
 
 ## Documentation
-Official documentation of the RAM programming language. Please open an issue if you want some features to be chaged or added.
+Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
 ### print
 - `print` prints the last number on the screen present in the stack.
@@ -109,5 +109,8 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 - `jgr <index>` - jumps to a block by its index position if the prev cmp statement is 1 (greater)
 
 - `jsm <index>` - jumps to a block by its index position if the prev cmp statement is -1 (smaller)
+
+#### TODO
+- Implement better error handling
 
 
