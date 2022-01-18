@@ -1,10 +1,1 @@
-ram 100
-ram 100
-cmp
-jne 1
-cmp
-je 2
-
-printc >> Not Equal
-
-printc >> Equal
+ram c
