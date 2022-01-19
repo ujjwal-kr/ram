@@ -1,1 +1,1 @@
-rand >> 10,randi
+rand >> 10,200
