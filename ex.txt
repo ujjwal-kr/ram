@@ -1,11 +1,1 @@
-ram 100
-print
-jmp 1
-
-printc >> hmm
-jmp 2
-
-printc >> hello
-ram 1
-print
-jmp 1000
+rand >> 10,randi

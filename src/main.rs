@@ -103,19 +103,42 @@ fn run_statement(
                             if cmd[2] == "prev" {
                                 local_vars.lx = stack[stack.len() - 1];
                             } else {
-                                local_vars.lx = cmd[2].parse().expect("Input a number");
+                                local_vars.lx = cmd[2].parse().expect(
+                                    format!(
+                                        "Input a number at b{}:l{}",
+                                        block_number.to_string(),
+                                        line.to_string()
+                                    )
+                                    .trim(),
+                                );
                             }
                         }
                         if cmd[1] == "rv" {
                             if cmd[2] == "prev" {
                                 local_vars.rv = stack[stack.len() - 1];
                             } else {
-                                local_vars.rv = cmd[2].parse::<f64>().unwrap();
+                                local_vars.rv = cmd[2].parse().expect(
+                                    format!(
+                                        "Input a number at b{}:l{}",
+                                        block_number.to_string(),
+                                        line.to_string()
+                                    )
+                                    .trim(),
+                                )
                             }
                         }
                     }
                 } else {
-                    stack.push(cmd[1].parse::<f64>().unwrap())
+                    stack.push(
+                        cmd[1].parse().expect(
+                            format!(
+                                "Input a number at b{}:l{}",
+                                block_number.to_string(),
+                                line.to_string()
+                            )
+                            .trim(),
+                        ),
+                    )
                 }
             }
             "stdin" => {
@@ -129,7 +152,14 @@ fn run_statement(
                 }
                 let mut input = String::new();
                 io::stdin().read_line(&mut input)?;
-                let number: f64 = input.trim().parse().expect("Input a number");
+                let number: f64 = input.trim().parse().expect(
+                    format!(
+                        "Input a number at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    )
+                    .trim(),
+                );
                 if cmd[1] == "lx" {
                     local_vars.lx = number
                 }
@@ -329,8 +359,22 @@ fn run_statement(
 
                 let mut rng = rand::thread_rng();
                 let random = rng.gen_range(
-                    numbers[0].trim().parse::<f64>().unwrap()
-                        ..numbers[1].trim().parse::<f64>().unwrap(),
+                    numbers[0].trim().parse().expect(
+                        format!(
+                            "Input a number at b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                        .trim(),
+                    )
+                        ..numbers[1].trim().parse().expect(
+                            format!(
+                                "Input a number at b{}:l{}",
+                                block_number.to_string(),
+                                line.to_string()
+                            )
+                            .trim(),
+                        ),
                 );
                 stack.push(random);
             }
