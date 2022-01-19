@@ -1,2 +1,2 @@
-ram 1
+ram 1100
 print
