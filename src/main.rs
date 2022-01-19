@@ -168,19 +168,53 @@ fn run_statement(
                 }
             }
             "sub" => {
+                if stack.len() < 2 {
+                    println!(
+                        "{}",
+                        format!(
+                            "Not enough items in the stack b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                    );
+                    break;
+                }
                 let result = stack[stack.len() - 2] - stack[stack.len() - 1];
                 stack.push(result);
             }
 
             "mul" => {
-                let result = stack[stack.len() - 1] * stack[stack.len() - 2];
-                stack.push(result);
                 if cmd.len() > 1 {
                     stack.push(local_vars.lx * local_vars.rv);
+                } else {
+                    if stack.len() < 2 {
+                        println!(
+                            "{}",
+                            format!(
+                                "Not enough items in the stack b{}:l{}",
+                                block_number.to_string(),
+                                line.to_string()
+                            )
+                        );
+                        break;
+                    }
+                    let result = stack[stack.len() - 1] * stack[stack.len() - 2];
+                    stack.push(result);
                 }
             }
 
             "div" => {
+                if stack.len() < 2 {
+                    println!(
+                        "{}",
+                        format!(
+                            "Not enough items in the stack b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                    );
+                    break;
+                }
                 let result = stack[stack.len() - 2] / stack[stack.len() - 1];
                 stack.push(result)
             }
@@ -194,6 +228,17 @@ fn run_statement(
                         local_vars.rv = local_vars.rv * local_vars.rv;
                     }
                 } else {
+                    if stack.len() < 1 {
+                        println!(
+                            "{}",
+                            format!(
+                                "Not enough items in the stack b{}:l{}",
+                                block_number.to_string(),
+                                line.to_string()
+                            )
+                        );
+                        break;
+                    }
                     let result = stack[stack.len() - 1] * stack[stack.len() - 1];
                     stack.push(result);
                 }
@@ -211,6 +256,17 @@ fn run_statement(
                     let result = stack[stack.len() - 1].sqrt();
                     stack.push(result);
                 }
+                if stack.len() < 1 {
+                    println!(
+                        "{}",
+                        format!(
+                            "Not enough items in the stack b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                    );
+                    break;
+                }
                 let result = stack[stack.len() - 1].sqrt();
                 stack.push(result);
             }
@@ -226,12 +282,34 @@ fn run_statement(
                         }
                     }
                 } else {
+                    if stack.len() < 1 {
+                        println!(
+                            "{}",
+                            format!(
+                                "Not enough items in the stack b{}:l{}",
+                                block_number.to_string(),
+                                line.to_string()
+                            )
+                        );
+                        break;
+                    }
                     let result = stack[stack.len() - 1].round();
                     stack.push(result);
                 }
             }
 
             "avg" => {
+                if stack.len() < 1 {
+                    println!(
+                        "{}",
+                        format!(
+                            "Not enough items in the stack b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                    );
+                    break;
+                }
                 let mut total: f64 = 0.0;
                 let mut i: f64 = 0.0;
                 for num in &stack {
@@ -254,6 +332,17 @@ fn run_statement(
             }
 
             "cmp" => {
+                if stack.len() < 2 {
+                    println!(
+                        "{}",
+                        format!(
+                            "Not enough items in the stack b{}:l{}",
+                            block_number.to_string(),
+                            line.to_string()
+                        )
+                    );
+                    break;
+                }
                 if stack[stack.len() - 1] < stack[stack.len() - 2] {
                     stack.push(1.0)
                 } else if stack[stack.len() - 1] > stack[stack.len() - 2] {
