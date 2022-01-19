@@ -1,0 +1,2 @@
+ram 1
+print
