@@ -120,7 +120,11 @@ fn run_statement(
             }
             "stdin" => {
                 if cmd.len() != 2 {
-                    println!("Invalid stdin statement");
+                    println!(
+                        "Not enough args: stdin at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
                     break;
                 }
                 let mut input = String::new();
