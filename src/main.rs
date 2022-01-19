@@ -354,7 +354,11 @@ fn run_statement(
 
             "je" => {
                 if cmd.len() != 2 {
-                    println!("Invalid jmp");
+                    println!(
+                        "Invalid jmp at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
                     break;
                 }
                 if stack[stack.len() - 1] == 0.0 {
