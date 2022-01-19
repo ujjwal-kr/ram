@@ -1,2 +1,4 @@
-ram 1100
+ram 1
+pop
 print
+printc
