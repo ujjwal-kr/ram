@@ -359,6 +359,15 @@ fn run_statement(
                 }
                 if stack[stack.len() - 1] == 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
+                    if blocks.len() <= index {
+                        println!(
+                            "block {} does not exist b{}:l{}",
+                            index.to_string(),
+                            block_number.to_string(),
+                            line.to_string()
+                        );
+                        break;
+                    }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -370,11 +379,24 @@ fn run_statement(
 
             "jne" => {
                 if cmd.len() != 2 {
-                    println!("Invalid jmp");
+                    println!(
+                        "Invalid jmp at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
                     break;
                 }
                 if stack[stack.len() - 1] != 0.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
+                    if blocks.len() <= index {
+                        println!(
+                            "block {} does not exist b{}:l{}",
+                            index.to_string(),
+                            block_number.to_string(),
+                            line.to_string()
+                        );
+                        break;
+                    }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -386,11 +408,25 @@ fn run_statement(
 
             "jgr" => {
                 if cmd.len() != 2 {
-                    println!("Invalid jmp");
+                    println!(
+                        "Invalid jmp at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
+
                     break;
                 }
                 if stack[stack.len() - 1] == 1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
+                    if blocks.len() <= index {
+                        println!(
+                            "block {} does not exist b{}:l{}",
+                            index.to_string(),
+                            block_number.to_string(),
+                            line.to_string()
+                        );
+                        break;
+                    }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -402,11 +438,25 @@ fn run_statement(
 
             "jsm" => {
                 if cmd.len() != 2 {
-                    println!("Invalid jmp");
+                    println!(
+                        "Invalid jmp at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
+
                     break;
                 }
                 if stack[stack.len() - 1] == -1.0 {
                     let index: usize = cmd[1].parse::<usize>().unwrap();
+                    if blocks.len() <= index {
+                        println!(
+                            "block {} does not exist b{}:l{}",
+                            index.to_string(),
+                            block_number.to_string(),
+                            line.to_string()
+                        );
+                        break;
+                    }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -418,17 +468,35 @@ fn run_statement(
 
             "jmp" => {
                 if cmd.len() != 2 {
-                    println!("Invalid jmp");
+                    println!(
+                        "Invalid jmp at b{}:l{}",
+                        block_number.to_string(),
+                        line.to_string()
+                    );
                     break;
                 }
                 let index: usize = cmd[1].parse::<usize>().unwrap();
+                if blocks.len() <= index {
+                    println!(
+                        "block {} does not exist b{}:l{}",
+                        index.to_string(),
+                        block_number.to_string(),
+                        line.to_string()
+                    );
+                    break;
+                }
                 match run_statement(blocks, &blocks[index], index, local_vars) {
                     Ok(()) => (),
                     _ => println!("Something went wrong"),
                 }
             }
             _ => {
-                println!("Cant recognize command '{}'", cmd[0]);
+                println!(
+                    "Cant recognize command '{}' at b{}:l{}",
+                    cmd[0],
+                    block_number.to_string(),
+                    line.to_string()
+                );
                 break;
             }
         }

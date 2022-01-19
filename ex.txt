@@ -1,4 +1,11 @@
-ram 1
-pop
+ram 100
 print
-printc
+jmp 1
+
+printc >> hmm
+jmp 2
+
+printc >> hello
+ram 1
+print
+jmp 1000
