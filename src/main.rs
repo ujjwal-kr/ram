@@ -75,7 +75,7 @@ fn run_statement(
                 }
             }
             "printc" => {
-                if cmd.len() != 3 {
+                if cmd.len() <= 3 {
                     println!(
                         "{}",
                         format!(
