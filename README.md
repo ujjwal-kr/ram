@@ -44,6 +44,9 @@ Prints the characters specified on the screen
 ### stdin
 `stdin lx/rv` sets the value of the standard input provided in the next line to the specified variable.
 
+### halt
+`halt` stops the program
+
 ### ram
 - `ram <number>` adds the number to the stack.
 - `ram lx/rv <number>` assigns the number to the variable
