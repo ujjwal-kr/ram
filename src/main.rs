@@ -26,7 +26,6 @@ fn main() -> std::io::Result<()> {
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
-
     let vars = Vars { lx: 0.0, rv: 0.0 };
     match run_statement(&blocks, &blocks[0], 0, vars) {
         Ok(()) => (),

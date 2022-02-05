@@ -160,7 +160,6 @@ halt
 
 #### TODO
 - Implement better error handling - added to a level
-- imports - work in progress
 - loops - made a generic one
 - comments - done
 - datatypes

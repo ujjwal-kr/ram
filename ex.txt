@@ -1,15 +1,1 @@
-ram rv 1
-add lx rv
-ram lx prev
-print lx
-jmp 1
-
-ram lx
-ram 10
-cmp
-je 2
-cmp
-jne 0
-
-printc >> loop end
-halt
+ram 221c
