@@ -115,6 +115,26 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 
 - `jsm <index>` - jumps to a block by its index position if the prev cmp statement is -1 (smaller)
 
+### An Example loop using jmp
+
+```
+ram rv 1
+add lx rv
+ram lx prev
+print lx
+jmp 1
+
+ram lx
+ram 10
+cmp
+je 2
+cmp
+jne 0
+
+printc >> loop end
+halt
+```
+
 #### TODO
 - Implement better error handling - added to a level
 - imports - work in progress
