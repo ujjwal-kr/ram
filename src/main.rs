@@ -369,7 +369,7 @@ fn run_statement(
                 }
             }
             "halt" => {
-                break;
+                panic!("Program End");
             }
             _ => {
                 println!(
