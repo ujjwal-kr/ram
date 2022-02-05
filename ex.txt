@@ -1,3 +1,6 @@
-ram dew
+ram 200
+ram 222
+ram 19999
 avg
+//hello
 print

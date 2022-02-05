@@ -49,8 +49,14 @@ fn run_statement(
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         line = line + 1;
-        let cmd: Vec<&str> = statement.split(" ").collect();
+        let mut cmd: Vec<&str> = statement.split(" ").collect();
+        // comments
+        let lits: Vec<&str> = cmd[0].trim().split("").collect();
+        if lits[1] == "/" && lits[2] == "/" {
+            cmd[0] = "//";
+        }
         match cmd[0] {
+            "//" => (),
             "print" => {
                 if cmd.len() == 1 {
                     if stack.len() < 1 {
