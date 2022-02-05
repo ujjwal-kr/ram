@@ -31,6 +31,9 @@ Official documentation for the RAM programming language. Please open an issue if
 
 The language has two variables `lx` and `rv` which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
+### comments
+`// this is a one line comment`
+
 ### print
 - `print` prints the last number on the screen present in the stack.
 - `print lx/rv` prints the value of `lx/rv` variables on the screen.
@@ -114,9 +117,10 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 
 #### TODO
 - Implement better error handling - added to a level
-- imports
-- loops
+- imports - work in progress
+- loops - made a generic one
 - comments - done
+- datatypes
 - standard library code
 
 
