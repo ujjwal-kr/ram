@@ -1,1 +1,5 @@
-ram 221c
+ram 1000
+ram 500
+pop
+pop
+print

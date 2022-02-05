@@ -57,29 +57,9 @@ fn run_statement(
         match cmd[0] {
             "//" => (),
             "print" => {
-                if cmd.len() == 1 {
-                    if stack.len() < 1 {
-                        stack_len_error(block_number, line);
-                        break;
-                    }
-                    println!("{}", stack[stack.len() - 1]);
-                } else {
-                    if cmd[1] == "lx" {
-                        println!("{}", local_vars.lx)
-                    }
-                    if cmd[1] == "rv" {
-                        println!("{}", local_vars.rv)
-                    }
-                }
+                print(&mut stack, cmd, &mut local_vars, block_number, line);
             }
-            "printc" => {
-                if cmd.len() < 3 {
-                    args_error(block_number, line);
-                    break;
-                }
-                let prntc_cmd: Vec<&str> = statement.split(">>").collect();
-                println!("{}", prntc_cmd[1].trim());
-            }
+            "printc" => printc(cmd, statement, block_number, line),
             "ram" => {
                 if cmd[1] == "lx" || cmd[1] == "rv" {
                     if cmd.len() == 2 {
@@ -125,11 +105,7 @@ fn run_statement(
                 }
             }
             "pop" => {
-                if stack.len() < 1 {
-                    stack_len_error(block_number, line);
-                    break;
-                }
-                stack.pop();
+                pop(&mut stack, block_number, line);
             }
             "popall" => stack = vec![],
             "add" => {
@@ -383,6 +359,43 @@ fn run_statement(
     }
     Ok(())
 }
+
+// Functions
+
+fn print(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
+    if cmd.len() == 1 {
+        if stack.len() < 1 {
+            stack_len_error(b, l);
+        } else {
+            println!("{}", stack[stack.len() - 1]);
+        }
+    } else {
+        if cmd[1] == "lx" {
+            println!("{}", vars.lx)
+        }
+        if cmd[1] == "rv" {
+            println!("{}", vars.rv)
+        }
+    }
+}
+
+fn printc(cmd: Vec<&str>, statement: &str, b: usize, l: u32) {
+    if cmd.len() < 3 {
+        args_error(b, l);
+    } else {
+        let prntc_cmd: Vec<&str> = statement.split(">>").collect();
+        println!("{}", prntc_cmd[1].trim());
+    }
+}
+
+fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
+    if stack.len() < 1 {
+        stack_len_error(b, l);
+    }
+    stack.pop();
+}
+
+// Errors
 
 fn parse_float(arg: &str, block: usize, line: u32) -> f64 {
     let num: f64;
