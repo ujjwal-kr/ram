@@ -31,6 +31,26 @@ Official documentation for the RAM programming language. Please open an issue if
 
 The language has two variables `lx` and `rv` which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
+## Contents
+ - [Comments](#comments)
+ - [Print](#print)
+ - [printc](#printc--characters)
+ - [stdin](#stdin)
+ - [halt](#halt)
+ - [ram](#ram)
+ - [pop](#pop)
+ - [popall](#popall)
+ - [add](#add)
+ - [subtract](#sub)
+ - [multiply](#mul)
+ - [division](#div)
+ - [sqr](#sqr)
+ - [sqrt](#sqrt)
+ - [random](#rand--num1num2)
+ - [round](#round)
+ - [average](#avg)
+ - [cmp and jump statements](#cmp-and-jump-statements)
+
 ### comments
 `// this is a one line comment`
 
