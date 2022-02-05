@@ -52,18 +52,11 @@ fn run_statement(
         let cmd: Vec<&str> = statement.split(" ").collect();
         match cmd[0] {
             "print" => {
-                if stack.len() < 1 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Nothing to print on the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
-                    break;
-                }
                 if cmd.len() == 1 {
+                    if stack.len() < 1 {
+                        stack_len_error(block_number, line);
+                        break;
+                    }
                     println!("{}", stack[stack.len() - 1]);
                 } else {
                     if cmd[1] == "lx" {
@@ -76,14 +69,7 @@ fn run_statement(
             }
             "printc" => {
                 if cmd.len() < 3 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough arguments b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    args_error(block_number, line);
                     break;
                 }
                 let prntc_cmd: Vec<&str> = statement.split(">>").collect();
@@ -103,63 +89,29 @@ fn run_statement(
                             if cmd[2] == "prev" {
                                 local_vars.lx = stack[stack.len() - 1];
                             } else {
-                                local_vars.lx = cmd[2].parse().expect(
-                                    format!(
-                                        "Input a number at b{}:l{}",
-                                        block_number.to_string(),
-                                        line.to_string()
-                                    )
-                                    .trim(),
-                                );
+                                local_vars.lx = parse_float(cmd[2], block_number, line)
                             }
                         }
                         if cmd[1] == "rv" {
                             if cmd[2] == "prev" {
                                 local_vars.rv = stack[stack.len() - 1];
                             } else {
-                                local_vars.rv = cmd[2].parse().expect(
-                                    format!(
-                                        "Input a number at b{}:l{}",
-                                        block_number.to_string(),
-                                        line.to_string()
-                                    )
-                                    .trim(),
-                                )
+                                local_vars.rv = parse_float(cmd[2], block_number, line)
                             }
                         }
                     }
                 } else {
-                    stack.push(
-                        cmd[1].parse().expect(
-                            format!(
-                                "Input a number at b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                            .trim(),
-                        ),
-                    )
+                    stack.push(parse_float(cmd[1], block_number, line))
                 }
             }
             "stdin" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Not enough args: stdin at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
+                    args_error(block_number, line);
                     break;
                 }
                 let mut input = String::new();
                 io::stdin().read_line(&mut input)?;
-                let number: f64 = input.trim().parse().expect(
-                    format!(
-                        "Input a number at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    )
-                    .trim(),
-                );
+                let number: f64 = parse_float(input.trim(), block_number, line);
                 if cmd[1] == "lx" {
                     local_vars.lx = number
                 }
@@ -169,14 +121,7 @@ fn run_statement(
             }
             "pop" => {
                 if stack.len() < 1 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Nothing to pop on the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 stack.pop();
@@ -187,14 +132,7 @@ fn run_statement(
                     stack.push(local_vars.lx + local_vars.rv);
                 } else {
                     if stack.len() < 2 {
-                        println!(
-                            "{}",
-                            format!(
-                                "Not enough items on the stack to add b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                        );
+                        stack_len_error(block_number, line);
                         break;
                     }
                     let result = stack[stack.len() - 1] + stack[stack.len() - 2];
@@ -203,14 +141,7 @@ fn run_statement(
             }
             "sub" => {
                 if stack.len() < 2 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough items in the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 let result = stack[stack.len() - 2] - stack[stack.len() - 1];
@@ -222,14 +153,7 @@ fn run_statement(
                     stack.push(local_vars.lx * local_vars.rv);
                 } else {
                     if stack.len() < 2 {
-                        println!(
-                            "{}",
-                            format!(
-                                "Not enough items in the stack b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                        );
+                        stack_len_error(block_number, line);
                         break;
                     }
                     let result = stack[stack.len() - 1] * stack[stack.len() - 2];
@@ -239,14 +163,7 @@ fn run_statement(
 
             "div" => {
                 if stack.len() < 2 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough items in the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 let result = stack[stack.len() - 2] / stack[stack.len() - 1];
@@ -263,14 +180,7 @@ fn run_statement(
                     }
                 } else {
                     if stack.len() < 1 {
-                        println!(
-                            "{}",
-                            format!(
-                                "Not enough items in the stack b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                        );
+                        stack_len_error(block_number, line);
                         break;
                     }
                     let result = stack[stack.len() - 1] * stack[stack.len() - 1];
@@ -291,14 +201,7 @@ fn run_statement(
                     stack.push(result);
                 }
                 if stack.len() < 1 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough items in the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 let result = stack[stack.len() - 1].sqrt();
@@ -317,14 +220,7 @@ fn run_statement(
                     }
                 } else {
                     if stack.len() < 1 {
-                        println!(
-                            "{}",
-                            format!(
-                                "Not enough items in the stack b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                        );
+                        stack_len_error(block_number, line);
                         break;
                     }
                     let result = stack[stack.len() - 1].round();
@@ -334,14 +230,7 @@ fn run_statement(
 
             "avg" => {
                 if stack.len() < 1 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough items in the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 let mut total: f64 = 0.0;
@@ -359,36 +248,15 @@ fn run_statement(
 
                 let mut rng = rand::thread_rng();
                 let random = rng.gen_range(
-                    numbers[0].trim().parse().expect(
-                        format!(
-                            "Input a number at b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                        .trim(),
-                    )
-                        ..numbers[1].trim().parse().expect(
-                            format!(
-                                "Input a number at b{}:l{}",
-                                block_number.to_string(),
-                                line.to_string()
-                            )
-                            .trim(),
-                        ),
+                    parse_float(numbers[0].trim(), block_number, line)
+                        ..parse_float(numbers[1].trim(), block_number, line),
                 );
                 stack.push(random);
             }
 
             "cmp" => {
                 if stack.len() < 2 {
-                    println!(
-                        "{}",
-                        format!(
-                            "Not enough items in the stack b{}:l{}",
-                            block_number.to_string(),
-                            line.to_string()
-                        )
-                    );
+                    stack_len_error(block_number, line);
                     break;
                 }
                 if stack[stack.len() - 1] < stack[stack.len() - 2] {
@@ -402,22 +270,13 @@ fn run_statement(
 
             "je" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Invalid jmp at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
+                    args_error(block_number, line);
                     break;
                 }
                 if stack[stack.len() - 1] == 0.0 {
-                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    let index: usize = parse_usize(cmd[1], block_number, line);
                     if blocks.len() <= index {
-                        println!(
-                            "block {} does not exist b{}:l{}",
-                            index.to_string(),
-                            block_number.to_string(),
-                            line.to_string()
-                        );
+                        invalid_jmp(block_number, line, index);
                         break;
                     }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
@@ -431,22 +290,13 @@ fn run_statement(
 
             "jne" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Invalid jmp at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
+                    args_error(block_number, line);
                     break;
                 }
                 if stack[stack.len() - 1] != 0.0 {
-                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    let index: usize = parse_usize(cmd[1], block_number, line);
                     if blocks.len() <= index {
-                        println!(
-                            "block {} does not exist b{}:l{}",
-                            index.to_string(),
-                            block_number.to_string(),
-                            line.to_string()
-                        );
+                        invalid_jmp(block_number, line, index);
                         break;
                     }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
@@ -460,23 +310,13 @@ fn run_statement(
 
             "jgr" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Invalid jmp at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
-
+                    args_error(block_number, line);
                     break;
                 }
                 if stack[stack.len() - 1] == 1.0 {
-                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    let index: usize = parse_usize(cmd[1], block_number, line);
                     if blocks.len() <= index {
-                        println!(
-                            "block {} does not exist b{}:l{}",
-                            index.to_string(),
-                            block_number.to_string(),
-                            line.to_string()
-                        );
+                        invalid_jmp(block_number, line, index);
                         break;
                     }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
@@ -490,24 +330,13 @@ fn run_statement(
 
             "jsm" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Invalid jmp at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
-
+                    args_error(block_number, line);
                     break;
                 }
                 if stack[stack.len() - 1] == -1.0 {
-                    let index: usize = cmd[1].parse::<usize>().unwrap();
+                    let index: usize = parse_usize(cmd[1], block_number, line);
                     if blocks.len() <= index {
-                        println!(
-                            "block {} does not exist b{}:l{}",
-                            index.to_string(),
-                            block_number.to_string(),
-                            line.to_string()
-                        );
-                        break;
+                        invalid_jmp(block_number, line, index)
                     }
                     match run_statement(blocks, &blocks[index], index, local_vars) {
                         Ok(()) => (),
@@ -520,21 +349,12 @@ fn run_statement(
 
             "jmp" => {
                 if cmd.len() != 2 {
-                    println!(
-                        "Invalid jmp at b{}:l{}",
-                        block_number.to_string(),
-                        line.to_string()
-                    );
+                    args_error(block_number, line);
                     break;
                 }
-                let index: usize = cmd[1].parse::<usize>().unwrap();
+                let index: usize = parse_usize(cmd[1], block_number, line);
                 if blocks.len() <= index {
-                    println!(
-                        "block {} does not exist b{}:l{}",
-                        index.to_string(),
-                        block_number.to_string(),
-                        line.to_string()
-                    );
+                    invalid_jmp(block_number, line, index);
                     break;
                 }
                 match run_statement(blocks, &blocks[index], index, local_vars) {
@@ -554,4 +374,56 @@ fn run_statement(
         }
     }
     Ok(())
+}
+
+fn parse_float(arg: &str, block: usize, line: u32) -> f64 {
+    let num: f64;
+    num = arg.parse().expect(
+        format!(
+            "Input a number at block:{}:line{}",
+            block.to_string(),
+            line.to_string()
+        )
+        .trim(),
+    );
+    num
+}
+
+fn parse_usize(arg: &str, block: usize, line: u32) -> usize {
+    let num: usize;
+    num = arg.parse().expect(
+        format!(
+            "Invalid jmp statement, block {} is invalid block:{}::line:{}",
+            arg,
+            block.to_string(),
+            line.to_string()
+        )
+        .trim(),
+    );
+    num
+}
+
+fn stack_len_error(block: usize, line: u32) {
+    println!(
+        "Not enough items in the stack, block:{}::line:{}",
+        block.to_string(),
+        line.to_string()
+    );
+}
+
+fn args_error(block: usize, line: u32) {
+    println!(
+        "Invalid arguments at block:{}::line:{}",
+        block.to_string(),
+        line.to_string()
+    );
+}
+
+fn invalid_jmp(block: usize, line: u32, inv_block: usize) {
+    println!(
+        "Invalid jmp arguments at block:{}::line:{}, block {} does not exist",
+        block.to_string(),
+        line.to_string(),
+        inv_block.to_string()
+    );
 }

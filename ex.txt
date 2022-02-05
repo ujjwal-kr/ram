@@ -1,14 +1,3 @@
-printc >> Coin Flip
-rand >> 0,1
-round
-ram 1
-cmp
-je 1
-pop
-ram 0
-cmp
-je 2
-
-printc >> Heads
-
-printc >> Tails
+ram dew
+avg
+print
