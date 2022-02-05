@@ -368,6 +368,9 @@ fn run_statement(
                     _ => println!("Something went wrong"),
                 }
             }
+            "halt" => {
+                break;
+            }
             _ => {
                 println!(
                     "Cant recognize command '{}' at b{}:l{}",

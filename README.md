@@ -116,7 +116,7 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 - Implement better error handling - added to a level
 - imports
 - loops
-- comments - work in progress
+- comments - done
 - standard library code
 
 
