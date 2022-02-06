@@ -29,7 +29,7 @@ printc >> Tails
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
-The language has three variables `lx`, `rv` (for storing numbers) and `string` (for storing a string) which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
+The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for storing a string), `vec_int` for storing a float vector and `vec_str` for storing a string vector which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
 ## Contents
  - [Comments](#comments)
@@ -38,6 +38,7 @@ The language has three variables `lx`, `rv` (for storing numbers) and `string` (
  - [stdin](#stdin)
  - [halt](#halt)
  - [ram](#ram)
+ - [vectors](#vectors)
  - [pop](#pop)
  - [popall](#popall)
  - [add](#add)
@@ -56,7 +57,7 @@ The language has three variables `lx`, `rv` (for storing numbers) and `string` (
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv` prints the value of `lx/rv/string` variables on the screen.
+- `print lx/rv/string/vec_str/vec_int` prints the value of `lx/rv/string/vec_str/vec_int` variables on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
@@ -73,7 +74,11 @@ Prints the characters specified on the screen
 - `ram lx/rv` adds the variable value to the stack for further calculations
 - `ram lx/rv prev` assigns the last stack value to the specified variable.
 - `ram string <strings>` assigns value to the strings global variable.
-     
+### vectors
+
+= `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.
+- `ram str int >> [1,2,3,4,strs...]` creates a vector and assigns it to the global `vec str` variable.
+
 ### pop
 Removes the last value from the stack
 
