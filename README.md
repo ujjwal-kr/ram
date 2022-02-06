@@ -50,6 +50,7 @@ The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for sto
  - [random](#rand--num1num2)
  - [round](#round)
  - [average](#avg)
+ - [split](#split)
  - [cmp and jump statements](#cmp-and-jump-statements)
 
 ### comments
@@ -57,7 +58,7 @@ The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for sto
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv/string/vec_str/vec_int` prints the value of `lx/rv/string/vec_str/vec_int` variables on the screen.
+- `print lx/rv/string/vec str/vec int` prints the value of `lx/rv/string/vec str/vec int` variables on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
@@ -116,6 +117,9 @@ the number added prior to the last number / last number and pushes to stack.
 
 ### avg
 Takes out the average of all the numbers present in the stack. `popall` should be used somewhere in the code to remove the vars which are redundant.
+
+### split
+`split >> <split_arg>` splits the `string` variable into args and stores the values into the `vec str`
 
 ### `cmp` and Jump statements
 The program is devided into blocks separated by empty lines. And each block has an index. For example-
