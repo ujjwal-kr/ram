@@ -1,2 +1,3 @@
-stdin string
-print string
+rand >> 10,100
+round
+print
