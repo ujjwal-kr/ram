@@ -75,7 +75,13 @@ pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars,
     stack.push(result);
 }
 
-pub fn round(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn round(
+    stack: &mut Vec<f64>,
+    cmd: Vec<&str>,
+    vars: &mut super::super::Vars,
+    b: usize,
+    l: u32,
+) {
     if cmd.len() > 1 {
         if cmd[1] == "lx" || cmd[1] == "rv" {
             if cmd[1] == "lx" {
@@ -117,5 +123,18 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
         stack.push(-1.0)
     } else {
         stack.push(0.0)
+    }
+}
+
+pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
+    if cmd.len() < 3 {
+        super::errors::args_error(b, l)
+    } else {
+        let args: Vec<&str> = statement.split(">>").collect();
+        let string: &str = vars.string.trim();
+        let str_vec: Vec<&str> = string.split(args[1].trim()).collect();
+        for items in str_vec {
+          vars.str_vec.push(items.trim().to_string());
+        }
     }
 }

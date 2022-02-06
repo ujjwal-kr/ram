@@ -1,4 +1,4 @@
-ram 100
-ram 2321
-add
-print
+ram string >> Hello ! world
+print string
+split >> !
+print vec str
