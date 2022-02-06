@@ -29,7 +29,7 @@ printc >> Tails
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
-The language has two variables `lx` and `rv` which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
+The language has three variables `lx`, `rv` (for storing numbers) and `string` (for storing a string) which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
 ## Contents
  - [Comments](#comments)
@@ -56,13 +56,13 @@ The language has two variables `lx` and `rv` which are global. The data stored i
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv` prints the value of `lx/rv` variables on the screen.
+- `print lx/rv` prints the value of `lx/rv/string` variables on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
 
 ### stdin
-`stdin lx/rv` sets the value of the standard input provided in the next line to the specified variable.
+`stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
 
 ### halt
 `halt` stops the program
@@ -72,6 +72,7 @@ Prints the characters specified on the screen
 - `ram lx/rv <number>` assigns the number to the variable
 - `ram lx/rv` adds the variable value to the stack for further calculations
 - `ram lx/rv prev` assigns the last stack value to the specified variable.
+- `ram string <strings>` assigns value to the strings global variable.
      
 ### pop
 Removes the last value from the stack

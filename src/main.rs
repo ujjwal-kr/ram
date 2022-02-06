@@ -7,10 +7,11 @@ use std::io::prelude::*;
 mod errors;
 use errors as errs;
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 struct Vars {
     lx: f64,
     rv: f64,
+    string: String,
 }
 
 fn main() -> std::io::Result<()> {
@@ -29,7 +30,11 @@ fn main() -> std::io::Result<()> {
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
-    let vars = Vars { lx: 0.0, rv: 0.0 };
+    let vars = Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "def".to_string(),
+    };
     match run_statement(&blocks, &blocks[0], 0, vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
@@ -47,6 +52,7 @@ fn run_statement(
     let mut local_vars = Vars {
         lx: vars.lx,
         rv: vars.rv,
+        string: vars.string,
     };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
@@ -61,7 +67,14 @@ fn run_statement(
             "//" => (),
             "print" => print(&mut stack, cmd, &mut local_vars, block_number, line),
             "printc" => printc(cmd, statement, block_number, line),
-            "ram" => ram(&mut stack, cmd, &mut local_vars, block_number, line),
+            "ram" => ram(
+                &mut stack,
+                cmd,
+                statement,
+                &mut local_vars,
+                block_number,
+                line,
+            ),
             "stdin" => stdin(&mut local_vars, cmd, block_number, line),
             "pop" => pop(&mut stack, block_number, line),
             "popall" => stack = vec![],
@@ -87,7 +100,7 @@ fn run_statement(
                         errs::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars) {
+                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -107,7 +120,7 @@ fn run_statement(
                         errs::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars) {
+                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -127,7 +140,7 @@ fn run_statement(
                         errs::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars) {
+                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -146,7 +159,7 @@ fn run_statement(
                     if blocks.len() <= index {
                         errs::invalid_jmp(block_number, line, index)
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars) {
+                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -165,7 +178,7 @@ fn run_statement(
                     errs::invalid_jmp(block_number, line, index);
                     break;
                 }
-                match run_statement(blocks, &blocks[index], index, local_vars) {
+                match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
                     Ok(()) => (),
                     _ => println!("Something went wrong"),
                 }
@@ -201,6 +214,9 @@ fn print(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32
         if cmd[1] == "rv" {
             println!("{}", vars.rv)
         }
+        if cmd[1] == "string" {
+            println!("{}", vars.string.trim());
+        }
     }
 }
 
@@ -220,8 +236,8 @@ fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
     stack.pop();
 }
 
-fn ram(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
-    if cmd[1] == "lx" || cmd[1] == "rv" {
+fn ram(stack: &mut Vec<f64>, cmd: Vec<&str>, statement: &str, vars: &mut Vars, b: usize, l: u32) {
+    if cmd[1] == "lx" || cmd[1] == "rv" || cmd[1] == "string" {
         if cmd.len() == 2 {
             if cmd[1] == "lx" {
                 stack.push(vars.lx)
@@ -244,6 +260,10 @@ fn ram(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) 
                     vars.rv = errs::parse_float(cmd[2], b, l)
                 }
             }
+            if cmd[1] == "string" {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                vars.string = lits[1].to_string();
+            }
         }
     } else {
         stack.push(errs::parse_float(cmd[1], b, l))
@@ -258,12 +278,16 @@ fn stdin(vars: &mut Vars, cmd: Vec<&str>, b: usize, l: u32) {
         io::stdin()
             .read_line(&mut input)
             .expect("something went wrong");
-        let number: f64 = errs::parse_float(input.trim(), b, l);
-        if cmd[1] == "lx" {
-            vars.lx = number
-        }
-        if cmd[1] == "rv" {
-            vars.rv = number
+        if cmd[1] == "string" {
+            vars.string = input;
+        } else {
+            let number: f64 = errs::parse_float(input.trim(), b, l);
+            if cmd[1] == "lx" {
+                vars.lx = number
+            }
+            if cmd[1] == "rv" {
+                vars.rv = number
+            }
         }
     }
 }
