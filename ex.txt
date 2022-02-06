@@ -1,6 +1,2 @@
-ram 100
-ram 21
-ram 120321321
-avg
-print
-popall
+stdin string
+print string
