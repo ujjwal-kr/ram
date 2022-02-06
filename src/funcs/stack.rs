@@ -1,5 +1,5 @@
-use std::io;
 use rand::Rng;
+use std::io;
 
 pub fn ram(
     stack: &mut Vec<f64>,
@@ -9,7 +9,10 @@ pub fn ram(
     b: usize,
     l: u32,
 ) {
-    if cmd[1] == "lx" || cmd[1] == "rv" || cmd[1] == "string" {
+    if cmd[1] == "lx" || cmd[1] == "rv" || cmd[1] == "string" || cmd[1] == "vec" {
+        if cmd.len() < 2 {
+            super::errors::args_error(b, l)
+        }
         if cmd.len() == 2 {
             if cmd[1] == "lx" {
                 stack.push(vars.lx)
@@ -35,6 +38,31 @@ pub fn ram(
             if cmd[1] == "string" {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 vars.string = lits[1].to_string();
+            }
+            if cmd[1] == "vec" {
+                if cmd.len() < 5 {
+                    super::errors::args_error(b, l);
+                } else {
+                    if cmd[2] == "int" {
+                        let lits: Vec<&str> = statement.split(">>").collect();
+                        let str_vec: String = lits[1].trim().to_string();
+                        let slice = &str_vec[1..str_vec.len() - 1];
+                        let data_vec: Vec<&str> = slice.split(",").collect();
+                        for item in data_vec {
+                            vars.num_vec.push(super::errors::parse_float(item, b, l));
+                        }
+                    } else if cmd[2] == "str" {
+                        let lits: Vec<&str> = statement.split(">>").collect();
+                        let data_vec: String = lits[1].trim().to_string();
+                        let slice = &data_vec[1..data_vec.len() - 1];
+                        let str_vec: Vec<&str> = slice.split(",").collect();
+                        for item in str_vec {
+                            vars.str_vec.push(item.trim().to_string());
+                        }
+                    } else {
+                        super::errors::args_error(b, l)
+                    }
+                }
             }
         }
     } else {
@@ -77,7 +105,8 @@ pub fn random(stack: &mut Vec<f64>, statement: &str, b: usize, l: u32) {
 
     let mut rng = rand::thread_rng();
     let random_num = rng.gen_range(
-        super::errors::parse_float(numbers[0].trim(), b, l)..super::errors::parse_float(numbers[1].trim(), b, l),
+        super::errors::parse_float(numbers[0].trim(), b, l)
+            ..super::errors::parse_float(numbers[1].trim(), b, l),
     );
     stack.push(random_num);
 }

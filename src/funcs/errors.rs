@@ -2,7 +2,7 @@
 
 pub fn parse_float(arg: &str, block: usize, line: u32) -> f64 {
     let num: f64;
-    num = arg.parse().expect(
+    num = arg.trim().parse().expect(
         format!(
             "Input a number at block:{}:line{}",
             block.to_string(),

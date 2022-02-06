@@ -11,6 +11,8 @@ pub struct Vars {
     pub lx: f64,
     pub rv: f64,
     pub string: String,
+    pub str_vec: Vec<String>,
+    pub num_vec: Vec<f64>,
 }
 
 fn main() -> std::io::Result<()> {
@@ -33,6 +35,8 @@ fn main() -> std::io::Result<()> {
         lx: 0.0,
         rv: 0.0,
         string: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
     };
     match run_statement(&blocks, &blocks[0], 0, vars) {
         Ok(()) => (),
@@ -52,6 +56,8 @@ fn run_statement(
         lx: vars.lx,
         rv: vars.rv,
         string: vars.string,
+        num_vec: vars.num_vec,
+        str_vec: vars.str_vec,
     };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {

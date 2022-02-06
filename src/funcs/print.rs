@@ -21,6 +21,13 @@ pub fn print(
         if cmd[1] == "string" {
             println!("{}", vars.string.trim());
         }
+        if cmd[1] == "vec" {
+            if cmd[2] == "int" {
+                println!("{:?}", vars.num_vec);
+            } else if cmd[2] == "str" {
+                println!("{:?}", vars.str_vec);
+            }
+        }
     }
 }
 

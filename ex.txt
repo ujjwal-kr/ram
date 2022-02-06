@@ -1,3 +1,7 @@
-rand >> 10,100
-round
-print
+ram vec str >> [test, test2, 2]
+ram vec int >> [2, 1, 1]
+jmp 1
+
+print vec int
+print vec int
+print vec str
