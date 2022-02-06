@@ -1,1 +1,6 @@
-ram 221c
+ram 100
+ram 21
+ram 120321321
+avg
+print
+popall
