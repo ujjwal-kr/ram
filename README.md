@@ -76,7 +76,7 @@ Prints the characters specified on the screen
 - `ram string <strings>` assigns value to the strings global variable.
 ### vectors
 
-= `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.
+- `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.
 - `ram str int >> [1,2,3,4,strs...]` creates a vector and assigns it to the global `vec str` variable.
 
 ### pop
