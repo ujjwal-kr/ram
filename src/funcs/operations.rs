@@ -156,9 +156,9 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                 let slice = &data_vec[1..data_vec.len() - 1];
                 let index: usize = super::errors::parse_usize(slice.trim(), b, l);
                 if index >= vars.str_vec.len() {
-                    super::errors::invalid_index(b, l, index)
+                    super::errors::invalid_index(b, l, index);
                 }
-                vars.string = vars.str_vec[index].to_string()
+                vars.string = vars.str_vec[index].to_string();
             }
         } else if cmd[1] == "int" {
             if cmd[2] == "push" {
@@ -166,6 +166,21 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                     vars.num_vec.push(vars.lx)
                 } else if cmd[3] == "rv" {
                     vars.num_vec.push(vars.rv)
+                }
+            } else {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let data_vec = lits[1].trim();
+                let slice = &data_vec[1..data_vec.len() - 1];
+                let index: usize = super::errors::parse_usize(slice.trim(), b, l);
+                if index >= vars.num_vec.len() {
+                    super::errors::invalid_index(b, l, index);
+                }
+                if cmd[2] == "lx" {
+                  vars.lx = vars.num_vec[index];
+                } else if cmd[2] == "rv" {
+                  vars.rv = vars.num_vec[index]
+                } else {
+                  super::errors::args_error(b, l);
                 }
             }
         }
