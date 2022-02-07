@@ -126,6 +126,8 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
     }
 }
 
+// strings
+
 pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l)
@@ -134,7 +136,38 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
         let string: &str = vars.string.trim();
         let str_vec: Vec<&str> = string.split(args[1].trim()).collect();
         for items in str_vec {
-          vars.str_vec.push(items.trim().to_string());
+            vars.str_vec.push(items.trim().to_string());
+        }
+    }
+}
+
+// vectors
+
+pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
+    if cmd.len() < 3 {
+        super::errors::args_error(b, l);
+    } else {
+        if cmd[1] == "str" {
+            if cmd[2] == "push" {
+                vars.str_vec.push(vars.string.clone().trim().to_string());
+            } else {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let data_vec = lits[1].trim();
+                let slice = &data_vec[1..data_vec.len() - 1];
+                let index: usize = super::errors::parse_usize(slice.trim(), b, l);
+                if index >= vars.str_vec.len() {
+                    super::errors::invalid_index(b, l, index)
+                }
+                vars.string = vars.str_vec[index].to_string()
+            }
+        } else if cmd[1] == "int" {
+            if cmd[2] == "push" {
+                if cmd[3] == "lx" {
+                    vars.num_vec.push(vars.lx)
+                } else if cmd[3] == "rv" {
+                    vars.num_vec.push(vars.rv)
+                }
+            }
         }
     }
 }

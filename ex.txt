@@ -1,4 +1,3 @@
-ram string >> Hello ! world
+ram vec str >> [hi, hui, bie]
+vec str >> [1]
 print string
-split >> !
-print vec str

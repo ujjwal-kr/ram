@@ -78,7 +78,10 @@ Prints the characters specified on the screen
 ### vectors
 
 - `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.
-- `ram str int >> [1,2,3,4,strs...]` creates a vector and assigns it to the global `vec str` variable.
+- `ram vec str >> [1,2,3,4,strs...]` creates a vector and assigns it to the global `vec str` variable.
+- `vec str push` pushes the value of `string` to `vec str` variable.
+- `vec int push lx/rv` pushes the value of `lx/rv` to `vec int` variable.
+- `vec str >> [<index>]` extracts value of the index position of `vec str` and stores it in the `string` variable.
 
 ### pop
 Removes the last value from the stack

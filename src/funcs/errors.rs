@@ -28,7 +28,7 @@ pub fn parse_usize(arg: &str, block: usize, line: u32) -> usize {
 }
 
 pub fn stack_len_error(block: usize, line: u32) {
-    println!(
+    panic!(
         "Not enough items in the stack, block:{}::line:{}",
         block.to_string(),
         line.to_string()
@@ -36,7 +36,7 @@ pub fn stack_len_error(block: usize, line: u32) {
 }
 
 pub fn args_error(block: usize, line: u32) {
-    println!(
+    panic!(
         "Invalid arguments at block:{}::line:{}",
         block.to_string(),
         line.to_string()
@@ -44,10 +44,19 @@ pub fn args_error(block: usize, line: u32) {
 }
 
 pub fn invalid_jmp(block: usize, line: u32, inv_block: usize) {
-    println!(
+    panic!(
         "Invalid jmp arguments at block:{}::line:{}, block {} does not exist",
         block.to_string(),
         line.to_string(),
         inv_block.to_string()
+    );
+}
+
+pub fn invalid_index(block: usize, line: u32, inv_index: usize) {
+    panic!(
+        "Invalid vector index, position {} does not exist in vec at block:{}::line:{}",
+        inv_index.to_string(),
+        block.to_string(),
+        line.to_string()
     );
 }
