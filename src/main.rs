@@ -4,7 +4,7 @@ use std::io;
 use std::io::prelude::*;
 
 mod funcs;
-use funcs::{errors, operations, print, stack};
+use funcs::{errors, operations, print, stack, stdfn};
 
 #[derive(Clone)]
 pub struct Vars {
@@ -80,7 +80,8 @@ fn run_statement(
                 block_number,
                 line,
             ),
-            "stdin" => stack::stdin(&mut local_vars, cmd, block_number, line),
+            "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
+            "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
             "pop" => stack::pop(&mut stack, block_number, line),
             "popall" => stack = vec![],
             "add" => operations::add(&mut stack, cmd, &mut local_vars, block_number, line),

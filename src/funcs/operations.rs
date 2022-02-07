@@ -176,11 +176,11 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                     super::errors::invalid_index(b, l, index);
                 }
                 if cmd[2] == "lx" {
-                  vars.lx = vars.num_vec[index];
+                    vars.lx = vars.num_vec[index];
                 } else if cmd[2] == "rv" {
-                  vars.rv = vars.num_vec[index]
+                    vars.rv = vars.num_vec[index]
                 } else {
-                  super::errors::args_error(b, l);
+                    super::errors::args_error(b, l);
                 }
             }
         }
