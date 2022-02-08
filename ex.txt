@@ -1,3 +1,7 @@
-ram vec str >> [hello, hi , no]
-vec str >> [lx]
-print string
+ram rv 1
+stdfs open >> ./test.txt
+split >> "\n"
+print vec str
+add lx rv
+ram lx
+ram 

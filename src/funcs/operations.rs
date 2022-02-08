@@ -162,12 +162,21 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
 
 // vectors
 
-pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn vec_ops(
+    stack: Vec<f64>,
+    cmd: Vec<&str>,
+    statement: &str,
+    vars: &mut super::super::Vars,
+    b: usize,
+    l: u32,
+) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
     } else {
         if cmd[1] == "str" {
-            if cmd[2] == "push" {
+            if cmd[2] == "len" {
+                stack.push(super::errors::parse_float(vars.str_vec.len(), b, l));
+            } else if cmd[2] == "push" {
                 vars.str_vec.push(vars.string.clone().trim().to_string());
             } else {
                 let lits: Vec<&str> = statement.split(">>").collect();
@@ -180,7 +189,9 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                 vars.string = vars.str_vec[index].to_string();
             }
         } else if cmd[1] == "int" {
-            if cmd[2] == "push" {
+            if cmd[2] == "len" {
+                stack.push(super::errors::parse_float(vars.num_vec.len(), b, l));
+            } else if cmd[2] == "push" {
                 if cmd[3] == "lx" {
                     vars.num_vec.push(vars.lx)
                 } else if cmd[3] == "rv" {
