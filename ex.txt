@@ -1,0 +1,2 @@
+ram string >> henlo
+stdfs write >> ./ex.rs

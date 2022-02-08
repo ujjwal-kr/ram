@@ -135,6 +135,7 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
         let args: Vec<&str> = statement.split(">>").collect();
         let string: &str = vars.string.trim();
         let str_vec: Vec<&str> = string.split(args[1].trim()).collect();
+        println!("{:?}", args[1]);
         for items in str_vec {
             vars.str_vec.push(items.trim().to_string());
         }
@@ -176,11 +177,11 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                     super::errors::invalid_index(b, l, index);
                 }
                 if cmd[2] == "lx" {
-                  vars.lx = vars.num_vec[index];
+                    vars.lx = vars.num_vec[index];
                 } else if cmd[2] == "rv" {
-                  vars.rv = vars.num_vec[index]
+                    vars.rv = vars.num_vec[index]
                 } else {
-                  super::errors::args_error(b, l);
+                    super::errors::args_error(b, l);
                 }
             }
         }
