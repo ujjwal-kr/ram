@@ -1,3 +1,4 @@
-ram lxstring >> hello
-str string lxstring
-print string
+ram string >> helloworld
+ram lxstring >> helloworld
+str cmp
+print

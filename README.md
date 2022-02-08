@@ -1,5 +1,5 @@
 # The Ram programming language
-A stack based programming language created to experiment my crappy lang-dev only capable of making some mathematical formulation. Written in the rust programming language.
+A stack based programming language created to experiment my crappy lang-dev only capable of making some mathematical formulation and logic. Written in the rust programming language.
 
 ## How to run
 1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v1.4/ram).
@@ -36,9 +36,11 @@ The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for sto
  - [Print](#print)
  - [printc](#printc--characters)
  - [stdin](#stdin)
+ - [stdfs](#stdfs)
  - [halt](#halt)
  - [ram](#ram)
  - [vectors](#vectors)
+ - [split](#split)
  - [pop](#pop)
  - [popall](#popall)
  - [add](#add)
@@ -50,7 +52,6 @@ The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for sto
  - [random](#rand--num1num2)
  - [round](#round)
  - [average](#avg)
- - [split](#split)
  - [cmp and jump statements](#cmp-and-jump-statements)
 
 ### comments
@@ -86,6 +87,14 @@ Prints the characters specified on the screen
 - `vec int push lx/rv` pushes the value of `lx/rv` to `vec int` variable.
 - `vec str >> [<index>]` extracts value of the index position of `vec str` and stores it in the `string` variable.
 - `vec int lx/rv >> [<index>]` extracts the value of the index position of `vec int` and stores it in `lx/rv` variable.
+
+### split
+`split >> "<arg>"` splits the `string` variable into args and stores the values into the `vec str`
+
+### str
+- `str lxstring string` moves the value of the `string` variable to `lxstring`.
+- `str string lxstring` moves the value of the `lxstring` variable to `string`.
+- `str cmp` compares the variables `lxstring & strings` and pushes 0 to the stack if they are equal, and -1 if they are not.
 
 ### pop
 Removes the last value from the stack
@@ -125,8 +134,6 @@ the number added prior to the last number / last number and pushes to stack.
 ### avg
 Takes out the average of all the numbers present in the stack. `popall` should be used somewhere in the code to remove the vars which are redundant.
 
-### split
-`split >> "<arg>"` splits the `string` variable into args and stores the values into the `vec str`
 
 ### `cmp` and Jump statements
 The program is devided into blocks separated by empty lines. And each block has an index. For example-
@@ -174,13 +181,3 @@ jne 0
 printc >> loop end
 halt
 ```
-
-#### TODO
-- Implement better error handling - added to a level
-- loops - made a generic one
-- comments - done
-- datatypes
-- standard library code
-
-
-

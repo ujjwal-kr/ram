@@ -126,7 +126,7 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
     }
 }
 
-// strings   
+// strings
 
 pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
     if cmd.len() < 3 {

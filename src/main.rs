@@ -83,7 +83,7 @@ fn run_statement(
                 block_number,
                 line,
             ),
-            "str" => stack::strfn(&mut local_vars, cmd, block_number, line),
+            "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
             "pop" => stack::pop(&mut stack, block_number, line),
