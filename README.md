@@ -60,7 +60,7 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
 
 - [cmp and jump statements](#cmp-and-jump-statements)
 
-### General Commands
+## General Commands
 ### comments
 `// this is a one line comment`
 
@@ -74,7 +74,7 @@ Prints the characters specified on the screen
 ### halt
 `halt` stops the program
 
-### std commands
+## std commands
 
 ### stdin
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
@@ -85,7 +85,7 @@ Prints the characters specified on the screen
 ### rand >> num1,num2
 `rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
 
-### stack based commands
+## stack based commands
 
 ### ram
 - `ram <number>` adds the number to the stack.
@@ -116,7 +116,7 @@ Removes the last value from the stack
 ### popall
 Empties the entire stack. Useful for `avg` implementation.
 
-### Operation Commands
+## Operation Commands
 
 ### add
 - adds last two numbers in the stack and pushes the result to the stack
