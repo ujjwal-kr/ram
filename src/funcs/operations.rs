@@ -173,7 +173,7 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let data_vec = lits[1].trim();
                 let slice = &data_vec[1..data_vec.len() - 1];
-                let index: usize = super::errors::parse_usize(slice.trim(), b, l);
+                let index: usize = ret_index(slice.trim(), vars, b, l);
                 if index >= vars.str_vec.len() {
                     super::errors::invalid_index(b, l, index);
                 }
@@ -190,7 +190,7 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let data_vec = lits[1].trim();
                 let slice = &data_vec[1..data_vec.len() - 1];
-                let index: usize = super::errors::parse_usize(slice.trim(), b, l);
+                let index: usize = ret_index(slice.trim(), vars, b, l);
                 if index >= vars.num_vec.len() {
                     super::errors::invalid_index(b, l, index);
                 }
@@ -203,5 +203,20 @@ pub fn vec_ops(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b
                 }
             }
         }
+    }
+}
+
+fn ret_index(str_idx: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> usize {
+    if str_idx == "lx" || str_idx == "rv" {
+        if str_idx == "lx" {
+            let index: usize = super::errors::parse_usize(vars.lx.to_string().trim(), b, l);
+            index
+        } else {
+            let index: usize = super::errors::parse_usize(vars.rv.to_string().trim(), b, l);
+            index
+        }
+    } else {
+        let index: usize = super::errors::parse_usize(str_idx, b, l);
+        index
     }
 }

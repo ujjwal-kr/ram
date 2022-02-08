@@ -1,4 +1,3 @@
-ram string >> helloworld
-ram lxstring >> helloworld
-str cmp
-print
+ram vec str >> [hello, hi , no]
+vec str >> [lx]
+print string

@@ -15,9 +15,9 @@ pub struct Vars {
 }
 
 fn main() -> std::io::Result<()> {
-    println!("Welcome to the Ram stack-based programming language.");
     let mut filename = String::new();
-    if env::args().nth(1).is_none()==true {
+    if env::args().nth(1).is_none() == true {
+        println!("Welcome to the Ram stack-based programming language.");
         println!("Please enter a filename: ");
         io::stdin().read_line(&mut filename)?;
         filename = filename.trim().to_string();

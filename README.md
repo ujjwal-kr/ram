@@ -85,8 +85,8 @@ Prints the characters specified on the screen
 - `ram vec str >> [1,2,3,4,strs...]` creates a vector and assigns it to the global `vec str` variable.
 - `vec str push` pushes the value of `string` to `vec str` variable.
 - `vec int push lx/rv` pushes the value of `lx/rv` to `vec int` variable.
-- `vec str >> [<index>]` extracts value of the index position of `vec str` and stores it in the `string` variable.
-- `vec int lx/rv >> [<index>]` extracts the value of the index position of `vec int` and stores it in `lx/rv` variable.
+- `vec str >> [<index>/lx/rv]` extracts value of the index position of `vec str` and stores it in the `string` variable.
+- `vec int lx/rv >> [<index>/lx/rv]` extracts the value of the index position of `vec int` and stores it in `lx/rv` variable.
 
 ### split
 `split >> "<arg>"` splits the `string` variable into args and stores the values into the `vec str`
