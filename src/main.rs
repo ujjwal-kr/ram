@@ -11,6 +11,7 @@ pub struct Vars {
     pub lx: f64,
     pub rv: f64,
     pub string: String,
+    pub lxstring: String,
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
 }
@@ -35,6 +36,7 @@ fn main() -> std::io::Result<()> {
         lx: 0.0,
         rv: 0.0,
         string: "".to_string(),
+        lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
     };
@@ -56,6 +58,7 @@ fn run_statement(
         lx: vars.lx,
         rv: vars.rv,
         string: vars.string,
+        lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
     };
@@ -80,6 +83,7 @@ fn run_statement(
                 block_number,
                 line,
             ),
+            "str" => stack::strfn(&mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
             "pop" => stack::pop(&mut stack, block_number, line),

@@ -6,7 +6,7 @@ pub fn ram(
     b: usize,
     l: u32,
 ) {
-    if cmd[1] == "lx" || cmd[1] == "rv" || cmd[1] == "string" || cmd[1] == "vec" {
+    if cmd[1] == "lx" || cmd[1] == "rv" || cmd[1] == "string" || cmd[1] == "vec" || cmd[1] == "lxstring" {
         if cmd.len() < 2 {
             super::errors::args_error(b, l)
         }
@@ -34,7 +34,11 @@ pub fn ram(
             }
             if cmd[1] == "string" {
                 let lits: Vec<&str> = statement.split(">>").collect();
-                vars.string = lits[1].to_string();
+                vars.string = lits[1].trim().to_string();
+            }
+            if cmd[1] == "lxstring" {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                vars.lxstring = lits[1].trim().to_string();
             }
             if cmd[1] == "vec" {
                 if cmd.len() < 5 {
@@ -72,4 +76,16 @@ pub fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
         super::errors::stack_len_error(b, l);
     }
     stack.pop();
+}
+
+pub fn strfn(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
+  if cmd.len() < 3 {
+    super::errors::args_error(b, l);
+  } else {
+    if cmd[1] == "string" && cmd[2] == "lxstring" {
+      vars.string = vars.lxstring.clone();
+    } else if cmd[1] == "lxstring" && cmd[2] == "string" {
+      vars.lxstring = vars.string.clone();
+    }
+  }
 }

@@ -1,3 +1,3 @@
-ram string >> hello i am ujjwal
-split >> " "
-print vec str
+ram lxstring >> hello
+str string lxstring
+print string

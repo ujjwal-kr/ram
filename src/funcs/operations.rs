@@ -126,41 +126,7 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
     }
 }
 
-// strings TODO: optimize code and fix split behaviour
-
-// pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
-//     if cmd.len() < 3 {
-//         super::errors::args_error(b, l)
-//     } else {
-//         let args: Vec<&str> = statement.split(">>").collect();
-//         let string: &str = vars.string.trim();
-//         if args[1].trim() == r"\n" {
-//             let _str_vec: Vec<&str> = string.split("\n").collect();
-//             vars.str_vec = vec![];
-//             for items in _str_vec {
-//                 vars.str_vec.push(items.trim().to_string());
-//             }
-//         } else if args[1].trim() == r"\n\n" {
-//             let _str_vec: Vec<&str> = string.split("\n\n").collect();
-//             vars.str_vec = vec![];
-//             for items in _str_vec {
-//                 vars.str_vec.push(items.trim().to_string());
-//             }
-//         } else if args[1].trim() == r"\space" {
-//             let _str_vec: Vec<&str> = string.split(" ").collect();
-//             vars.str_vec = vec![];
-//             for items in _str_vec {
-//                 vars.str_vec.push(items.trim().to_string());
-//             }
-//         } else {
-//             let _str_vec: Vec<&str> = string.split(args[1].trim()).collect();
-//             vars.str_vec = vec![];
-//             for items in _str_vec {
-//                 vars.str_vec.push(items.trim().to_string());
-//             }
-//         }
-//     }
-// }
+// strings   
 
 pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
     if cmd.len() < 3 {
