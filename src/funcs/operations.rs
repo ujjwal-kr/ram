@@ -126,18 +126,70 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
     }
 }
 
-// strings
+// strings TODO: optimize code and fix split behaviour
+
+// pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
+//     if cmd.len() < 3 {
+//         super::errors::args_error(b, l)
+//     } else {
+//         let args: Vec<&str> = statement.split(">>").collect();
+//         let string: &str = vars.string.trim();
+//         if args[1].trim() == r"\n" {
+//             let _str_vec: Vec<&str> = string.split("\n").collect();
+//             vars.str_vec = vec![];
+//             for items in _str_vec {
+//                 vars.str_vec.push(items.trim().to_string());
+//             }
+//         } else if args[1].trim() == r"\n\n" {
+//             let _str_vec: Vec<&str> = string.split("\n\n").collect();
+//             vars.str_vec = vec![];
+//             for items in _str_vec {
+//                 vars.str_vec.push(items.trim().to_string());
+//             }
+//         } else if args[1].trim() == r"\space" {
+//             let _str_vec: Vec<&str> = string.split(" ").collect();
+//             vars.str_vec = vec![];
+//             for items in _str_vec {
+//                 vars.str_vec.push(items.trim().to_string());
+//             }
+//         } else {
+//             let _str_vec: Vec<&str> = string.split(args[1].trim()).collect();
+//             vars.str_vec = vec![];
+//             for items in _str_vec {
+//                 vars.str_vec.push(items.trim().to_string());
+//             }
+//         }
+//     }
+// }
 
 pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
     if cmd.len() < 3 {
-        super::errors::args_error(b, l)
+        super::errors::args_error(b, l);
     } else {
-        let args: Vec<&str> = statement.split(">>").collect();
+        let lits: Vec<&str> = statement.split(">>").collect();
         let string: &str = vars.string.trim();
-        let str_vec: Vec<&str> = string.split(args[1].trim()).collect();
-        println!("{:?}", args[1]);
-        for items in str_vec {
-            vars.str_vec.push(items.trim().to_string());
+        let str_arg: &str = lits[1].trim();
+        let slice = &str_arg[1..str_arg.len() - 1];
+        if slice == r"\n" || slice == r"\n\n" {
+            if slice == r"\n" {
+                let str_vec: Vec<&str> = string.split("\n").collect();
+                vars.str_vec = vec![];
+                for items in str_vec {
+                    vars.str_vec.push(items.to_string());
+                }
+            } else if slice == r"\n\n" {
+                let str_vec: Vec<&str> = string.split("\n\n").collect();
+                vars.str_vec = vec![];
+                for items in str_vec {
+                    vars.str_vec.push(items.to_string());
+                }
+            }
+        } else {
+            let str_vec: Vec<&str> = string.split(slice).collect();
+            vars.str_vec = vec![];
+            for items in str_vec {
+                vars.str_vec.push(items.to_string());
+            }
         }
     }
 }

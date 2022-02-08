@@ -126,7 +126,7 @@ the number added prior to the last number / last number and pushes to stack.
 Takes out the average of all the numbers present in the stack. `popall` should be used somewhere in the code to remove the vars which are redundant.
 
 ### split
-`split >> <split_arg>` splits the `string` variable into args and stores the values into the `vec str`
+`split >> "<arg>"` splits the `string` variable into args and stores the values into the `vec str`
 
 ### `cmp` and Jump statements
 The program is devided into blocks separated by empty lines. And each block has an index. For example-

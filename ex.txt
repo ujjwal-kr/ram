@@ -1,2 +1,3 @@
-ram string >> henlo
-stdfs write >> ./ex.rs
+ram string >> hello i am ujjwal
+split >> " "
+print vec str
