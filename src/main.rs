@@ -1,7 +1,5 @@
-use std::f64;
-use std::fs;
-use std::io;
 use std::io::prelude::*;
+use std::{env, f64, fs, io};
 
 mod funcs;
 use funcs::{errors, operations, print, stack, stdfn};
