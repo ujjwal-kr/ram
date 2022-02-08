@@ -23,7 +23,7 @@ printc >> Heads
 printc >> Tails
 ```
 
-4. run `./ram` and enter the file path eg. `example.ram` at the prompt.
+4. run `./ram ./example.ram` and press enter.
 5. Die
 
 ## Documentation
