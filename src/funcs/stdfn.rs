@@ -64,18 +64,12 @@ pub fn random(
     let args: Vec<&str> = rand_cmd[1].split(",").collect();
 
     let mut rng = rand::thread_rng();
-    let random_num = rng.gen_range(
-        ret_float(args[0].trim(), vars, b, l)..ret_float(args[1].trim(), vars, b, l),
-    );
+    let random_num =
+        rng.gen_range(ret_float(args[0].trim(), vars, b, l)..ret_float(args[1].trim(), vars, b, l));
     stack.push(random_num);
 }
 
-fn ret_float(
-    str_num: &str,
-    vars: &mut super::super::Vars,
-    b: usize,
-    l: u32,
-) -> f64 {
+fn ret_float(str_num: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> f64 {
     if str_num == "lx" || str_num == "rv" {
         if str_num == "lx" {
             vars.lx
