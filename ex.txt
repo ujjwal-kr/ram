@@ -1,5 +1,2 @@
-stdfs open >> ./examples/loop.ram
-split >> \n
-print vec str
-vec str >> [1]
-print string
+ram string >> henlo
+stdfs write >> ./ex.rs

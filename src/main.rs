@@ -92,7 +92,7 @@ fn run_statement(
             "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, block_number, line),
             "round" => operations::round(&mut stack, cmd, &mut local_vars, block_number, line),
             "avg" => operations::avg(&mut stack, block_number, line),
-            "rand" => stack::random(&mut stack, statement, block_number, line),
+            "rand" => stdfn::random(&mut stack, statement, block_number, line),
             "split" => operations::split(cmd, statement, &mut local_vars, block_number, line),
             "vec" => operations::vec_ops(cmd, statement, &mut local_vars, block_number, line),
             "cmp" => operations::cmp(&mut stack, block_number, line),

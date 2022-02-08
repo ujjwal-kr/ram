@@ -135,6 +135,7 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
         let args: Vec<&str> = statement.split(">>").collect();
         let string: &str = vars.string.trim();
         let str_vec: Vec<&str> = string.split(args[1].trim()).collect();
+        println!("{:?}", args[1]);
         for items in str_vec {
             vars.str_vec.push(items.trim().to_string());
         }
