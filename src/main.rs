@@ -1,7 +1,5 @@
-use std::f64;
-use std::fs;
-use std::io;
 use std::io::prelude::*;
+use std::{env, f64, fs, io};
 
 mod funcs;
 use funcs::{errors, operations, print, stack, stdfn};
@@ -18,9 +16,14 @@ pub struct Vars {
 
 fn main() -> std::io::Result<()> {
     println!("Welcome to the Ram stack-based programming language.");
-    println!("Enter the filename: ");
     let mut filename = String::new();
-    io::stdin().read_line(&mut filename)?;
+    if env::args().nth(1).is_none()==true {
+        println!("Please enter a filename: ");
+        io::stdin().read_line(&mut filename)?;
+        filename = filename.trim().to_string();
+    } else {
+        filename = env::args().nth(1).unwrap();
+    }
 
     let mut file = fs::File::open(filename.trim())?;
     let mut contents = String::new();
