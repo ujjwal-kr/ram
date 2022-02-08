@@ -49,14 +49,40 @@ pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b:
     }
 }
 
-pub fn random(stack: &mut Vec<f64>, statement: &str, b: usize, l: u32) {
+pub fn random(
+    vars: &mut super::super::Vars,
+    cmd: Vec<&str>,
+    stack: &mut Vec<f64>,
+    statement: &str,
+    b: usize,
+    l: u32,
+) {
+    if cmd.len() < 3 {
+        super::errors::args_error(b, l);
+    }
     let rand_cmd: Vec<&str> = statement.split(">>").collect();
-    let numbers: Vec<&str> = rand_cmd[1].split(",").collect();
+    let args: Vec<&str> = rand_cmd[1].split(",").collect();
 
     let mut rng = rand::thread_rng();
     let random_num = rng.gen_range(
-        super::errors::parse_float(numbers[0].trim(), b, l)
-            ..super::errors::parse_float(numbers[1].trim(), b, l),
+        ret_float(args[0].trim(), vars, b, l)..ret_float(args[1].trim(), vars, b, l),
     );
     stack.push(random_num);
+}
+
+fn ret_float(
+    str_num: &str,
+    vars: &mut super::super::Vars,
+    b: usize,
+    l: u32,
+) -> f64 {
+    if str_num == "lx" || str_num == "rv" {
+        if str_num == "lx" {
+            vars.lx
+        } else {
+            vars.rv
+        }
+    } else {
+        super::errors::parse_float(str_num.trim(), b, l)
+    }
 }
