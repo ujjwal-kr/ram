@@ -31,15 +31,18 @@ pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b:
     } else {
         if cmd[1] == "open" {
             let lits: Vec<&str> = _statement.split(">>").collect();
-            let mut file = fs::File::open(lits[1].trim()).expect(format!(
-                "No such file exists block::{}:line:{}",
-                b.to_string().trim(),
-                l.to_string()
-            ).trim());
+            let mut file = fs::File::open(lits[1].trim()).expect(
+                format!(
+                    "No such file exists block::{}:line:{}",
+                    b.to_string().trim(),
+                    l.to_string()
+                )
+                .trim(),
+            );
             let mut contents = String::new();
             file.read_to_string(&mut contents)
                 .expect("something went wrong");
-            vars.string = contents;    
+            vars.string = contents;
         } else {
             super::errors::args_error(b, l);
         }

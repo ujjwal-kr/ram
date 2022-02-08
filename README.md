@@ -66,6 +66,9 @@ Prints the characters specified on the screen
 ### stdin
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
 
+### stdfs
+- `stdfs open ./path/to/file` opens the file and stores the contents as strings in the  `strings` variable.
+
 ### halt
 `halt` stops the program
 
