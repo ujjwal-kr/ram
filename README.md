@@ -32,28 +32,35 @@ Official documentation for the RAM programming language. Please open an issue if
 The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxstring` (for storing a string), `vec int` for storing a float vector and `vec str` for storing a string vector. All of these are global variavles. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
 ## Contents
- - [Comments](#comments)
- - [Print](#print)
- - [printc](#printc--characters)
- - [stdin](#stdin)
- - [stdfs](#stdfs)
- - [halt](#halt)
- - [ram](#ram)
- - [vectors](#vectors)
- - [split](#split)
- - [pop](#pop)
- - [popall](#popall)
- - [add](#add)
- - [subtract](#sub)
- - [multiply](#mul)
- - [division](#div)
- - [sqr](#sqr)
- - [sqrt](#sqrt)
- - [random](#rand--num1num2)
- - [round](#round)
- - [average](#avg)
- - [cmp and jump statements](#cmp-and-jump-statements)
+- General commands:
+  - [Comments](#comments)
+  - [Print](#print)
+  - [printc](#printc--characters)
+  - [halt](#halt)
+- std commands:
+  - [stdin](#stdin)
+  - [stdfs](#stdfs)
+  - [random](#rand--num1num2)
+- stack based commands:
+  - [ram](#ram)
+  - [vectors](#vectors)
+  - [split](#split)
+  - [str](#str);
+  - [pop](#pop)
+  - [popall](#popall)
+- operations:  
+  - [add](#add)
+  - [subtract](#sub)
+  - [multiply](#mul)
+  - [division](#div)
+  - [sqr](#sqr)
+  - [sqrt](#sqrt)
+  - [average](#avg)
+  - [round](#round)
 
+- [cmp and jump statements](#cmp-and-jump-statements)
+
+### General Commands
 ### comments
 `// this is a one line comment`
 
@@ -64,14 +71,21 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
 ### printc >> characters
 Prints the characters specified on the screen
 
+### halt
+`halt` stops the program
+
+### std commands
+
 ### stdin
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
 
 ### stdfs
 - `stdfs open ./path/to/file` opens the file and stores the contents as strings in the  `strings` variable.
 
-### halt
-`halt` stops the program
+### rand >> num1,num2
+`rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
+
+### stack based commands
 
 ### ram
 - `ram <number>` adds the number to the stack.
@@ -102,6 +116,8 @@ Removes the last value from the stack
 ### popall
 Empties the entire stack. Useful for `avg` implementation.
 
+### Operation Commands
+
 ### add
 - adds last two numbers in the stack and pushes the result to the stack
 - `add lx rv` adds the two variables and pushes the result to the stack
@@ -124,16 +140,12 @@ the number added prior to the last number / last number and pushes to stack.
 - `sqrt` squares the last number in the stack and adds the result to the stack.
 - `sqrt lx/rv` squares `lx/rv` and assigns the result to the variable squared.
 
-### rand >> num1,num2
-`rand >> num1,num2` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
+### avg
+Takes out the average of all the numbers present in the stack. `popall` should be used somewhere in the code to remove the vars which are redundant.
 
 ### round
 - `round` rounds the last number present in the stack to decimals and pushes it to the stack.
 - `round lx/rv` rounds the specified variable and assigns the result to the var itself.
-
-### avg
-Takes out the average of all the numbers present in the stack. `popall` should be used somewhere in the code to remove the vars which are redundant.
-
 
 ### `cmp` and Jump statements
 The program is devided into blocks separated by empty lines. And each block has an index. For example-
