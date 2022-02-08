@@ -29,7 +29,7 @@ printc >> Tails
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
-The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for storing a string), `vec int` for storing a float vector and `vec str` for storing a string vector which are global. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
+The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxstring` (for storing a string), `vec int` for storing a float vector and `vec str` for storing a string vector. All of these are global variavles. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
 
 ## Contents
  - [Comments](#comments)
@@ -59,7 +59,7 @@ The language has 5 variables `lx`, `rv` (for storing numbers), `string` (for sto
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv/string/vec str/vec int` prints the value of `lx/rv/string/vec str/vec int` variables on the screen.
+- `print lx/rv/string/lxstring/vec str/vec int` prints the value of `lx/rv/string/lxstring/vec str/vec int` variables on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
