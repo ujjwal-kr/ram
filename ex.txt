@@ -1,7 +1,15 @@
 ram rv 1
 stdfs open >> ./test.txt
 split >> "\n"
-print vec str
 add lx rv
 ram lx
-ram 
+vec str len
+cmp
+je 2
+cmp
+jne 1
+
+print lx
+jmp 0
+
+halt

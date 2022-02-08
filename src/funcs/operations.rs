@@ -163,7 +163,7 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
 // vectors
 
 pub fn vec_ops(
-    stack: Vec<f64>,
+    stack: &mut Vec<f64>,
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut super::super::Vars,
@@ -175,7 +175,11 @@ pub fn vec_ops(
     } else {
         if cmd[1] == "str" {
             if cmd[2] == "len" {
-                stack.push(super::errors::parse_float(vars.str_vec.len(), b, l));
+                stack.push(super::errors::parse_float(
+                    vars.str_vec.len().to_string().trim(),
+                    b,
+                    l,
+                ));
             } else if cmd[2] == "push" {
                 vars.str_vec.push(vars.string.clone().trim().to_string());
             } else {
@@ -190,7 +194,11 @@ pub fn vec_ops(
             }
         } else if cmd[1] == "int" {
             if cmd[2] == "len" {
-                stack.push(super::errors::parse_float(vars.num_vec.len(), b, l));
+                stack.push(super::errors::parse_float(
+                    vars.num_vec.len().to_string().trim(),
+                    b,
+                    l,
+                ));
             } else if cmd[2] == "push" {
                 if cmd[3] == "lx" {
                     vars.num_vec.push(vars.lx)
