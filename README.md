@@ -45,7 +45,7 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
   - [ram](#ram)
   - [vectors](#vectors)
   - [split](#split)
-  - [str](#str);
+  - [str](#str)
   - [pop](#pop)
   - [popall](#popall)
 - operations:  
