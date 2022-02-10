@@ -1,9 +1,13 @@
 use colored::*;
+pub mod operation_test;
 pub mod stack_test;
+
+use operation_test::*;
 use stack_test::*;
 
 pub fn test() {
     ram_works();
+    add_works();
 }
 
 pub fn log_pass(string: &str) {
