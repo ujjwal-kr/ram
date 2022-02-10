@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::{env, f64, fs, io};
 
 mod funcs;
+mod tests;
 use funcs::{errors, operations, print, stack, stdfn};
 
 #[derive(Clone)]
@@ -22,7 +23,12 @@ fn main() -> std::io::Result<()> {
         io::stdin().read_line(&mut filename)?;
         filename = filename.trim().to_string();
     } else {
-        filename = env::args().nth(1).unwrap();
+        if env::args().nth(1).unwrap() == "test" {
+            tests::test();
+            panic!("Test End");
+        } else {
+            filename = env::args().nth(1).unwrap();
+        }
     }
 
     let mut file = fs::File::open(filename.trim())?;

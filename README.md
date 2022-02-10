@@ -92,7 +92,7 @@ Prints the characters specified on the screen
 - `ram lx/rv <number>` assigns the number to the variable
 - `ram lx/rv` adds the variable value to the stack for further calculations
 - `ram lx/rv prev` assigns the last stack value to the specified variable.
-- `ram string <strings>` assigns value to the strings global variable.
+- `ram string >> <strings>` assigns value to the strings global variable.
 
 ### vectors
 - `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.

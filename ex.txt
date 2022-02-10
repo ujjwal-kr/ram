@@ -1,15 +1,2 @@
-ram lx 30
-ram rv 20
-rand >> rv,lx
-round
-ram lx prev
-print
-jmp 1
-
-ram lx
-ram 25
-cmp
-je 2
-jmp 0
-
-halt
+ram string >> hello world
+print string
