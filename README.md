@@ -6,25 +6,25 @@ A stack based programming language created to experiment my crappy lang-dev only
 2. Make it executable using `chmod +x ./ram`
 3. Make a .ram file with the following contents at the same directory as the binary:
 
-```
-printc >> Coin Flip
-rand >> 0,1
-round
-ram 1
-cmp
-je 1
-pop
-ram 0
+```as
+ram rv 1
+add lx rv
+ram lx prev
+print lx
+jmp 1
+
+ram lx
+ram 10
 cmp
 je 2
+cmp
+jne 0
 
-printc >> Heads
-
-printc >> Tails
+printc >> loop end
+halt
 ```
 
 4. run `./ram ./example.ram` and press enter.
-5. Die
 
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
@@ -60,7 +60,7 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
 
 - [cmp and jump statements](#cmp-and-jump-statements)
 
-### General Commands
+## General Commands
 ### comments
 `// this is a one line comment`
 
@@ -74,7 +74,7 @@ Prints the characters specified on the screen
 ### halt
 `halt` stops the program
 
-### std commands
+## std commands
 
 ### stdin
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
@@ -85,7 +85,7 @@ Prints the characters specified on the screen
 ### rand >> num1,num2
 `rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
 
-### stack based commands
+## stack based commands
 
 ### ram
 - `ram <number>` adds the number to the stack.
@@ -116,7 +116,7 @@ Removes the last value from the stack
 ### popall
 Empties the entire stack. Useful for `avg` implementation.
 
-### Operation Commands
+## Operation Commands
 
 ### add
 - adds last two numbers in the stack and pushes the result to the stack
@@ -149,7 +149,7 @@ Takes out the average of all the numbers present in the stack. `popall` should b
 
 ### `cmp` and Jump statements
 The program is devided into blocks separated by empty lines. And each block has an index. For example-
-```
+```as
 ram 100
 ram 300
 cmp
@@ -174,22 +174,21 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 
 - `jsm <index>` - jumps to a block by its index position if the prev cmp statement is -1 (smaller)
 
-### An Example loop using jmp
+### Example Coin Flip
 
-```
-ram rv 1
-add lx rv
-ram lx prev
-print lx
-jmp 1
-
-ram lx
-ram 10
+```as
+printc >> Coin Flip
+rand >> 0,1
+round
+ram 1
+cmp
+je 1
+pop
+ram 0
 cmp
 je 2
-cmp
-jne 0
 
-printc >> loop end
-halt
+printc >> Heads
+
+printc >> Tails
 ```
