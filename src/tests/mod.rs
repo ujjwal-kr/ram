@@ -1,11 +1,13 @@
 use colored::*;
+use std::fs::File;
+use std::io::prelude::*;
 pub mod operation_test;
 pub mod stack_test;
 
 use operation_test::*;
 use stack_test::*;
 
-pub fn test() -> bool {
+pub fn test() {
     ram_works();
     str_works();
     operation_works();
@@ -17,6 +19,8 @@ pub fn log_pass(string: &str) {
 
 pub fn log_fail(string: &str) {
     println!("{}: {}", "FAILED".red().bold(), string.yellow());
+    let mut file = File::create("log.txt").expect("err creating log");
+    file.write_all(b"true").expect("err creating log");
 }
 
 pub fn assert_f64(a: f64, b: f64, statement: &str) {

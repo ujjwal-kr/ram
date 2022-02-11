@@ -258,11 +258,20 @@ fn vec_ops_works() {
 
     // vec int push lx
     statement = "vec int push lx";
-    vars.lx = 2.0;
+    vars.lx = 5.0;
     vars.num_vec.push(3.0);
     cmd = statement.split(" ").collect();
     operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
-    assert_vec_int(vars.num_vec.clone(), [3.0, 2.0].to_vec(), statement);
+    assert_vec_int(vars.num_vec.clone(), [3.0, 5.0].to_vec(), statement);
+    vars.num_vec = vec![];
+
+    // vec int push rv
+    statement = "vec int push rv";
+    vars.rv = 4.0;
+    vars.num_vec.push(3.0);
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_vec_int(vars.num_vec.clone(), [3.0, 4.0].to_vec(), statement);
     vars.num_vec = vec![];
 
     // vec int lx >> [1]

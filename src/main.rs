@@ -1,5 +1,5 @@
 use std::io::prelude::*;
-use std::{env, f64, fs, io, process};
+use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
 mod tests;
@@ -25,7 +25,12 @@ fn main() -> std::io::Result<()> {
     } else {
         if env::args().nth(1).unwrap() == "test" {
             tests::test();
-            process::exit(1);
+            if Path::new("log.txt").exists() {
+              fs::remove_file("log.txt").expect("");
+              panic!("Tests failed");
+            } else {
+              process::exit(1);
+            }
         } else {
             filename = env::args().nth(1).unwrap();
         }

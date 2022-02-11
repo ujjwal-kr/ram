@@ -93,7 +93,7 @@ pub fn ram_works() {
 }
 
 pub fn str_works() {
-  // str lxstring string
+    // str lxstring string
     let mut statement: &str = "str lxstring string";
     let mut stack: Vec<f64> = vec![];
     let mut cmd: Vec<&str> = statement.split(" ").collect();
