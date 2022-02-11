@@ -55,28 +55,31 @@ pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
                 vars.rv = vars.rv * vars.rv;
             }
         } else {
-          super::errors::args_error(b, l);
+            super::errors::args_error(b, l);
         }
     }
 }
 
 pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
-    if cmd[1] == "lx" || cmd[1] == "rv" {
-        if cmd[1] == "lx" {
-            vars.lx = vars.lx.sqrt();
-        }
-        if cmd[1] == "rv" {
-            vars.rv = vars.rv.sqrt();
+    if cmd.len() == 1 {
+        if stack.len() < 1 {
+            super::errors::stack_len_error(b, l);
+        } else {
+            let result = stack[stack.len() - 1].sqrt();
+            stack.push(result);
         }
     } else {
-        let result = stack[stack.len() - 1].sqrt();
-        stack.push(result);
+        if cmd[1] == "lx" || cmd[1] == "rv" {
+            if cmd[1] == "lx" {
+                vars.lx = vars.lx.sqrt();
+            }
+            if cmd[1] == "rv" {
+                vars.rv = vars.rv.sqrt();
+            }
+        } else {
+          super::errors::args_error(b, l);
+        }
     }
-    if stack.len() < 1 {
-        super::errors::stack_len_error(b, l);
-    }
-    let result = stack[stack.len() - 1].sqrt();
-    stack.push(result);
 }
 
 pub fn round(

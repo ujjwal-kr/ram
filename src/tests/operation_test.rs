@@ -7,6 +7,7 @@ pub fn operation_works() {
     mul_works();
     div_works();
     sqr_works();
+    sqrt_works();
 }
 
 fn add_works() {
@@ -121,4 +122,40 @@ fn sqr_works() {
     cmd = statement.split(" ").collect();
     operations::sqr(&mut stack, cmd, &mut vars, 0, 1);
     assert_f64(vars.rv, 16.0, statement);
+}
+
+fn sqrt_works() {
+    // sqrt
+    let mut statement: &str = "sqrt";
+    let mut vars = super::super::Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "".to_string(),
+        lxstring: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
+    };
+
+    let mut stack: Vec<f64> = vec![];
+    stack.push(9.0);
+    let mut cmd: Vec<&str> = vec![];
+    cmd.push("sqrt");
+    operations::sqrt(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(stack[1], 3.0, statement);
+
+    // sqr lx
+    stack = vec![];
+    statement = "sqrt lx";
+    vars.lx = 25.0;
+    cmd = statement.split(" ").collect();
+    operations::sqrt(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(vars.lx, 5.0, statement);
+
+    // sqr rv
+    stack = vec![];
+    statement = "sqrt rv";
+    vars.rv = 4.0;
+    cmd = statement.split(" ").collect();
+    operations::sqrt(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(vars.rv, 2.0, statement);
 }
