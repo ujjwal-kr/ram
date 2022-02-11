@@ -40,19 +40,23 @@ pub fn div(stack: &mut Vec<f64>, b: usize, l: u32) {
 }
 
 pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
-    if cmd[1] == "lx" || cmd[1] == "rv" {
-        if cmd[1] == "lx" {
-            vars.lx = vars.lx * vars.lx;
-        }
-        if cmd[1] == "rv" {
-            vars.rv = vars.rv * vars.rv;
-        }
-    } else {
+    if cmd.len() == 1 {
         if stack.len() < 1 {
             super::errors::stack_len_error(b, l);
         }
         let result = stack[stack.len() - 1] * stack[stack.len() - 1];
         stack.push(result);
+    } else {
+        if cmd[1] == "lx" || cmd[1] == "rv" {
+            if cmd[1] == "lx" {
+                vars.lx = vars.lx * vars.lx;
+            }
+            if cmd[1] == "rv" {
+                vars.rv = vars.rv * vars.rv;
+            }
+        } else {
+          super::errors::args_error(b, l);
+        }
     }
 }
 

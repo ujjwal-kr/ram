@@ -7,7 +7,7 @@ use stack_test::*;
 
 pub fn test() {
     ram_works();
-    add_works();
+    operation_works();
 }
 
 pub fn log_pass(string: &str) {
