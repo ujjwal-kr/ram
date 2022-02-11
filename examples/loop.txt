@@ -5,7 +5,7 @@ print lx
 jmp 1
 
 ram lx
-ram 1479
+ram 500
 cmp
 je 2
 cmp
