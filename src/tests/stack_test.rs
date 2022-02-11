@@ -91,3 +91,29 @@ pub fn ram_works() {
     stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
     assert_vec_str(vars.str_vec, ["hello", "a", "b"].to_vec(), statement);
 }
+
+pub fn str_works() {
+  // str lxstring string
+    let mut statement: &str = "str lxstring string";
+    let mut stack: Vec<f64> = vec![];
+    let mut cmd: Vec<&str> = statement.split(" ").collect();
+    let mut vars = super::super::Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "".to_string(),
+        lxstring: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
+    };
+
+    vars.string = "helloworld".to_string();
+    stack::strfn(&mut stack, &mut vars, cmd, 0, 1);
+    assert_str(vars.lxstring.trim(), vars.string.trim(), statement);
+
+    // str string lxstring
+    statement = "str string lxstring";
+    cmd = statement.split(" ").collect();
+    vars.lxstring = "abc".to_string();
+    stack::strfn(&mut stack, &mut vars, cmd, 0, 1);
+    assert_str(vars.lxstring.trim(), vars.string.trim(), statement);
+}

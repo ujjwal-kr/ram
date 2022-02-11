@@ -7,6 +7,7 @@ use stack_test::*;
 
 pub fn test() {
     ram_works();
+    str_works();
     operation_works();
 }
 
