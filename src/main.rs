@@ -1,5 +1,5 @@
 use std::io::prelude::*;
-use std::{env, f64, fs, io};
+use std::{env, f64, fs, io, process};
 
 mod funcs;
 mod tests;
@@ -25,7 +25,7 @@ fn main() -> std::io::Result<()> {
     } else {
         if env::args().nth(1).unwrap() == "test" {
             tests::test();
-            panic!("Test End");
+            process::exit(1);
         } else {
             filename = env::args().nth(1).unwrap();
         }
@@ -219,7 +219,7 @@ fn run_statement(
                 }
             }
             "halt" => {
-                panic!("Program End");
+                process::exit(1);
             }
             _ => {
                 println!(

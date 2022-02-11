@@ -5,7 +5,7 @@ pub mod stack_test;
 use operation_test::*;
 use stack_test::*;
 
-pub fn test() {
+pub fn test() -> bool {
     ram_works();
     str_works();
     operation_works();
