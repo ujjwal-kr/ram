@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()> {
               fs::remove_file("log.txt").expect("");
               panic!("Tests failed");
             } else {
-              process::exit(1);
+              process::exit(0);
             }
         } else {
             filename = env::args().nth(1).unwrap();
@@ -224,7 +224,7 @@ fn run_statement(
                 }
             }
             "halt" => {
-                process::exit(1);
+                process::exit(0);
             }
             _ => {
                 println!(
