@@ -1,5 +1,3 @@
-ram 10
-ram 12
-ram 2
-avg
+ram vec str >> [hello, world]
+vec str len
 print

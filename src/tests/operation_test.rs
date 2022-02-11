@@ -10,6 +10,8 @@ pub fn operation_works() {
     sqrt_works();
     round_works();
     avg_works();
+    split_works();
+    vec_ops_works();
 }
 
 fn add_works() {
@@ -162,7 +164,6 @@ fn sqrt_works() {
     assert_f64(vars.rv, 2.0, statement);
 }
 
-
 fn round_works() {
     // round
     let mut statement: &str = "round";
@@ -208,4 +209,142 @@ fn avg_works() {
     stack.push(2.0);
     operations::avg(&mut stack, 0, 1);
     assert_f64(stack[3], 8.0, statement);
+}
+
+fn split_works() {
+    // split >> ","
+    let mut vars = super::super::Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "".to_string(),
+        lxstring: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
+    };
+    vars.string = "one,two,three".to_string();
+    let statement: &str = "split >> \",\"";
+    let cmd = statement.split(" ").collect();
+    operations::split(cmd, statement, &mut vars, 0, 1);
+    assert_vec_str(
+        vars.str_vec.clone(),
+        ["one", "two", "three"].to_vec(),
+        statement,
+    );
+}
+
+fn vec_ops_works() {
+    // vec str push
+    let mut stack: Vec<f64> = vec![];
+    let mut statement: &str = "vec str push";
+    let mut cmd: Vec<&str> = statement.split(" ").collect();
+    let mut vars = super::super::Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "".to_string(),
+        lxstring: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
+    };
+
+    vars.str_vec.push("hello".to_string()); // at place 0
+    vars.string = "hello2".to_string();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1); // push string at [1]
+    assert_vec_str(
+        vars.str_vec.clone(),
+        ["hello", "hello2"].to_vec(),
+        statement,
+    );
+    vars.str_vec = vec![];
+
+    // vec int push lx
+    statement = "vec int push lx";
+    vars.lx = 2.0;
+    vars.num_vec.push(3.0);
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_vec_int(vars.num_vec.clone(), [3.0, 2.0].to_vec(), statement);
+    vars.num_vec = vec![];
+
+    // vec int lx >> [1]
+    statement = "vec int lx >> [1]";
+    vars.num_vec.push(1.0);
+    vars.num_vec.push(3.0);
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(vars.lx, vars.num_vec[1], statement);
+    vars.num_vec = vec![];
+
+    // vec int rv >> [0]
+    statement = "vec int rv >> [0]";
+    vars.num_vec.push(1.0);
+    vars.num_vec.push(3.0);
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(vars.rv, vars.num_vec[0], statement);
+    vars.num_vec = vec![];
+
+    // vec int rv >> [lx]
+    statement = "vec int rv >> [lx]";
+    vars.num_vec.push(1.0);
+    vars.num_vec.push(3.0);
+    vars.lx = 1.0;
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(vars.rv, vars.num_vec[1], statement);
+    vars.num_vec = vec![];
+
+    // vec int lx >> [rv]
+    statement = "vec int lx >> [rv]";
+    vars.num_vec.push(1.0);
+    vars.num_vec.push(3.0);
+    vars.rv = 1.0;
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(vars.lx, vars.num_vec[1], statement);
+    vars.num_vec = vec![];
+
+    // vec str >> [1]
+    statement = "vec str >> [1]";
+    cmd = statement.split(" ").collect();
+    vars.str_vec.push("one".to_string());
+    vars.str_vec.push("two".to_string());
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_str(vars.string.trim(), vars.str_vec[1].trim(), statement);
+    vars.str_vec = vec![];
+
+    // vec str >> [lx]
+    statement = "vec str >> [lx]";
+    vars.lx = 1.0;
+    cmd = statement.split(" ").collect();
+    vars.str_vec.push("one".to_string());
+    vars.str_vec.push("two".to_string());
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_str(vars.string.trim(), vars.str_vec[1].trim(), statement);
+    vars.str_vec = vec![];
+
+    // vec str >> [rv]
+    statement = "vec str >> [rv]";
+    vars.rv = 1.0;
+    cmd = statement.split(" ").collect();
+    vars.str_vec.push("one".to_string());
+    vars.str_vec.push("two".to_string());
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_str(vars.string.trim(), vars.str_vec[1].trim(), statement);
+    vars.str_vec = vec![];
+
+    // vec str len
+    statement = "vec str len";
+    vars.str_vec.push("one".to_string());
+    vars.str_vec.push("two".to_string());
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(stack[0], 2.0, statement);
+    stack = vec![];
+
+    // vec int len
+    statement = "vec int len";
+    cmd = statement.split(" ").collect();
+    vars.num_vec.push(2.0);
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_f64(stack[0], 1.0, statement);
 }
