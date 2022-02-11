@@ -2,7 +2,7 @@
 A stack based programming language created to experiment my crappy lang-dev only capable of making some mathematical formulation and logic. Written in the rust programming language.
 
 ## How to run
-1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v1.6/ram).
+1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v1.7/ram).
 2. Make it executable using `chmod +x ./ram`
 3. Make a .ram file with the following contents at the same directory as the binary:
 
@@ -25,6 +25,11 @@ halt
 ```
 
 4. run `./ram ./example.ram` and press enter.
+
+## How to test
+Run `cargo run test` to run the custom tests to test all the commands in the suit. Make sure to run this before pushing any PRs. The tests are automatically ran when there is a PR/commit on the master branch.
+
+![tests](https://media.discordapp.net/attachments/939051863037341726/941527372006572102/unknown.png?width=300&height=407)
 
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
