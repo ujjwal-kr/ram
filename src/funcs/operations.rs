@@ -77,7 +77,7 @@ pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars,
                 vars.rv = vars.rv.sqrt();
             }
         } else {
-          super::errors::args_error(b, l);
+            super::errors::args_error(b, l);
         }
     }
 }

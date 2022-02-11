@@ -1,2 +1,5 @@
-ram string >> hello world
-print string
+ram 10
+ram 12
+ram 2
+avg
+print

@@ -8,6 +8,8 @@ pub fn operation_works() {
     div_works();
     sqr_works();
     sqrt_works();
+    round_works();
+    avg_works();
 }
 
 fn add_works() {
@@ -158,4 +160,52 @@ fn sqrt_works() {
     cmd = statement.split(" ").collect();
     operations::sqrt(&mut stack, cmd, &mut vars, 0, 1);
     assert_f64(vars.rv, 2.0, statement);
+}
+
+
+fn round_works() {
+    // round
+    let mut statement: &str = "round";
+    let mut vars = super::super::Vars {
+        lx: 0.0,
+        rv: 0.0,
+        string: "".to_string(),
+        lxstring: "".to_string(),
+        num_vec: vec![],
+        str_vec: vec![],
+    };
+
+    let mut stack: Vec<f64> = vec![];
+    stack.push(9.3);
+    let mut cmd: Vec<&str> = vec![];
+    cmd.push("round");
+    operations::round(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(stack[1], 9.0, statement);
+
+    // round lx
+    stack = vec![];
+    statement = "round lx";
+    vars.lx = 25.7;
+    cmd = statement.split(" ").collect();
+    operations::round(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(vars.lx, 26.0, statement);
+
+    // round rv
+    stack = vec![];
+    statement = "round rv";
+    vars.rv = 4.5;
+    cmd = statement.split(" ").collect();
+    operations::round(&mut stack, cmd, &mut vars, 0, 1);
+    assert_f64(vars.rv, 5.0, statement);
+}
+
+fn avg_works() {
+    // avg
+    let statement: &str = "avg";
+    let mut stack: Vec<f64> = vec![];
+    stack.push(10.0);
+    stack.push(12.0);
+    stack.push(2.0);
+    operations::avg(&mut stack, 0, 1);
+    assert_f64(stack[3], 8.0, statement);
 }
