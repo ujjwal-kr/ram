@@ -1,3 +1,15 @@
-ram vec str >> [hello, world]
-vec str len
-print
+ram rv 1
+add lx rv
+ram lx prev
+print lx
+jmp 1
+
+ram lx
+ram yy
+cmp
+je 2
+cmp
+jne 0
+
+printc >> loop end
+halt

@@ -26,10 +26,10 @@ fn main() -> std::io::Result<()> {
         if env::args().nth(1).unwrap() == "test" {
             tests::test();
             if Path::new("log.txt").exists() {
-              fs::remove_file("log.txt").expect("");
-              panic!("Tests failed");
+                fs::remove_file("log.txt").expect("");
+                panic!("Tests failed");
             } else {
-              process::exit(0);
+                process::exit(0);
             }
         } else {
             filename = env::args().nth(1).unwrap();
