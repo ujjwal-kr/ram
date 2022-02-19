@@ -7,15 +7,17 @@ mod tests;
 use funcs::{errors, operations, print, stack, stdfn};
 
 #[derive(Clone)]
-pub struct Vars {
+pub struct Vars<'a> {
     pub lx: f64,
     pub rv: f64,
     pub string: String,
     pub lxstring: String,
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
-    pub hash_str: HashMap<String, String>,
-    pub hash_int: HashMap<String, f64>,
+    pub hash_str: HashMap<&'a str, &'a str>,
+    pub hash_int: HashMap<&'a str, &'a str>,
+    pub hash_str_vec: HashMap<&'a str, Vec<&'a str>>,
+    pub hash_int_vec: HashMap<&'a str, Vec<f64>>,
 }
 
 fn main() -> std::io::Result<()> {
@@ -58,6 +60,8 @@ fn main() -> std::io::Result<()> {
         str_vec: vec![],
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
+        hash_int_vec: HashMap::new(),
+        hash_str_vec: HashMap::new(),
     };
     match run_statement(&blocks, &blocks[0], 0, vars) {
         Ok(()) => (),
@@ -82,6 +86,8 @@ fn run_statement(
         str_vec: vars.str_vec,
         hash_str: vars.hash_str,
         hash_int: vars.hash_int,
+        hash_int_vec: vars.hash_int_vec,
+        hash_str_vec: vars.hash_str_vec,
     };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {

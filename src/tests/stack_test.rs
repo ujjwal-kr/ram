@@ -16,6 +16,8 @@ pub fn ram_works() {
         str_vec: vec![],
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
+        hash_int_vec: HashMap::new(),
+        hash_str_vec: HashMap::new(),
     };
 
     stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
@@ -109,6 +111,8 @@ pub fn str_works() {
         str_vec: vec![],
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
+        hash_int_vec: HashMap::new(),
+        hash_str_vec: HashMap::new(),
     };
 
     vars.string = "helloworld".to_string();
