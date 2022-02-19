@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{env, f64, fs, io, path::Path, process};
 
@@ -13,6 +14,8 @@ pub struct Vars {
     pub lxstring: String,
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
+    pub hash_str: HashMap<String, String>,
+    pub hash_int: HashMap<String, f64>,
 }
 
 fn main() -> std::io::Result<()> {
@@ -53,6 +56,8 @@ fn main() -> std::io::Result<()> {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        hash_str: HashMap::new(),
+        hash_int: HashMap::new(),
     };
     match run_statement(&blocks, &blocks[0], 0, vars) {
         Ok(()) => (),
@@ -75,6 +80,8 @@ fn run_statement(
         lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
+        hash_str: vars.hash_str,
+        hash_int: vars.hash_int,
     };
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
