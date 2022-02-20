@@ -1,6 +1,5 @@
 use super::super::funcs::operations;
 use super::*;
-use std::collections::HashMap;
 
 pub fn operation_works() {
     add_works();
@@ -25,10 +24,6 @@ fn add_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
     let mut stack: Vec<f64> = vec![];
     stack.push(2.0);
@@ -68,10 +63,6 @@ fn mul_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
     let mut stack: Vec<f64> = vec![];
     stack.push(2.0);
@@ -111,10 +102,6 @@ fn sqr_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     let mut stack: Vec<f64> = vec![];
@@ -151,10 +138,6 @@ fn sqrt_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     let mut stack: Vec<f64> = vec![];
@@ -191,10 +174,6 @@ fn round_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     let mut stack: Vec<f64> = vec![];
@@ -241,10 +220,6 @@ fn split_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
     vars.string = "one,two,three".to_string();
     let statement: &str = "split >> \",\"";
@@ -269,10 +244,6 @@ fn vec_ops_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     vars.str_vec.push("hello".to_string()); // at place 0

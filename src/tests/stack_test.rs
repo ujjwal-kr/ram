@@ -1,6 +1,5 @@
 use super::super::funcs::stack;
 use super::*;
-use std::collections::HashMap;
 
 pub fn ram_works() {
     // ram 10
@@ -14,10 +13,6 @@ pub fn ram_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
@@ -109,10 +104,6 @@ pub fn str_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
     };
 
     vars.string = "helloworld".to_string();

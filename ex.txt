@@ -1,6 +1,5 @@
-var x str >> something
-jmp 1
-
-move str string x
-print string
-// Add hash vec move from local vars (str_vec, int_vec)
+ram string >> hello
+var exm str >> nil
+move str var exm string
+move str lxstring exm
+print lxstring

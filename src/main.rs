@@ -7,17 +7,21 @@ mod tests;
 use funcs::{errors, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
-pub struct Vars<'a> {
+pub struct Vars {
     pub lx: f64,
     pub rv: f64,
     pub string: String,
     pub lxstring: String,
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
-    pub hash_str: HashMap<&'a str, &'a str>,
-    pub hash_int: HashMap<&'a str, f64>,
-    pub hash_str_vec: HashMap<&'static str, Vec<String>>,
-    pub hash_int_vec: HashMap<&'static str, Vec<f64>>,
+}
+
+#[derive(Clone)]
+pub struct HashVars {
+    pub hash_str: HashMap<String, String>,
+    pub hash_int: HashMap<String, f64>,
+    pub hash_str_vec: HashMap<String, Vec<String>>,
+    pub hash_int_vec: HashMap<String, Vec<f64>>,
 }
 
 fn main() -> std::io::Result<()> {
@@ -58,12 +62,15 @@ fn main() -> std::io::Result<()> {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+    };
+
+    let hash_vars = HashVars {
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
         hash_int_vec: HashMap::new(),
         hash_str_vec: HashMap::new(),
     };
-    match run_statement(&blocks, &blocks[0], 0, vars) {
+    match run_statement(&blocks, &blocks[0], 0, vars, hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -75,6 +82,7 @@ fn run_statement(
     run_block: &Vec<&str>,
     block_number: usize,
     vars: Vars,
+    hash_vars: HashVars,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
     let mut local_vars = Vars {
@@ -84,11 +92,15 @@ fn run_statement(
         lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
-        hash_str: vars.hash_str,
-        hash_int: vars.hash_int,
-        hash_int_vec: vars.hash_int_vec,
-        hash_str_vec: vars.hash_str_vec,
     };
+
+    let mut local_hash_vars = HashVars {
+        hash_str: hash_vars.hash_str,
+        hash_int: hash_vars.hash_int,
+        hash_int_vec: hash_vars.hash_int_vec,
+        hash_str_vec: hash_vars.hash_str_vec,
+    };
+
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         line = line + 1;
@@ -110,8 +122,8 @@ fn run_statement(
                 block_number,
                 line,
             ),
-            "var" => var::var(cmd, statement, &mut local_vars, block_number, line),
-            "move" => var::movefn(cmd, &mut local_vars, block_number, line),
+            "var" => var::var(cmd, statement, &mut local_hash_vars, block_number, line),
+            "move" => var::movefn(cmd, &mut local_vars, &mut local_hash_vars, block_number, line),
             "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
@@ -155,7 +167,13 @@ fn run_statement(
                         errors::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
+                    match run_statement(
+                        blocks,
+                        &blocks[index],
+                        index,
+                        local_vars.clone(),
+                        local_hash_vars.clone(),
+                    ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -175,7 +193,13 @@ fn run_statement(
                         errors::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
+                    match run_statement(
+                        blocks,
+                        &blocks[index],
+                        index,
+                        local_vars.clone(),
+                        local_hash_vars.clone(),
+                    ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -195,7 +219,13 @@ fn run_statement(
                         errors::invalid_jmp(block_number, line, index);
                         break;
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
+                    match run_statement(
+                        blocks,
+                        &blocks[index],
+                        index,
+                        local_vars.clone(),
+                        local_hash_vars.clone(),
+                    ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -214,7 +244,13 @@ fn run_statement(
                     if blocks.len() <= index {
                         errors::invalid_jmp(block_number, line, index)
                     }
-                    match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
+                    match run_statement(
+                        blocks,
+                        &blocks[index],
+                        index,
+                        local_vars.clone(),
+                        local_hash_vars.clone(),
+                    ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
                     }
@@ -233,7 +269,13 @@ fn run_statement(
                     errors::invalid_jmp(block_number, line, index);
                     break;
                 }
-                match run_statement(blocks, &blocks[index], index, local_vars.clone()) {
+                match run_statement(
+                    blocks,
+                    &blocks[index],
+                    index,
+                    local_vars.clone(),
+                    local_hash_vars.clone(),
+                ) {
                     Ok(()) => (),
                     _ => println!("Something went wrong"),
                 }
