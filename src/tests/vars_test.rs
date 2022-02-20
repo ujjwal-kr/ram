@@ -36,9 +36,6 @@ pub fn var_works() {
 }
 
 pub fn move_works() {
-    // move int lx x
-    let mut statement: &str = "move int lx x";
-    let mut cmd: Vec<&str> = statement.split(" ").collect();
 
     let mut vars = super::super::Vars {
         lx: 0.0,
@@ -53,34 +50,54 @@ pub fn move_works() {
         hash_str_vec: HashMap::new(),
     };
 
-    var::movefn(cmd, statement, &mut vars, 0, 1);
+    // move int lx x
+    let mut statement: &str = "var x int >> 40";
+    let mut cmd: Vec<&str> = statement.split(" ").collect();
+    var::var(cmd, statement, &mut vars, 0, 1);
+
+    statement = "move int lx x";
+    cmd = statement.split(" ").collect();
+
+    var::movefn(cmd, &mut vars, 0, 1);
     match vars.hash_int.get(&"x") {
         Some(&value) => assert_f64(value, vars.lx, statement),
         _ => assert_str("fail", "something", statement),
     }
 
     // move int rv y
+    let mut statement: &str = "var y int >> 30";
+    let mut cmd: Vec<&str> = statement.split(" ").collect();
+    var::var(cmd, statement, &mut vars, 0, 1);
+
     statement = "move int rv y";
     cmd = statement.split(" ").collect();
-    var::movefn(cmd, statement, &mut vars, 0, 1);
+    var::movefn(cmd, &mut vars, 0, 1);
     match vars.hash_int.get(&"y") {
         Some(&value) => assert_f64(value, vars.rv, statement),
         _ => assert_str("fail", "something", statement),
     }
 
     // move str string z
+    statement = "var z str >> ok";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut vars, 0, 1);
+
     statement = "move str string z";
     cmd = statement.split(" ").collect();
-    var::movefn(cmd, statement, &mut vars, 0, 1);
+    var::movefn(cmd, &mut vars, 0, 1);
     match vars.hash_str.get(&"z") {
         Some(&value) => assert_str(value, vars.string.trim(), statement),
         _ => assert_str("fail", "something", statement),
     }
 
     // move str lxstring z
+    statement = "var z str >> ok2";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut vars, 0, 1);
+
     statement = "move str lxstring z";
     cmd = statement.split(" ").collect();
-    var::movefn(cmd, statement, &mut vars, 0, 1);
+    var::movefn(cmd, &mut vars, 0, 1);
     match vars.hash_str.get(&"z") {
         Some(&value) => assert_str(value, vars.lxstring.trim(), statement),
         _ => assert_str("fail", "something", statement),

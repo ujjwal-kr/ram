@@ -18,6 +18,37 @@ pub fn var<'a>(cmd: Vec<&'a str>, statement: &'a str, vars: &mut Vars<'a>, b: us
     }
 }
 
-pub fn movefn(cmd: Vec<&str>, statement: &str, vars: &mut Vars, b: usize, l: u32) {
-
+pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
+    if cmd.len() < 4 {
+        errors::args_error(b, l);
+    }
+    if cmd[1] == "str" {
+        if cmd[2] == "string" {
+            match vars.hash_str.get(&cmd[3]) {
+                Some(&value) => { vars.string = value.to_string() },
+                _ => { errors::var_error(cmd[3], b, l) }
+            }
+        } else if cmd[2] == "lxstring" {
+            match vars.hash_str.get(&cmd[3]) {
+                Some(&value) => { vars.lxstring = value.to_string() },
+                _ => { errors::var_error(cmd[3], b, l) }
+            }
+        } else {
+            errors::args_error(b, l);
+        }
+    } else if cmd[1] == "int" {
+        if cmd[2] == "lx" {
+            match vars.hash_int.get(&cmd[3]) {
+                Some(&value) => { vars.lx = value },
+                _ => { errors::var_error(cmd[3], b, l) }
+            }
+        } else if cmd[2] == "rv" {
+            match vars.hash_int.get(&cmd[3]) {
+                Some(&value) => { vars.rv = value },
+                _ => { errors::var_error(cmd[3], b, l) }
+            }
+        } else {
+            errors::args_error(b, l);
+        }
+    }
 }

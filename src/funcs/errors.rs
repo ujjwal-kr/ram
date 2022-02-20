@@ -64,3 +64,13 @@ pub fn invalid_index(block: usize, line: u32, inv_index: usize) {
     );
     process::exit(0)
 }
+
+pub fn var_error(var_name: &str, block: usize, line: u32) {
+    println!(
+        "Var `{}` does not exist at block:{}::line:{}",
+        var_name.to_string(),
+        block.to_string(),
+        line.to_string()
+    );
+    process::exit(0)
+}
