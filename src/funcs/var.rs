@@ -34,7 +34,14 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
                 _ => { errors::var_error(cmd[3], b, l); }
             }
         } else if cmd[2] == "var" {
-            
+            if cmd.len() < 5 { errors::args_error(b, l); }
+            if cmd[4] == "string" {
+                vars.hash_str.insert(cmd[3].trim(), vars.string.trim());
+            } else if cmd[4] == "lxstring" {
+                vars.hash_str.insert(cmd[3].trim(), vars.lxstring.trim());
+            } else {
+                errors::args_error(b, l);
+            }
         } else {
             errors::args_error(b, l);
         }
