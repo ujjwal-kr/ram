@@ -45,7 +45,7 @@ fn main() -> std::io::Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let mut _program: Vec<&str> = contents.split("\n\n").collect();
+    let mut _program: Vec<&str> = contents.split("\r\n\r\n").collect();
     let mut blocks: Vec<Vec<&str>> = vec![];
     for block in &_program {
         let block_vec: Vec<&str> = block.split("\n").collect();
@@ -111,6 +111,7 @@ fn run_statement(
                 line,
             ),
             "var" => var::var(cmd, statement, &mut local_vars, block_number, line),
+            "move" => var::movefn(cmd, &mut local_vars, block_number, line),
             "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
@@ -149,7 +150,7 @@ fn run_statement(
                     break;
                 }
                 if stack[stack.len() - 1] == 0.0 {
-                    let index: usize = errors::parse_usize(cmd[1], block_number, line);
+                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
                     if blocks.len() <= index {
                         errors::invalid_jmp(block_number, line, index);
                         break;
@@ -169,7 +170,7 @@ fn run_statement(
                     break;
                 }
                 if stack[stack.len() - 1] != 0.0 {
-                    let index: usize = errors::parse_usize(cmd[1], block_number, line);
+                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
                     if blocks.len() <= index {
                         errors::invalid_jmp(block_number, line, index);
                         break;
@@ -189,7 +190,7 @@ fn run_statement(
                     break;
                 }
                 if stack[stack.len() - 1] == 1.0 {
-                    let index: usize = errors::parse_usize(cmd[1], block_number, line);
+                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
                     if blocks.len() <= index {
                         errors::invalid_jmp(block_number, line, index);
                         break;
@@ -209,7 +210,7 @@ fn run_statement(
                     break;
                 }
                 if stack[stack.len() - 1] == -1.0 {
-                    let index: usize = errors::parse_usize(cmd[1], block_number, line);
+                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
                     if blocks.len() <= index {
                         errors::invalid_jmp(block_number, line, index)
                     }
@@ -227,7 +228,7 @@ fn run_statement(
                     errors::args_error(block_number, line);
                     break;
                 }
-                let index: usize = errors::parse_usize(cmd[1], block_number, line);
+                let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
                 if blocks.len() <= index {
                     errors::invalid_jmp(block_number, line, index);
                     break;
