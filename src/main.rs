@@ -4,7 +4,7 @@ use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
 mod tests;
-use funcs::{errors, operations, print, stack, stdfn};
+use funcs::{errors, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
 pub struct Vars<'a> {
@@ -16,8 +16,8 @@ pub struct Vars<'a> {
     pub num_vec: Vec<f64>,
     pub hash_str: HashMap<&'a str, &'a str>,
     pub hash_int: HashMap<&'a str, f64>,
-    pub hash_str_vec: HashMap<&'a str, Vec<&'a str>>,
-    pub hash_int_vec: HashMap<&'a str, Vec<f64>>,
+    pub hash_str_vec: HashMap<&'static str, Vec<String>>,
+    pub hash_int_vec: HashMap<&'static str, Vec<f64>>,
 }
 
 fn main() -> std::io::Result<()> {
@@ -110,6 +110,7 @@ fn run_statement(
                 block_number,
                 line,
             ),
+            "var" => var::var(cmd, statement, &mut local_vars, block_number, line),
             "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),

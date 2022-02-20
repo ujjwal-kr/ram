@@ -14,6 +14,7 @@ pub fn test() {
     str_works();
     operation_works();
     var_works();
+    move_works();
 }
 
 pub fn log_pass(string: &str) {

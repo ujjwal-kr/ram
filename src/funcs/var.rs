@@ -17,3 +17,7 @@ pub fn var<'a>(cmd: Vec<&'a str>, statement: &'a str, vars: &mut Vars<'a>, b: us
         errors::args_error(b, l);
     }
 }
+
+pub fn movefn(cmd: Vec<&str>, statement: &str, vars: &mut Vars, b: usize, l: u32) {
+
+}
