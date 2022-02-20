@@ -15,7 +15,7 @@ pub struct Vars<'a> {
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
     pub hash_str: HashMap<&'a str, &'a str>,
-    pub hash_int: HashMap<&'a str, &'a str>,
+    pub hash_int: HashMap<&'a str, f64>,
     pub hash_str_vec: HashMap<&'a str, Vec<&'a str>>,
     pub hash_int_vec: HashMap<&'a str, Vec<f64>>,
 }

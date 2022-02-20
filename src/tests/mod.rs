@@ -63,14 +63,3 @@ pub fn assert_vec_str(a: Vec<String>, b: Vec<&str>, statement: &str) {
     }
     log_pass(statement)
 }
-
-pub fn assert_var_vec_str(a: Vec<&str>, b: Vec<&str>, statement: &str) {
-    let mut i = 0usize;
-    for item in a {
-        if item != b[i] {
-            return log_fail(statement);
-        }
-        i = i + 1;
-    }
-    log_pass(statement)
-}

@@ -1,4 +1,3 @@
-use super::super::funcs::errors;
 use super::super::funcs::var;
 use super::*;
 use std::collections::HashMap;
@@ -31,25 +30,7 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(cmd, statement, &mut vars, 0, 1);
     match vars.hash_int.get(&"y") {
-        Some(&value) => assert_f64(errors::parse_float(value, 0, 1), 50.0, statement),
-        _ => assert_str("fail", "something", statement),
-    }
-
-    // var w vec str >> [one, two]
-    statement = "var w vec str >> [one, two]";
-    cmd = statement.split(" ").collect();
-    var::var(cmd, statement, &mut vars, 0, 1);
-    match vars.hash_str_vec.get(&"w") {
-        Some(value) => assert_var_vec_str((&value).to_vec(), ["one", "two"].to_vec(), statement),
-        _ => assert_str("fail", "something", statement),
-    }
-
-    // var v vec int >> [1, 2]
-    statement = "var v vec int >> [1, 2]";
-    cmd = statement.split(" ").collect();
-    var::var(cmd, statement, &mut vars, 0, 1);
-    match vars.hash_int_vec.get(&"v") {
-        Some(value) => assert_vec_int((&value).to_vec(), [1.0, 2.0].to_vec(), statement),
+        Some(&value) => assert_f64(value, 50.0, statement),
         _ => assert_str("fail", "something", statement),
     }
 }
