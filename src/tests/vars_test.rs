@@ -36,7 +36,6 @@ pub fn var_works() {
 }
 
 pub fn move_works() {
-
     let mut vars = super::super::Vars {
         lx: 0.0,
         rv: 0.0,
@@ -100,6 +99,46 @@ pub fn move_works() {
     var::movefn(cmd, &mut vars, 0, 1);
     match vars.hash_str.get(&"z") {
         Some(&value) => assert_str(value, vars.lxstring.trim(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move str var exm string
+    vars.string = "hello".to_string();
+    statement = "move str var exm string";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, 0, 1);
+    match vars.hash_str.get(&"exm") {
+        Some(&value) => assert_str(value, vars.string.trim(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move str var lxstr lxstring
+    vars.lxstring = "hello2".to_string();
+    statement = "move str var lxstr lxstring";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, 0, 1);
+    match vars.hash_str.get(&"lxstr") {
+        Some(&value) => assert_str(value, vars.lxstring.trim(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move int var testint lx
+    vars.lx = 15.0;
+    statement = "move int var testint lx";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, 0, 1);
+    match vars.hash_int.get(&"testint") {
+        Some(&value) => assert_f64(value, vars.lx, statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move int var testint rv
+    vars.rv = 16.0;
+    statement = "move int var testint rv";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, 0, 1);
+    match vars.hash_int.get(&"testint") {
+        Some(&value) => assert_f64(value, vars.rv, statement),
         _ => assert_str("fail", "something", statement),
     }
 }

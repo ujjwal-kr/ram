@@ -33,6 +33,8 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
                 Some(&value) => { vars.lxstring = value.to_string() },
                 _ => { errors::var_error(cmd[3], b, l); }
             }
+        } else if cmd[2] == "var" {
+            
         } else {
             errors::args_error(b, l);
         }
@@ -47,6 +49,8 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, b: usize, l: u32) {
                 Some(&value) => { vars.rv = value },
                 _ => { errors::var_error(cmd[3], b, l) }
             }
+        } else if cmd[2] == "var" {
+            
         } else {
             errors::args_error(b, l);
         }
