@@ -9,12 +9,20 @@ pub fn var(cmd: Vec<&str>, statement: &str, hash_vars: &mut HashVars, b: usize, 
     let lits: Vec<&str> = statement.split(">>").collect();
     let value: String = lits[1].trim().to_string();
     if cmd[2] == "str" {
-        hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
+        if cmd[3].trim() == "vec" {
+            
+        } else {
+            hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
+        }
     } else if cmd[2] == "int" {
-        hash_vars.hash_int.insert(
-            cmd[1].trim().to_string(),
-            errors::parse_float(value.trim(), b, l),
-        );
+        if cmd[3].trim() == "vec" {
+            
+        } else {
+            hash_vars.hash_int.insert(
+                cmd[1].trim().to_string(),
+                errors::parse_float(value.trim(), b, l),
+            );
+        }
     } else {
         errors::args_error(b, l);
     }

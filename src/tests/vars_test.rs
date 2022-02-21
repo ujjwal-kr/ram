@@ -28,6 +28,24 @@ pub fn var_works() {
         Some(&value) => assert_f64(value, 50.0, statement),
         _ => assert_str("fail", "something", statement),
     }
+
+    // var w int vec >> [10, 13, 12]
+    statement = "var w int vec >> [10, 13]";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut hash_vars, 0, 1);
+    match hash_vars.hash_int_vec.get("w") {
+        Some(value) => assert_vec_int(value.to_vec(), [10.0, 13.0].to_vec(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // var v str vec >> [one,two]
+    statement = "var v str vec >> [one,two]";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut hash_vars, 0, 1);
+    match hash_vars.hash_str_vec.get("v") {
+        Some(value) => assert_vec_str(value.to_vec(), ["one","two"].to_vec(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
 }
 
 pub fn move_works() {
