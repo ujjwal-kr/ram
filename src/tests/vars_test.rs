@@ -43,7 +43,7 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(cmd, statement, &mut hash_vars, 0, 1);
     match hash_vars.hash_str_vec.get("v") {
-        Some(value) => assert_vec_str(value.to_vec(), ["one","two"].to_vec(), statement),
+        Some(value) => assert_vec_str(value.to_vec(), ["one", "two"].to_vec(), statement),
         _ => assert_str("fail", "something", statement),
     }
 }

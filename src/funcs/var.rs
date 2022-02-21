@@ -6,17 +6,35 @@ pub fn var(cmd: Vec<&str>, statement: &str, hash_vars: &mut HashVars, b: usize, 
     if cmd.len() < 5 {
         errors::args_error(b, l);
     }
+
     let lits: Vec<&str> = statement.split(">>").collect();
     let value: String = lits[1].trim().to_string();
+
     if cmd[2] == "str" {
         if cmd[3].trim() == "vec" {
-            
+            let slice = &value[1..value.len() - 1];
+            let data_vec: Vec<&str> = slice.split(",").collect();
+            let mut str_vec: Vec<String> = vec![];
+            for item in data_vec {
+                str_vec.push(item.to_string());
+            }
+            hash_vars
+                .hash_str_vec
+                .insert(cmd[1].trim().to_string(), str_vec);
         } else {
             hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
         }
     } else if cmd[2] == "int" {
         if cmd[3].trim() == "vec" {
-            
+            let slice = &value[1..value.len() - 1];
+            let data_vec: Vec<&str> = slice.split(",").collect();
+            let mut num_vec: Vec<f64> = vec![];
+            for item in data_vec {
+                num_vec.push(errors::parse_float(item, b, l));
+            }
+            hash_vars
+                .hash_int_vec
+                .insert(cmd[1].trim().to_string(), num_vec);
         } else {
             hash_vars.hash_int.insert(
                 cmd[1].trim().to_string(),
@@ -58,7 +76,8 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
                     .hash_str
                     .insert(cmd[3].trim().to_string(), vars.string.clone());
             } else if cmd[4].trim() == "lxstring" {
-                hash_vars.hash_str
+                hash_vars
+                    .hash_str
                     .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
             } else {
                 errors::args_error(b, l);
@@ -79,9 +98,13 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
             }
         } else if cmd[2].trim() == "var" {
             if cmd[4].trim() == "lx" {
-                hash_vars.hash_int.insert(cmd[3].trim().to_string(), vars.lx);
+                hash_vars
+                    .hash_int
+                    .insert(cmd[3].trim().to_string(), vars.lx);
             } else if cmd[4].trim() == "rv" {
-                hash_vars.hash_int.insert(cmd[3].trim().to_string(), vars.rv);
+                hash_vars
+                    .hash_int
+                    .insert(cmd[3].trim().to_string(), vars.rv);
             }
         } else {
             errors::args_error(b, l);
