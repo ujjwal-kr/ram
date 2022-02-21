@@ -44,6 +44,9 @@ pub fn assert_str(a: &str, b: &str, statement: &str) {
 }
 
 pub fn assert_vec_int(a: Vec<f64>, b: Vec<f64>, statement: &str) {
+    if a.len() != b.len() {
+        return log_fail(statement);
+    }
     let mut i = 0usize;
     for item in a {
         if item != b[i] {
@@ -55,6 +58,9 @@ pub fn assert_vec_int(a: Vec<f64>, b: Vec<f64>, statement: &str) {
 }
 
 pub fn assert_vec_str(a: Vec<String>, b: Vec<&str>, statement: &str) {
+    if a.len() != b.len() {
+        return log_fail(statement);
+    }
     let mut i = 0usize;
     for item in a {
         if item.trim() != b[i] {
@@ -66,6 +72,9 @@ pub fn assert_vec_str(a: Vec<String>, b: Vec<&str>, statement: &str) {
 }
 
 pub fn assert_vec_string(a: Vec<String>, b: Vec<String>, statement: &str) {
+    if a.len() != b.len() {
+        return log_fail(statement);
+    }
     let mut i = 0usize;
     for item in a {
         if item.trim() != b[i].trim() {

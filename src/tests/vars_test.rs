@@ -159,6 +159,11 @@ pub fn move_works() {
     }
 
     // move vec vec str var test
+
+    statement = "var test str vec >> [t, one]";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut hash_vars, 0, 1);
+
     statement = "move vec vec str var test";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
@@ -168,6 +173,7 @@ pub fn move_works() {
     }
 
     // move vec var test2 vec str
+    vars.str_vec = ["one".to_string(), "two".to_string()].to_vec();
     statement = "move vec var test2 vec str";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
@@ -177,6 +183,11 @@ pub fn move_works() {
     }
 
     // move vec vec int var test3
+
+    statement = "var test3 int vec >> [1.0, 3.0]";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut hash_vars, 0, 1);
+
     statement = "move vec vec int var test3";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
@@ -186,6 +197,7 @@ pub fn move_works() {
     }
 
     // move vec var test4 vec int
+    vars.num_vec = [1.6, 2.7].to_vec();
     statement = "move vec var test4 vec int";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
