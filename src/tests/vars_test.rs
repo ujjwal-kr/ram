@@ -157,4 +157,40 @@ pub fn move_works() {
         Some(&value) => assert_f64(value, vars.rv, statement),
         _ => assert_str("fail", "something", statement),
     }
+
+    // move vec vec str var test
+    statement = "move vec vec str var test";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
+    match hash_vars.hash_str_vec.get("test") {
+        Some(value) => assert_vec_string(value.to_vec(), vars.str_vec.clone(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move vec var test2 vec str
+    statement = "move vec var test2 vec str";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
+    match hash_vars.hash_str_vec.get("test2") {
+        Some(value) => assert_vec_string(value.to_vec(), vars.str_vec.clone(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move vec vec int var test3
+    statement = "move vec vec int var test3";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
+    match hash_vars.hash_int_vec.get("test3") {
+        Some(value) => assert_vec_int(value.to_vec(), vars.num_vec.clone(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
+
+    // move vec var test4 vec int
+    statement = "move vec var test4 vec int";
+    cmd = statement.split(" ").collect();
+    var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
+    match hash_vars.hash_int_vec.get("test4") {
+        Some(value) => assert_vec_int(value.to_vec(), vars.num_vec.clone(), statement),
+        _ => assert_str("fail", "something", statement),
+    }
 }

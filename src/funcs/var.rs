@@ -109,5 +109,9 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
         } else {
             errors::args_error(b, l);
         }
+    } else if cmd[1] == "vec" {
+        
+    } else {
+        errors::args_error(b, l);
     }
 }

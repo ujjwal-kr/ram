@@ -64,3 +64,14 @@ pub fn assert_vec_str(a: Vec<String>, b: Vec<&str>, statement: &str) {
     }
     log_pass(statement)
 }
+
+pub fn assert_vec_string(a: Vec<String>, b: Vec<String>, statement: &str) {
+    let mut i = 0usize;
+    for item in a {
+        if item.trim() != b[i].trim() {
+            return log_fail(statement);
+        }
+        i = i + 1;
+    }
+    log_pass(statement)
+}
