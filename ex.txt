@@ -1,5 +1,2 @@
-var lol int vec >> [12, 21]
-move vec vec int var lol
-jmp 1
-
-print vec int
+var lmao int >> 69
+print var int lmao

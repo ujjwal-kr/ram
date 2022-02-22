@@ -44,6 +44,20 @@ pub fn print(
             } else {
                 super::errors::var_error(cmd[2], b, l);
             }
+        } else if cmd[1] == "var" {
+            if cmd[2].trim() == "int" {
+                match hash_vars.hash_int.get(cmd[3].trim()) {
+                    Some(&value) => println!("{}", value),
+                    _ => super::errors::var_error(cmd[3].trim(), b, l),
+                }
+            }
+            else if cmd[2].trim() == "str" {
+                match hash_vars.hash_str.get(cmd[3].trim()) {
+                    Some(value) => println!("{}", value),
+                    _ => super::errors::var_error(cmd[3].trim(), b, l),
+                }
+            }
+            else { super::errors::args_error(b, l); }
         } else {
             super::errors::var_error(cmd[1], b, l);
         }
