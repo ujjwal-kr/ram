@@ -112,7 +112,14 @@ fn run_statement(
         }
         match cmd[0] {
             "//" => (),
-            "print" => print::print(&mut stack, cmd, &mut local_vars, block_number, line),
+            "print" => print::print(
+                &mut stack,
+                cmd,
+                &mut local_vars,
+                &mut local_hash_vars,
+                block_number,
+                line,
+            ),
             "printc" => print::printc(cmd, statement, block_number, line),
             "ram" => stack::ram(
                 &mut stack,

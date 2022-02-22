@@ -2,6 +2,7 @@ pub fn print(
     stack: &mut Vec<f64>,
     cmd: Vec<&str>,
     vars: &mut super::super::Vars,
+    hash_vars: &mut super::super::HashVars,
     b: usize,
     l: u32,
 ) {
@@ -14,22 +15,37 @@ pub fn print(
     } else {
         if cmd[1] == "lx" {
             println!("{}", vars.lx)
-        }
-        if cmd[1] == "rv" {
+        } else if cmd[1] == "rv" {
             println!("{}", vars.rv)
-        }
-        if cmd[1] == "string" {
+        } else if cmd[1] == "string" {
             println!("{}", vars.string.trim());
-        }
-        if cmd[1] == "lxstring" {
+        } else if cmd[1] == "lxstring" {
             println!("{}", vars.lxstring.trim());
-        }
-        if cmd[1] == "vec" {
-            if cmd[2] == "int" {
-                println!("{:?}", vars.num_vec);
-            } else if cmd[2] == "str" {
-                println!("{:?}", vars.str_vec);
+        } else if cmd[1] == "vec" {
+            if cmd[2].trim() == "int" {
+                if cmd.len() == 3 {
+                    println!("{:?}", vars.num_vec);
+                } else if cmd.len() == 4 {
+                    match hash_vars.hash_int_vec.get(cmd[3].trim()) {
+                        Some(value) => println!("{:?}", value),
+                        _ => super::errors::var_error(cmd[3].trim(), b, l),
+                    }
+                }
+            } else if cmd[2].trim() == "str" {
+                if cmd.len() == 3 {
+                    println!("{:?}", vars.str_vec);
+                }
+                if cmd.len() == 4 {
+                    match hash_vars.hash_str_vec.get(cmd[3].trim()) {
+                        Some(value) => println!("{:?}", value),
+                        _ => super::errors::var_error(cmd[3], b, l),
+                    }
+                }
+            } else {
+                super::errors::var_error(cmd[2], b, l);
             }
+        } else {
+            super::errors::var_error(cmd[1], b, l);
         }
     }
 }

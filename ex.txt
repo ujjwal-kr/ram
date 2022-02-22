@@ -1,5 +1,5 @@
-ram string >> hello
-var exm str >> nil
-move str var exm string
-move str lxstring exm
-print lxstring
+var lol int vec >> [12, 21]
+move vec vec int var lol
+jmp 1
+
+print vec int
