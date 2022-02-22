@@ -67,7 +67,7 @@ pub fn invalid_index(block: usize, line: u32, inv_index: usize) {
 
 pub fn var_error(var_name: &str, block: usize, line: u32) {
     println!(
-        "Var {} does not exist at block:{}::line:{}",
+        "Var {} does not exist or type mismatch at block:{}::line:{}",
         var_name.to_string(),
         block.to_string(),
         line.to_string()
