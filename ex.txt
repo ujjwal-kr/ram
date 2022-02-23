@@ -1,2 +1,6 @@
-var test str vec >> [hello,world]
-print vec str test
+ram 10
+ram 20
+cmp
+jne 1
+
+printc >> hmm

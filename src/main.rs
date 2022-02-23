@@ -110,7 +110,7 @@ fn run_statement(
         if lits[1] == "/" && lits[2] == "/" {
             cmd[0] = "//";
         }
-        match cmd[0] {
+        match cmd[0].trim() {
             "//" => (),
             "print" => print::print(
                 &mut stack,

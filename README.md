@@ -100,7 +100,7 @@ Prints the characters specified on the screen
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
 
 ### stdfs
-- `stdfs open ./path/to/file` opens the file and stores the contents as strings in the  `strings` variable.
+- `stdfs open >> ./path/to/file` opens the file and stores the contents as strings in the  `strings` variable.
 
 ### rand >> num1,num2
 `rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
