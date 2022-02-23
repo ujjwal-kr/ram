@@ -1,2 +1,2 @@
-var lmao int >> 69
-print var int lmao
+var test str vec >> [hello,world]
+print vec str test

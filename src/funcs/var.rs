@@ -110,30 +110,24 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
             errors::args_error(b, l);
         }
     } else if cmd[1] == "vec" {
-        // move vec vec str var test
-        // move vec vec int var test3
+        // move vec vec str test
+        // move vec vec int test3
 
         // move vec var test2 vec str
         // move vec var test4 vec int
 
-        if cmd.len() < 6 {
+        if cmd.len() < 5 {
             errors::args_error(b, l);
         }
 
         if cmd[2] == "vec" {
             if cmd[3] == "str" {
-                if cmd[4] != "var" {
-                    errors::args_error(b, l);
-                }
-                match hash_vars.hash_str_vec.get(cmd[5].trim()) {
+                match hash_vars.hash_str_vec.get(cmd[4].trim()) {
                     Some(value) => vars.str_vec = value.to_vec(),
                     _ => errors::var_error(cmd[5].trim(), b, l),
                 }
             } else if cmd[3] == "int" {
-                if cmd[4] != "var" {
-                    errors::args_error(b, l);
-                }
-                match hash_vars.hash_int_vec.get(cmd[5].trim()) {
+                match hash_vars.hash_int_vec.get(cmd[4].trim()) {
                     Some(value) => vars.num_vec = value.to_vec(),
                     _ => errors::var_error(cmd[5].trim(), b, l),
                 }

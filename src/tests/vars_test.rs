@@ -158,13 +158,13 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec vec str var test
+    // move vec vec str test
 
     statement = "var test str vec >> [t, one]";
     cmd = statement.split(" ").collect();
     var::var(cmd, statement, &mut hash_vars, 0, 1);
 
-    statement = "move vec vec str var test";
+    statement = "move vec vec str test";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
     match hash_vars.hash_str_vec.get("test") {
@@ -182,13 +182,13 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec vec int var test3
+    // move vec vec int test3
 
     statement = "var test3 int vec >> [1.0, 3.0]";
     cmd = statement.split(" ").collect();
     var::var(cmd, statement, &mut hash_vars, 0, 1);
 
-    statement = "move vec vec int var test3";
+    statement = "move vec vec int test3";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
     match hash_vars.hash_int_vec.get("test3") {
