@@ -55,14 +55,17 @@ These variables are called hash_vars as they are implemented using a hashmap. Th
   - [stdin](#stdin)
   - [stdfs](#stdfs)
   - [random](#rand--num1num2)
-- stack based commands:
+- Stack based commands:
   - [ram](#ram)
   - [vectors](#vectors)
   - [split](#split)
   - [str](#str)
   - [pop](#pop)
   - [popall](#popall)
-- operations:  
+- Hash Vars
+  - [var](#var)
+  - [move](#move)
+- Operations:  
   - [add](#add)
   - [subtract](#sub)
   - [multiply](#mul)
@@ -137,6 +140,26 @@ Removes the last value from the stack
 
 ### popall
 Empties the entire stack. Useful for `avg` implementation.
+
+## Hash Vars
+
+### var
+- `var <name> str >> test123` creates a variable called `name` with string type and assigns `"test123"` to it.
+- `var <name> int >> 75` creates a variable called `name` with integer type and assigns `75` to it.
+- `var <name_vec> int vec >> [10, 13, 12]` creates a variable called `name_vec` with vec integer type and assigns `[10, 13, 12]` to it.
+- `var <name_vec> str vec >> [one,two]` creates a variable called `name_vec` with vec integer type and assigns `[one,two]` to it.
+
+### move
+
+Move is used to move the value of hashvars to general purpose vars and vice versa (note its destination first).
+- `move int lx/rv <name>` moves the value of `name` hash variable to `lx/rv` (make sure `name` is of int type)
+- `move str string/lxstring <name>` moves the value of `name` hash variable to `string/lxstring` (make sure `name` is of str type)
+- `move str var <name> string/lxstring` moves the value of `string/lxstring` to `name` hash var (make sure `name` is of str type)
+- `move int var <name> lx/rv` moves the value of `lx/rv` to `name` hash var (make sure `name` is of int type)
+- `move vec vec str <name>` moves the value of `name` hash var to `vec str` (make sure `name` is a string vector)
+- `move vec vec int <name>` moves the value of `name` hash var to `vec int` (make sure `name` is a integer vector)
+- `move vec var <name> vec int` moves the value of `vec int` to `name` hash var (make sure `name` is a integer vector)
+- `move vec var <name> vec str` moves the value of `vec str` to `name` hash var (make sure `name` is a string vector)
 
 ## Operation Commands
 
