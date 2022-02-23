@@ -93,16 +93,18 @@ pub fn strfn(
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
     } else {
-        if cmd[1] == "string" && cmd[2] == "lxstring" {
+        if cmd[1] == "string".trim() && cmd[2] == "lxstring".trim() {
             vars.string = vars.lxstring.clone();
-        } else if cmd[1] == "lxstring" && cmd[2] == "string" {
+        } else if cmd[1] == "lxstring" && cmd[2].trim() == "string".trim() {
             vars.lxstring = vars.string.clone();
-        } else if cmd[1] == "cmp" {
+        } else if cmd[1] == "cmp".trim() {
             if vars.lxstring.trim() == vars.string.trim() {
                 stack.push(0.0);
             } else {
                 stack.push(-1.0);
             }
+
+            println!("{:?}", stack);
         }
     }
 }

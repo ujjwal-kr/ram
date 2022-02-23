@@ -15,11 +15,11 @@ pub fn print(
     } else {
         if cmd[1] == "lx" {
             println!("{}", vars.lx)
-        } else if cmd[1] == "rv" {
+        } else if cmd[1].trim() == "rv" {
             println!("{}", vars.rv)
-        } else if cmd[1] == "string" {
+        } else if cmd[1].trim() == "string" {
             println!("{}", vars.string.trim());
-        } else if cmd[1] == "lxstring" {
+        } else if cmd[1].trim() == "lxstring" {
             println!("{}", vars.lxstring.trim());
         } else if cmd[1] == "vec" {
             if cmd[2].trim() == "int" {

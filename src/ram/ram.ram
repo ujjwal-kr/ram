@@ -1,0 +1,7 @@
+stdfs open >> ./src/ram/test.txt
+split string >> "\n"
+print vec str
+vec str >> [0]
+str lxstring string
+ram string >> ram 10
+str cmp
