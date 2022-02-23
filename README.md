@@ -71,7 +71,13 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv/string/lxstring/vec str/vec int` prints the value of `lx/rv/string/lxstring/vec str/vec int` variables on the screen.
+- `print lx/rv` prints the value of `lx/rv/` variables at the screen.
+- `print string/lxstring` prints the value of `string/lxstring` variables at the screen.
+- `print vec str/vec int` prints the value of `vec str/vec int` variables at the screen.
+- `print var str <hash_str_var>` prints the value of `hash_str_var` variable at the screen.
+- `print var str <hash_int_var>` prints the value of `hash_int_var` variable at the screen.
+- `print vec str <hash_str_vec_var>` prints the value of `hash_str_vec_var` variable at the screen.
+- `print vec int <hash_int_vec_var>` prints the value of `hash_int_vec_var` variable at the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
