@@ -2,7 +2,7 @@
 A stack based programming language created to experiment my crappy lang-dev only capable of making some mathematical formulation and logic. Written in the rust programming language.
 
 ## How to run
-1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v1.7/ram).
+1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v2.0/ram).
 2. Make it executable using `chmod +x ./ram`
 3. Make a .ram file with the following contents at the same directory as the binary:
 
