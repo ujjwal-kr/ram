@@ -5,3 +5,6 @@ vec str >> [0]
 str lxstring string
 ram string >> ram 10
 str cmp
+je 1
+
+printc >> hmm

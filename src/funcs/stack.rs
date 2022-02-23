@@ -98,14 +98,12 @@ pub fn strfn(
             vars.string = vars.lxstring.clone();
         } else if cmd[1] == "lxstring" && cmd[2].trim() == "string".trim() {
             vars.lxstring = vars.string.clone();
-        } else if cmd[1] == "cmp".trim() {
+        } else if cmd[1].trim()  == "cmp"{
             if vars.lxstring.trim() == vars.string.trim() {
                 stack.push(0.0);
             } else {
                 stack.push(-1.0);
             }
-
-            println!("{:?}", stack);
         }
     }
 }
