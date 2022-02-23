@@ -6,8 +6,8 @@ pub fn ram(
     b: usize,
     l: u32,
 ) {
-    if cmd[1] == "lx"
-        || cmd[1] == "rv"
+    if cmd[1].trim() == "lx"
+        || cmd[1].trim() == "rv"
         || cmd[1] == "string"
         || cmd[1] == "vec"
         || cmd[1] == "lxstring"
@@ -16,32 +16,33 @@ pub fn ram(
             super::errors::args_error(b, l)
         }
         if cmd.len() == 2 {
-            if cmd[1] == "lx" {
+            if cmd[1].trim() == "lx" {
                 stack.push(vars.lx)
-            }
-            if cmd[1] == "rv" {
+            } else if cmd[1].trim() == "rv" {
                 stack.push(vars.rv)
+            } else {
+                super::errors::args_error(b, l)
             }
         } else {
             if cmd[1] == "lx" {
-                if cmd[2] == "prev" {
+                if cmd[2].trim() == "prev" {
                     vars.lx = stack[stack.len() - 1];
                 } else {
                     vars.lx = super::errors::parse_float(cmd[2], b, l)
                 }
             }
             if cmd[1] == "rv" {
-                if cmd[2] == "prev" {
+                if cmd[2].trim() == "prev" {
                     vars.rv = stack[stack.len() - 1];
                 } else {
                     vars.rv = super::errors::parse_float(cmd[2], b, l)
                 }
             }
-            if cmd[1] == "string" {
+            if cmd[1].trim() == "string" {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 vars.string = lits[1].trim().to_string();
             }
-            if cmd[1] == "lxstring" {
+            if cmd[1].trim() == "lxstring" {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 vars.lxstring = lits[1].trim().to_string();
             }
@@ -93,7 +94,7 @@ pub fn strfn(
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
     } else {
-        if cmd[1] == "string".trim() && cmd[2] == "lxstring".trim() {
+        if cmd[1] == "string".trim() && cmd[2].trim() == "lxstring".trim() {
             vars.string = vars.lxstring.clone();
         } else if cmd[1] == "lxstring" && cmd[2].trim() == "string".trim() {
             vars.lxstring = vars.string.clone();

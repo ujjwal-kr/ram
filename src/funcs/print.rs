@@ -13,7 +13,7 @@ pub fn print(
             println!("{}", stack[stack.len() - 1]);
         }
     } else {
-        if cmd[1] == "lx" {
+        if cmd[1].trim() == "lx" {
             println!("{}", vars.lx)
         } else if cmd[1].trim() == "rv" {
             println!("{}", vars.rv)
