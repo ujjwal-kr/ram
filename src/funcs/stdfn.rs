@@ -11,14 +11,14 @@ pub fn stdin(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
         io::stdin()
             .read_line(&mut input)
             .expect("something went wrong");
-        if cmd[1] == "string" {
+        if cmd[1].trim() == "string" {
             vars.string = input;
         } else {
             let number: f64 = super::errors::parse_float(input.trim(), b, l);
-            if cmd[1] == "lx" {
+            if cmd[1].trim() == "lx" {
                 vars.lx = number
             }
-            if cmd[1] == "rv" {
+            if cmd[1].trim() == "rv" {
                 vars.rv = number
             }
         }

@@ -47,11 +47,11 @@ pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
         let result = stack[stack.len() - 1] * stack[stack.len() - 1];
         stack.push(result);
     } else {
-        if cmd[1] == "lx" || cmd[1] == "rv" {
-            if cmd[1] == "lx" {
+        if cmd[1].trim() == "lx" || cmd[1].trim() == "rv" {
+            if cmd[1].trim() == "lx" {
                 vars.lx = vars.lx * vars.lx;
             }
-            if cmd[1] == "rv" {
+            if cmd[1].trim() == "rv" {
                 vars.rv = vars.rv * vars.rv;
             }
         } else {
@@ -70,10 +70,10 @@ pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars,
         }
     } else {
         if cmd[1] == "lx" || cmd[1] == "rv" {
-            if cmd[1] == "lx" {
+            if cmd[1].trim() == "lx" {
                 vars.lx = vars.lx.sqrt();
             }
-            if cmd[1] == "rv" {
+            if cmd[1].trim() == "rv" {
                 vars.rv = vars.rv.sqrt();
             }
         } else {
@@ -90,11 +90,11 @@ pub fn round(
     l: u32,
 ) {
     if cmd.len() > 1 {
-        if cmd[1] == "lx" || cmd[1] == "rv" {
-            if cmd[1] == "lx" {
+        if cmd[1].trim() == "lx" || cmd[1].trim() == "rv" {
+            if cmd[1].trim() == "lx" {
                 vars.lx = vars.lx.round();
             }
-            if cmd[1] == "rv" {
+            if cmd[1].trim() == "rv" {
                 vars.rv = vars.rv.round();
             }
         }
@@ -181,13 +181,13 @@ pub fn vec_ops(
         super::errors::args_error(b, l);
     } else {
         if cmd[1] == "str" {
-            if cmd[2] == "len" {
+            if cmd[2].trim() == "len" {
                 stack.push(super::errors::parse_float(
                     vars.str_vec.len().to_string().trim(),
                     b,
                     l,
                 ));
-            } else if cmd[2] == "push" {
+            } else if cmd[2].trim() == "push" {
                 vars.str_vec.push(vars.string.clone().trim().to_string());
             } else {
                 let lits: Vec<&str> = statement.split(">>").collect();
@@ -199,17 +199,17 @@ pub fn vec_ops(
                 }
                 vars.string = vars.str_vec[index].to_string();
             }
-        } else if cmd[1] == "int" {
-            if cmd[2] == "len" {
+        } else if cmd[1].trim() == "int" {
+            if cmd[2].trim() == "len" {
                 stack.push(super::errors::parse_float(
                     vars.num_vec.len().to_string().trim(),
                     b,
                     l,
                 ));
-            } else if cmd[2] == "push" {
-                if cmd[3] == "lx" {
+            } else if cmd[2].trim() == "push" {
+                if cmd[3].trim() == "lx" {
                     vars.num_vec.push(vars.lx)
-                } else if cmd[3] == "rv" {
+                } else if cmd[3].trim() == "rv" {
                     vars.num_vec.push(vars.rv)
                 }
             } else {
@@ -220,9 +220,9 @@ pub fn vec_ops(
                 if index >= vars.num_vec.len() {
                     super::errors::invalid_index(b, l, index);
                 }
-                if cmd[2] == "lx" {
+                if cmd[2].trim() == "lx" {
                     vars.lx = vars.num_vec[index];
-                } else if cmd[2] == "rv" {
+                } else if cmd[2].trim() == "rv" {
                     vars.rv = vars.num_vec[index]
                 } else {
                     super::errors::args_error(b, l);
