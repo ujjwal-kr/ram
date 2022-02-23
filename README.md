@@ -34,7 +34,16 @@ Run `cargo run test` to run the custom tests to test all the commands in the sui
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
-The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxstring` (for storing a string), `vec int` for storing a float vector and `vec str` for storing a string vector. All of these are global variavles. The data stored in them is preserved when a code block is switched. Details about how to use them is further in the documentation.
+## Variable Reference
+The language has 6 general purpose variables (as in x86/arm) and 4 dynamic variables (as in python/js). All of them are global. The data stored in them unlike the stack is preserved when a code block is switched. Details about how to use them is further in the documentation.
+
+### General purpose vars
+- `lx` and `rv` store floating point integers.
+- `string` and `lxstring` to store strings.
+- `vec int` and `vec str` to store integer and string vectors.
+
+### Dynamic vars
+These variables are called hash_vars as they are implemented using a hashmap. There can be unlimited number of these named variables, restricted to types like string, integer, integer vector and string vector. You can move values from these vars to general purpose vars for further operations.
 
 ## Contents
 - General commands:
@@ -71,13 +80,13 @@ The language has 6 variables `lx`, `rv` (for storing numbers), `string` and `lxs
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv` prints the value of `lx/rv/` variables at the screen.
-- `print string/lxstring` prints the value of `string/lxstring` variables at the screen.
-- `print vec str/vec int` prints the value of `vec str/vec int` variables at the screen.
-- `print var str <hash_str_var>` prints the value of `hash_str_var` variable at the screen.
-- `print var str <hash_int_var>` prints the value of `hash_int_var` variable at the screen.
-- `print vec str <hash_str_vec_var>` prints the value of `hash_str_vec_var` variable at the screen.
-- `print vec int <hash_int_vec_var>` prints the value of `hash_int_vec_var` variable at the screen.
+- `print lx/rv` prints the value of `lx/rv/` variables on the screen.
+- `print string/lxstring` prints the value of `string/lxstring` variables on the screen.
+- `print vec str/vec int` prints the value of `vec str/vec int` variables on the screen.
+- `print var str <hash_str_var>` prints the value of `hash_str_var` variable on the screen.
+- `print var str <hash_int_var>` prints the value of `hash_int_var` variable on the screen.
+- `print vec str <hash_str_vec_var>` prints the value of `hash_str_vec_var` variable on the screen.
+- `print vec int <hash_int_vec_var>` prints the value of `hash_int_vec_var` variable on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
