@@ -1,10 +1,24 @@
+var stack int vec >> [0]
+jmp 1
+
 stdfs open >> ./src/ram/test.txt
 split string >> "\n"
-print vec str
-vec str >> [0]
-str lxstring string
-ram string >> ram 10
-str cmp
-je 1
+// cmp lx with length of program
+vec str len
+ram lx
+cmp
+jne 2
 
-printc >> hmm
+print lx
+vec str >> [lx]
+// call lexer + parser
+jmp 3
+// increment the loop
+ram 1
+ram lx
+add
+ram lx prev
+jmp 1
+
+split string >> " "
+print vec str
