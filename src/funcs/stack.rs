@@ -73,7 +73,22 @@ pub fn ram(
                     }
                 }
             }
-            if cmd[1] == "var" {}
+            if cmd[1] == "var" {
+                if cmd.len() >= 3 {
+                    if cmd.len() == 4 && cmd[3].trim() == "prev" {
+                        hash_vars
+                            .hash_int
+                            .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
+                    } else {
+                        match hash_vars.hash_int.get(cmd[2].trim()) {
+                            Some(&value) => stack.push(value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    }
+                } else {
+                    super::errors::args_error(b, l);
+                }
+            }
         }
     } else {
         stack.push(super::errors::parse_float(cmd[1], b, l))
