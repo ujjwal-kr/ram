@@ -1,0 +1,55 @@
+var stack int vec >> [0]
+jmp 1
+
+stdfs open >> ./src/ram/test.txt
+split string >> "\n"
+// cmp lx with length of program
+vec str len
+ram lx
+cmp
+jne 2
+
+// print lx
+vec str >> [lx]
+// call lexer + parser
+jmp 3
+// increment the loop
+ram 1
+ram lx
+add
+ram lx prev
+jmp 1
+
+split string >> " "
+vec str >> [0]
+print vec str
+ram lxstring >> ram
+// compare for "ram"
+str cmp
+je 4
+ram lxstring >> pop
+// compare for "pop"
+str cmp
+je 5
+ram lxstring >> add
+// compare for "add"
+str cmp
+je 6
+ram lxstring >> sub
+// compare for "sub"
+str cmp
+je 7
+
+// ram func
+printc >> ram function called
+// move vec vec int stack
+
+
+// pop func
+printc >> pop func called
+
+// add func
+printc >> add func called
+
+// sub func
+printc >> sub func called
