@@ -146,7 +146,9 @@ pub fn var_works() {
 
     // var <name_vec> int vec lx/rv/var <name> >> [2] -> store the value of <name_vec[2]> in lx/rv/<name>
 
-    hash_vars.hash_int_vec.insert("test".to_string(), [1.0, 1.1, 2.1].to_vec());
+    hash_vars
+        .hash_int_vec
+        .insert("test".to_string(), [1.0, 1.1, 2.1].to_vec());
     hash_vars.hash_int.insert("name".to_string(), 0.0);
 
     statement = "var test int vec lx >> [1]";
@@ -165,13 +167,17 @@ pub fn var_works() {
     match hash_vars.hash_int.get("name") {
         Some(&value) => assert_f64(value, 2.1, statement),
         _ => assert_str("fail", "something", statement),
-
     }
 
     // var <name_vec> str vec string/lxstring/var <name> >> [2] -> store the value of <name_vec[2]> in string/lxstring/<name>
 
-    hash_vars.hash_str_vec.insert("test".to_string(), ["r".to_string(), "a".to_string(), "m".to_string()].to_vec());
-    hash_vars.hash_str.insert("name".to_string(), "".to_string());
+    hash_vars.hash_str_vec.insert(
+        "test".to_string(),
+        ["r".to_string(), "a".to_string(), "m".to_string()].to_vec(),
+    );
+    hash_vars
+        .hash_str
+        .insert("name".to_string(), "".to_string());
 
     statement = "var test str vec string >> [0]";
     cmd = statement.split(" ").collect();

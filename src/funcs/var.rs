@@ -18,6 +18,38 @@ pub fn var(
         if cmd[3].trim() == "vec" {
             if cmd[4].trim() == "push" {
                 // var <name_vec> str vec push >> string/lxstring/var <name>
+                if cmd[6] == "string".trim() || cmd[6] == "lxstring".trim() || cmd[6] == "var" {
+                    let mut new_vec: Vec<String> = vec![];
+                    match hash_vars.hash_str_vec.get(cmd[1]) {
+                        Some(value) => new_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[3].trim(), b, l),
+                    }
+                    if cmd[6] == "string".trim() {
+                        new_vec.push(vars.string.clone());
+                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else if cmd[6] == "lxstring".trim() {
+                        new_vec.push(vars.lxstring.clone());
+                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else if cmd[6] == "var" {
+                        let mut var_value: String = "".to_string();
+                        match hash_vars.hash_str.get(cmd[7].trim()) {
+                            Some(value) => var_value = value.to_string(),
+                            _ => errors::var_error(cmd[7].trim(), b, l),
+                        }
+                        new_vec.push(var_value.clone());
+                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else {
+                        errors::args_error(b, l);
+                    }
+                } else {
+                    errors::args_error(b, l);
+                }
             } else if cmd[4] == ">>" {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let value: String = lits[1].trim().to_string();
@@ -45,6 +77,38 @@ pub fn var(
         if cmd[3].trim() == "vec" {
             if cmd[4].trim() == "push" {
                 // var <name_vec> int vec push >> lx/rv/var <name>
+                if cmd[6] == "lx".trim() || cmd[6] == "rv".trim() || cmd[6] == "var" {
+                    let mut new_vec: Vec<f64> = vec![];
+                    match hash_vars.hash_int_vec.get(cmd[1]) {
+                        Some(value) => new_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[3].trim(), b, l),
+                    }
+                    if cmd[6] == "lx".trim() {
+                        new_vec.push(vars.lx.clone());
+                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else if cmd[6] == "rv".trim() {
+                        new_vec.push(vars.rv.clone());
+                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else if cmd[6] == "var" {
+                        let mut var_value: f64 = 0.0;
+                        match hash_vars.hash_int.get(cmd[7].trim()) {
+                            Some(&value) => var_value = value,
+                            _ => errors::var_error(cmd[7].trim(), b, l),
+                        }
+                        new_vec.push(var_value.clone());
+                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                            *x = new_vec;
+                        }
+                    } else {
+                        errors::args_error(b, l);
+                    }
+                } else {
+                    errors::args_error(b, l);
+                }
             } else if cmd[4] == ">>" {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let value: String = lits[1].trim().to_string();
