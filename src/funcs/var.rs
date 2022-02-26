@@ -2,40 +2,70 @@ use super::super::errors;
 use super::super::HashVars;
 use super::super::Vars;
 
-pub fn var(cmd: Vec<&str>, statement: &str, hash_vars: &mut HashVars, b: usize, l: u32) {
-    if cmd.len() < 5 {
+pub fn var(
+    cmd: Vec<&str>,
+    statement: &str,
+    vars: &mut Vars,
+    hash_vars: &mut HashVars,
+    b: usize,
+    l: u32,
+) {
+    if cmd.len() < 4 {
         errors::args_error(b, l);
     }
 
-    let lits: Vec<&str> = statement.split(">>").collect();
-    let value: String = lits[1].trim().to_string();
-
     if cmd[2] == "str" {
         if cmd[3].trim() == "vec" {
-            let slice = &value[1..value.len() - 1];
-            let data_vec: Vec<&str> = slice.split(",").collect();
-            let mut str_vec: Vec<String> = vec![];
-            for item in data_vec {
-                str_vec.push(item.to_string());
+            if cmd[4].trim() == "push" {
+                // var <name_vec> str vec push >> string/lxstring/var <name>
+            } else if cmd[4] == ">>" {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                let slice = &value[1..value.len() - 1];
+                let data_vec: Vec<&str> = slice.split(",").collect();
+                let mut str_vec: Vec<String> = vec![];
+                for item in data_vec {
+                    str_vec.push(item.to_string());
+                }
+                hash_vars
+                    .hash_str_vec
+                    .insert(cmd[1].trim().to_string(), str_vec);
+            } else {
+                if cmd.len() < 6 {
+                    errors::args_error(b, l);
+                }
+                // var <name_vec> str vec string/lxstring/var <name> >> [2]
             }
-            hash_vars
-                .hash_str_vec
-                .insert(cmd[1].trim().to_string(), str_vec);
         } else {
+            let lits: Vec<&str> = statement.split(">>").collect();
+            let value: String = lits[1].trim().to_string();
             hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
         }
     } else if cmd[2] == "int" {
         if cmd[3].trim() == "vec" {
-            let slice = &value[1..value.len() - 1];
-            let data_vec: Vec<&str> = slice.split(",").collect();
-            let mut num_vec: Vec<f64> = vec![];
-            for item in data_vec {
-                num_vec.push(errors::parse_float(item, b, l));
+            if cmd[4].trim() == "push" {
+                // var <name_vec> int vec push >> lx/rv/var <name>
+            } else if cmd[4] == ">>" {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                let slice = &value[1..value.len() - 1];
+                let data_vec: Vec<&str> = slice.split(",").collect();
+                let mut num_vec: Vec<f64> = vec![];
+                for item in data_vec {
+                    num_vec.push(errors::parse_float(item, b, l));
+                }
+                hash_vars
+                    .hash_int_vec
+                    .insert(cmd[1].trim().to_string(), num_vec);
+            } else {
+                if cmd.len() < 6 {
+                    errors::args_error(b, l);
+                }
+                // var <name_vec> int vec lx/rv/var <name> >> [2]
             }
-            hash_vars
-                .hash_int_vec
-                .insert(cmd[1].trim().to_string(), num_vec);
         } else {
+            let lits: Vec<&str> = statement.split(">>").collect();
+            let value: String = lits[1].trim().to_string();
             hash_vars.hash_int.insert(
                 cmd[1].trim().to_string(),
                 errors::parse_float(value.trim(), b, l),

@@ -130,7 +130,14 @@ fn run_statement(
                 block_number,
                 line,
             ),
-            "var" => var::var(cmd, statement, &mut local_hash_vars, block_number, line),
+            "var" => var::var(
+                cmd,
+                statement,
+                &mut local_vars,
+                &mut local_hash_vars,
+                block_number,
+                line,
+            ),
             "move" => var::movefn(
                 cmd,
                 &mut local_vars,
