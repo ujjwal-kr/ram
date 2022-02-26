@@ -126,6 +126,7 @@ fn run_statement(
                 cmd,
                 statement,
                 &mut local_vars,
+                &mut local_hash_vars,
                 block_number,
                 line,
             ),

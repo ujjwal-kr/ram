@@ -3,6 +3,7 @@ pub fn ram(
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut super::super::Vars,
+    hash_vars: &mut super::super::HashVars,
     b: usize,
     l: u32,
 ) {
@@ -11,6 +12,7 @@ pub fn ram(
         || cmd[1] == "string"
         || cmd[1] == "vec"
         || cmd[1] == "lxstring"
+        || cmd[1] == "var"
     {
         if cmd.len() < 2 {
             super::errors::args_error(b, l)
@@ -71,6 +73,7 @@ pub fn ram(
                     }
                 }
             }
+            if cmd[1] == "var" {}
         }
     } else {
         stack.push(super::errors::parse_float(cmd[1], b, l))
@@ -98,7 +101,7 @@ pub fn strfn(
             vars.string = vars.lxstring.clone();
         } else if cmd[1] == "lxstring" && cmd[2].trim() == "string".trim() {
             vars.lxstring = vars.string.clone();
-        } else if cmd[1].trim()  == "cmp"{
+        } else if cmd[1].trim() == "cmp" {
             if vars.lxstring.trim() == vars.string.trim() {
                 stack.push(0.0);
             } else {

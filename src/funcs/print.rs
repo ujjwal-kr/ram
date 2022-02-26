@@ -50,14 +50,14 @@ pub fn print(
                     Some(&value) => println!("{}", value),
                     _ => super::errors::var_error(cmd[3].trim(), b, l),
                 }
-            }
-            else if cmd[2].trim() == "str" {
+            } else if cmd[2].trim() == "str" {
                 match hash_vars.hash_str.get(cmd[3].trim()) {
                     Some(value) => println!("{}", value),
                     _ => super::errors::var_error(cmd[3].trim(), b, l),
                 }
+            } else {
+                super::errors::args_error(b, l);
             }
-            else { super::errors::args_error(b, l); }
         } else {
             super::errors::var_error(cmd[1], b, l);
         }

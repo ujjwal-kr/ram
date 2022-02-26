@@ -1,5 +1,7 @@
 use super::super::funcs::stack;
+use super::super::funcs::var;
 use super::*;
+use std::collections::HashMap;
 
 pub fn ram_works() {
     // ram 10
@@ -15,7 +17,14 @@ pub fn ram_works() {
         str_vec: vec![],
     };
 
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    let mut hash_vars = super::super::HashVars {
+        hash_str: HashMap::new(),
+        hash_int: HashMap::new(),
+        hash_int_vec: HashMap::new(),
+        hash_str_vec: HashMap::new(),
+    };
+
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(stack[0], 10.0, statement);
 
     // ram lx 12
@@ -23,14 +32,14 @@ pub fn ram_works() {
     cmd = statement.split(" ").collect();
     stack = vec![];
 
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(vars.lx, 12.0, statement);
 
     // ram rv 13
     statement = "ram rv 13";
     cmd = statement.split(" ").collect();
     stack = vec![];
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(vars.rv, 13.0, statement);
 
     // ram lx
@@ -38,7 +47,7 @@ pub fn ram_works() {
     statement = "ram lx";
     cmd = statement.split(" ").collect();
     stack = vec![];
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(vars.lx, stack[0], statement);
 
     // ram rv
@@ -46,7 +55,7 @@ pub fn ram_works() {
     statement = "ram rv";
     cmd = statement.split(" ").collect();
     stack = vec![];
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(vars.rv, stack[0], statement);
 
     // ram lx prev
@@ -54,7 +63,7 @@ pub fn ram_works() {
     stack.push(2.0);
     statement = "ram lx prev";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(stack[0], vars.lx, statement);
 
     // ram rv prev
@@ -62,34 +71,63 @@ pub fn ram_works() {
     stack.push(3.0);
     statement = "ram rv prev";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_f64(stack[0], vars.rv, statement);
 
     // ram string >> hello world
     stack = vec![];
     statement = "ram string >> hello world";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_str("hello world", vars.string.trim(), statement);
 
     // ram lxstring >> hello world
     stack = vec![];
     statement = "ram lxstring >> hello world";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_str("hello world", vars.lxstring.trim(), statement);
 
     // ram vec int >> [1, 2, 3]
     statement = "ram vec int >> [1, 2, 3]";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     assert_vec_int(vars.num_vec.clone(), [1.0, 2.0, 3.0].to_vec(), statement);
 
     // ram vec str >> [1, 2, 3]
     statement = "ram vec str >> [hello, a, b]";
     cmd = statement.split(" ").collect();
-    stack::ram(&mut stack, cmd, statement, &mut vars, 0, 1);
-    assert_vec_str(vars.str_vec, ["hello", "a", "b"].to_vec(), statement);
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
+    assert_vec_str(
+        vars.str_vec.clone(),
+        ["hello", "a", "b"].to_vec(),
+        statement,
+    );
+
+    // ram var <name> -> pushes the int var name into the stack
+    statement = "var test int >> 15";
+    cmd = statement.split(" ").collect();
+    var::var(cmd, statement, &mut hash_vars, 0, 1);
+    stack = vec![];
+    statement = "ram var test";
+    cmd = statement.split(" ").collect();
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
+    if stack.len() < 1 {
+        assert_str("fail", "something", statement);
+    } else {
+        assert_f64(stack[0], 15.0, statement);
+    }
+
+    // ram var <name> prev -> stores the last value of stack to <name>
+    stack = vec![];
+    stack.push(2.0);
+    statement = "ram var test prev";
+    cmd = statement.split(" ").collect();
+    stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
+    match hash_vars.hash_int.get("test") {
+        Some(&value) => assert_f64(value, 2.0, statement),
+        _ => assert_str("fail", "something", statement),
+    }
 }
 
 pub fn str_works() {
