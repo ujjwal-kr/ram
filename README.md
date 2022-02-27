@@ -83,7 +83,7 @@ These variables are called hash_vars as they are implemented using a hashmap. Th
 
 ### print
 - `print` prints the last number on the screen present in the stack.
-- `print lx/rv` prints the value of `lx/rv/` variables on the screen.
+- `print lx/rv` prints the value of `lx/rv` variables on the screen.
 - `print string/lxstring` prints the value of `string/lxstring` variables on the screen.
 - `print vec str/vec int` prints the value of `vec str/vec int` variables on the screen.
 - `print var str <hash_str_var>` prints the value of `hash_str_var` variable on the screen.
@@ -116,6 +116,8 @@ Prints the characters specified on the screen
 - `ram lx/rv` adds the variable value to the stack for further calculations
 - `ram lx/rv prev` assigns the last stack value to the specified variable.
 - `ram string >> <strings>` assigns value to the strings global variable.
+- `ram var <name>` adds the int hashvar value to the stack.
+- `ram var <name> prev` assigns the last stack value to the specified hash int variable.
 
 ### vectors
 - `ram vec int >> [1,2,3,4,ints...]` creates a vector and assigns it to the global `vec int` variable.
@@ -144,10 +146,16 @@ Empties the entire stack. Useful for `avg` implementation.
 ## Hash Vars
 
 ### var
-- `var <name> str >> test123` creates a variable called `name` with string type and assigns `"test123"` to it.
-- `var <name> int >> 75` creates a variable called `name` with integer type and assigns `75` to it.
-- `var <name_vec> int vec >> [10, 13, 12]` creates a variable called `name_vec` with vec integer type and assigns `[10, 13, 12]` to it.
-- `var <name_vec> str vec >> [one,two]` creates a variable called `name_vec` with vec integer type and assigns `[one,two]` to it.
+- `var <name> str >> test123` creates a variable called `name` with string type and assigns "test123" to it.
+- `var <name> int >> 75` creates a variable called `name` with integer type and assigns 75 to it.
+- `var <name_vec> int vec >> [10, 13, 12]` creates a variable called `name_vec` with vec integer type and assigns [10, 13, 12] to it.
+- `var <name_vec> str vec >> [one,two]` creates a variable called `name_vec` with vec integer type and assigns [one,two] to it.
+
+- `var <name_vec> str vec push >> string/lxstring/var <name>` pushes string/lxstring/`<name>` into the `<name_vec>` variable.
+- `var <name_vec> int vec push >> lx/rv/var <name>` pushes lx/rv/`<name>` into the `<name_vec>` variable.
+
+- `var <name_vec> int vec lx/rv/var <name> >> [lx/rv/var name/<number>]` stores the [index] value of `<name_vec>` into the specified variable.
+- `var <name_vec> str vec string/lxstring/var <name> >> [lx/rv/var name/<number>]` stores the [index] value of `<name_vec>` into the specified variable.
 
 ### move
 
