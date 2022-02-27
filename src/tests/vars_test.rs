@@ -207,7 +207,7 @@ pub fn var_works() {
     statement = "var test int vec len";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
-    if stack.len() >= 3 {
+    if stack.len() >= 1 {
         assert_f64(stack[stack.len() - 1], 2.0, statement);
     } else {
         assert_str("fail", "something", statement);
@@ -222,7 +222,7 @@ pub fn var_works() {
     statement = "var test str vec len";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
-    if stack.len() >= 3 {
+    if stack.len() >= 1 {
         assert_f64(stack[stack.len() - 1], 2.0, statement);
     } else {
         assert_str("fail", "something", statement);

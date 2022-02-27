@@ -18,14 +18,17 @@ pub fn var(
     if cmd[2] == "str" {
         if cmd[3].trim() == "vec" {
             if cmd[4].trim() == "len" {
-
+                match hash_vars.hash_str_vec.get(cmd[1].trim()) {
+                    Some(value) => stack.push(errors::parse_float(value.to_vec().len().to_string().trim(), b, l)),
+                    _ => errors::var_error(cmd[1].trim(), b, l),
+                }
             } else if cmd[4].trim() == "push" {
                 // var <name_vec> str vec push >> string/lxstring/var <name>
                 if cmd[6] == "string".trim() || cmd[6] == "lxstring".trim() || cmd[6] == "var" {
                     let mut new_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => new_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[3].trim(), b, l),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
                     }
                     if cmd[6] == "string".trim() {
                         new_vec.push(vars.string.clone());
@@ -75,7 +78,7 @@ pub fn var(
                     let mut var_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[7].trim(), b, l),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
                     }
 
                     let lits: Vec<&str> = statement.split(">>").collect();
@@ -105,14 +108,17 @@ pub fn var(
     } else if cmd[2] == "int" {
         if cmd[3].trim() == "vec" {
             if cmd[4].trim() == "len" {
-
+                match hash_vars.hash_int_vec.get(cmd[1].trim()) {
+                    Some(value) => stack.push(errors::parse_float(value.to_vec().len().to_string().trim(), b, l)),
+                    _ => errors::var_error(cmd[1].trim(), b, l),
+                }
             } else if cmd[4].trim() == "push" {
                 // var <name_vec> int vec push >> lx/rv/var <name>
                 if cmd[6] == "lx".trim() || cmd[6] == "rv".trim() || cmd[6] == "var" {
                     let mut new_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => new_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[3].trim(), b, l),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
                     }
                     if cmd[6] == "lx".trim() {
                         new_vec.push(vars.lx.clone());
