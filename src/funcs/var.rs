@@ -67,6 +67,32 @@ pub fn var(
                     errors::args_error(b, l);
                 }
                 // var <name_vec> str vec string/lxstring/var <name> >> [2]
+                if cmd[4] == "string" || cmd[4] == "lxstring" || cmd[4] == "var" {
+
+                    let mut var_vec: Vec<String> = vec![];
+                    match hash_vars.hash_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    if cmd[4] == "string" {
+                        vars.string = var_vec[index].clone();
+                    } else if cmd[4] == "lxstring" {
+                        vars.lxstring = var_vec[index].clone();
+                    } else if cmd[4] == "var" {
+                        hash_vars.hash_str.insert(cmd[5].to_string(), var_vec[index].clone());
+                    }
+                } else {
+                    errors::args_error(b, l);
+                }
             }
         } else {
             let lits: Vec<&str> = statement.split(">>").collect();
@@ -126,6 +152,32 @@ pub fn var(
                     errors::args_error(b, l);
                 }
                 // var <name_vec> int vec lx/rv/var <name> >> [2]
+                if cmd[4] == "lx" || cmd[4] == "rv" || cmd[4] == "var" {
+
+                    let mut var_vec: Vec<f64> = vec![];
+                    match hash_vars.hash_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    if cmd[4] == "lx" {
+                        vars.lx = var_vec[index].clone();
+                    } else if cmd[4] == "rv" {
+                        vars.rv = var_vec[index].clone();
+                    } else if cmd[4] == "var" {
+                        hash_vars.hash_int.insert(cmd[5].to_string(), var_vec[index].clone());
+                    }
+                } else {
+                    errors::args_error(b, l);
+                }
             }
         } else {
             let lits: Vec<&str> = statement.split(">>").collect();
@@ -245,5 +297,30 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
         }
     } else {
         errors::args_error(b, l);
+    }
+}
+
+fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) -> usize {
+    if str_idx.trim().len() == 1 {
+        if str_idx == "lx" || str_idx == "rv" {
+            if str_idx == "lx" {
+                let index: usize = errors::parse_usize(vars.lx.to_string().trim(), b, l);
+                return index;
+            } else {
+                let index: usize = errors::parse_usize(vars.rv.to_string().trim(), b, l);
+                return index;
+            } 
+        } else {
+            let index: usize = errors::parse_usize(str_idx, b, l);
+            return index;
+        }
+    } else {
+        let mut index_n: usize = 0;
+        let str_idx_vec: Vec<&str> = str_idx.split(" ").collect();
+        match hash_vars.hash_int.get(str_idx_vec[1].to_string().trim()) {
+            Some(&value) => index_n = errors::parse_usize(value.to_string().trim(), b, l),
+            _ => errors::var_error(str_idx_vec[1].trim(), b, l),
+        }
+        return index_n;
     }
 }
