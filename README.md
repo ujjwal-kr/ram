@@ -157,6 +157,9 @@ Empties the entire stack. Useful for `avg` implementation.
 - `var <name_vec> int vec lx/rv/var <name> >> [lx/rv/var name/<number>]` stores the [index] value of `<name_vec>` into the specified variable.
 - `var <name_vec> str vec string/lxstring/var <name> >> [lx/rv/var name/<number>]` stores the [index] value of `<name_vec>` into the specified variable.
 
+- `var <name_vec> str vec len` -> pushes the length of str `<name_vec>` into the stack.
+- `var <name_vec> int vec len` -> pushes the length of int `<name_vec>` into the stack.
+
 ### move
 
 Move is used to move the value of hashvars to general purpose vars and vice versa (note its destination first).
