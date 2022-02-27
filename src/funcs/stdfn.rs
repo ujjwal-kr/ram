@@ -80,3 +80,31 @@ fn ret_float(str_num: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> 
         super::errors::parse_float(str_num.trim(), b, l)
     }
 }
+
+pub fn parse_int(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
+    // parse int lx string
+    // parse int lx lxstring
+
+    // parse int rv string
+    // parse int rv lxstring
+
+    if cmd[2] == "lx" {
+        if cmd[3].trim() == "string" {
+            vars.lx = super::errors::parse_float(vars.string, b, l);
+        } else if cmd[3].trim() == "lxstring" {
+            vars.lx = super::errors::parse_float(vars.lxstring, b, l);
+        } else {
+            super::errors::args_error(b, l);
+        }
+    } else if cmd[2] == "rv" {
+        if cmd[3].trim() == "string" {
+            vars.rv = super::errors::parse_float(vars.string, b, l);
+        } else if cmd[3].trim() == "lxstring" {
+            vars.rv = super::errors::parse_float(vars.lxstring, b, l);
+        } else {
+            super::errors::args_error(b, l);
+        }
+    } else {
+        super::errors::args_error(b, l);
+    }
+}
