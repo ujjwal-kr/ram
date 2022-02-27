@@ -107,7 +107,7 @@ pub fn ram_works() {
     // ram var <name> -> pushes the int var name into the stack
     statement = "var test int >> 15";
     cmd = statement.split(" ").collect();
-    var::var(cmd, statement, &mut vars, &mut hash_vars, 0, 1);
+    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     stack = vec![];
     statement = "ram var test";
     cmd = statement.split(" ").collect();

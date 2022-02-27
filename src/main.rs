@@ -131,6 +131,7 @@ fn run_statement(
                 line,
             ),
             "var" => var::var(
+                &mut stack,
                 cmd,
                 statement,
                 &mut local_vars,

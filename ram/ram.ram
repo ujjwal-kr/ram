@@ -1,23 +1,26 @@
 var stack int vec >> [0]
+var i int >> 0
 jmp 1
 
-stdfs open >> ./src/ram/test.txt
+stdfs open >> ./ram/test.txt
 split string >> "\n"
-// cmp lx with length of program
+
+// cmp i with length of program
 vec str len
-ram lx
+ram var i
 cmp
 jne 2
 
-// print lx
-vec str >> [lx]
+// print i
+print var int i
+vec str >> [i]
 // call lexer + parser
 jmp 3
 // increment the loop
 ram 1
-ram lx
+ram var i
 add
-ram lx prev
+ram var i prev
 jmp 1
 
 split string >> " "
@@ -42,8 +45,6 @@ je 7
 
 // ram func
 printc >> ram function called
-// move vec vec int stack
-
 
 // pop func
 printc >> pop func called

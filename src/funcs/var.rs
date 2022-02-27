@@ -3,6 +3,7 @@ use super::super::HashVars;
 use super::super::Vars;
 
 pub fn var(
+    stack: &mut Vec<f64>,
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut Vars,
@@ -16,7 +17,9 @@ pub fn var(
 
     if cmd[2] == "str" {
         if cmd[3].trim() == "vec" {
-            if cmd[4].trim() == "push" {
+            if cmd[4].trim() == "len" {
+
+            } else if cmd[4].trim() == "push" {
                 // var <name_vec> str vec push >> string/lxstring/var <name>
                 if cmd[6] == "string".trim() || cmd[6] == "lxstring".trim() || cmd[6] == "var" {
                     let mut new_vec: Vec<String> = vec![];
@@ -101,7 +104,9 @@ pub fn var(
         }
     } else if cmd[2] == "int" {
         if cmd[3].trim() == "vec" {
-            if cmd[4].trim() == "push" {
+            if cmd[4].trim() == "len" {
+
+            } else if cmd[4].trim() == "push" {
                 // var <name_vec> int vec push >> lx/rv/var <name>
                 if cmd[6] == "lx".trim() || cmd[6] == "rv".trim() || cmd[6] == "var" {
                     let mut new_vec: Vec<f64> = vec![];
