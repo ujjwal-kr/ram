@@ -114,18 +114,18 @@ pub fn var(
                 }
             } else if cmd[4].trim() == "push" {
                 // var <name_vec> int vec push >> lx/rv/var <name>
-                if cmd[6] == "lx".trim() || cmd[6] == "rv".trim() || cmd[6] == "var" {
+                if cmd[6].trim() == "lx" || cmd[6].trim() == "rv" || cmd[6] == "var" {
                     let mut new_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => new_vec = value.to_vec(),
                         _ => errors::var_error(cmd[1].trim(), b, l),
                     }
-                    if cmd[6] == "lx".trim() {
+                    if cmd[6].trim() == "lx" {
                         new_vec.push(vars.lx.clone());
                         if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
                             *x = new_vec;
                         }
-                    } else if cmd[6] == "rv".trim() {
+                    } else if cmd[6].trim() == "rv" {
                         new_vec.push(vars.rv.clone());
                         if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
                             *x = new_vec;

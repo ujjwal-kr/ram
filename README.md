@@ -108,6 +108,9 @@ Prints the characters specified on the screen
 ### rand >> num1,num2
 `rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
 
+### parse
+`parse int lx/rv string/lxstring` parses string/lxstring and stores in lx/rv.
+
 ## stack based commands
 
 ### ram

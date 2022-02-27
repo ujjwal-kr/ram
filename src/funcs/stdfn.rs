@@ -90,17 +90,17 @@ pub fn parse_int(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32
 
     if cmd[2] == "lx" {
         if cmd[3].trim() == "string" {
-            vars.lx = super::errors::parse_float(vars.string, b, l);
+            vars.lx = super::errors::parse_float(vars.string.trim(), b, l);
         } else if cmd[3].trim() == "lxstring" {
-            vars.lx = super::errors::parse_float(vars.lxstring, b, l);
+            vars.lx = super::errors::parse_float(vars.lxstring.trim(), b, l);
         } else {
             super::errors::args_error(b, l);
         }
     } else if cmd[2] == "rv" {
         if cmd[3].trim() == "string" {
-            vars.rv = super::errors::parse_float(vars.string, b, l);
+            vars.rv = super::errors::parse_float(vars.string.trim(), b, l);
         } else if cmd[3].trim() == "lxstring" {
-            vars.rv = super::errors::parse_float(vars.lxstring, b, l);
+            vars.rv = super::errors::parse_float(vars.lxstring.trim(), b, l);
         } else {
             super::errors::args_error(b, l);
         }

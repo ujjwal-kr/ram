@@ -1,4 +1,5 @@
 ram 10
+ram 22
 ram 12
-add
+ram 10000
 print

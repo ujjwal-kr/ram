@@ -168,6 +168,7 @@ fn run_statement(
                 line,
             ),
             "split" => operations::split(cmd, statement, &mut local_vars, block_number, line),
+            "parse" => stdfn::parse_int(&mut local_vars, cmd, block_number, line),
             "vec" => operations::vec_ops(
                 &mut stack,
                 cmd,
