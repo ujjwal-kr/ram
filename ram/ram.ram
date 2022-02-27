@@ -1,19 +1,21 @@
+stdfs open >> ./ram/test.txt
+split string >> "\n"
 var stack int vec >> [0]
 var i int >> 0
 jmp 1
 
-stdfs open >> ./ram/test.txt
-split string >> "\n"
-
-// cmp i with length of program
+// loop through the program [1]
 vec str len
 ram var i
 cmp
 jne 2
 
-// print i
+// init router [2]
 print var int i
-vec str >> [i]
+// send command to cmd vec
+var cmd str vec >> [nil]
+move vec var cmd vec str
+var cmd str vec string >> [var i]
 // call lexer + parser
 jmp 3
 // increment the loop
@@ -23,6 +25,7 @@ add
 ram var i prev
 jmp 1
 
+// main router [3]
 split string >> " "
 vec str >> [0]
 print vec str
@@ -34,23 +37,30 @@ ram lxstring >> pop
 // compare for "pop"
 str cmp
 je 5
+ram lxstring >> print
+// compare for print
+str cmp
+je 6
 ram lxstring >> add
 // compare for "add"
 str cmp
-je 6
+je 7
 ram lxstring >> sub
 // compare for "sub"
 str cmp
-je 7
+je 8
 
-// ram func
+// ram func [4]
 printc >> ram function called
 
-// pop func
+// pop func [5]
 printc >> pop func called
 
-// add func
+// print func [6]
+printc >> print func called
+
+// add func [7]
 printc >> add func called
 
-// sub func
+// sub func [8]
 printc >> sub func called
