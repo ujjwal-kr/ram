@@ -29,7 +29,7 @@ halt
 ## How to test
 Run `cargo run test` to run the custom tests to test all the commands in the suit. Make sure to run this before pushing any PRs. The tests are automatically ran when there is a PR/commit on the master branch.
 
-![tests](https://media.discordapp.net/attachments/939051863037341726/941527372006572102/unknown.png?width=300&height=407)
+![tests](https://media.discordapp.net/attachments/867819380464680980/947347676503089172/unknown.png?width=350&height=510)
 
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
