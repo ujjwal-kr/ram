@@ -10,11 +10,20 @@ use stack_test::*;
 use vars_test::*;
 
 pub fn test() {
+    test_log("ram");
     ram_works();
+    test_log("str");
     str_works();
+    test_log("operations");
     operation_works();
+    test_log("var");
     var_works();
+    test_log("move");
     move_works();
+}
+
+pub fn test_log(string: &str) {
+    println!("{} {}", "TESTING:".cyan().bold(), string);
 }
 
 pub fn log_pass(string: &str) {
