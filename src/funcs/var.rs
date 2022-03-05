@@ -312,7 +312,8 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
 }
 
 fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) -> usize {
-    if str_idx.trim().len() == 1 {
+    let idx_tokens: Vec<&str> = str_idx.split(" ").collect();
+    if idx_tokens.len() == 1 {
         if str_idx == "lx" || str_idx == "rv" {
             if str_idx == "lx" {
                 let index: usize = errors::parse_usize(vars.lx.to_string().trim(), b, l);
