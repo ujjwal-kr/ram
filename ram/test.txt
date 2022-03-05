@@ -1,5 +1,2 @@
-ram 10
-ram 22
-ram 12
-ram 10000
+ram 500
 print

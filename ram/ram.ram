@@ -11,7 +11,6 @@ cmp
 jne 2
 
 // init router [2]
-print var int i
 // send command to cmd vec
 var cmd str vec >> [nil]
 move vec var cmd vec str
@@ -28,7 +27,6 @@ jmp 1
 // main router [3]
 split string >> " "
 vec str >> [0]
-print vec str
 ram lxstring >> ram
 // compare for "ram"
 str cmp
@@ -52,12 +50,22 @@ je 8
 
 // ram func [4]
 printc >> ram function called
+vec str string >> [1]
+parse int lx string
+var stack int vec push >> lx
 
 // pop func [5]
 printc >> pop func called
 
 // print func [6]
 printc >> print func called
+var stack int vec len
+ram 1
+sub
+ram lx prev
+// store the last item of stack in string
+var stack int vec rv >> [lx]
+print rv
 
 // add func [7]
 printc >> add func called
