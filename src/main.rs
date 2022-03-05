@@ -64,13 +64,13 @@ fn main() -> std::io::Result<()> {
         str_vec: vec![],
     };
 
-    let hash_vars = HashVars {
+    let mut hash_vars = HashVars {
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
         hash_int_vec: HashMap::new(),
         hash_str_vec: HashMap::new(),
     };
-    match run_statement(&blocks, &blocks[0], 0, vars, hash_vars) {
+    match run_statement(&blocks, &blocks[0], 0, vars, &mut hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -82,7 +82,7 @@ fn run_statement(
     run_block: &Vec<&str>,
     block_number: usize,
     vars: Vars,
-    hash_vars: HashVars,
+    hash_vars: &mut HashVars,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
     let mut local_vars = Vars {
@@ -92,13 +92,6 @@ fn run_statement(
         lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
-    };
-
-    let mut local_hash_vars = HashVars {
-        hash_str: hash_vars.hash_str,
-        hash_int: hash_vars.hash_int,
-        hash_int_vec: hash_vars.hash_int_vec,
-        hash_str_vec: hash_vars.hash_str_vec,
     };
 
     let mut stack: Vec<f64> = vec![];
@@ -116,7 +109,7 @@ fn run_statement(
                 &mut stack,
                 cmd,
                 &mut local_vars,
-                &mut local_hash_vars,
+                hash_vars,
                 block_number,
                 line,
             ),
@@ -126,7 +119,7 @@ fn run_statement(
                 cmd,
                 statement,
                 &mut local_vars,
-                &mut local_hash_vars,
+                hash_vars,
                 block_number,
                 line,
             ),
@@ -135,14 +128,14 @@ fn run_statement(
                 cmd,
                 statement,
                 &mut local_vars,
-                &mut local_hash_vars,
+                hash_vars,
                 block_number,
                 line,
             ),
             "move" => var::movefn(
                 cmd,
                 &mut local_vars,
-                &mut local_hash_vars,
+                hash_vars,
                 block_number,
                 line,
             ),
@@ -195,7 +188,7 @@ fn run_statement(
                         &blocks[index],
                         index,
                         local_vars.clone(),
-                        local_hash_vars.clone(),
+                        hash_vars,
                     ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -221,7 +214,7 @@ fn run_statement(
                         &blocks[index],
                         index,
                         local_vars.clone(),
-                        local_hash_vars.clone(),
+                        hash_vars,
                     ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -247,7 +240,7 @@ fn run_statement(
                         &blocks[index],
                         index,
                         local_vars.clone(),
-                        local_hash_vars.clone(),
+                        hash_vars,
                     ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -272,7 +265,7 @@ fn run_statement(
                         &blocks[index],
                         index,
                         local_vars.clone(),
-                        local_hash_vars.clone(),
+                        hash_vars,
                     ) {
                         Ok(()) => (),
                         _ => println!("Something went wrong"),
@@ -297,7 +290,7 @@ fn run_statement(
                     &blocks[index],
                     index,
                     local_vars.clone(),
-                    local_hash_vars.clone(),
+                    hash_vars,
                 ) {
                     Ok(()) => (),
                     _ => println!("Something went wrong"),
