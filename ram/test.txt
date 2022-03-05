@@ -1,2 +1,4 @@
 ram 500
+ram 200
+sub
 print
