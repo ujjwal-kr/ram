@@ -31,6 +31,9 @@ Run `cargo run test` to run the custom tests to test all the commands in the sui
 
 ![tests](https://media.discordapp.net/attachments/867819380464680980/947347676503089172/unknown.png?width=350&height=510)
 
+## A basic interpreter
+I wrote a very basic interpreter similar to the old version of ram in the language itself to try to make it turing complete. The source is located in https://github.com/ujjwal-kr/ram/blob/master/ram/ram.ram
+
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
