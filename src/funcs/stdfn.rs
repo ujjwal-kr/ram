@@ -26,8 +26,40 @@ pub fn stdin(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
 }
 
 pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b: usize, l: u32) {
-    if cmd.len() < 4 {
+    if cmd.len() < 3 {
         super::errors::args_error(b, l);
+    } else if cmd.len() == 3 {
+        if cmd[2].trim() == "string" || cmd[2].trim() == "lxstring" {
+            if cmd[2].trim() == "string" {
+                let mut file = fs::File::open(vars.string.trim()).expect(
+                    format!(
+                        "No such file exists block::{}:line:{}",
+                        b.to_string().trim(),
+                        l.to_string()
+                    )
+                    .trim(),
+                );
+                let mut contents = String::new();
+                file.read_to_string(&mut contents)
+                    .expect("something went wrong");
+                vars.string = contents;
+            } else if cmd[2].trim() == "lxstring" {
+                let mut file = fs::File::open(vars.lxstring.trim()).expect(
+                    format!(
+                        "No such file exists block::{}:line:{}",
+                        b.to_string().trim(),
+                        l.to_string()
+                    )
+                    .trim(),
+                );
+                let mut contents = String::new();
+                file.read_to_string(&mut contents)
+                    .expect("something went wrong");
+                vars.string = contents;
+            }
+        } else {
+            super::errors::args_error(b, l);
+        }
     } else {
         if cmd[1] == "open" {
             let lits: Vec<&str> = _statement.split(">>").collect();
