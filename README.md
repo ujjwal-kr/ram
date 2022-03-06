@@ -35,7 +35,7 @@ Run `cargo run test` to run the custom tests to test all the commands in the sui
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
 
 ## Variable Reference
-The language has 6 general purpose variables (as in x86/arm) and 4 dynamic variables (as in python/js). All of them are global. The data stored in them unlike the stack is preserved when a code block is switched. Details about how to use them is further in the documentation.
+The language has 6 general purpose variables (as in x86/arm) and 4 dynamic variables (as in python/js). All of them are global. The data stored in them unlike the stack is preserved when a code block is switched using jump. Details about how to use them is further in the documentation.
 
 ### General purpose vars
 - `lx` and `rv` store floating point integers.
@@ -44,6 +44,8 @@ The language has 6 general purpose variables (as in x86/arm) and 4 dynamic varia
 
 ### Dynamic vars
 These variables are called hash_vars as they are implemented using a hashmap. There can be unlimited number of these named variables, restricted to types like string, integer, integer vector and string vector. You can move values from these vars to general purpose vars for further operations.
+
+NOTE: These variables are truly global. They can change from a block without calling any jump statements.
 
 ## Contents
 - General commands:
@@ -103,7 +105,8 @@ Prints the characters specified on the screen
 `stdin lx/rv/string` sets the value of the standard input provided in the next line to the specified variable.
 
 ### stdfs
-- `stdfs open >> ./path/to/file` opens the file and stores the contents as strings in the  `strings` variable.
+- `stdfs open >> ./path/to/file` opens the file and stores the contents as strings in the  `string` variable.
+- `stdfs open string/lxstring` opens the file from string/lxstring and stores the contents as strings in the  `string` variable.
 
 ### rand >> num1,num2
 `rand >> num1,num2/lx,rv/rv,lx` generates a random decimal between num1 and num2 (including both) and pushes it to stack. May `round` be used after this statement to round it to an integer.
