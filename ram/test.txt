@@ -1,4 +1,4 @@
-ram 1000
-ram 2
-div
+ram 100
+ram 200
+add
 print

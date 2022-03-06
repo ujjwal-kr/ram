@@ -1,6 +1,1 @@
-ram 10
-ram 20
-cmp
-jne 1
-
-printc >> hmm
+print var str vec name
