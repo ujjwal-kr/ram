@@ -1,4 +1,4 @@
-ram 500
-ram 200
-sub
+ram 1000
+ram 2
+div
 print

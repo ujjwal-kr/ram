@@ -47,6 +47,14 @@ ram lxstring >> sub
 // compare for "sub"
 str cmp
 je 8
+ram lxstring >> mul
+// compare for "mul"
+str cmp
+je 9
+ram lxstring >> div
+// compare for "div"
+str cmp
+je 10
 
 // ram func [4]
 vec str string >> [1]
@@ -88,7 +96,6 @@ ram lx prev
 var stack int vec push >> lx
 
 // sub func [8]
-printc >> sub func called
 var stack int vec len
 ram 1
 sub
@@ -107,5 +114,49 @@ var stack int vec var sub_num_2 >> [lx]
 ram var sub_num_2
 ram var sub_num_1
 sub
+ram lx prev
+var stack int vec push >> lx
+
+// mul func [9]
+var stack int vec len
+ram 1
+sub
+// emits -1 idx
+ram lx prev
+var mul_num_1 int >> 0
+var stack int vec var mul_num_1 >> [lx]
+pop
+pop
+ram 2
+sub
+// emits -2 idx
+ram lx prev
+var mul_num_2 int >> 0
+var stack int vec var mul_num_2 >> [lx]
+ram var mul_num_1
+ram var mul_num_2
+mul
+ram lx prev
+var stack int vec push >> lx
+
+// div func [10]
+var stack int vec len
+ram 1
+sub
+// emits -1 idx
+ram lx prev
+var div_num_1 int >> 0
+var stack int vec var div_num_1 >> [lx]
+pop
+pop
+ram 2
+sub
+// emits -2 idx
+ram lx prev
+var div_num_2 int >> 0
+var stack int vec var div_num_2 >> [lx]
+ram var div_num_2
+ram var div_num_1
+div
 ram lx prev
 var stack int vec push >> lx
