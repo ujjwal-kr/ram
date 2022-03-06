@@ -51,36 +51,17 @@ These variables are called hash_vars as they are implemented using a hashmap. Th
 NOTE: These variables are truly global. They can change from a block without calling any jump statements.
 
 ## Contents
-- General commands:
-  - [Comments](#comments)
-  - [Print](#print)
-  - [printc](#printc--characters)
-  - [halt](#halt)
-- std commands:
-  - [stdin](#stdin)
-  - [stdfs](#stdfs)
-  - [random](#rand--num1num2)
-- Stack based commands:
-  - [ram](#ram)
-  - [vectors](#vectors)
-  - [split](#split)
-  - [str](#str)
-  - [pop](#pop)
-  - [popall](#popall)
-- Hash Vars
-  - [var](#var)
-  - [move](#move)
-- Operations:  
-  - [add](#add)
-  - [subtract](#sub)
-  - [multiply](#mul)
-  - [division](#div)
-  - [sqr](#sqr)
-  - [sqrt](#sqrt)
-  - [average](#avg)
-  - [round](#round)
 
-- [cmp and jump statements](#cmp-and-jump-statements)
+| General Commands | Std commands | Stack commands | Hash Vars |      Operations |
+| ------------- | ------------- | ------------- | -------------       | ---------------------------------------------------------------------- |
+| [Comments](#comments) | [stdin](#stdin)  | [ram](#ram) | [var](#var)         | [add](#add), [sub](#sub), [div](#div), [mul]([multiply](#mul))   |
+| [Print](#print)  |  [stdfs](#stdfs)  | [vectors](#vectors) | [move](#move)  |  [split](#split)|
+| [printc](#printc--characters)| [random](#rand--num1num2) | [str](#str) |    |  [str](#str)  |
+| [halt](#halt) |                 |  [pop](#pop)        |                 |   [sqr](#sqr), [sqrt](#sqrt)  |
+|               |                 |  [popall](#popall)  |                 |   [average](#avg)     |
+|               |                 |                     |                 |    [round](#round)   |
+
+### **[cmp and jump statements](#cmp-and-jump-statements-1)**
 
 ## General Commands
 ### comments
