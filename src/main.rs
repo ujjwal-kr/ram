@@ -4,7 +4,7 @@ use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
 mod tests;
-use funcs::{errors, operations, print, stack, stdfn, var};
+use funcs::{errors, operations, print, stack, stdfn, var, jump};
 
 #[derive(Clone)]
 pub struct Vars {
@@ -77,7 +77,7 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn run_statement(
+pub fn run_statement(
     blocks: &Vec<Vec<&str>>,
     run_block: &Vec<&str>,
     block_number: usize,
@@ -171,134 +171,12 @@ fn run_statement(
                 line,
             ),
             "cmp" => operations::cmp(&mut stack, block_number, line),
-
-            "je" => {
-                if cmd.len() != 2 {
-                    errors::args_error(block_number, line);
-                    break;
-                }
-                if stack[stack.len() - 1] == 0.0 {
-                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
-                    if blocks.len() <= index {
-                        errors::invalid_jmp(block_number, line, index);
-                        break;
-                    }
-                    match run_statement(
-                        blocks,
-                        &blocks[index],
-                        index,
-                        local_vars.clone(),
-                        hash_vars,
-                    ) {
-                        Ok(()) => (),
-                        _ => println!("Something went wrong"),
-                    }
-                    stack.pop();
-                }
-                stack.pop();
-            }
-
-            "jne" => {
-                if cmd.len() != 2 {
-                    errors::args_error(block_number, line);
-                    break;
-                }
-                if stack[stack.len() - 1] != 0.0 {
-                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
-                    if blocks.len() <= index {
-                        errors::invalid_jmp(block_number, line, index);
-                        break;
-                    }
-                    match run_statement(
-                        blocks,
-                        &blocks[index],
-                        index,
-                        local_vars.clone(),
-                        hash_vars,
-                    ) {
-                        Ok(()) => (),
-                        _ => println!("Something went wrong"),
-                    }
-                    stack.pop();
-                }
-                stack.pop();
-            }
-
-            "jgr" => {
-                if cmd.len() != 2 {
-                    errors::args_error(block_number, line);
-                    break;
-                }
-                if stack[stack.len() - 1] == 1.0 {
-                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
-                    if blocks.len() <= index {
-                        errors::invalid_jmp(block_number, line, index);
-                        break;
-                    }
-                    match run_statement(
-                        blocks,
-                        &blocks[index],
-                        index,
-                        local_vars.clone(),
-                        hash_vars,
-                    ) {
-                        Ok(()) => (),
-                        _ => println!("Something went wrong"),
-                    }
-                    stack.pop();
-                }
-                stack.pop();
-            }
-
-            "jsm" => {
-                if cmd.len() != 2 {
-                    errors::args_error(block_number, line);
-                    break;
-                }
-                if stack[stack.len() - 1] == -1.0 {
-                    let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
-                    if blocks.len() <= index {
-                        errors::invalid_jmp(block_number, line, index)
-                    }
-                    match run_statement(
-                        blocks,
-                        &blocks[index],
-                        index,
-                        local_vars.clone(),
-                        hash_vars,
-                    ) {
-                        Ok(()) => (),
-                        _ => println!("Something went wrong"),
-                    }
-                    stack.pop();
-                }
-                stack.pop();
-            }
-
-            "jmp" => {
-                if cmd.len() != 2 {
-                    errors::args_error(block_number, line);
-                    break;
-                }
-                let index: usize = errors::parse_usize(cmd[1].trim(), block_number, line);
-                if blocks.len() <= index {
-                    errors::invalid_jmp(block_number, line, index);
-                    break;
-                }
-                match run_statement(
-                    blocks,
-                    &blocks[index],
-                    index,
-                    local_vars.clone(),
-                    hash_vars,
-                ) {
-                    Ok(()) => (),
-                    _ => println!("Something went wrong"),
-                }
-            }
-            "halt" => {
-                process::exit(0);
-            }
+            "je" => jump::je(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "jne" =>  jump::jne(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "jgr" => jump::jgr(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "jsm" => jump::jsm(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "jmp" =>  jump::jmp(cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "halt" => process::exit(0),
             _ => {
                 println!(
                     "Cant recognize command '{}' at b{}:l{}",
