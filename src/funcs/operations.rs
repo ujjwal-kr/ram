@@ -189,6 +189,11 @@ pub fn vec_ops(
                 ));
             } else if cmd[2].trim() == "push" {
                 vars.str_vec.push(vars.string.clone().trim().to_string());
+            } else if cmd[2].trim() == "pop" {
+                if vars.str_vec.len() < 1 {
+                    super::errors::vec_items(b, l);
+                }
+                vars.str_vec.pop();
             } else {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let data_vec = lits[1].trim();
@@ -212,6 +217,11 @@ pub fn vec_ops(
                 } else if cmd[3].trim() == "rv" {
                     vars.num_vec.push(vars.rv)
                 }
+            } else if cmd[2].trim() == "pop" {
+                if vars.num_vec.len() < 1 {
+                    super::errors::vec_items(b, l);
+                }
+                vars.num_vec.pop();
             } else {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let data_vec = lits[1].trim();

@@ -74,3 +74,12 @@ pub fn var_error(var_name: &str, block: usize, line: u32) {
     );
     process::exit(1)
 }
+
+pub fn vec_items(block: usize, line: u32) {
+    println!(
+        "Not enough items in the vec at block:{}::line:{}",
+        block.to_string(),
+        line.to_string()
+    );
+    process::exit(1)
+}

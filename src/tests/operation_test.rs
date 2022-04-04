@@ -356,4 +356,18 @@ fn vec_ops_works() {
     vars.num_vec.push(2.0);
     operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
     assert_f64(stack[0], 1.0, statement);
+
+    // vec str pop
+    vars.str_vec = vec!["test".to_string(), "test1".to_string()];
+    statement = "vec str pop";
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_vec_string(["test".to_string()].to_vec(), vars.str_vec.clone(), statement);
+
+    // vec int pop
+    vars.num_vec = vec![10.0, 1.0];
+    statement = "vec int pop";
+    cmd = statement.split(" ").collect();
+    operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
+    assert_vec_int(vars.num_vec.clone(), [10.0].to_vec(), statement);
 }
