@@ -118,6 +118,8 @@ Prints the characters specified on the screen
 - `vec int lx/rv >> [<index>/lx/rv]` extracts the value of the index position of `vec int` and stores it in `lx/rv` variable.
 - `vec str len` pushes the length of the `vec str` variable to the stack.
 - `vec int len` pushes the length of the `vec int` variable to the stack.
+- `vec int pop` pops the last item from the `vec int`.
+- `vec str pop` pops the last item from the `vec str`.
 
 ### split
 `split >> "<arg>"` splits the `string` variable into args and stores the values into the `vec str`
