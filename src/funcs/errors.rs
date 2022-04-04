@@ -33,7 +33,7 @@ pub fn stack_len_error(block: usize, line: u32) {
         block.to_string(),
         line.to_string()
     );
-    process::exit(0)
+    process::exit(1)
 }
 
 pub fn args_error(block: usize, line: u32) {
@@ -42,7 +42,7 @@ pub fn args_error(block: usize, line: u32) {
         block.to_string(),
         line.to_string()
     );
-    process::exit(0)
+    process::exit(1)
 }
 
 pub fn invalid_jmp(block: usize, line: u32, inv_block: usize) {
@@ -52,7 +52,7 @@ pub fn invalid_jmp(block: usize, line: u32, inv_block: usize) {
         line.to_string(),
         inv_block.to_string()
     );
-    process::exit(0)
+    process::exit(1)
 }
 
 pub fn invalid_index(block: usize, line: u32, inv_index: usize) {
@@ -62,7 +62,7 @@ pub fn invalid_index(block: usize, line: u32, inv_index: usize) {
         block.to_string(),
         line.to_string()
     );
-    process::exit(0)
+    process::exit(1)
 }
 
 pub fn var_error(var_name: &str, block: usize, line: u32) {
@@ -72,5 +72,5 @@ pub fn var_error(var_name: &str, block: usize, line: u32) {
         block.to_string(),
         line.to_string()
     );
-    process::exit(0)
+    process::exit(1)
 }
