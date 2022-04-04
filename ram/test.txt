@@ -1,4 +1,4 @@
 ram 100
-ram 200
-add
+ram 20
+pop
 print

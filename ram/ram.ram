@@ -62,7 +62,9 @@ parse int lx string
 var stack int vec push >> lx
 
 // pop func [5]
-printc >> pop func called
+move vec vec int stack
+vec int pop
+move vec var stack vec int
 
 // print func [6]
 var stack int vec len
