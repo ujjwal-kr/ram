@@ -1,0 +1,18 @@
+ram 100
+ram 500
+add
+print
+jmp 1
+
+var test_str str >> test123
+print var str test_str
+ram 10
+ram 10
+cmp
+je 2
+
+var stack int vec >> [0]
+ram 100
+ram lx prev
+var stack int vec push >> lx
+print var int vec stack

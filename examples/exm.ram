@@ -1,9 +1,0 @@
-printc >> Hello World
-ram 1700
-ram 700
-ram 600
-avg
-print
-rand >> 100,500
-round
-print

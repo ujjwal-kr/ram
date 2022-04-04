@@ -184,7 +184,7 @@ pub fn run_statement(
                     block_number.to_string(),
                     line.to_string()
                 );
-                break;
+                process::exit(1)
             }
         }
     }

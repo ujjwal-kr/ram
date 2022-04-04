@@ -18,5 +18,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
+    - name: Run unit test
       run: cargo run test --verbose
+    - name: Run e2e test
+      run: cargo run ./examples/test.ram --verbose
