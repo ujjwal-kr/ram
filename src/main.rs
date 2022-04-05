@@ -1,192 +1,142 @@
-use std::collections::HashMap;
-use std::io::prelude::*;
-use std::{env, f64, fs, io, path::Path, process};
+use super::errors;
 
-mod funcs;
-mod tests;
-use funcs::{errors, operations, print, stack, stdfn, var, jump};
-
-#[derive(Clone)]
-pub struct Vars {
-    pub lx: f64,
-    pub rv: f64,
-    pub string: String,
-    pub lxstring: String,
-    pub str_vec: Vec<String>,
-    pub num_vec: Vec<f64>,
-}
-
-#[derive(Clone)]
-pub struct HashVars {
-    pub hash_str: HashMap<String, String>,
-    pub hash_int: HashMap<String, f64>,
-    pub hash_str_vec: HashMap<String, Vec<String>>,
-    pub hash_int_vec: HashMap<String, Vec<f64>>,
-}
-
-fn main() -> std::io::Result<()> {
-    let mut filename = String::new();
-    if env::args().nth(1).is_none() == true {
-        println!("Welcome to the Ram stack-based programming language.");
-        println!("Please enter a filename: ");
-        io::stdin().read_line(&mut filename)?;
-        filename = filename.trim().to_string();
-    } else {
-        if env::args().nth(1).unwrap() == "test" {
-            tests::test();
-            if Path::new("log.txt").exists() {
-                fs::remove_file("log.txt").expect("");
-                panic!("Tests failed");
+pub fn ram(
+    stack: &mut Vec<f64>,
+    cmd: Vec<&str>,
+    statement: &str,
+    vars: &mut super::super::Vars,
+    hash_vars: &mut super::super::HashVars,
+    b: usize,
+    l: u32,
+) {
+    match cmd[1].trim() {
+        "lx" => {
+            if cmd.len() == 2 {
+                stack.push(vars.lx)
+            } else if cmd.len() >= 3 {
+                match cmd[2].trim() {
+                    "prev" => vars.lx = stack[stack.len() - 1],
+                    _ => vars.lx = errors::parse_float(cmd[2], b, l),
+                }
             } else {
-                process::exit(0);
+                errors::args_error(b, l);
             }
-        } else {
-            filename = env::args().nth(1).unwrap();
         }
-    }
+        "rv" => {
+            if cmd.len() == 2 {
+                stack.push(vars.rv)
+            } else if cmd.len() >= 3 {
+                match cmd[2].trim() {
+                    "prev" => vars.rv = stack[stack.len() - 1],
+                    _ => vars.rv = errors::parse_float(cmd[2], b, l),
+                }
+            } else {
+                errors::args_error(b, l);
+            }
+        }
+        "string" => {
+            if cmd.len() < 4 {
+                errors::args_error(b, l);
+            }
+            if cmd[2] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
+            }
+            let lits: Vec<&str> = statement.split(">>").collect();
+            vars.string = lits[1].trim().to_string();
+        }
 
-    let mut file = fs::File::open(filename.trim())?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
+        "lxstring" => {
+            if cmd.len() < 4 {
+                errors::args_error(b, l);
+            }
+            if cmd[2] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
+            }
+            let lits: Vec<&str> = statement.split(">>").collect();
+            vars.lxstring = lits[1].trim().to_string();
+        }
+        "vec" => {
+            if cmd.len() < 5 {
+                errors::args_error(b, l)
+            }
+            if cmd[3] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
+            }
 
-    let mut _program: Vec<&str> = contents.split("\r\n\r\n").collect();
-    let mut blocks: Vec<Vec<&str>> = vec![];
-    for block in &_program {
-        let block_vec: Vec<&str> = block.split("\n").collect();
-        blocks.push(block_vec);
-    }
-    let vars = Vars {
-        lx: 0.0,
-        rv: 0.0,
-        string: "".to_string(),
-        lxstring: "".to_string(),
-        num_vec: vec![],
-        str_vec: vec![],
-    };
+            match cmd[2] {
+                "str" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec: String = lits[1].trim().to_string();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let str_vec: Vec<&str> = slice.split(",").collect();
+                    for item in str_vec {
+                        vars.str_vec.push(item.trim().to_string());
+                    }
+                }
+                "int" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let str_vec: String = lits[1].trim().to_string();
+                    let slice = &str_vec[1..str_vec.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    for item in data_vec {
+                        vars.num_vec.push(errors::parse_float(item, b, l));
+                    }
+                }
+                _ => errors::args_error(b, l),
+            }
+        }
 
-    let mut hash_vars = HashVars {
-        hash_str: HashMap::new(),
-        hash_int: HashMap::new(),
-        hash_int_vec: HashMap::new(),
-        hash_str_vec: HashMap::new(),
-    };
-    match run_statement(&blocks, &blocks[0], 0, vars, &mut hash_vars) {
-        Ok(()) => (),
-        _ => println!("Something went wrong"),
+        "var" => {
+            if cmd.len() < 3 {
+                errors::args_error(b, l);
+            }
+            if cmd.len() == 3 {
+                match hash_vars.hash_int.get(cmd[2].trim()) {
+                    Some(&value) => stack.push(value),
+                    _ => super::errors::var_error(cmd[2].trim(), b, l),
+                }
+            } else {
+                if cmd[3].trim() == "prev" {
+                    hash_vars
+                        .hash_int
+                        .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
+                }
+            }
+        }
+        _ => stack.push(errors::parse_float(cmd[1], b, l)),
     }
-    Ok(())
 }
 
-pub fn run_statement(
-    blocks: &Vec<Vec<&str>>,
-    run_block: &Vec<&str>,
-    block_number: usize,
-    vars: Vars,
-    hash_vars: &mut HashVars,
-) -> std::io::Result<()> {
-    let mut line = 0u32;
-    let mut local_vars = Vars {
-        lx: vars.lx,
-        rv: vars.rv,
-        string: vars.string,
-        lxstring: vars.lxstring,
-        num_vec: vars.num_vec,
-        str_vec: vars.str_vec,
-    };
+pub fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
+    if stack.len() < 1 {
+        super::errors::stack_len_error(b, l);
+    }
+    stack.pop();
+}
 
-    let mut stack: Vec<f64> = vec![];
-    for statement in run_block {
-        line = line + 1;
-        let mut cmd: Vec<&str> = statement.split(" ").collect();
-        // comments
-        let lits: Vec<&str> = cmd[0].trim().split("").collect();
-        if lits[1] == "/" && lits[2] == "/" {
-            cmd[0] = "//";
-        }
-        match cmd[0].trim() {
-            "//" => (),
-            "print" => print::print(
-                &mut stack,
-                cmd,
-                &mut local_vars,
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "printc" => print::printc(cmd, statement, block_number, line),
-            "ram" => stack::ram(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "var" => var::var(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "move" => var::movefn(
-                cmd,
-                &mut local_vars,
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
-            "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
-            "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
-            "pop" => stack::pop(&mut stack, block_number, line),
-            "popall" => stack = vec![],
-            "add" => operations::add(&mut stack, cmd, &mut local_vars, block_number, line),
-            "sub" => operations::sub(&mut stack, block_number, line),
-            "mul" => operations::mul(&mut stack, cmd, &mut local_vars, block_number, line),
-            "div" => operations::div(&mut stack, block_number, line),
-            "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, block_number, line),
-            "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, block_number, line),
-            "round" => operations::round(&mut stack, cmd, &mut local_vars, block_number, line),
-            "avg" => operations::avg(&mut stack, block_number, line),
-            "rand" => stdfn::random(
-                &mut local_vars,
-                cmd,
-                &mut stack,
-                statement,
-                block_number,
-                line,
-            ),
-            "split" => operations::split(cmd, statement, &mut local_vars, block_number, line),
-            "parse" => stdfn::parse_int(&mut local_vars, cmd, block_number, line),
-            "vec" => operations::vec_ops(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                block_number,
-                line,
-            ),
-            "cmp" => operations::cmp(&mut stack, block_number, line),
-            "je" => jump::je(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jne" =>  jump::jne(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jgr" => jump::jgr(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jsm" => jump::jsm(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jmp" =>  jump::jmp(cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "halt" => process::exit(0),
-            _ => {
-                println!(
-                    "Cant recognize command '{}' at b{}:l{}",
-                    cmd[0],
-                    block_number.to_string(),
-                    line.to_string()
-                );
-                process::exit(1)
+pub fn strfn(
+    stack: &mut Vec<f64>,
+    vars: &mut super::super::Vars,
+    cmd: Vec<&str>,
+    b: usize,
+    l: u32,
+) {
+    if cmd.len() < 2 {
+        super::errors::args_error(b, l);
+    }
+    match cmd[1].trim() {
+        "cmp" => {
+            if vars.lxstring.trim() == vars.string.trim() {
+                stack.push(0.0);
+            } else {
+                stack.push(-1.0);
             }
         }
+        "string" => vars.string = vars.lxstring.clone(),
+        "lxstring" => vars.string = vars.lxstring.clone(),
+        _=> errors::args_error(b, l),
     }
-    Ok(())
 }
