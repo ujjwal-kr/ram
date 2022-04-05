@@ -1,3 +1,5 @@
+use super::errors;
+
 pub fn ram(
     stack: &mut Vec<f64>,
     cmd: Vec<&str>,
@@ -7,91 +9,104 @@ pub fn ram(
     b: usize,
     l: u32,
 ) {
-    if cmd[1].trim() == "lx"
-        || cmd[1].trim() == "rv"
-        || cmd[1] == "string"
-        || cmd[1] == "vec"
-        || cmd[1] == "lxstring"
-        || cmd[1] == "var"
-    {
-        if cmd.len() < 2 {
-            super::errors::args_error(b, l)
-        }
-        if cmd.len() == 2 {
-            if cmd[1].trim() == "lx" {
+    match cmd[1].trim() {
+        "lx" => {
+            if cmd.len() == 2 {
                 stack.push(vars.lx)
-            } else if cmd[1].trim() == "rv" {
-                stack.push(vars.rv)
+            } else if cmd.len() >= 3 {
+                match cmd[2].trim() {
+                    "prev" => vars.lx = stack[stack.len() - 1],
+                    _ => vars.lx = errors::parse_float(cmd[2], b, l),
+                }
             } else {
-                super::errors::args_error(b, l)
+                errors::args_error(b, l);
             }
-        } else {
-            if cmd[1] == "lx" {
-                if cmd[2].trim() == "prev" {
-                    vars.lx = stack[stack.len() - 1];
-                } else {
-                    vars.lx = super::errors::parse_float(cmd[2], b, l)
+        }
+        "rv" => {
+            if cmd.len() == 2 {
+                stack.push(vars.rv)
+            } else if cmd.len() >= 3 {
+                match cmd[2].trim() {
+                    "prev" => vars.rv = stack[stack.len() - 1],
+                    _ => vars.rv = errors::parse_float(cmd[2], b, l),
                 }
+            } else {
+                errors::args_error(b, l);
             }
-            if cmd[1] == "rv" {
-                if cmd[2].trim() == "prev" {
-                    vars.rv = stack[stack.len() - 1];
-                } else {
-                    vars.rv = super::errors::parse_float(cmd[2], b, l)
-                }
+        }
+        "string" => {
+            if cmd.len() < 4 {
+                errors::args_error(b, l);
             }
-            if cmd[1].trim() == "string" {
-                let lits: Vec<&str> = statement.split(">>").collect();
-                vars.string = lits[1].trim().to_string();
+            if cmd[2] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
             }
-            if cmd[1].trim() == "lxstring" {
-                let lits: Vec<&str> = statement.split(">>").collect();
-                vars.lxstring = lits[1].trim().to_string();
+            let lits: Vec<&str> = statement.split(">>").collect();
+            vars.string = lits[1].trim().to_string();
+        }
+
+        "lxstring" => {
+            if cmd.len() < 4 {
+                errors::args_error(b, l);
             }
-            if cmd[1] == "vec" {
-                if cmd.len() < 5 {
-                    super::errors::args_error(b, l);
-                } else {
-                    if cmd[2] == "int" {
-                        let lits: Vec<&str> = statement.split(">>").collect();
-                        let str_vec: String = lits[1].trim().to_string();
-                        let slice = &str_vec[1..str_vec.len() - 1];
-                        let data_vec: Vec<&str> = slice.split(",").collect();
-                        for item in data_vec {
-                            vars.num_vec.push(super::errors::parse_float(item, b, l));
-                        }
-                    } else if cmd[2] == "str" {
-                        let lits: Vec<&str> = statement.split(">>").collect();
-                        let data_vec: String = lits[1].trim().to_string();
-                        let slice = &data_vec[1..data_vec.len() - 1];
-                        let str_vec: Vec<&str> = slice.split(",").collect();
-                        for item in str_vec {
-                            vars.str_vec.push(item.trim().to_string());
-                        }
-                    } else {
-                        super::errors::args_error(b, l)
+            if cmd[2] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
+            }
+            let lits: Vec<&str> = statement.split(">>").collect();
+            vars.lxstring = lits[1].trim().to_string();
+        }
+        "vec" => {
+            if cmd.len() < 5 {
+                errors::args_error(b, l)
+            }
+            if cmd[3] != ">>" {
+                // TODO: error statement
+                errors::args_error(b, l);
+            }
+
+            match cmd[2] {
+                "str" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec: String = lits[1].trim().to_string();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let str_vec: Vec<&str> = slice.split(",").collect();
+                    for item in str_vec {
+                        vars.str_vec.push(item.trim().to_string());
                     }
                 }
-            }
-            if cmd[1] == "var" {
-                if cmd.len() >= 3 {
-                    if cmd.len() == 4 && cmd[3].trim() == "prev" {
-                        hash_vars
-                            .hash_int
-                            .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
-                    } else {
-                        match hash_vars.hash_int.get(cmd[2].trim()) {
-                            Some(&value) => stack.push(value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
+                "int" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let str_vec: String = lits[1].trim().to_string();
+                    let slice = &str_vec[1..str_vec.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    for item in data_vec {
+                        vars.num_vec.push(errors::parse_float(item, b, l));
                     }
-                } else {
-                    super::errors::args_error(b, l);
+                }
+                _ => errors::args_error(b, l),
+            }
+        }
+
+        "var" => {
+            if cmd.len() < 3 {
+                errors::args_error(b, l);
+            }
+            if cmd.len() == 3 {
+                match hash_vars.hash_int.get(cmd[2].trim()) {
+                    Some(&value) => stack.push(value),
+                    _ => super::errors::var_error(cmd[2].trim(), b, l),
+                }
+            } else {
+                if cmd[3].trim() == "prev" {
+                    hash_vars
+                        .hash_int
+                        .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
                 }
             }
         }
-    } else {
-        stack.push(super::errors::parse_float(cmd[1], b, l))
+        _ => stack.push(errors::parse_float(cmd[1], b, l)),
     }
 }
 
@@ -111,17 +126,17 @@ pub fn strfn(
 ) {
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
-    } else {
-        if cmd[1] == "string".trim() && cmd[2].trim() == "lxstring".trim() {
-            vars.string = vars.lxstring.clone();
-        } else if cmd[1] == "lxstring" && cmd[2].trim() == "string".trim() {
-            vars.lxstring = vars.string.clone();
-        } else if cmd[1].trim() == "cmp" {
+    }
+    match cmd[1].trim() {
+        "cmp" => {
             if vars.lxstring.trim() == vars.string.trim() {
                 stack.push(0.0);
             } else {
                 stack.push(-1.0);
             }
         }
+        "string" => vars.string = vars.lxstring.clone(),
+        "lxstring" => vars.string = vars.lxstring.clone(),
+        _=> errors::args_error(b, l),
     }
 }
