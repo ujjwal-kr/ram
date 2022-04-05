@@ -137,6 +137,6 @@ pub fn strfn(
         }
         "string" => vars.string = vars.lxstring.clone(),
         "lxstring" => vars.string = vars.lxstring.clone(),
-        _=> errors::args_error(b, l),
+        _ => errors::args_error(b, l),
     }
 }

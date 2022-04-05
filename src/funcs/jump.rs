@@ -91,13 +91,7 @@ pub fn jgr(
         if blocks.len() <= index {
             errors::invalid_jmp(block_number, line, index);
         }
-        match run_statement(
-            blocks,
-            &blocks[index],
-            index,
-            local_vars.clone(),
-            hash_vars,
-        ) {
+        match run_statement(blocks, &blocks[index], index, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }
@@ -123,13 +117,7 @@ pub fn jsm(
         if blocks.len() <= index {
             errors::invalid_jmp(block_number, line, index)
         }
-        match run_statement(
-            blocks,
-            &blocks[index],
-            index,
-            local_vars.clone(),
-            hash_vars,
-        ) {
+        match run_statement(blocks, &blocks[index], index, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }

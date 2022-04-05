@@ -218,7 +218,7 @@ pub fn var_works() {
     statement = "var test str vec >> [one,two]";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
-    
+
     statement = "var test str vec len";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);

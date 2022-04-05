@@ -4,7 +4,7 @@ use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
 mod tests;
-use funcs::{errors, operations, print, stack, stdfn, var, jump};
+use funcs::{errors, jump, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
 pub struct Vars {
@@ -132,13 +132,7 @@ pub fn run_statement(
                 block_number,
                 line,
             ),
-            "move" => var::movefn(
-                cmd,
-                &mut local_vars,
-                hash_vars,
-                block_number,
-                line,
-            ),
+            "move" => var::movefn(cmd, &mut local_vars, hash_vars, block_number, line),
             "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
@@ -171,11 +165,50 @@ pub fn run_statement(
                 line,
             ),
             "cmp" => operations::cmp(&mut stack, block_number, line),
-            "je" => jump::je(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jne" =>  jump::jne(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jgr" => jump::jgr(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jsm" => jump::jsm(&mut stack, cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
-            "jmp" =>  jump::jmp(cmd, blocks, local_vars.clone(), hash_vars, block_number, line),
+            "je" => jump::je(
+                &mut stack,
+                cmd,
+                blocks,
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jne" => jump::jne(
+                &mut stack,
+                cmd,
+                blocks,
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jgr" => jump::jgr(
+                &mut stack,
+                cmd,
+                blocks,
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jsm" => jump::jsm(
+                &mut stack,
+                cmd,
+                blocks,
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jmp" => jump::jmp(
+                cmd,
+                blocks,
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
             "halt" => process::exit(0),
             _ => {
                 println!(

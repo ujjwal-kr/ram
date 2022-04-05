@@ -362,7 +362,11 @@ fn vec_ops_works() {
     statement = "vec str pop";
     cmd = statement.split(" ").collect();
     operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
-    assert_vec_string(["test".to_string()].to_vec(), vars.str_vec.clone(), statement);
+    assert_vec_string(
+        ["test".to_string()].to_vec(),
+        vars.str_vec.clone(),
+        statement,
+    );
 
     // vec int pop
     vars.num_vec = vec![10.0, 1.0];
