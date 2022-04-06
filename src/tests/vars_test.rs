@@ -200,7 +200,7 @@ pub fn var_works() {
 
     // var <name_vec> int vec len -> pushes the length of <name_vec> into the stack
 
-    statement = "var test int vec >> [1,3]";
+    statement = "var test int vec >> [1,3, 12, 14]";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
 
@@ -208,14 +208,14 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     if stack.len() >= 1 {
-        assert_f64(stack[stack.len() - 1], 2.0, statement);
+        assert_f64(stack[stack.len() - 1], 4.0, statement);
     } else {
         assert_str("fail", "something", statement);
     }
 
     // var <name_vec> str vec len -> pushes the length of <name_vec> into the stack
 
-    statement = "var test str vec >> [one,two]";
+    statement = "var test str vec >> [one,two, three]";
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
 
@@ -223,7 +223,7 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     if stack.len() >= 1 {
-        assert_f64(stack[stack.len() - 1], 2.0, statement);
+        assert_f64(stack[stack.len() - 1], 3.0, statement);
     } else {
         assert_str("fail", "something", statement);
     }

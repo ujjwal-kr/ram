@@ -12,72 +12,65 @@ pub fn var(
     l: u32,
 ) {
     if cmd.len() < 4 {
-        errors::args_error(b, l);
+        errors::args_error(b, l)
     }
 
-    if cmd[2] == "str" {
-        if cmd[3].trim() == "vec" {
-            if cmd[4].trim() == "len" {
-                match hash_vars.hash_str_vec.get(cmd[1].trim()) {
-                    Some(value) => stack.push(errors::parse_float(
-                        value.to_vec().len().to_string().trim(),
-                        b,
-                        l,
-                    )),
-                    _ => errors::var_error(cmd[1].trim(), b, l),
+    match cmd[2] {
+        "str" => match cmd[3] {
+            ">>" => {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
+            }
+            "vec" => match cmd[4].trim() {
+                ">>" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let value: String = lits[1].trim().to_string();
+                    let slice = &value[1..value.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    let mut str_vec: Vec<String> = vec![];
+                    for item in data_vec {
+                        str_vec.push(item.to_string());
+                    }
+                    hash_vars
+                        .hash_str_vec
+                        .insert(cmd[1].trim().to_string(), str_vec);
                 }
-            } else if cmd[4].trim() == "push" {
-                // var <name_vec> str vec push >> string/lxstring/var <name>
-                if cmd[6] == "string".trim() || cmd[6] == "lxstring".trim() || cmd[6] == "var" {
+                "push" => {
                     let mut new_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => new_vec = value.to_vec(),
                         _ => errors::var_error(cmd[1].trim(), b, l),
                     }
-                    if cmd[6] == "string".trim() {
-                        new_vec.push(vars.string.clone());
-                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
+                    match cmd[6].trim() {
+                        "string" => {
+                            new_vec.push(vars.string.clone());
+                            if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                    } else if cmd[6] == "lxstring".trim() {
-                        new_vec.push(vars.lxstring.clone());
-                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
+                        "lxstring" => {
+                            new_vec.push(vars.lxstring.clone());
+                            if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                    } else if cmd[6] == "var" {
-                        let mut var_value: String = "".to_string();
-                        match hash_vars.hash_str.get(cmd[7].trim()) {
-                            Some(value) => var_value = value.to_string(),
-                            _ => errors::var_error(cmd[7].trim(), b, l),
+
+                        "var" => {
+                            let mut var_value: String = "".to_string();
+                            match hash_vars.hash_str.get(cmd[7].trim()) {
+                                Some(value) => var_value = value.to_string(),
+                                _ => errors::var_error(cmd[7].trim(), b, l),
+                            }
+                            new_vec.push(var_value.clone());
+                            if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                        new_vec.push(var_value.clone());
-                        if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
-                        }
-                    } else {
-                        errors::args_error(b, l);
+                        _ => errors::args_error(b, l),
                     }
-                } else {
-                    errors::args_error(b, l);
                 }
-            } else if cmd[4] == ">>" {
-                let lits: Vec<&str> = statement.split(">>").collect();
-                let value: String = lits[1].trim().to_string();
-                let slice = &value[1..value.len() - 1];
-                let data_vec: Vec<&str> = slice.split(",").collect();
-                let mut str_vec: Vec<String> = vec![];
-                for item in data_vec {
-                    str_vec.push(item.to_string());
-                }
-                hash_vars
-                    .hash_str_vec
-                    .insert(cmd[1].trim().to_string(), str_vec);
-            } else {
-                if cmd.len() < 6 {
-                    errors::args_error(b, l);
-                }
-                // var <name_vec> str vec string/lxstring/var <name> >> [2]
-                if cmd[4] == "string" || cmd[4] == "lxstring" || cmd[4] == "var" {
+                "string" => {
                     let mut var_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -92,87 +85,113 @@ pub fn var(
                         errors::invalid_index(b, l, index);
                     }
 
-                    if cmd[4] == "string" {
-                        vars.string = var_vec[index].clone();
-                    } else if cmd[4] == "lxstring" {
-                        vars.lxstring = var_vec[index].clone();
-                    } else if cmd[4] == "var" {
-                        hash_vars
-                            .hash_str
-                            .insert(cmd[5].to_string(), var_vec[index].clone());
-                    }
-                } else {
-                    errors::args_error(b, l);
+                    vars.string = var_vec[index].clone();
                 }
-            }
-        } else {
-            let lits: Vec<&str> = statement.split(">>").collect();
-            let value: String = lits[1].trim().to_string();
-            hash_vars.hash_str.insert(cmd[1].trim().to_string(), value);
-        }
-    } else if cmd[2] == "int" {
-        if cmd[3].trim() == "vec" {
-            if cmd[4].trim() == "len" {
-                match hash_vars.hash_int_vec.get(cmd[1].trim()) {
+                "lxstring" => {
+                    let mut var_vec: Vec<String> = vec![];
+                    match hash_vars.hash_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.lxstring = var_vec[index].clone();
+                }
+                "var" => {
+                    let mut var_vec: Vec<String> = vec![];
+                    match hash_vars.hash_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    hash_vars
+                        .hash_str
+                        .insert(cmd[5].to_string(), var_vec[index].clone());
+                }
+                "len" => match hash_vars.hash_str_vec.get(cmd[1].trim()) {
                     Some(value) => stack.push(errors::parse_float(
                         value.to_vec().len().to_string().trim(),
                         b,
                         l,
                     )),
                     _ => errors::var_error(cmd[1].trim(), b, l),
+                },
+                _ => errors::args_error(b, l),
+            },
+            _ => errors::args_error(b, l),
+        },
+        "int" => match cmd[3] {
+            ">>" => {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                hash_vars.hash_int.insert(
+                    cmd[1].trim().to_string(),
+                    errors::parse_float(value.trim(), b, l),
+                );
+            }
+            "vec" => match cmd[4].trim() {
+                ">>" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let value: String = lits[1].trim().to_string();
+                    let slice = &value[1..value.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    let mut num_vec: Vec<f64> = vec![];
+                    for item in data_vec {
+                        num_vec.push(errors::parse_float(item, b, l));
+                    }
+                    hash_vars
+                        .hash_int_vec
+                        .insert(cmd[1].trim().to_string(), num_vec);
                 }
-            } else if cmd[4].trim() == "push" {
-                // var <name_vec> int vec push >> lx/rv/var <name>
-                if cmd[6].trim() == "lx" || cmd[6].trim() == "rv" || cmd[6] == "var" {
+                "push" => {
                     let mut new_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => new_vec = value.to_vec(),
                         _ => errors::var_error(cmd[1].trim(), b, l),
                     }
-                    if cmd[6].trim() == "lx" {
-                        new_vec.push(vars.lx.clone());
-                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
+                    match cmd[6].trim() {
+                        "lx" => {
+                            new_vec.push(vars.lx.clone());
+                            if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                    } else if cmd[6].trim() == "rv" {
-                        new_vec.push(vars.rv.clone());
-                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
+                        "rv" => {
+                            new_vec.push(vars.rv.clone());
+                            if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                    } else if cmd[6] == "var" {
-                        let mut var_value: f64 = 0.0;
-                        match hash_vars.hash_int.get(cmd[7].trim()) {
-                            Some(&value) => var_value = value,
-                            _ => errors::var_error(cmd[7].trim(), b, l),
+                        "var" => {
+                            let mut var_value: f64 = 0.0;
+                            match hash_vars.hash_int.get(cmd[7].trim()) {
+                                Some(&value) => var_value = value,
+                                _ => errors::var_error(cmd[7].trim(), b, l),
+                            }
+                            new_vec.push(var_value.clone());
+                            if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
                         }
-                        new_vec.push(var_value.clone());
-                        if let Some(x) = hash_vars.hash_int_vec.get_mut(cmd[1]) {
-                            *x = new_vec;
-                        }
-                    } else {
-                        errors::args_error(b, l);
+                        _ => errors::args_error(b, l),
                     }
-                } else {
-                    errors::args_error(b, l);
                 }
-            } else if cmd[4] == ">>" {
-                let lits: Vec<&str> = statement.split(">>").collect();
-                let value: String = lits[1].trim().to_string();
-                let slice = &value[1..value.len() - 1];
-                let data_vec: Vec<&str> = slice.split(",").collect();
-                let mut num_vec: Vec<f64> = vec![];
-                for item in data_vec {
-                    num_vec.push(errors::parse_float(item, b, l));
-                }
-                hash_vars
-                    .hash_int_vec
-                    .insert(cmd[1].trim().to_string(), num_vec);
-            } else {
-                if cmd.len() < 6 {
-                    errors::args_error(b, l);
-                }
-                // var <name_vec> int vec lx/rv/var <name> >> [2]
-                if cmd[4] == "lx" || cmd[4] == "rv" || cmd[4] == "var" {
+                "lx" => {
                     let mut var_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -187,29 +206,57 @@ pub fn var(
                         errors::invalid_index(b, l, index);
                     }
 
-                    if cmd[4] == "lx" {
-                        vars.lx = var_vec[index].clone();
-                    } else if cmd[4] == "rv" {
-                        vars.rv = var_vec[index].clone();
-                    } else if cmd[4] == "var" {
-                        hash_vars
-                            .hash_int
-                            .insert(cmd[5].to_string(), var_vec[index].clone());
-                    }
-                } else {
-                    errors::args_error(b, l);
+                    vars.lx = var_vec[index].clone();
                 }
-            }
-        } else {
-            let lits: Vec<&str> = statement.split(">>").collect();
-            let value: String = lits[1].trim().to_string();
-            hash_vars.hash_int.insert(
-                cmd[1].trim().to_string(),
-                errors::parse_float(value.trim(), b, l),
-            );
-        }
-    } else {
-        errors::args_error(b, l);
+                "rv" => {
+                    let mut var_vec: Vec<f64> = vec![];
+                    match hash_vars.hash_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.rv = var_vec[index].clone();
+                }
+                "var" => {
+                    let mut var_vec: Vec<f64> = vec![];
+                    match hash_vars.hash_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    hash_vars
+                        .hash_int
+                        .insert(cmd[5].to_string(), var_vec[index].clone());
+                }
+                "len" => match hash_vars.hash_int_vec.get(cmd[1].trim()) {
+                    Some(value) => stack.push(errors::parse_float(
+                        value.to_vec().len().to_string().trim(),
+                        b,
+                        l,
+                    )),
+                    _ => errors::var_error(cmd[1].trim(), b, l),
+                },
+                _ => errors::args_error(b, l),
+            },
+            _ => errors::args_error(b, l),
+        },
+        _ => errors::args_error(b, l),
     }
 }
 
