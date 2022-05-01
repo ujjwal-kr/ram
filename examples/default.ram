@@ -11,3 +11,4 @@ cmp
 jgr 2
 
 printc >> works again
+halt
