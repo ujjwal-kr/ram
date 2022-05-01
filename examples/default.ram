@@ -1,0 +1,13 @@
+ram 10
+ram 20
+add
+print
+jmp 1
+
+printc >> works
+ram 10
+ram 2
+cmp
+jgr 2
+
+printc >> works again
