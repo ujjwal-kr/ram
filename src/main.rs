@@ -49,7 +49,7 @@ fn main() -> std::io::Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    let mut _program: Vec<&str> = contents.split("\r\n\r\n").collect();
+    let mut _program: Vec<&str> = contents.split("\n\n").collect();
     let mut blocks: Vec<Vec<&str>> = vec![];
     for block in &_program {
         let block_vec: Vec<&str> = block.split("\n").collect();
