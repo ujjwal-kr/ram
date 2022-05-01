@@ -20,3 +20,5 @@ jobs:
       run: cargo build --verbose
     - name: Run unit test
       run: cargo run test --verbose
+    - name: E2E
+      run: cargo run ./examples/default.ram --verbose
