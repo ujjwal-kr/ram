@@ -21,4 +21,4 @@ jobs:
     - name: Run unit test
       run: cargo run test --verbose
     - name: E2E
-      run: cargo run ./examples/default.ram --verbose
+      run: cargo run /examples/default.ram --verbose
