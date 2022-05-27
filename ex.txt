@@ -1,1 +1,8 @@
-print var str vec name
+ram 10
+    ram 20
+    print
+jmp 1
+
+
+ram 10
+print

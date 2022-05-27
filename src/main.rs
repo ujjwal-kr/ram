@@ -97,7 +97,8 @@ pub fn run_statement(
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         line = line + 1;
-        let mut cmd: Vec<&str> = statement.split(" ").collect();
+        // skip tabs and split by spaces
+        let mut cmd: Vec<&str> = statement.trim().split(" ").collect();
         // comments
         let lits: Vec<&str> = cmd[0].trim().split("").collect();
         if lits[1] == "/" && lits[2] == "/" {
@@ -105,6 +106,7 @@ pub fn run_statement(
         }
         match cmd[0].trim() {
             "//" => (),
+            "" => (),
             "print" => print::print(
                 &mut stack,
                 cmd,
