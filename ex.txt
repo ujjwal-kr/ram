@@ -1,8 +1,9 @@
-ram 10
+func:
+    ram 10
     ram 20
     print
-jmp 1
+    jmp 1
 
-
-ram 10
-print
+func2:
+    ram 10
+    print

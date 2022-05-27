@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{env, f64, fs, io, path::Path, process};
@@ -22,6 +23,32 @@ pub struct HashVars {
     pub hash_int: HashMap<String, f64>,
     pub hash_str_vec: HashMap<String, Vec<String>>,
     pub hash_int_vec: HashMap<String, Vec<f64>>,
+}
+
+fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
+    let mut program: HashMap<String, Vec<String>> = HashMap::new();
+    let mut current_key: String = String::new();
+    let exp = Regex::new(r"^[a-zA-Z0-9]+:$").unwrap();
+    for mut line in p_lines {
+        line = line.trim();
+        if exp.is_match(line) {
+            current_key = line.to_string();
+            program.insert(line.to_string(), vec![]);
+            line = "";
+        }
+        let mut new_vec: Vec<String> = vec![];
+        match program.get(current_key.trim()) {
+            Some(value) => new_vec = value.to_vec(),
+            _ => panic!("program parsing error"),
+        }
+        if line != "" {
+            new_vec.push(line.to_string());
+        }
+        if let Some(x) = program.get_mut(current_key.trim()) {
+            *x = new_vec;
+        }
+    }
+    program
 }
 
 fn main() -> std::io::Result<()> {
@@ -49,12 +76,18 @@ fn main() -> std::io::Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
+    let p_lines: Vec<&str> = contents.split("\n").collect();
+    let program: HashMap<String, Vec<String>> = populate_labels(p_lines);
+
+    println!("{:?}", program);
+
     let mut _program: Vec<&str> = contents.split("\n\n").collect();
     let mut blocks: Vec<Vec<&str>> = vec![];
     for block in &_program {
         let block_vec: Vec<&str> = block.split("\n").collect();
         blocks.push(block_vec);
     }
+
     let vars = Vars {
         lx: 0.0,
         rv: 0.0,
