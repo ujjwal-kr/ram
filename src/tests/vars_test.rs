@@ -72,7 +72,7 @@ pub fn var_works() {
     match hash_vars.hash_int_vec.get("test") {
         Some(value) => assert_f64(
             value.to_vec()[value.to_vec().len() - 1],
-            vars.lx.clone(),
+            vars.lx,
             statement,
         ),
         _ => assert_str("fail", "something", statement),
@@ -84,7 +84,7 @@ pub fn var_works() {
     match hash_vars.hash_int_vec.get("test") {
         Some(value) => assert_f64(
             value.to_vec()[value.to_vec().len() - 1],
-            vars.rv.clone(),
+            vars.rv,
             statement,
         ),
         _ => assert_str("fail", "something", statement),
@@ -115,7 +115,7 @@ pub fn var_works() {
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
-            vars.string.clone().trim(),
+            vars.string.trim(),
             statement,
         ),
         _ => assert_str("fail", "something", statement),
@@ -127,7 +127,7 @@ pub fn var_works() {
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
-            vars.lxstring.clone().trim(),
+            vars.lxstring.trim(),
             statement,
         ),
         _ => assert_str("fail", "something", statement),

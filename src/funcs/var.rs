@@ -358,14 +358,14 @@ fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize,
         if str_idx == "lx" || str_idx == "rv" {
             if str_idx == "lx" {
                 let index: usize = errors::parse_usize(vars.lx.to_string().trim(), b, l);
-                return index;
+                index
             } else {
                 let index: usize = errors::parse_usize(vars.rv.to_string().trim(), b, l);
-                return index;
+                 index
             }
         } else {
             let index: usize = errors::parse_usize(str_idx, b, l);
-            return index;
+             index
         }
     } else {
         let mut index_n: usize = 0;
@@ -374,6 +374,6 @@ fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize,
             Some(&value) => index_n = errors::parse_usize(value.to_string().trim(), b, l),
             _ => errors::var_error(str_idx_vec[1].trim(), b, l),
         }
-        return index_n;
+         index_n
     }
 }
