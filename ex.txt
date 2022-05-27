@@ -1,9 +1,8 @@
-func:
+main:
     ram 10
-    ram 20
     print
-    jmp 1
+    jmp func:
 
-func2:
-    ram 10
-    print
+func:
+    printc >> heloo
+    jmp main:

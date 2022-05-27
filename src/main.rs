@@ -29,9 +29,13 @@ fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut program: HashMap<String, Vec<String>> = HashMap::new();
     let mut current_key: String = String::new();
     let exp = Regex::new(r"^[a-zA-Z0-9]+:$").unwrap();
+    let mut i = 0u32;
     for mut line in p_lines {
         line = line.trim();
         if exp.is_match(line) {
+            if i == 0 && line != "main:" {
+                panic!("No main label");
+            }
             current_key = line.to_string();
             program.insert(line.to_string(), vec![]);
             line = "";
@@ -47,6 +51,7 @@ fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         if let Some(x) = program.get_mut(current_key.trim()) {
             *x = new_vec;
         }
+        i = i + 1;
     }
     program
 }
@@ -79,15 +84,6 @@ fn main() -> std::io::Result<()> {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let program: HashMap<String, Vec<String>> = populate_labels(p_lines);
 
-    println!("{:?}", program);
-
-    let mut _program: Vec<&str> = contents.split("\n\n").collect();
-    let mut blocks: Vec<Vec<&str>> = vec![];
-    for block in &_program {
-        let block_vec: Vec<&str> = block.split("\n").collect();
-        blocks.push(block_vec);
-    }
-
     let vars = Vars {
         lx: 0.0,
         rv: 0.0,
@@ -103,7 +99,7 @@ fn main() -> std::io::Result<()> {
         hash_int_vec: HashMap::new(),
         hash_str_vec: HashMap::new(),
     };
-    match run_statement(&blocks, &blocks[0], 0, vars, &mut hash_vars) {
+    match run_statement(program, "main:", vars, &mut hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -111,13 +107,14 @@ fn main() -> std::io::Result<()> {
 }
 
 pub fn run_statement(
-    blocks: &Vec<Vec<&str>>,
-    run_block: &Vec<&str>,
-    block_number: usize,
+    program: HashMap<String, Vec<String>>,
+    run_label: &str,
     vars: Vars,
     hash_vars: &mut HashVars,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
+    let mut block_number: usize = 1;
+    
     let mut local_vars = Vars {
         lx: vars.lx,
         rv: vars.rv,
@@ -127,11 +124,18 @@ pub fn run_statement(
         str_vec: vars.str_vec,
     };
 
+    let run_block: Vec<String>;
+    match program.get(run_label) {
+        Some(value) => run_block = value.to_vec(),
+        _ => panic!("Function not found")
+    }
+
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
+        let statement = statement.trim();
         line = line + 1;
         // skip tabs and split by spaces
-        let mut cmd: Vec<&str> = statement.trim().split(" ").collect();
+        let mut cmd: Vec<&str> = statement.split(" ").collect();
         // comments
         let lits: Vec<&str> = cmd[0].trim().split("").collect();
         if lits[1] == "/" && lits[2] == "/" {
@@ -199,46 +203,46 @@ pub fn run_statement(
                 block_number,
                 line,
             ),
-            "cmp" => operations::cmp(&mut stack, block_number, line),
-            "je" => jump::je(
-                &mut stack,
-                cmd,
-                blocks,
-                local_vars.clone(),
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "jne" => jump::jne(
-                &mut stack,
-                cmd,
-                blocks,
-                local_vars.clone(),
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "jgr" => jump::jgr(
-                &mut stack,
-                cmd,
-                blocks,
-                local_vars.clone(),
-                hash_vars,
-                block_number,
-                line,
-            ),
-            "jsm" => jump::jsm(
-                &mut stack,
-                cmd,
-                blocks,
-                local_vars.clone(),
-                hash_vars,
-                block_number,
-                line,
-            ),
+            // "cmp" => operations::cmp(&mut stack, block_number, line),
+            // "je" => jump::je(
+            //     &mut stack,
+            //     cmd,
+            //     blocks,
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     block_number,
+            //     line,
+            // ),
+            // "jne" => jump::jne(
+            //     &mut stack,
+            //     cmd,
+            //     blocks,
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     block_number,
+            //     line,
+            // ),
+            // "jgr" => jump::jgr(
+            //     &mut stack,
+            //     cmd,
+            //     blocks,
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     block_number,
+            //     line,
+            // ),
+            // "jsm" => jump::jsm(
+            //     &mut stack,
+            //     cmd,
+            //     blocks,
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     block_number,
+            //     line,
+            // ),
             "jmp" => jump::jmp(
                 cmd,
-                blocks,
+                program.clone(),
                 local_vars.clone(),
                 hash_vars,
                 block_number,
