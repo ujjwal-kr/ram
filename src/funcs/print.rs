@@ -7,62 +7,60 @@ pub fn print(
     l: u32,
 ) {
     if cmd.len() == 1 {
-        if stack.len() < 1 {
+        if stack.is_empty() {
             super::errors::stack_len_error(b, l);
         } else {
             println!("{}", stack[stack.len() - 1]);
         }
     } else {
-        if cmd[1].trim() == "lx" {
-            println!("{}", vars.lx)
-        } else if cmd[1].trim() == "rv" {
-            println!("{}", vars.rv)
-        } else if cmd[1].trim() == "string" {
-            println!("{}", vars.string.trim());
-        } else if cmd[1].trim() == "lxstring" {
-            println!("{}", vars.lxstring.trim());
-        } else if cmd[1] == "vec" {
-            if cmd[2].trim() == "int" {
-                if cmd.len() == 3 {
-                    println!("{:?}", vars.num_vec);
-                }
-            } else if cmd[2].trim() == "str" {
-                if cmd.len() == 3 {
-                    println!("{:?}", vars.str_vec);
-                }
-            } else {
-                super::errors::var_error(cmd[2], b, l);
-            }
-        } else if cmd[1] == "var" {
-            if cmd[2].trim() == "int" {
-                if cmd.len() == 5 && cmd[3] == "vec" {
-                    match hash_vars.hash_int_vec.get(cmd[4].trim()) {
-                        Some(value) => println!("{:?}", value),
-                        _ => super::errors::var_error(cmd[4].trim(), b, l),
-                    }
-                } else {
-                    match hash_vars.hash_int.get(cmd[3].trim()) {
-                        Some(&value) => println!("{}", value),
-                        _ => super::errors::var_error(cmd[3].trim(), b, l),
+        match cmd[1].trim() {
+            "lx" => println!("{}", vars.lx),
+            "rv" => println!("{}", vars.rv),
+            "string" => println!("{}", vars.string.trim()),
+            "lxstring" => println!("{}", vars.lxstring.trim()),
+            "vec" => match cmd[2].trim() {
+                "str" => {
+                    if cmd.len() == 3 {
+                        println!("{:?}", vars.str_vec);
                     }
                 }
-            } else if cmd[2].trim() == "str" {
-                if cmd.len() == 5 && cmd[3] == "vec" {
-                    match hash_vars.hash_str_vec.get(cmd[4].trim()) {
-                        Some(value) => println!("{:?}", value),
-                        _ => super::errors::var_error(cmd[4], b, l),
-                    }
-                } else {
-                    match hash_vars.hash_str.get(cmd[3].trim()) {
-                        Some(value) => println!("{}", value),
-                        _ => super::errors::var_error(cmd[3].trim(), b, l),
+                "int" => {
+                    if cmd.len() == 3 {
+                        println!("{:?}", vars.num_vec);
                     }
                 }
-            } else {
-                super::errors::args_error(b, l);
-            }
-        } else {
-            super::errors::var_error(cmd[1], b, l);
+                _ => super::errors::args_error(b, l),
+            },
+            "var" => match cmd[2].trim() {
+                "int" => {
+                    if cmd.len() == 5 && cmd[3] == "vec" {
+                        match hash_vars.hash_int_vec.get(cmd[4].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[4].trim(), b, l),
+                        }
+                    } else {
+                        match hash_vars.hash_int.get(cmd[3].trim()) {
+                            Some(&value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[3].trim(), b, l),
+                        }
+                    }
+                }
+                "str" => {
+                    if cmd.len() == 5 && cmd[3] == "vec" {
+                        match hash_vars.hash_str_vec.get(cmd[4].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[4], b, l),
+                        }
+                    } else {
+                        match hash_vars.hash_str.get(cmd[3].trim()) {
+                            Some(value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[3].trim(), b, l),
+                        }
+                    }
+                }
+                _ => super::errors::args_error(b, l),
+            },
+            _ => super::errors::args_error(b, l),
         }
     }
 }
