@@ -114,7 +114,7 @@ pub fn run_statement(
 ) -> std::io::Result<()> {
     let mut line = 0u32;
     let mut block_number: usize = 1;
-    
+
     let mut local_vars = Vars {
         lx: vars.lx,
         rv: vars.rv,
@@ -127,7 +127,7 @@ pub fn run_statement(
     let run_block: Vec<String>;
     match program.get(run_label) {
         Some(value) => run_block = value.to_vec(),
-        _ => panic!("Function not found")
+        _ => panic!("Function not found"),
     }
 
     let mut stack: Vec<f64> = vec![];
@@ -203,43 +203,43 @@ pub fn run_statement(
                 block_number,
                 line,
             ),
-            // "cmp" => operations::cmp(&mut stack, block_number, line),
-            // "je" => jump::je(
-            //     &mut stack,
-            //     cmd,
-            //     blocks,
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     block_number,
-            //     line,
-            // ),
-            // "jne" => jump::jne(
-            //     &mut stack,
-            //     cmd,
-            //     blocks,
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     block_number,
-            //     line,
-            // ),
-            // "jgr" => jump::jgr(
-            //     &mut stack,
-            //     cmd,
-            //     blocks,
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     block_number,
-            //     line,
-            // ),
-            // "jsm" => jump::jsm(
-            //     &mut stack,
-            //     cmd,
-            //     blocks,
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     block_number,
-            //     line,
-            // ),
+            "cmp" => operations::cmp(&mut stack, block_number, line),
+            "je" => jump::je(
+                &mut stack,
+                cmd,
+                program.clone(),
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jne" => jump::jne(
+                &mut stack,
+                cmd,
+                program.clone(),
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jgr" => jump::jgr(
+                &mut stack,
+                cmd,
+                program.clone(),
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
+            "jsm" => jump::jsm(
+                &mut stack,
+                cmd,
+                program.clone(),
+                local_vars.clone(),
+                hash_vars,
+                block_number,
+                line,
+            ),
             "jmp" => jump::jmp(
                 cmd,
                 program.clone(),
