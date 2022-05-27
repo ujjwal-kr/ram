@@ -112,7 +112,7 @@ pub fn ram_works() {
     statement = "ram var test";
     cmd = statement.split(" ").collect();
     stack::ram(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
-    if stack.len() < 1 {
+    if stack.is_empty() {
         assert_str("fail", "something", statement);
     } else {
         assert_f64(stack[0], 15.0, statement);

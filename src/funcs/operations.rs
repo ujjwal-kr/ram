@@ -156,6 +156,12 @@ pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: 
                 for items in str_vec {
                     vars.str_vec.push(items.to_string());
                 }
+            } else if slice == r"\t" {
+                let str_vec: Vec<&str> = string.split("\t").collect();
+                vars.str_vec = vec![];
+                for items in str_vec {
+                    vars.str_vec.push(items.to_string());
+                }
             }
         } else {
             let str_vec: Vec<&str> = string.split(slice).collect();
@@ -179,22 +185,25 @@ pub fn vec_ops(
 ) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
-    } else {
-        if cmd[1] == "str" {
-            if cmd[2].trim() == "len" {
+    }
+    match cmd[1] {
+        "str" => match cmd[2].trim() {
+            "push" => vars.str_vec.push(vars.string.clone().trim().to_string()),
+            "pop" => {
+                if vars.str_vec.is_empty() {
+                    super::errors::vec_items(b, l);
+                } else {
+                    vars.str_vec.pop();
+                }
+            }
+            "len" => {
                 stack.push(super::errors::parse_float(
                     vars.str_vec.len().to_string().trim(),
                     b,
                     l,
                 ));
-            } else if cmd[2].trim() == "push" {
-                vars.str_vec.push(vars.string.clone().trim().to_string());
-            } else if cmd[2].trim() == "pop" {
-                if vars.str_vec.len() < 1 {
-                    super::errors::vec_items(b, l);
-                }
-                vars.str_vec.pop();
-            } else {
+            }
+            ">>" => {
                 let lits: Vec<&str> = statement.split(">>").collect();
                 let data_vec = lits[1].trim();
                 let slice = &data_vec[1..data_vec.len() - 1];
@@ -204,41 +213,50 @@ pub fn vec_ops(
                 }
                 vars.string = vars.str_vec[index].to_string();
             }
-        } else if cmd[1].trim() == "int" {
-            if cmd[2].trim() == "len" {
+            _ => super::errors::args_error(b, l),
+        },
+        "int" => match cmd[2].trim() {
+            "push" => match cmd[3].trim() {
+                "lx" => vars.num_vec.push(vars.lx),
+                "rv" => vars.num_vec.push(vars.rv),
+                _ => super::errors::args_error(b, l),
+            },
+            "pop" => {
+                if vars.num_vec.is_empty() {
+                    super::errors::vec_items(b, l);
+                }
+                vars.num_vec.pop();
+            }
+            "len" => {
                 stack.push(super::errors::parse_float(
                     vars.num_vec.len().to_string().trim(),
                     b,
                     l,
                 ));
-            } else if cmd[2].trim() == "push" {
-                if cmd[3].trim() == "lx" {
-                    vars.num_vec.push(vars.lx)
-                } else if cmd[3].trim() == "rv" {
-                    vars.num_vec.push(vars.rv)
-                }
-            } else if cmd[2].trim() == "pop" {
-                if vars.num_vec.len() < 1 {
-                    super::errors::vec_items(b, l);
-                }
-                vars.num_vec.pop();
-            } else {
-                let lits: Vec<&str> = statement.split(">>").collect();
-                let data_vec = lits[1].trim();
-                let slice = &data_vec[1..data_vec.len() - 1];
-                let index: usize = ret_index(slice.trim(), vars, b, l);
-                if index >= vars.num_vec.len() {
-                    super::errors::invalid_index(b, l, index);
-                }
-                if cmd[2].trim() == "lx" {
-                    vars.lx = vars.num_vec[index];
-                } else if cmd[2].trim() == "rv" {
-                    vars.rv = vars.num_vec[index]
+            }
+            "lx" | "rv" => {
+                if cmd[3] == ">>" {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, b, l);
+                    if index >= vars.num_vec.len() {
+                        super::errors::invalid_index(b, l, index);
+                    }
+                    if cmd[2].trim() == "lx" {
+                        vars.lx = vars.num_vec[index];
+                    } else if cmd[2].trim() == "rv" {
+                        vars.rv = vars.num_vec[index]
+                    } else {
+                        super::errors::args_error(b, l);
+                    }
                 } else {
                     super::errors::args_error(b, l);
                 }
             }
-        }
+            _ => super::errors::args_error(b, l),
+        },
+        _ => super::errors::args_error(b, l),
     }
 }
 

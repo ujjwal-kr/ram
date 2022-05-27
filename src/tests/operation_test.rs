@@ -373,5 +373,5 @@ fn vec_ops_works() {
     statement = "vec int pop";
     cmd = statement.split(" ").collect();
     operations::vec_ops(&mut stack, cmd, statement, &mut vars, 0, 1);
-    assert_vec_int(vars.num_vec.clone(), [10.0].to_vec(), statement);
+    assert_vec_int(vars.num_vec, [10.0].to_vec(), statement);
 }

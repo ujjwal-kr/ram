@@ -70,11 +70,7 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     match hash_vars.hash_int_vec.get("test") {
-        Some(value) => assert_f64(
-            value.to_vec()[value.to_vec().len() - 1],
-            vars.lx.clone(),
-            statement,
-        ),
+        Some(value) => assert_f64(value.to_vec()[value.to_vec().len() - 1], vars.lx, statement),
         _ => assert_str("fail", "something", statement),
     }
 
@@ -82,11 +78,7 @@ pub fn var_works() {
     cmd = statement.split(" ").collect();
     var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, 0, 1);
     match hash_vars.hash_int_vec.get("test") {
-        Some(value) => assert_f64(
-            value.to_vec()[value.to_vec().len() - 1],
-            vars.rv.clone(),
-            statement,
-        ),
+        Some(value) => assert_f64(value.to_vec()[value.to_vec().len() - 1], vars.rv, statement),
         _ => assert_str("fail", "something", statement),
     }
 
@@ -115,7 +107,7 @@ pub fn var_works() {
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
-            vars.string.clone().trim(),
+            vars.string.trim(),
             statement,
         ),
         _ => assert_str("fail", "something", statement),
@@ -127,7 +119,7 @@ pub fn var_works() {
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
-            vars.lxstring.clone().trim(),
+            vars.lxstring.trim(),
             statement,
         ),
         _ => assert_str("fail", "something", statement),
@@ -385,7 +377,7 @@ pub fn move_works() {
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, 0, 1);
     match hash_vars.hash_int_vec.get("test4") {
-        Some(value) => assert_vec_int(value.to_vec(), vars.num_vec.clone(), statement),
+        Some(value) => assert_vec_int(value.to_vec(), vars.num_vec, statement),
         _ => assert_str("fail", "something", statement),
     }
 }
