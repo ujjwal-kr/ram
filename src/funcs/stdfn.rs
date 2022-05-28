@@ -3,7 +3,7 @@ use std::fs;
 use std::io;
 use std::io::prelude::*;
 
-pub fn stdin(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
+pub fn stdin(vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
     if cmd.len() != 2 {
         super::errors::args_error(b, l);
     } else {
@@ -25,7 +25,7 @@ pub fn stdin(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
     }
 }
 
-pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b: usize, l: u32) {
+pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b: &str, l: u32) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
     } else if cmd.len() == 3 {
@@ -86,7 +86,7 @@ pub fn random(
     cmd: Vec<&str>,
     stack: &mut Vec<f64>,
     statement: &str,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() < 3 {
@@ -101,7 +101,7 @@ pub fn random(
     stack.push(random_num);
 }
 
-fn ret_float(str_num: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> f64 {
+fn ret_float(str_num: &str, vars: &mut super::super::Vars, b: &str, l: u32) -> f64 {
     if str_num == "lx" || str_num == "rv" {
         if str_num == "lx" {
             vars.lx
@@ -113,13 +113,7 @@ fn ret_float(str_num: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> 
     }
 }
 
-pub fn parse_int(vars: &mut super::super::Vars, cmd: Vec<&str>, b: usize, l: u32) {
-    // parse int lx string
-    // parse int lx lxstring
-
-    // parse int rv string
-    // parse int rv lxstring
-
+pub fn parse_int(vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
     if cmd[2] == "lx" {
         if cmd[3].trim() == "string" {
             vars.lx = super::errors::parse_float(vars.string.trim(), b, l);

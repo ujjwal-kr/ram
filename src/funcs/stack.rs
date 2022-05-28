@@ -6,7 +6,7 @@ pub fn ram(
     statement: &str,
     vars: &mut super::super::Vars,
     hash_vars: &mut super::super::HashVars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     match cmd[1].trim() {
@@ -110,8 +110,8 @@ pub fn ram(
     }
 }
 
-pub fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
-    if stack.len() < 1 {
+pub fn pop(stack: &mut Vec<f64>, b: &str, l: u32) {
+    if stack.is_empty() {
         super::errors::stack_len_error(b, l);
     }
     stack.pop();
@@ -121,7 +121,7 @@ pub fn strfn(
     stack: &mut Vec<f64>,
     vars: &mut super::super::Vars,
     cmd: Vec<&str>,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() < 2 {

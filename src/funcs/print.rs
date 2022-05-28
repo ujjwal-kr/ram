@@ -3,7 +3,7 @@ pub fn print(
     cmd: Vec<&str>,
     vars: &mut super::super::Vars,
     hash_vars: &mut super::super::HashVars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() == 1 {
@@ -65,7 +65,7 @@ pub fn print(
     }
 }
 
-pub fn printc(cmd: Vec<&str>, statement: &str, b: usize, l: u32) {
+pub fn printc(cmd: Vec<&str>, statement: &str, b: &str, l: u32) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
     } else {

@@ -1,8 +1,0 @@
-main:
-    ram 10
-    print
-    jmp func:
-
-func:
-    printc >> heloo
-    jmp main:

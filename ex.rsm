@@ -1,0 +1,10 @@
+main:
+    ram 100
+    ram 200
+    add
+    print
+    jmp fun1:
+
+
+fun1:
+    printc >> hello from fun1

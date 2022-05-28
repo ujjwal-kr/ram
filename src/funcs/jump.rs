@@ -7,7 +7,7 @@ pub fn jmp(
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
     hash_vars: &mut HashVars,
-    block_number: usize,
+    block_number: &str,
     line: u32,
 ) {
     if cmd.len() != 2 {
@@ -26,7 +26,7 @@ pub fn je(
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
     hash_vars: &mut HashVars,
-    block_number: usize,
+    block_number: &str,
     line: u32,
 ) {
     if cmd.len() != 2 {
@@ -49,7 +49,7 @@ pub fn jne(
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
     hash_vars: &mut HashVars,
-    block_number: usize,
+    block_number: &str,
     line: u32,
 ) {
     if cmd.len() != 2 {
@@ -72,7 +72,7 @@ pub fn jgr(
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
     hash_vars: &mut HashVars,
-    block_number: usize,
+    block_number: &str,
     line: u32,
 ) {
     if cmd.len() != 2 {
@@ -95,7 +95,7 @@ pub fn jsm(
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
     hash_vars: &mut HashVars,
-    block_number: usize,
+    block_number: &str,
     line: u32,
 ) {
     if cmd.len() != 2 {

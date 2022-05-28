@@ -40,16 +40,16 @@ fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
             program.insert(line.to_string(), vec![]);
             line = "";
         }
-        let mut new_vec: Vec<String> = vec![];
+        let mut _new_vec: Vec<String> = vec![];
         match program.get(current_key.trim()) {
-            Some(value) => new_vec = value.to_vec(),
+            Some(value) => _new_vec = value.to_vec(),
             _ => panic!("program parsing error"),
         }
         if line != "" {
-            new_vec.push(line.to_string());
+            _new_vec.push(line.to_string());
         }
         if let Some(x) = program.get_mut(current_key.trim()) {
-            *x = new_vec;
+            *x = _new_vec;
         }
         i = i + 1;
     }
@@ -113,7 +113,6 @@ pub fn run_statement(
     hash_vars: &mut HashVars,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
-    let mut block_number: usize = 1;
 
     let mut local_vars = Vars {
         lx: vars.lx,
@@ -127,7 +126,10 @@ pub fn run_statement(
     let run_block: Vec<String>;
     match program.get(run_label) {
         Some(value) => run_block = value.to_vec(),
-        _ => panic!("Function not found"),
+        _ => {
+            println!("label '{}' not found", run_label);
+            process::exit(1);
+        },
     }
 
     let mut stack: Vec<f64> = vec![];
@@ -149,17 +151,17 @@ pub fn run_statement(
                 cmd,
                 &mut local_vars,
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
-            "printc" => print::printc(cmd, statement, block_number, line),
+            "printc" => print::printc(cmd, statement, run_label, line),
             "ram" => stack::ram(
                 &mut stack,
                 cmd,
                 statement,
                 &mut local_vars,
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "var" => var::var(
@@ -168,49 +170,49 @@ pub fn run_statement(
                 statement,
                 &mut local_vars,
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
-            "move" => var::movefn(cmd, &mut local_vars, hash_vars, block_number, line),
-            "str" => stack::strfn(&mut stack, &mut local_vars, cmd, block_number, line),
-            "stdin" => stdfn::stdin(&mut local_vars, cmd, block_number, line),
-            "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, block_number, line),
-            "pop" => stack::pop(&mut stack, block_number, line),
+            "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
+            "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
+            "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
+            "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
+            "pop" => stack::pop(&mut stack, run_label, line),
             "popall" => stack = vec![],
-            "add" => operations::add(&mut stack, cmd, &mut local_vars, block_number, line),
-            "sub" => operations::sub(&mut stack, block_number, line),
-            "mul" => operations::mul(&mut stack, cmd, &mut local_vars, block_number, line),
-            "div" => operations::div(&mut stack, block_number, line),
-            "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, block_number, line),
-            "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, block_number, line),
-            "round" => operations::round(&mut stack, cmd, &mut local_vars, block_number, line),
-            "avg" => operations::avg(&mut stack, block_number, line),
+            "add" => operations::add(&mut stack, cmd, &mut local_vars, run_label, line),
+            "sub" => operations::sub(&mut stack, run_label, line),
+            "mul" => operations::mul(&mut stack, cmd, &mut local_vars, run_label, line),
+            "div" => operations::div(&mut stack, run_label, line),
+            "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, run_label, line),
+            "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, run_label, line),
+            "round" => operations::round(&mut stack, cmd, &mut local_vars, run_label, line),
+            "avg" => operations::avg(&mut stack, run_label, line),
             "rand" => stdfn::random(
                 &mut local_vars,
                 cmd,
                 &mut stack,
                 statement,
-                block_number,
+                run_label,
                 line,
             ),
-            "split" => operations::split(cmd, statement, &mut local_vars, block_number, line),
-            "parse" => stdfn::parse_int(&mut local_vars, cmd, block_number, line),
+            "split" => operations::split(cmd, statement, &mut local_vars, run_label, line),
+            "parse" => stdfn::parse_int(&mut local_vars, cmd, run_label, line),
             "vec" => operations::vec_ops(
                 &mut stack,
                 cmd,
                 statement,
                 &mut local_vars,
-                block_number,
+                run_label,
                 line,
             ),
-            "cmp" => operations::cmp(&mut stack, block_number, line),
+            "cmp" => operations::cmp(&mut stack, run_label, line),
             "je" => jump::je(
                 &mut stack,
                 cmd,
                 program.clone(),
                 local_vars.clone(),
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "jne" => jump::jne(
@@ -219,7 +221,7 @@ pub fn run_statement(
                 program.clone(),
                 local_vars.clone(),
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "jgr" => jump::jgr(
@@ -228,7 +230,7 @@ pub fn run_statement(
                 program.clone(),
                 local_vars.clone(),
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "jsm" => jump::jsm(
@@ -237,7 +239,7 @@ pub fn run_statement(
                 program.clone(),
                 local_vars.clone(),
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "jmp" => jump::jmp(
@@ -245,7 +247,7 @@ pub fn run_statement(
                 program.clone(),
                 local_vars.clone(),
                 hash_vars,
-                block_number,
+                run_label,
                 line,
             ),
             "halt" => process::exit(0),
@@ -253,7 +255,7 @@ pub fn run_statement(
                 println!(
                     "Cant recognize command '{}' at b{}:l{}",
                     cmd[0],
-                    block_number.to_string(),
+                    run_label.to_string(),
                     line.to_string()
                 );
                 process::exit(1)

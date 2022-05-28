@@ -8,7 +8,7 @@ pub fn var(
     statement: &str,
     vars: &mut Vars,
     hash_vars: &mut HashVars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() < 4 {
@@ -260,7 +260,7 @@ pub fn var(
     }
 }
 
-pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) {
+pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str, l: u32) {
     if cmd.len() < 4 {
         errors::args_error(b, l);
     }
@@ -352,7 +352,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usiz
     }
 }
 
-fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) -> usize {
+fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: &str, l: u32) -> usize {
     let idx_tokens: Vec<&str> = str_idx.split(" ").collect();
     if idx_tokens.len() == 1 {
         if str_idx == "lx" || str_idx == "rv" {

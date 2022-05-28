@@ -1,4 +1,4 @@
-pub fn add(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn add(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() > 1 {
         stack.push(vars.lx + vars.rv);
     } else {
@@ -11,7 +11,7 @@ pub fn add(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
     }
 }
 
-pub fn sub(stack: &mut Vec<f64>, b: usize, l: u32) {
+pub fn sub(stack: &mut Vec<f64>, b: &str, l: u32) {
     if stack.len() < 2 {
         super::errors::stack_len_error(b, l);
     }
@@ -19,7 +19,7 @@ pub fn sub(stack: &mut Vec<f64>, b: usize, l: u32) {
     stack.push(result);
 }
 
-pub fn mul(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn mul(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() > 1 {
         stack.push(vars.lx * vars.rv);
     } else {
@@ -31,7 +31,7 @@ pub fn mul(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
     }
 }
 
-pub fn div(stack: &mut Vec<f64>, b: usize, l: u32) {
+pub fn div(stack: &mut Vec<f64>, b: &str, l: u32) {
     if stack.len() < 2 {
         super::errors::stack_len_error(b, l);
     }
@@ -39,7 +39,7 @@ pub fn div(stack: &mut Vec<f64>, b: usize, l: u32) {
     stack.push(result)
 }
 
-pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() == 1 {
         if stack.len() < 1 {
             super::errors::stack_len_error(b, l);
@@ -60,7 +60,7 @@ pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
     }
 }
 
-pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() == 1 {
         if stack.len() < 1 {
             super::errors::stack_len_error(b, l);
@@ -86,7 +86,7 @@ pub fn round(
     stack: &mut Vec<f64>,
     cmd: Vec<&str>,
     vars: &mut super::super::Vars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() > 1 {
@@ -107,7 +107,7 @@ pub fn round(
     }
 }
 
-pub fn avg(stack: &mut Vec<f64>, b: usize, l: u32) {
+pub fn avg(stack: &mut Vec<f64>, b: &str, l: u32) {
     if stack.len() < 1 {
         super::errors::stack_len_error(b, l);
     }
@@ -120,7 +120,7 @@ pub fn avg(stack: &mut Vec<f64>, b: usize, l: u32) {
     stack.push(total / i)
 }
 
-pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
+pub fn cmp(stack: &mut Vec<f64>, b: &str, l: u32) {
     if stack.len() < 2 {
         super::errors::stack_len_error(b, l);
     }
@@ -135,7 +135,7 @@ pub fn cmp(stack: &mut Vec<f64>, b: usize, l: u32) {
 
 // strings
 
-pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: usize, l: u32) {
+pub fn split(cmd: Vec<&str>, statement: &str, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
     } else {
@@ -180,7 +180,7 @@ pub fn vec_ops(
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut super::super::Vars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() < 3 {
@@ -260,7 +260,7 @@ pub fn vec_ops(
     }
 }
 
-fn ret_index(str_idx: &str, vars: &mut super::super::Vars, b: usize, l: u32) -> usize {
+fn ret_index(str_idx: &str, vars: &mut super::super::Vars, b: &str, l: u32) -> usize {
     if str_idx == "lx" || str_idx == "rv" {
         if str_idx == "lx" {
             let index: usize = super::errors::parse_usize(vars.lx.to_string().trim(), b, l);
