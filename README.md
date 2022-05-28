@@ -7,8 +7,6 @@ A stack-based programming language developed to experiment with my language deve
 3. Make a .ram file with the following contents at the same directory as the binary:
 
 ```as
-// loop from 0 to 500
-
 main:
     ram lx
     ram 1
@@ -31,11 +29,11 @@ Run `cargo run test` to run the custom tests to test all the commands in the sui
 
 ![tests](https://media.discordapp.net/attachments/867819380464680980/947347676503089172/unknown.png?width=350&height=510)
 
-## A basic interpreter
-I wrote a very basic interpreter similar to the old version of ram in the language itself to try to make it turing complete. The source is located in https://github.com/ujjwal-kr/ram/blob/master/ram/ram.ram
-
 ## Documentation
 Official documentation for the RAM programming language. Please open an issue if you find any bugs, or want some features to be chaged or added.
+
+## Program Structure
+A program should always start with a `main:` label. Labels are like functions where you can jump anytime using `jmp` or conditional jumps (see [jump](#cmp-and-jump-statements-1) reference to learn how to use them). Each label contains a block which is executed when the label is called. Every block has a stack which stores integers and there exists some commands to manipulate the stack.
 
 ## Variable Reference
 The language has 6 general purpose variables (as in x86/arm) and 4 dynamic variables (as in python/js). All of them are global. The data stored in them unlike the stack is preserved when a code block is switched using jump. Details about how to use them is further in the documentation.
@@ -44,6 +42,8 @@ The language has 6 general purpose variables (as in x86/arm) and 4 dynamic varia
 - `lx` and `rv` store floating point integers.
 - `string` and `lxstring` to store strings.
 - `vec int` and `vec str` to store integer and string vectors.
+
+NOTE: These variables can be read from any block but cannot be modified without jumping back to the block in which the user wishes to modify the value of the variable.
 
 ### Dynamic vars
 These variables are called hash_vars as they are implemented using a hashmap. There can be unlimited number of these named variables, restricted to types like string, integer, integer vector and string vector. You can move values from these vars to general purpose vars for further operations.
@@ -196,31 +196,45 @@ Takes out the average of all the numbers present in the stack. `popall` should b
 - `round lx/rv` rounds the specified variable and assigns the result to the var itself.
 
 ### `cmp` and Jump statements
-The program is devided into blocks separated by empty lines. And each block has an index. For example-
+The program is devided into labels and we can jump on any label to execute the code block below it.
+
 ```as
-ram 100
-ram 300
-cmp
-jne 1
-cmp
-je 2
-
-printc >> Not Equal
-
-printc >> Equal
+main:
+    ram 100
+    ram 300
+    cmp
+    jne not_equal:
+    cmp
+    je equal:
+    
+ not_equal:
+    printc >> Not Equal
+    
+equal:
+    printc >> Equal
 ```
 
-This code consists of three codeblocks, indexed 0,1,2 respectively and can be accessed by the jump statements.
+The `main:` label is considered compulsory at the beginning of the program.
 
-- `jmp <index>` - jumps to the codeblock at the index position.
-- `cmp` pushes -1, 0, 1 to the stack if the last two numbers are smaller, equal or greater than each other. (Important before jne and je commands).
-- `jne <index>` - jumps to a block by its index position if the previous cmp statement is not 0 (equal)
+- `jmp <label:>` - jumps to the label
+- `cmp` pushes -1, 0, 1 to the stack if the previous number smaller, equal or greater than the number after it in the stack.
 
-- `je <index>` - jumps to a block by its index position if the previous cmp statement is 0 (equal)
+```as
+main:
+    ram 10
+    ram 20
+    cmp
+    print
+    // this will print -1 as 10 < 20
+```
 
-- `jgr <index>` - jumps to a block by its index position if the prev cmp statement is 1 (greater)
+- `jne <label:>` - jumps to the label if the previous cmp statement is not 0 (not equal)
 
-- `jsm <index>` - jumps to a block by its index position if the prev cmp statement is -1 (smaller)
+- `je <label:>` - jumps to the label if the previous cmp statement is 0 (equal)
+
+- `jgr <label:>` - jumps to the label if the prev cmp statement is 1 (greater)
+
+- `jsm <label:>` - jumps to the label if the prev cmp statement is -1 (smaller)
 
 ### Example Coin Flip
 
