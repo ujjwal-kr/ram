@@ -61,7 +61,7 @@ pub fn assert_vec_int(a: Vec<f64>, b: Vec<f64>, statement: &str) {
         if item != b[i] {
             return log_fail(statement);
         }
-        i = i + 1;
+        i += 1;
     }
     log_pass(statement)
 }
@@ -75,7 +75,7 @@ pub fn assert_vec_str(a: Vec<String>, b: Vec<&str>, statement: &str) {
         if item.trim() != b[i] {
             return log_fail(statement);
         }
-        i = i + 1;
+        i += 1;
     }
     log_pass(statement)
 }
@@ -89,7 +89,7 @@ pub fn assert_vec_string(a: Vec<String>, b: Vec<String>, statement: &str) {
         if item.trim() != b[i].trim() {
             return log_fail(statement);
         }
-        i = i + 1;
+        i += 1;
     }
     log_pass(statement)
 }

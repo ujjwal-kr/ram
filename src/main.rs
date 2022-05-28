@@ -59,7 +59,7 @@ fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
 
 fn main() -> std::io::Result<()> {
     let mut filename = String::new();
-    if env::args().nth(1).is_none() == true {
+    if env::args().nth(1).is_none() {
         println!("Welcome to the Ram stack-based programming language.");
         println!("Please enter a filename: ");
         io::stdin().read_line(&mut filename)?;
@@ -228,7 +228,7 @@ pub fn run_statement(
             "halt" => process::exit(0),
             _ => {
                 println!(
-                    "Cant recognize command '{}' at b{}:l{}",
+                    "Cant recognize command '{}' at '{}' line: {}",
                     cmd[0],
                     run_label.to_string(),
                     line.to_string()

@@ -62,7 +62,7 @@ pub fn var(
                                 Some(value) => var_value = value.to_string(),
                                 _ => errors::var_error(cmd[7].trim(), b, l),
                             }
-                            new_vec.push(var_value.clone());
+                            new_vec.push(var_value);
                             if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
                                 *x = new_vec;
                             }
@@ -242,7 +242,7 @@ pub fn var(
 
                     hash_vars
                         .hash_int
-                        .insert(cmd[5].to_string(), var_vec[index].clone());
+                        .insert(cmd[5].to_string(), var_vec[index]);
                 }
                 "len" => match hash_vars.hash_int_vec.get(cmd[1].trim()) {
                     Some(value) => stack.push(errors::parse_float(

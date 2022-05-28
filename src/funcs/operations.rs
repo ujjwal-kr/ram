@@ -41,7 +41,7 @@ pub fn div(stack: &mut Vec<f64>, b: &str, l: u32) {
 
 pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() == 1 {
-        if stack.len() < 1 {
+        if stack.is_empty() {
             super::errors::stack_len_error(b, l);
         }
         let result = stack[stack.len() - 1] * stack[stack.len() - 1];
@@ -62,7 +62,7 @@ pub fn sqr(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, 
 
 pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() == 1 {
-        if stack.len() < 1 {
+        if stack.is_empty() {
             super::errors::stack_len_error(b, l);
         } else {
             let result = stack[stack.len() - 1].sqrt();
@@ -93,7 +93,7 @@ pub fn round(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars
             }
         }
     } else {
-        if stack.len() < 1 {
+        if stack.is_empty() {
             super::errors::stack_len_error(b, l);
         }
         let result = stack[stack.len() - 1].round();
@@ -102,7 +102,7 @@ pub fn round(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars
 }
 
 pub fn avg(stack: &mut Vec<f64>, b: &str, l: u32) {
-    if stack.len() < 1 {
+    if stack.is_empty() {
         super::errors::stack_len_error(b, l);
     }
     let mut total: f64 = 0.0;

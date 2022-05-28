@@ -226,7 +226,7 @@ fn split_works() {
     let cmd = statement.split(" ").collect();
     operations::split(cmd, statement, &mut vars, "0", 1);
     assert_vec_str(
-        vars.str_vec.clone(),
+        vars.str_vec,
         ["one", "two", "three"].to_vec(),
         statement,
     );
