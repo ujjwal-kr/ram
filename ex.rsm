@@ -1,10 +1,19 @@
+
+// test
 main:
     ram 100
     ram 200
     add
     print
-    jmp fun1:
+    jmp meow:
 
+super:
+    ram 10
+    ram 20
+    add
+    print
+    printc >> super
 
-fun1:
-    printc >> hello from fun1
+meow:
+    printc >> hello from meow
+    jmp super:

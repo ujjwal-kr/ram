@@ -7,21 +7,21 @@ A stack-based programming language developed to experiment with my language deve
 3. Make a .ram file with the following contents at the same directory as the binary:
 
 ```as
-ram rv 1
-add lx rv
-ram lx prev
-print lx
-jmp 1
+// loop from 0 to 500
 
-ram lx
-ram 10
-cmp
-je 2
-cmp
-jne 0
+main:
+    ram lx
+    ram 1
+    add
+    ram lx prev
+    print
+    ram 500
+    cmp
+    je halt:
+    jmp main:
 
-printc >> loop end
-halt
+halt:
+    halt
 ```
 
 4. run `./ram ./example.ram` and press enter.
@@ -225,18 +225,21 @@ This code consists of three codeblocks, indexed 0,1,2 respectively and can be ac
 ### Example Coin Flip
 
 ```as
-printc >> Coin Flip
-rand >> 0,1
-round
-ram 1
-cmp
-je 1
-pop
-ram 0
-cmp
-je 2
+main:
+    printc >> Coin Flip
+    rand >> 0,1
+    round
+    ram 1
+    cmp
+    je heads:
+    pop
+    ram 0
+    cmp
+    je tails:
 
-printc >> Heads
+heads:
+    printc >> Heads
 
-printc >> Tails
+tails:
+    printc >> Tails
 ```

@@ -24,7 +24,15 @@ pub fn var_works() {
         str_vec: vec![],
     };
 
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str.get("x") {
         Some(value) => assert_str(value.trim(), "something", statement),
         _ => assert_str("fail", "something", statement),
@@ -33,7 +41,15 @@ pub fn var_works() {
     // var y int >> 50
     statement = "var y int >> 50";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int.get("y") {
         Some(&value) => assert_f64(value, 50.0, statement),
         _ => assert_str("fail", "something", statement),
@@ -42,7 +58,15 @@ pub fn var_works() {
     // var w int vec >> [10, 13, 12]
     statement = "var w int vec >> [10, 13]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int_vec.get("w") {
         Some(value) => assert_vec_int(value.to_vec(), [10.0, 13.0].to_vec(), statement),
         _ => assert_str("fail", "something", statement),
@@ -51,7 +75,15 @@ pub fn var_works() {
     // var v str vec >> [one,two]
     statement = "var v str vec >> [one,two]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str_vec.get("v") {
         Some(value) => assert_vec_str(value.to_vec(), ["one", "two"].to_vec(), statement),
         _ => assert_str("fail", "something", statement),
@@ -68,7 +100,15 @@ pub fn var_works() {
 
     statement = "var test int vec push >> lx";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int_vec.get("test") {
         Some(value) => assert_f64(value.to_vec()[value.to_vec().len() - 1], vars.lx, statement),
         _ => assert_str("fail", "something", statement),
@@ -76,7 +116,15 @@ pub fn var_works() {
 
     statement = "var test int vec push >> rv";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int_vec.get("test") {
         Some(value) => assert_f64(value.to_vec()[value.to_vec().len() - 1], vars.rv, statement),
         _ => assert_str("fail", "something", statement),
@@ -84,7 +132,15 @@ pub fn var_works() {
 
     statement = "var test int vec push >> var name";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int_vec.get("test") {
         Some(value) => assert_f64(value.to_vec()[value.to_vec().len() - 1], 3.0, statement),
         _ => assert_str("fail", "something", statement),
@@ -103,7 +159,15 @@ pub fn var_works() {
 
     statement = "var test str vec push >> string";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
@@ -115,7 +179,15 @@ pub fn var_works() {
 
     statement = "var test str vec push >> lxstring";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
@@ -127,7 +199,15 @@ pub fn var_works() {
 
     statement = "var test str vec push >> var name";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str_vec.get("test") {
         Some(value) => assert_str(
             value.to_vec()[value.to_vec().len() - 1].trim(),
@@ -146,17 +226,41 @@ pub fn var_works() {
 
     statement = "var test int vec lx >> [1]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     assert_f64(vars.lx, 1.1, statement);
 
     statement = "var test int vec rv >> [0]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     assert_f64(vars.rv, 1.0, statement);
 
     statement = "var test int vec var name >> [2]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_int.get("name") {
         Some(&value) => assert_f64(value, 2.1, statement),
         _ => assert_str("fail", "something", statement),
@@ -174,17 +278,41 @@ pub fn var_works() {
 
     statement = "var test str vec string >> [0]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     assert_str(vars.string.trim(), "r", statement);
 
     statement = "var test str vec lxstring >> [1]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     assert_str(vars.lxstring.trim(), "a", statement);
 
     statement = "var test str vec var name >> [2]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     match hash_vars.hash_str.get("name") {
         Some(value) => assert_str(value.trim(), "m", statement),
         _ => assert_str("fail", "something", statement),
@@ -194,11 +322,27 @@ pub fn var_works() {
 
     statement = "var test int vec >> [1,3, 12, 14]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "var test int vec len";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     if stack.len() >= 1 {
         assert_f64(stack[stack.len() - 1], 4.0, statement);
     } else {
@@ -209,11 +353,27 @@ pub fn var_works() {
 
     statement = "var test str vec >> [one,two, three]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "var test str vec len";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
     if stack.len() >= 1 {
         assert_f64(stack[stack.len() - 1], 3.0, statement);
     } else {
@@ -243,7 +403,15 @@ pub fn move_works() {
     // move int lx x
     let mut statement: &str = "var x int >> 40";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move int lx x";
     cmd = statement.split(" ").collect();
@@ -257,7 +425,15 @@ pub fn move_works() {
     // move int rv y
     let mut statement: &str = "var y int >> 30";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move int rv y";
     cmd = statement.split(" ").collect();
@@ -270,7 +446,15 @@ pub fn move_works() {
     // move str string z
     statement = "var z str >> ok";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move str string z";
     cmd = statement.split(" ").collect();
@@ -283,7 +467,15 @@ pub fn move_works() {
     // move str lxstring z
     statement = "var z str >> ok2";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move str lxstring z";
     cmd = statement.split(" ").collect();
@@ -337,7 +529,15 @@ pub fn move_works() {
 
     statement = "var test str vec >> [t, one]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move vec vec str test";
     cmd = statement.split(" ").collect();
@@ -361,7 +561,15 @@ pub fn move_works() {
 
     statement = "var test3 int vec >> [1.0, 3.0]";
     cmd = statement.split(" ").collect();
-    var::var(&mut stack, cmd, statement, &mut vars, &mut hash_vars, "0", 1);
+    var::var(
+        &mut stack,
+        cmd,
+        statement,
+        &mut vars,
+        &mut hash_vars,
+        "0",
+        1,
+    );
 
     statement = "move vec vec int test3";
     cmd = statement.split(" ").collect();

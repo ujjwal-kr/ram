@@ -117,13 +117,7 @@ pub fn pop(stack: &mut Vec<f64>, b: &str, l: u32) {
     stack.pop();
 }
 
-pub fn strfn(
-    stack: &mut Vec<f64>,
-    vars: &mut super::super::Vars,
-    cmd: Vec<&str>,
-    b: &str,
-    l: u32,
-) {
+pub fn strfn(stack: &mut Vec<f64>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
     }

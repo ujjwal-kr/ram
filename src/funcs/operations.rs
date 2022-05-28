@@ -82,13 +82,7 @@ pub fn sqrt(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars,
     }
 }
 
-pub fn round(
-    stack: &mut Vec<f64>,
-    cmd: Vec<&str>,
-    vars: &mut super::super::Vars,
-    b: &str,
-    l: u32,
-) {
+pub fn round(stack: &mut Vec<f64>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
     if cmd.len() > 1 {
         if cmd[1].trim() == "lx" || cmd[1].trim() == "rv" {
             if cmd[1].trim() == "lx" {

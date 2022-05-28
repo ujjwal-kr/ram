@@ -34,24 +34,25 @@ fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         line = line.trim();
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
-                panic!("No main label");
+                panic!("No main label at the beginning of the file.");
             }
             current_key = line.to_string();
             program.insert(line.to_string(), vec![]);
-            line = "";
-        }
-        let mut _new_vec: Vec<String> = vec![];
-        match program.get(current_key.trim()) {
-            Some(value) => _new_vec = value.to_vec(),
-            _ => panic!("program parsing error"),
-        }
-        if line != "" {
+        } else if line != "" && &line[..2] != "//" {
+            let mut _new_vec: Vec<String> = vec![];
+            match program.get(current_key.trim()) {
+                Some(value) => _new_vec = value.to_vec(),
+                _ => {
+                    println!("command '{}' not recognized", line);
+                    process::exit(1)
+                }
+            }
             _new_vec.push(line.to_string());
+            if let Some(x) = program.get_mut(current_key.trim()) {
+                *x = _new_vec;
+            }
+            i += 1;
         }
-        if let Some(x) = program.get_mut(current_key.trim()) {
-            *x = _new_vec;
-        }
-        i = i + 1;
     }
     program
 }
@@ -129,31 +130,17 @@ pub fn run_statement(
         _ => {
             println!("label '{}' not found", run_label);
             process::exit(1);
-        },
+        }
     }
 
     let mut stack: Vec<f64> = vec![];
     for statement in run_block {
         let statement = statement.trim();
-        line = line + 1;
+        line += 1;
         // skip tabs and split by spaces
-        let mut cmd: Vec<&str> = statement.split(" ").collect();
-        // comments
-        let lits: Vec<&str> = cmd[0].trim().split("").collect();
-        if lits[1] == "/" && lits[2] == "/" {
-            cmd[0] = "//";
-        }
+        let cmd: Vec<&str> = statement.split(" ").collect();
         match cmd[0].trim() {
-            "//" => (),
-            "" => (),
-            "print" => print::print(
-                &mut stack,
-                cmd,
-                &mut local_vars,
-                hash_vars,
-                run_label,
-                line,
-            ),
+            "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             "printc" => print::printc(cmd, statement, run_label, line),
             "ram" => stack::ram(
                 &mut stack,
@@ -187,24 +174,12 @@ pub fn run_statement(
             "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, run_label, line),
             "round" => operations::round(&mut stack, cmd, &mut local_vars, run_label, line),
             "avg" => operations::avg(&mut stack, run_label, line),
-            "rand" => stdfn::random(
-                &mut local_vars,
-                cmd,
-                &mut stack,
-                statement,
-                run_label,
-                line,
-            ),
+            "rand" => stdfn::random(&mut local_vars, cmd, &mut stack, statement, run_label, line),
             "split" => operations::split(cmd, statement, &mut local_vars, run_label, line),
             "parse" => stdfn::parse_int(&mut local_vars, cmd, run_label, line),
-            "vec" => operations::vec_ops(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                run_label,
-                line,
-            ),
+            "vec" => {
+                operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
+            }
             "cmp" => operations::cmp(&mut stack, run_label, line),
             "je" => jump::je(
                 &mut stack,
