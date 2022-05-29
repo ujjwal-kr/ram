@@ -110,11 +110,22 @@ pub fn ram(
     }
 }
 
-pub fn pop(stack: &mut Vec<f64>, b: &str, l: u32) {
+pub fn pop(stack: &mut Vec<f64>, cmd: Vec<&str>, b: &str, l: u32) {
     if stack.is_empty() {
         super::errors::stack_len_error(b, l);
     }
-    stack.pop();
+    if cmd.len() == 1 {
+        stack.pop();
+    } else if cmd.len() == 2 {
+        let pop_amount: usize = super::errors::parse_usize(cmd[1], b, l);
+        if pop_amount <= stack.len() {
+            for _n in 0..pop_amount {
+                stack.pop();
+            }
+        } else {
+            super::errors::stack_len_error(b, l);
+        }
+    }
 }
 
 pub fn strfn(stack: &mut Vec<f64>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {

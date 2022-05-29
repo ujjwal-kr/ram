@@ -1,17 +1,7 @@
 main:
-    ram 100
-    ram 200
-    add
-    print
-    jmp meow:
-
-super:
     ram 10
     ram 20
-    add
+    ram 40
+    ram 22222
+    pop 232
     print
-    printc >> super
-
-meow:
-    printc >> hello from meow
-    jmp super:

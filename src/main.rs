@@ -163,7 +163,7 @@ pub fn run_statement(
             "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
             "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
-            "pop" => stack::pop(&mut stack, run_label, line),
+            "pop" => stack::pop(&mut stack, cmd, run_label, line),
             "popall" => stack = vec![],
             "add" => operations::add(&mut stack, cmd, &mut local_vars, run_label, line),
             "sub" => operations::sub(&mut stack, run_label, line),

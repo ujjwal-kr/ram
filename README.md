@@ -130,7 +130,8 @@ Prints the characters specified on the screen
 - `str cmp` compares the variables `lxstring & strings` and pushes 0 to the stack if they are equal, and -1 if they are not.
 
 ### pop
-Removes the last value from the stack
+- `pop` Removes the last value from the stack
+- `pop <n>` Removes the last `n` values from the stack
 
 ### popall
 Empties the entire stack. Useful for `avg` implementation.
