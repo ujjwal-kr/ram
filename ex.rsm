@@ -3,7 +3,7 @@ main:
     ram 200
     add
     print
-    jmp meow:[]
+    jmp meow:
 
 super:
     ram 10

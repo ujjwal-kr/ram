@@ -28,7 +28,7 @@ pub struct HashVars {
 fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut program: HashMap<String, Vec<String>> = HashMap::new();
     let mut current_key: String = String::new();
-    let exp = Regex::new(r"^[a-zA-Z0-9]+:$").unwrap();
+    let exp = Regex::new(r"^[a-zA-Z0-9_]+:$").unwrap();
     let mut i = 0u32;
     for mut line in p_lines {
         line = line.trim();
@@ -137,7 +137,6 @@ pub fn run_statement(
     for statement in run_block {
         let statement = statement.trim();
         line += 1;
-        // skip tabs and split by spaces
         let cmd: Vec<&str> = statement.split(" ").collect();
         match cmd[0].trim() {
             "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
