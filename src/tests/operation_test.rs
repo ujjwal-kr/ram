@@ -225,11 +225,7 @@ fn split_works() {
     let statement: &str = "split >> \",\"";
     let cmd = statement.split(" ").collect();
     operations::split(cmd, statement, &mut vars, "0", 1);
-    assert_vec_str(
-        vars.str_vec,
-        ["one", "two", "three"].to_vec(),
-        statement,
-    );
+    assert_vec_str(vars.str_vec, ["one", "two", "three"].to_vec(), statement);
 }
 
 fn vec_ops_works() {

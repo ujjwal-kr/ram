@@ -261,91 +261,142 @@ pub fn var(
 }
 
 pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str, l: u32) {
-    if cmd.len() < 4 {
+    if cmd.len() < 6 {
         errors::args_error(b, l);
     }
+
+    // move int lx/rv = var <name>
+    //  move int var <name> = lx/rv
+
+    // move str string/lxstring = var <name>
+    // move str var <name> = string/lxstring
+
+    // move vec vec str = var <name>
+    // move vec vec int = var <name>
+    // move vec var <name> = vec int
+    // move vec var <name> = vec str
+
     match cmd[1] {
         "int" => match cmd[2] {
-            "lx" => match hash_vars.hash_int.get(&cmd[3].trim().to_string()) {
-                Some(&value) => vars.lx = value,
-                _ => errors::var_error(cmd[3], b, l),
-            },
-            "rv" => match hash_vars.hash_int.get(&cmd[3].trim().to_string()) {
-                Some(&value) => vars.rv = value,
-                _ => errors::var_error(cmd[3], b, l),
-            },
+            "lx" | "rv" => {
+                if cmd[3] != "=" || cmd[4] != "var" {
+                    errors::args_error(b, l);
+                }
+                if cmd[2] == "lx" {
+                    match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                        Some(&value) => vars.lx = value,
+                        _ => errors::var_error(cmd[5], b, l),
+                    }
+                } else {
+                    match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                        Some(&value) => vars.rv = value,
+                        _ => errors::var_error(cmd[5], b, l),
+                    }
+                }
+            }
+
             "var" => {
-                if cmd[4].trim() == "lx" {
-                    hash_vars
-                        .hash_int
-                        .insert(cmd[3].trim().to_string(), vars.lx);
-                } else if cmd[4].trim() == "rv" {
-                    hash_vars
-                        .hash_int
-                        .insert(cmd[3].trim().to_string(), vars.rv);
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
+                }
+                match cmd[5] {
+                    "lx" => {
+                        hash_vars
+                            .hash_int
+                            .insert(cmd[3].trim().to_string(), vars.lx);
+                    }
+                    "rv" => {
+                        hash_vars
+                            .hash_int
+                            .insert(cmd[3].trim().to_string(), vars.rv);
+                    }
+                    _ => errors::args_error(b, l),
                 }
             }
             _ => errors::args_error(b, l),
         },
+
         "str" => match cmd[2] {
-            "string" => match hash_vars.hash_str.get(cmd[3].trim()) {
-                Some(value) => {
-                    vars.string = value.to_string();
+            "string" | "lxstring" => {
+                if cmd[3] != "=" || cmd[4] != "var" {
+                    errors::args_error(b, l);
                 }
-                _ => {
-                    errors::var_error(cmd[3].trim(), b, l);
+                if cmd[2] == "string" {
+                    match hash_vars.hash_str.get(cmd[5].trim()) {
+                        Some(value) => {
+                            vars.string = value.to_string();
+                        }
+                        _ => {
+                            errors::var_error(cmd[5].trim(), b, l);
+                        }
+                    }
+                } else {
+                    match hash_vars.hash_str.get(cmd[5].trim()) {
+                        Some(value) => vars.lxstring = value.to_string(),
+                        _ => {
+                            errors::var_error(cmd[5].trim(), b, l);
+                        }
+                    }
                 }
-            },
-            "lxstring" => match hash_vars.hash_str.get(cmd[3].trim()) {
-                Some(value) => vars.lxstring = value.to_string(),
-                _ => {
-                    errors::var_error(cmd[3].trim(), b, l);
+            }
+            "var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
                 }
-            },
-            "var" => match cmd[4] {
-                "lxstring" => {
-                    hash_vars
-                        .hash_str
-                        .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                match cmd[5] {
+                    "lxstring" => {
+                        hash_vars
+                            .hash_str
+                            .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                    }
+                    "string" => {
+                        hash_vars
+                            .hash_str
+                            .insert(cmd[3].trim().to_string(), vars.string.clone());
+                    }
+                    _ => errors::args_error(b, l),
                 }
-                "string" => {
-                    hash_vars
-                        .hash_str
-                        .insert(cmd[3].trim().to_string(), vars.string.clone());
-                }
-                _ => errors::args_error(b, l),
-            },
+            }
             _ => errors::args_error(b, l),
         },
         "vec" => match cmd[2] {
-            "vec" => {
-                if cmd[3] == "str" {
-                    match hash_vars.hash_str_vec.get(cmd[4].trim()) {
-                        Some(value) => vars.str_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[5].trim(), b, l),
+            "vec" => match cmd[3] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "var" {
+                        errors::args_error(b, l);
                     }
-                } else if cmd[3] == "int" {
-                    match hash_vars.hash_int_vec.get(cmd[4].trim()) {
-                        Some(value) => vars.num_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[5].trim(), b, l),
+                    if cmd[3] == "str" {
+                        match hash_vars.hash_str_vec.get(cmd[6].trim()) {
+                            Some(value) => vars.str_vec = value.to_vec(),
+                            _ => errors::var_error(cmd[6].trim(), b, l),
+                        }
+                    } else {
+                        match hash_vars.hash_int_vec.get(cmd[6].trim()) {
+                            Some(value) => vars.num_vec = value.to_vec(),
+                            _ => errors::var_error(cmd[6].trim(), b, l),
+                        }
                     }
-                } else {
-                    errors::args_error(b, l);
                 }
-            }
-            "var" => {
-                if cmd[5].trim() == "str" {
-                    hash_vars
-                        .hash_str_vec
-                        .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
-                } else if cmd[5].trim() == "int" {
-                    hash_vars
-                        .hash_int_vec
-                        .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
-                } else {
-                    errors::args_error(b, l);
+                _ => errors::args_error(b, l),
+            },
+            "var" => match cmd[6] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "vec" {
+                        errors::args_error(b, l);
+                    }
+
+                    if cmd[6] == "str" {
+                        hash_vars
+                            .hash_str_vec
+                            .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
+                    } else {
+                        hash_vars
+                            .hash_int_vec
+                            .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
+                    }
                 }
-            }
+                _ => errors::args_error(b, l),
+            },
             _ => errors::args_error(b, l),
         },
         _ => errors::args_error(b, l),

@@ -400,7 +400,8 @@ pub fn move_works() {
 
     let mut stack: Vec<f64> = vec![];
 
-    // move int lx x
+    // move int lx = var <name>
+
     let mut statement: &str = "var x int >> 40";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     var::var(
@@ -413,7 +414,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move int lx x";
+    statement = "move int lx = var x";
     cmd = statement.split(" ").collect();
 
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
@@ -422,7 +423,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move int rv y
+    // move int rv = var y
     let mut statement: &str = "var y int >> 30";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     var::var(
@@ -435,7 +436,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move int rv y";
+    statement = "move int rv = var y";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_int.get("y") {
@@ -443,7 +444,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move str string z
+    // move str string  = var z
     statement = "var z str >> ok";
     cmd = statement.split(" ").collect();
     var::var(
@@ -456,7 +457,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move str string z";
+    statement = "move str string = var z";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str.get("z") {
@@ -464,7 +465,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move str lxstring z
+    // move str lxstring = var z
     statement = "var z str >> ok2";
     cmd = statement.split(" ").collect();
     var::var(
@@ -477,7 +478,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move str lxstring z";
+    statement = "move str lxstring = var z";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str.get("z") {
@@ -485,9 +486,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move str var exm string
+    // move str var exm = string
     vars.string = "hello".to_string();
-    statement = "move str var exm string";
+    statement = "move str var exm = string";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str.get("exm") {
@@ -495,9 +496,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move str var lxstr lxstring
+    // move str var lxstr = lxstring
     vars.lxstring = "hello2".to_string();
-    statement = "move str var lxstr lxstring";
+    statement = "move str var lxstr = lxstring";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str.get("lxstr") {
@@ -505,9 +506,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move int var testint lx
+    // move int var testint = lx
     vars.lx = 15.0;
-    statement = "move int var testint lx";
+    statement = "move int var testint = lx";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_int.get("testint") {
@@ -515,9 +516,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move int var testint rv
+    // move int var testint = rv
     vars.rv = 16.0;
-    statement = "move int var testint rv";
+    statement = "move int var testint = rv";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_int.get("testint") {
@@ -525,7 +526,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec vec str test
+    // move vec vec str = var test
 
     statement = "var test str vec >> [t, one]";
     cmd = statement.split(" ").collect();
@@ -539,7 +540,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move vec vec str test";
+    statement = "move vec vec str = var test";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str_vec.get("test") {
@@ -547,9 +548,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec var test2 vec str
+    // move vec var test2 = vec str
     vars.str_vec = ["one".to_string(), "two".to_string()].to_vec();
-    statement = "move vec var test2 vec str";
+    statement = "move vec var test2 = vec str";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_str_vec.get("test2") {
@@ -557,7 +558,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec vec int test3
+    // move vec vec int = var test3
 
     statement = "var test3 int vec >> [1.0, 3.0]";
     cmd = statement.split(" ").collect();
@@ -571,7 +572,7 @@ pub fn move_works() {
         1,
     );
 
-    statement = "move vec vec int test3";
+    statement = "move vec vec int = var test3";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_int_vec.get("test3") {
@@ -579,9 +580,9 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move vec var test4 vec int
+    // move vec var test4 = vec int
     vars.num_vec = [1.6, 2.7].to_vec();
-    statement = "move vec var test4 vec int";
+    statement = "move vec var test4 = vec int";
     cmd = statement.split(" ").collect();
     var::movefn(cmd, &mut vars, &mut hash_vars, "0", 1);
     match hash_vars.hash_int_vec.get("test4") {

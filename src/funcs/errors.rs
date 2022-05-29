@@ -2,10 +2,14 @@ use std::process;
 
 pub fn parse_float(arg: &str, run_label: &str, line: u32) -> f64 {
     let num: f64;
-    num = arg
-        .trim()
-        .parse()
-        .expect(format!("Input a number at '{}' line: {}", run_label, line.to_string()).trim());
+    num = arg.trim().parse().expect(
+        format!(
+            "Input a number at '{}' line: {}",
+            run_label,
+            line.to_string()
+        )
+        .trim(),
+    );
     num
 }
 
