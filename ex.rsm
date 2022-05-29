@@ -3,5 +3,5 @@ main:
     ram 20
     ram 40
     ram 22222
-    pop 232
+    pop  2
     print

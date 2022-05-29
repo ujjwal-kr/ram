@@ -137,7 +137,7 @@ pub fn run_statement(
     for statement in run_block {
         let statement = statement.trim();
         line += 1;
-        let cmd: Vec<&str> = statement.split(" ").collect();
+        let cmd: Vec<&str> = statement.split_whitespace().collect();
         match cmd[0].trim() {
             "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             "printc" => print::printc(cmd, statement, run_label, line),
