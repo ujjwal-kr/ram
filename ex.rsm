@@ -1,7 +1,3 @@
 main:
-    ram 10
-    ram 20
-    ram 40
-    ram 22222
-    pop  2
-    print
+    var kek str >> hmm
+    print var kek str
