@@ -72,10 +72,10 @@ NOTE: These variables are truly global. They can change from a block without cal
 - `print lx/rv` prints the value of `lx/rv` variables on the screen.
 - `print string/lxstring` prints the value of `string/lxstring` variables on the screen.
 - `print vec str/vec int` prints the value of `vec str/vec int` variables on the screen.
-- `print var str <hash_str_var>` prints the value of `hash_str_var` variable on the screen.
-- `print var int <hash_int_var>` prints the value of `hash_int_var` variable on the screen.
-- `print var str vec <hash_str_vec_var>` prints the value of `hash_str_vec_var` variable on the screen.
-- `print var int vec <hash_int_vec_var>` prints the value of `hash_int_vec_var` variable on the screen.
+- `print var <hash_str_var> str` prints the value of `hash_str_var` variable on the screen.
+- `print var <hash_int_var> int` prints the value of `hash_int_var` variable on the screen.
+- `print var <hash_str_vec_var> str vec` prints the value of `hash_str_vec_var` variable on the screen.
+- `print var <hash_int_vec_var> int vec` prints the value of `hash_int_vec_var` variable on the screen.
 
 ### printc >> characters
 Prints the characters specified on the screen
