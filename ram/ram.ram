@@ -14,7 +14,7 @@ program_loop:
 program_router:
     // send command to cmd vec
     var cmd str vec >> [nil]
-    move vec var cmd vec str
+    move vec var cmd = vec str
     var cmd str vec string >> [var i]
     // call lexer + parser
     jmp main_router:
@@ -63,9 +63,9 @@ ram:
     var stack int vec push >> lx
 
 pop:
-    move vec vec int stack
+    move vec vec int = var stack
     vec int pop
-    move vec var stack vec int
+    move vec var stack = vec int
 
 print:
     var stack int vec len
@@ -84,8 +84,7 @@ add:
     ram lx prev
     var add_num_1 int >> 0
     var stack int vec var add_num_1 >> [lx]
-    pop
-    pop
+    pop 2
     ram 2
     sub
     // emits -2 idx
@@ -106,8 +105,7 @@ sub:
     ram lx prev
     var sub_num_1 int >> 0
     var stack int vec var sub_num_1 >> [lx]
-    pop
-    pop
+    pop 2
     ram 2
     sub
     // emits -2 idx
@@ -128,8 +126,7 @@ mul:
     ram lx prev
     var mul_num_1 int >> 0
     var stack int vec var mul_num_1 >> [lx]
-    pop
-    pop
+    pop 2
     ram 2
     sub
     // emits -2 idx
@@ -150,8 +147,7 @@ div:
     ram lx prev
     var div_num_1 int >> 0
     var stack int vec var div_num_1 >> [lx]
-    pop
-    pop
+    pop 2
     ram 2
     sub
     // emits -2 idx

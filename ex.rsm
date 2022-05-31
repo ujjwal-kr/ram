@@ -1,3 +1,5 @@
 main:
-    var kek str >> hmm
-    print var kek str
+    ram 100
+    ram 200
+    sub
+    print
