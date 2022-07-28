@@ -197,7 +197,7 @@ pub fn ram_works() {
     );
 
     // ram var <name> -> pushes the int var name into the stack
-    statement = "var test int >> 15";
+    statement = "global_var test int >> 15";
     cmd = statement.split(" ").collect();
     var::global_var(
         &mut stack,
@@ -209,7 +209,7 @@ pub fn ram_works() {
         1,
     );
     stack = vec![];
-    statement = "ram var test";
+    statement = "ram global_var test";
     cmd = statement.split(" ").collect();
     stack::ram(
         &mut stack,
@@ -229,7 +229,7 @@ pub fn ram_works() {
     // ram var <name> prev -> stores the last value of stack to <name>
     stack = vec![];
     stack.push(2.0);
-    statement = "ram var test prev";
+    statement = "ram global_var test prev";
     cmd = statement.split(" ").collect();
     stack::ram(
         &mut stack,

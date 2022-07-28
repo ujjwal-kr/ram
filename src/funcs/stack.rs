@@ -105,7 +105,24 @@ pub fn ram(
                         .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
                 }
             }
-        }
+        },
+
+        "var" => {
+            if cmd.len() < 3 {
+                errors::args_error(b, l);
+            }
+            if cmd.len() == 3 {
+                match vars.var_int.get(cmd[2].trim()) {
+                    Some(&value) => stack.push(value),
+                    _ => super::errors::var_error(cmd[2].trim(), b, l),
+                }
+            } else {
+                if cmd[3].trim() == "prev" {
+                    vars.var_int
+                        .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
+                }
+            }
+        },
         _ => stack.push(errors::parse_float(cmd[1], b, l)),
     }
 }
