@@ -16,6 +16,8 @@ pub fn test() {
     str_works();
     test_log("operations");
     operation_works();
+    test_log("global var");
+    global_var_works();
     test_log("var");
     var_works();
     test_log("move");

@@ -2,6 +2,17 @@ use super::super::errors;
 use super::super::HashVars;
 use super::super::Vars;
 
+pub fn var(
+    stack: &mut Vec<f64>,
+    cmd: Vec<&str>,
+    statement: &str,
+    vars: &mut Vars,
+    hash_vars: &mut HashVars,
+    b: &str,
+    l: u32,
+) {
+}
+
 pub fn global_var(
     stack: &mut Vec<f64>,
     cmd: Vec<&str>,
