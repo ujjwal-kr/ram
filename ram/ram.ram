@@ -1,28 +1,28 @@
 main:
     stdfs open >> ./ram/test.txt
     split string >> "\n"
-    var stack int vec >> [0]
-    var i int >> 0
+    global_var stack int vec >> [0]
+    global_var i int >> 0
     jmp program_loop:
 
 program_loop:
     vec str len
-    ram var i
+    ram global_var i
     cmp
     jne program_router:
 
 program_router:
     // send command to cmd vec
-    var cmd str vec >> [nil]
-    move vec var cmd = vec str
-    var cmd str vec string >> [var i]
+    global_var cmd str vec >> [nil]
+    move vec global_var cmd = vec str
+    global_var cmd str vec string >> [global_var i]
     // call lexer + parser
     jmp main_router:
     // increment the loop
     ram 1
-    ram var i
+    ram global_var i
     add
-    ram var i prev
+    ram global_var i prev
     jmp program_loop:
 
 main_router:
@@ -60,102 +60,102 @@ main_router:
 ram:
     vec str >> [1]
     parse int lx string
-    var stack int vec push >> lx
+    global_var stack int vec push >> lx
 
 pop:
-    move vec vec int = var stack
+    move vec vec int = global_var stack
     vec int pop
-    move vec var stack = vec int
+    move vec global_var stack = vec int
 
 print:
-    var stack int vec len
+    global_var stack int vec len
     ram 1
     sub
     ram lx prev
     // store the last item of stack in string
-    var stack int vec rv >> [lx]
+    global_var stack int vec rv >> [lx]
     print rv
 
 add:
-    var stack int vec len
+    global_var stack int vec len
     ram 1
     sub
     // emits -1 idx
     ram lx prev
-    var add_num_1 int >> 0
-    var stack int vec var add_num_1 >> [lx]
+    global_var add_num_1 int >> 0
+    global_var stack int vec global_var add_num_1 >> [lx]
     pop 2
     ram 2
     sub
     // emits -2 idx
     ram lx prev
-    var add_num_2 int >> 0
-    var stack int vec var add_num_2 >> [lx]
-    ram var add_num_1
-    ram var add_num_2
+    global_var add_num_2 int >> 0
+    global_var stack int vec global_var add_num_2 >> [lx]
+    ram global_var add_num_1
+    ram global_var add_num_2
     add
     ram lx prev
-    var stack int vec push >> lx
+    global_var stack int vec push >> lx
 
 sub: 
-    var stack int vec len
+    global_var stack int vec len
     ram 1
     sub
     // emits -1 idx
     ram lx prev
-    var sub_num_1 int >> 0
-    var stack int vec var sub_num_1 >> [lx]
+    global_var sub_num_1 int >> 0
+    global_var stack int vec global_var sub_num_1 >> [lx]
     pop 2
     ram 2
     sub
     // emits -2 idx
     ram lx prev
-    var sub_num_2 int >> 0
-    var stack int vec var sub_num_2 >> [lx]
-    ram var sub_num_2
-    ram var sub_num_1
+    global_var sub_num_2 int >> 0
+    global_var stack int vec global_var sub_num_2 >> [lx]
+    ram global_var sub_num_2
+    ram global_var sub_num_1
     sub
     ram lx prev
-    var stack int vec push >> lx
+    global_var stack int vec push >> lx
 
 mul:
-    var stack int vec len
+    global_var stack int vec len
     ram 1
     sub
     // emits -1 idx
     ram lx prev
-    var mul_num_1 int >> 0
-    var stack int vec var mul_num_1 >> [lx]
+    global_var mul_num_1 int >> 0
+    global_var stack int vec global_var mul_num_1 >> [lx]
     pop 2
     ram 2
     sub
     // emits -2 idx
     ram lx prev
-    var mul_num_2 int >> 0
-    var stack int vec var mul_num_2 >> [lx]
-    ram var mul_num_1
-    ram var mul_num_2
+    global_var mul_num_2 int >> 0
+    var stack int vec global_var mul_num_2 >> [lx]
+    ram global_var mul_num_1
+    ram global_var mul_num_2
     mul
     ram lx prev
-    var stack int vec push >> lx
+    global_var stack int vec push >> lx
 
 div: 
-    var stack int vec len
+    global_var stack int vec len
     ram 1
     sub
     // emits -1 idx
     ram lx prev
-    var div_num_1 int >> 0
-    var stack int vec var div_num_1 >> [lx]
+    global_var div_num_1 int >> 0
+    global_var stack int vec global_var div_num_1 >> [lx]
     pop 2
     ram 2
     sub
     // emits -2 idx
     ram lx prev
-    var div_num_2 int >> 0
-    var stack int vec var div_num_2 >> [lx]
-    ram var div_num_2
-    ram var div_num_1
+    global_var div_num_2 int >> 0
+    global_var stack int vec global_var div_num_2 >> [lx]
+    ram global_var div_num_2
+    ram global_var div_num_1
     div
     ram lx prev
-    var stack int vec push >> lx
+    global_var stack int vec push >> lx
