@@ -5,7 +5,6 @@ use std::{env, f64, fs, io, path::Path, process};
 mod funcs;
 mod tests;
 mod lex;
-use lex::populate_labels;
 use funcs::{errors, jump, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
@@ -52,7 +51,7 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
-    let program: HashMap<String, Vec<String>> = populate_labels(p_lines);
+    let program: HashMap<String, Vec<String>> = lex::populate_labels(p_lines);
 
     let vars = Vars {
         lx: 0.0,
@@ -69,14 +68,14 @@ fn main() -> std::io::Result<()> {
         hash_int_vec: HashMap::new(),
         hash_str_vec: HashMap::new(),
     };
-    match run_statement(program, "main:", vars, &mut hash_vars) {
+    match execute_block(program, "main:", vars, &mut hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
     Ok(())
 }
 
-pub fn run_statement(
+pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
     vars: Vars,

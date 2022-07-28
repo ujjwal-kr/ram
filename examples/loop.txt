@@ -6,9 +6,9 @@ main:
     add
     ram lx prev
     print
-    ram 500
+    ram 20000
     cmp
-    je halt:
+    je halt
     jmp main:
 
 halt:
