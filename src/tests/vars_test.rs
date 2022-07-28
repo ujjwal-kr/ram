@@ -199,7 +199,7 @@ pub fn global_var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    statement = "global_var test str vec push >> var name";
+    statement = "global_var test str vec push >> global_var name";
     cmd = statement.split(" ").collect();
     var::global_var(
         &mut stack,
@@ -594,7 +594,7 @@ pub fn var_works() {
 
     statement = "var test int vec lx >> [1]";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -670,7 +670,7 @@ pub fn var_works() {
 
     statement = "var test str vec var name >> [2]";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -874,7 +874,7 @@ pub fn move_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    // move int var testint = lx
+    // move int global_var testint = lx
     vars.lx = 15.0;
     statement = "move int global_var testint = lx";
     cmd = statement.split(" ").collect();

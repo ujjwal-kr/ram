@@ -67,7 +67,7 @@ pub fn global_var(
                             }
                         }
 
-                        "var" => {
+                        "global_var" => {
                             let mut var_value: String = "".to_string();
                             match hash_vars.hash_str.get(cmd[7].trim()) {
                                 Some(value) => var_value = value.to_string(),
@@ -115,7 +115,7 @@ pub fn global_var(
 
                     vars.lxstring = var_vec[index].clone();
                 }
-                "var" => {
+                "global_var" => {
                     let mut var_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -188,7 +188,7 @@ pub fn global_var(
                                 *x = new_vec;
                             }
                         }
-                        "var" => {
+                        "global_var" => {
                             let mut var_value: f64 = 0.0;
                             match hash_vars.hash_int.get(cmd[7].trim()) {
                                 Some(&value) => var_value = value,
@@ -206,7 +206,7 @@ pub fn global_var(
                     let mut var_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[7].trim(), b, l),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
                     }
 
                     let lits: Vec<&str> = statement.split(">>").collect();
@@ -236,7 +236,7 @@ pub fn global_var(
 
                     vars.rv = var_vec[index];
                 }
-                "var" => {
+                "global_var" => {
                     let mut var_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -290,7 +290,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
     match cmd[1] {
         "int" => match cmd[2] {
             "lx" | "rv" => {
-                if cmd[3] != "=" || cmd[4] != "var" {
+                if cmd[3] != "=" || cmd[4] != "global_var" {
                     errors::args_error(b, l);
                 }
                 if cmd[2] == "lx" {
@@ -306,7 +306,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                 }
             }
 
-            "var" => {
+            "global_var" => {
                 if cmd[4] != "=" {
                     errors::args_error(b, l);
                 }
@@ -329,7 +329,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
 
         "str" => match cmd[2] {
             "string" | "lxstring" => {
-                if cmd[3] != "=" || cmd[4] != "var" {
+                if cmd[3] != "=" || cmd[4] != "global_var" {
                     errors::args_error(b, l);
                 }
                 if cmd[2] == "string" {
@@ -350,7 +350,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                     }
                 }
             }
-            "var" => {
+            "global_var" => {
                 if cmd[4] != "=" {
                     errors::args_error(b, l);
                 }
@@ -373,7 +373,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
         "vec" => match cmd[2] {
             "vec" => match cmd[3] {
                 "str" | "int" => {
-                    if cmd[4] != "=" || cmd[5] != "var" {
+                    if cmd[4] != "=" || cmd[5] != "global_var" {
                         errors::args_error(b, l);
                     }
                     if cmd[3] == "str" {
@@ -390,7 +390,7 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                 }
                 _ => errors::args_error(b, l),
             },
-            "var" => match cmd[6] {
+            "global_var" => match cmd[6] {
                 "str" | "int" => {
                     if cmd[4] != "=" || cmd[5] != "vec" {
                         errors::args_error(b, l);
