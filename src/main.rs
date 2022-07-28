@@ -15,6 +15,10 @@ pub struct Vars {
     pub lxstring: String,
     pub str_vec: Vec<String>,
     pub num_vec: Vec<f64>,
+    pub var_str: HashMap<String, String>,
+    pub var_int: HashMap<String, f64>,
+    pub var_str_vec: HashMap<String, Vec<String>>,
+    pub var_int_vec: HashMap<String, Vec<f64>>,
 }
 
 #[derive(Clone)]
@@ -60,6 +64,10 @@ fn main() -> std::io::Result<()> {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
     let mut hash_vars = HashVars {
@@ -90,6 +98,10 @@ pub fn execute_block(
         lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
     let run_block: Vec<String>;
@@ -118,7 +130,7 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
-            "var" => var::var(
+            "global_var" => var::global_var(
                 &mut stack,
                 cmd,
                 statement,

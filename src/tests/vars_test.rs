@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 pub fn var_works() {
     // var x str >> something
-    let mut statement = "var x str >> something";
+    let mut statement = "global_var x str >> something";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     let mut stack: Vec<f64> = vec![];
 
@@ -22,9 +22,13 @@ pub fn var_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -39,9 +43,9 @@ pub fn var_works() {
     }
 
     // var y int >> 50
-    statement = "var y int >> 50";
+    statement = "global_var y int >> 50";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -56,9 +60,9 @@ pub fn var_works() {
     }
 
     // var w int vec >> [10, 13, 12]
-    statement = "var w int vec >> [10, 13]";
+    statement = "global_var w int vec >> [10, 13]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -73,9 +77,9 @@ pub fn var_works() {
     }
 
     // var v str vec >> [one,two]
-    statement = "var v str vec >> [one,two]";
+    statement = "global_var v str vec >> [one,two]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -98,9 +102,9 @@ pub fn var_works() {
         .hash_int_vec
         .insert("test".to_string(), [0.0].to_vec());
 
-    statement = "var test int vec push >> lx";
+    statement = "global_var test int vec push >> lx";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -114,9 +118,9 @@ pub fn var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    statement = "var test int vec push >> rv";
+    statement = "global_var test int vec push >> rv";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -130,9 +134,9 @@ pub fn var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    statement = "var test int vec push >> var name";
+    statement = "global_var test int vec push >> var name";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -157,9 +161,9 @@ pub fn var_works() {
         .hash_str_vec
         .insert("test".to_string(), ["".to_string()].to_vec());
 
-    statement = "var test str vec push >> string";
+    statement = "global_var test str vec push >> string";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -177,9 +181,9 @@ pub fn var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    statement = "var test str vec push >> lxstring";
+    statement = "global_var test str vec push >> lxstring";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -197,9 +201,9 @@ pub fn var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-    statement = "var test str vec push >> var name";
+    statement = "global_var test str vec push >> var name";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -224,9 +228,9 @@ pub fn var_works() {
         .insert("test".to_string(), [1.0, 1.1, 2.1].to_vec());
     hash_vars.hash_int.insert("name".to_string(), 0.0);
 
-    statement = "var test int vec lx >> [1]";
+    statement = "global_var test int vec lx >> [1]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -237,9 +241,9 @@ pub fn var_works() {
     );
     assert_f64(vars.lx, 1.1, statement);
 
-    statement = "var test int vec rv >> [0]";
+    statement = "global_var test int vec rv >> [0]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -250,9 +254,9 @@ pub fn var_works() {
     );
     assert_f64(vars.rv, 1.0, statement);
 
-    statement = "var test int vec var name >> [2]";
+    statement = "global_var test int vec var name >> [2]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -276,9 +280,9 @@ pub fn var_works() {
         .hash_str
         .insert("name".to_string(), "".to_string());
 
-    statement = "var test str vec string >> [0]";
+    statement = "global_var test str vec string >> [0]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -289,9 +293,9 @@ pub fn var_works() {
     );
     assert_str(vars.string.trim(), "r", statement);
 
-    statement = "var test str vec lxstring >> [1]";
+    statement = "global_var test str vec lxstring >> [1]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -302,9 +306,9 @@ pub fn var_works() {
     );
     assert_str(vars.lxstring.trim(), "a", statement);
 
-    statement = "var test str vec var name >> [2]";
+    statement = "global_var test str vec var name >> [2]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -320,9 +324,9 @@ pub fn var_works() {
 
     // var <name_vec> int vec len -> pushes the length of <name_vec> into the stack
 
-    statement = "var test int vec >> [1,3, 12, 14]";
+    statement = "global_var test int vec >> [1,3, 12, 14]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -332,9 +336,9 @@ pub fn var_works() {
         1,
     );
 
-    statement = "var test int vec len";
+    statement = "global_var test int vec len";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -351,9 +355,9 @@ pub fn var_works() {
 
     // var <name_vec> str vec len -> pushes the length of <name_vec> into the stack
 
-    statement = "var test str vec >> [one,two, three]";
+    statement = "global_var test str vec >> [one,two, three]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -363,9 +367,9 @@ pub fn var_works() {
         1,
     );
 
-    statement = "var test str vec len";
+    statement = "global_var test str vec len";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -389,6 +393,10 @@ pub fn move_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
     let mut hash_vars = super::super::HashVars {
@@ -402,9 +410,9 @@ pub fn move_works() {
 
     // move int lx = var <name>
 
-    let mut statement: &str = "var x int >> 40";
+    let mut statement: &str = "global_var x int >> 40";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -424,9 +432,9 @@ pub fn move_works() {
     }
 
     // move int rv = var y
-    let mut statement: &str = "var y int >> 30";
+    let mut statement: &str = "global_var y int >> 30";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -445,9 +453,9 @@ pub fn move_works() {
     }
 
     // move str string  = var z
-    statement = "var z str >> ok";
+    statement = "global_var z str >> ok";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -466,9 +474,9 @@ pub fn move_works() {
     }
 
     // move str lxstring = var z
-    statement = "var z str >> ok2";
+    statement = "global_var z str >> ok2";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -528,9 +536,9 @@ pub fn move_works() {
 
     // move vec vec str = var test
 
-    statement = "var test str vec >> [t, one]";
+    statement = "global_var test str vec >> [t, one]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -560,9 +568,9 @@ pub fn move_works() {
 
     // move vec vec int = var test3
 
-    statement = "var test3 int vec >> [1.0, 3.0]";
+    statement = "global_var test3 int vec >> [1.0, 3.0]";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,

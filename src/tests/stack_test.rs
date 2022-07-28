@@ -15,6 +15,10 @@ pub fn ram_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
     let mut hash_vars = super::super::HashVars {
@@ -195,7 +199,7 @@ pub fn ram_works() {
     // ram var <name> -> pushes the int var name into the stack
     statement = "var test int >> 15";
     cmd = statement.split(" ").collect();
-    var::var(
+    var::global_var(
         &mut stack,
         cmd,
         statement,
@@ -254,6 +258,10 @@ pub fn str_works() {
         lxstring: "".to_string(),
         num_vec: vec![],
         str_vec: vec![],
+        var_str: HashMap::new(),
+        var_int: HashMap::new(),
+        var_str_vec: HashMap::new(),
+        var_int_vec: HashMap::new()
     };
 
     vars.string = "helloworld".to_string();
