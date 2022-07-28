@@ -89,7 +89,7 @@ pub fn ram(
             }
         }
 
-        "var" => {
+        "global_var" => {
             if cmd.len() < 3 {
                 errors::args_error(b, l);
             }
