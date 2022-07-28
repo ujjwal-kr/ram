@@ -20,8 +20,10 @@ pub fn test() {
     global_var_works();
     test_log("var");
     var_works();
-    test_log("move");
+    test_log("global move");
     move_works();
+    test_log("local move");
+    local_move_works();
 }
 
 pub fn test_log(string: &str) {

@@ -18,7 +18,7 @@ pub fn ram_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     let mut hash_vars = super::super::HashVars {
@@ -261,7 +261,7 @@ pub fn str_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     vars.string = "helloworld".to_string();

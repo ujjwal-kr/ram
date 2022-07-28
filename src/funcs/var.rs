@@ -32,8 +32,7 @@ pub fn var(
                     for item in data_vec {
                         str_vec.push(item.to_string());
                     }
-                    vars.var_str_vec
-                        .insert(cmd[1].trim().to_string(), str_vec);
+                    vars.var_str_vec.insert(cmd[1].trim().to_string(), str_vec);
                 }
                 "push" => {
                     let mut new_vec: Vec<String> = vec![];
@@ -152,8 +151,7 @@ pub fn var(
                     for item in data_vec {
                         num_vec.push(errors::parse_float(item, b, l));
                     }
-                    vars.var_int_vec
-                        .insert(cmd[1].trim().to_string(), num_vec);
+                    vars.var_int_vec.insert(cmd[1].trim().to_string(), num_vec);
                 }
                 "push" => {
                     let mut new_vec: Vec<f64> = vec![];
@@ -237,8 +235,7 @@ pub fn var(
                         errors::invalid_index(b, l, index);
                     }
 
-                    vars.var_int
-                        .insert(cmd[5].to_string(), var_vec[index]);
+                    vars.var_int.insert(cmd[5].to_string(), var_vec[index]);
                 }
                 "len" => match vars.var_int_vec.get(cmd[1].trim()) {
                     Some(value) => stack.push(errors::parse_float(

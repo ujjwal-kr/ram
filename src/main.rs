@@ -3,8 +3,8 @@ use std::io::prelude::*;
 use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
-mod tests;
 mod lex;
+mod tests;
 use funcs::{errors, jump, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
@@ -67,7 +67,7 @@ fn main() -> std::io::Result<()> {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     let mut hash_vars = HashVars {
@@ -101,7 +101,7 @@ pub fn execute_block(
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     let run_block: Vec<String>;

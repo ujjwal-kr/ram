@@ -2,7 +2,6 @@ use regex::Regex;
 use std::collections::HashMap;
 use std::process;
 
-
 pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut program: HashMap<String, Vec<String>> = HashMap::new();
     let mut current_key: String = String::new();

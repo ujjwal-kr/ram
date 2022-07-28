@@ -105,7 +105,7 @@ pub fn ram(
                         .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
                 }
             }
-        },
+        }
 
         "var" => {
             if cmd.len() < 3 {
@@ -122,7 +122,7 @@ pub fn ram(
                         .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
                 }
             }
-        },
+        }
         _ => stack.push(errors::parse_float(cmd[1], b, l)),
     }
 }
