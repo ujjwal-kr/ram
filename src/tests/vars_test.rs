@@ -986,7 +986,7 @@ pub fn local_move_works() {
 
     let mut statement: &str = "var x int >> 40";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -1008,7 +1008,7 @@ pub fn local_move_works() {
     // move int rv = var y
     let mut statement: &str = "var y int >> 30";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -1029,7 +1029,7 @@ pub fn local_move_works() {
     // move str string  = var z
     statement = "var z str >> ok";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -1050,7 +1050,7 @@ pub fn local_move_works() {
     // move str lxstring = var z
     statement = "var z str >> ok2";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -1112,7 +1112,7 @@ pub fn local_move_works() {
 
     statement = "var test str vec >> [t, one]";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,
@@ -1144,7 +1144,7 @@ pub fn local_move_works() {
 
     statement = "var test3 int vec >> [1.0, 3.0]";
     cmd = statement.split(" ").collect();
-    var::global_var(
+    var::var(
         &mut stack,
         cmd,
         statement,

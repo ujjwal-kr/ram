@@ -519,18 +519,33 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
     match cmd[1] {
         "int" => match cmd[2] {
             "lx" | "rv" => {
-                if cmd[3] != "=" || cmd[4] != "global_var" {
+                if cmd[3] != "=" || cmd[4] != "global_var" && cmd[4] != "var" {
                     errors::args_error(b, l);
                 }
                 if cmd[2] == "lx" {
-                    match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
-                        Some(&value) => vars.lx = value,
-                        _ => errors::var_error(cmd[5], b, l),
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.lx = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+
+                        "var" => match vars.var_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.lx = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        _ => errors::args_error(b, l),
                     }
                 } else {
-                    match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
-                        Some(&value) => vars.rv = value,
-                        _ => errors::var_error(cmd[5], b, l),
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.rv = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        "var" => match vars.var_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.rv = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        _ => errors::args_error(b, l),
                     }
                 }
             }
@@ -552,30 +567,75 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                     }
                     _ => errors::args_error(b, l),
                 }
+            },
+            
+            "var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
+                }
+                match cmd[5] {
+                    "lx" => {
+                        vars.var_int
+                            .insert(cmd[3].trim().to_string(), vars.lx);
+                    }
+                    "rv" => {
+                        vars.var_int
+                            .insert(cmd[3].trim().to_string(), vars.rv);
+                    }
+                    _ => errors::args_error(b, l),
+                }
             }
             _ => errors::args_error(b, l),
         },
 
         "str" => match cmd[2] {
             "string" | "lxstring" => {
-                if cmd[3] != "=" || cmd[4] != "global_var" {
+                if cmd[3] != "=" || cmd[4] != "global_var" && cmd[4] != "var" {
                     errors::args_error(b, l);
                 }
                 if cmd[2] == "string" {
-                    match hash_vars.hash_str.get(cmd[5].trim()) {
-                        Some(value) => {
-                            vars.string = value.to_string();
-                        }
-                        _ => {
-                            errors::var_error(cmd[5].trim(), b, l);
-                        }
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.string = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        "var" => match vars.var_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.string = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        _ => errors::args_error(b, l)
                     }
                 } else {
-                    match hash_vars.hash_str.get(cmd[5].trim()) {
-                        Some(value) => vars.lxstring = value.to_string(),
-                        _ => {
-                            errors::var_error(cmd[5].trim(), b, l);
-                        }
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.lxstring = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        "var" => match vars.var_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.lxstring = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        _ => errors::args_error(b, l)
                     }
                 }
             }
@@ -596,28 +656,60 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                     }
                     _ => errors::args_error(b, l),
                 }
+            },
+            "var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
+                }
+                match cmd[5] {
+                    "lxstring" => {
+                        vars.var_str
+                            .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                    }
+                    "string" => {
+                        vars.var_str
+                            .insert(cmd[3].trim().to_string(), vars.string.clone());
+                    }
+                    _ => errors::args_error(b, l),
+                }
             }
             _ => errors::args_error(b, l),
         },
         "vec" => match cmd[2] {
             "vec" => match cmd[3] {
                 "str" | "int" => {
-                    if cmd[4] != "=" || cmd[5] != "global_var" {
+                    if cmd[4] != "=" || cmd[5] != "global_var" && cmd[5] != "var" {
                         errors::args_error(b, l);
                     }
                     if cmd[3] == "str" {
-                        match hash_vars.hash_str_vec.get(cmd[6].trim()) {
-                            Some(value) => vars.str_vec = value.to_vec(),
-                            _ => errors::var_error(cmd[6].trim(), b, l),
+                        match cmd[5] {
+                            "global_var" => match hash_vars.hash_str_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.str_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            "var" => match vars.var_str_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.str_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            _ => errors::args_error(b, l)
                         }
+
                     } else {
-                        match hash_vars.hash_int_vec.get(cmd[6].trim()) {
-                            Some(value) => vars.num_vec = value.to_vec(),
-                            _ => errors::var_error(cmd[6].trim(), b, l),
+                        match cmd[5] {
+                            "global_var" => match hash_vars.hash_int_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.num_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            "var" => match vars.var_int_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.num_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            _ => errors::args_error(b, l)
                         }
+
                     }
                 }
-                _ => errors::args_error(b, l),
+                _ => errors::args_error(b, l)
             },
             "global_var" => match cmd[6] {
                 "str" | "int" => {
@@ -632,6 +724,22 @@ pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str
                     } else {
                         hash_vars
                             .hash_int_vec
+                            .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
+                    }
+                }
+                _ => errors::args_error(b, l),
+            },
+            "var" => match cmd[6] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "vec" {
+                        errors::args_error(b, l);
+                    }
+
+                    if cmd[6] == "str" {
+                       vars.var_str_vec
+                            .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
+                    } else {
+                        vars.var_int_vec
                             .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
                     }
                 }
