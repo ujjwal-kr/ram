@@ -31,7 +31,7 @@ pub fn print(
                 }
                 _ => super::errors::args_error(b, l),
             },
-            "var" => match cmd[3].trim() {
+            "global_var" => match cmd[3].trim() {
                 "int" => {
                     if cmd.len() == 5 && cmd[4] == "vec" {
                         match hash_vars.hash_int_vec.get(cmd[2].trim()) {
@@ -53,6 +53,35 @@ pub fn print(
                         }
                     } else {
                         match hash_vars.hash_str.get(cmd[2].trim()) {
+                            Some(value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    }
+                }
+                _ => super::errors::args_error(b, l),
+            },
+            "var" => match cmd[3].trim() {
+                "int" => {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match vars.var_int_vec.get(cmd[2].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    } else {
+                        match vars.var_int.get(cmd[2].trim()) {
+                            Some(&value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    }
+                }
+                "str" => {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match vars.var_str_vec.get(cmd[2].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[2], b, l),
+                        }
+                    } else {
+                        match vars.var_str.get(cmd[2].trim()) {
                             Some(value) => println!("{}", value),
                             _ => super::errors::var_error(cmd[2].trim(), b, l),
                         }
