@@ -1,5 +1,13 @@
 main:
-    ram 100
-    ram 200
-    sub
+    var x int >> 10
+    var y int >> 20
+    jmp add:
+    ram global_var sum
     print
+
+add:
+    ram var x
+    ram var y
+    add
+    global_var sum int >> 0
+    ram global_var sum prev

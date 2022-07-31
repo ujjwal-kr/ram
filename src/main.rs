@@ -98,10 +98,10 @@ pub fn execute_block(
         lxstring: vars.lxstring,
         num_vec: vars.num_vec,
         str_vec: vars.str_vec,
-        var_str: HashMap::new(),
-        var_int: HashMap::new(),
-        var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new(),
+        var_str: vars.var_str,
+        var_int: vars.var_int,
+        var_str_vec: vars.var_str_vec,
+        var_int_vec: vars.var_int_vec,
     };
 
     let run_block: Vec<String>;
