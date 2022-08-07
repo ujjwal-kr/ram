@@ -3,6 +3,7 @@ use super::errors;
 use std::collections::HashMap;
 
 pub fn jmp(
+    stack: &mut Vec<f64>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
@@ -14,7 +15,7 @@ pub fn jmp(
         errors::args_error(block_number, line);
     }
     let label = cmd[1].trim();
-    match execute_block(program, label, local_vars.clone(), hash_vars) {
+    match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -34,7 +35,7 @@ pub fn je(
     }
     if stack[stack.len() - 1] == 0.0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, local_vars.clone(), hash_vars) {
+        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }
@@ -57,7 +58,7 @@ pub fn jne(
     }
     if stack[stack.len() - 1] != 0.0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, local_vars.clone(), hash_vars) {
+        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }
@@ -80,7 +81,7 @@ pub fn jgr(
     }
     if stack[stack.len() - 1] == 1.0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, local_vars.clone(), hash_vars) {
+        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }
@@ -103,7 +104,7 @@ pub fn jsm(
     }
     if stack[stack.len() - 1] == -1.0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, local_vars.clone(), hash_vars) {
+        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
             Ok(()) => (),
             _ => println!("Something went wrong"),
         }

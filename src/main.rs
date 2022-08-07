@@ -57,6 +57,8 @@ fn main() -> std::io::Result<()> {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let program: HashMap<String, Vec<String>> = parser::populate_labels(p_lines);
 
+    let mut stack: Vec<f64> = vec![];
+
     let vars = Vars {
         lx: 0.0,
         rv: 0.0,
@@ -76,7 +78,7 @@ fn main() -> std::io::Result<()> {
         hash_int_vec: HashMap::new(),
         hash_str_vec: HashMap::new(),
     };
-    match execute_block(program, "main:", vars, &mut hash_vars) {
+    match execute_block(program, "main:", &mut stack, vars, &mut hash_vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -86,6 +88,7 @@ fn main() -> std::io::Result<()> {
 pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
+    stack: &mut Vec<f64>,
     vars: Vars,
     hash_vars: &mut HashVars,
 ) -> std::io::Result<()> {
@@ -113,7 +116,8 @@ pub fn execute_block(
         }
     }
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack = stack;
+
     for statement in run_block {
         let statement = statement.trim();
         line += 1;
@@ -153,7 +157,7 @@ pub fn execute_block(
             "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
             "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
             "pop" => stack::pop(&mut stack, cmd, run_label, line),
-            "popall" => stack = vec![],
+            // "popall" => stack = vec![],
             "add" => operations::add(&mut stack, cmd, &mut local_vars, run_label, line),
             "sub" => operations::sub(&mut stack, run_label, line),
             "mul" => operations::mul(&mut stack, cmd, &mut local_vars, run_label, line),
@@ -206,6 +210,7 @@ pub fn execute_block(
                 line,
             ),
             "jmp" => jump::jmp(
+                &mut stack,
                 cmd,
                 program.clone(),
                 local_vars.clone(),
