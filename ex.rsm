@@ -1,3 +1,5 @@
+include "ok.rs"
+
 main:
     var x int >> 10
     var y int >> 20

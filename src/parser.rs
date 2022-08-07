@@ -2,7 +2,13 @@ use regex::Regex;
 use std::collections::HashMap;
 use std::process;
 
+pub struct IncludeMapping {
+    pub filename: String,
+    pub has_included: Vec<String>
+}
+
 pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
+    map_includes(p_lines.clone(), "main.rsm".to_string());
     let mut program: HashMap<String, Vec<String>> = HashMap::new();
     let mut current_key: String = String::new();
     let exp = Regex::new(r"^[a-zA-Z0-9_]+:$").unwrap();
@@ -32,4 +38,23 @@ pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         }
     }
     program
+}
+
+pub fn map_includes(p_lines: Vec<&str>, filename: String) -> IncludeMapping {
+    let mut has_included: Vec<String> = vec![];
+    for mut line in p_lines {
+        line = line.trim();
+        if line != "" {
+            let cmd = line.split_whitespace().collect::<Vec<&str>>();
+            if cmd[0] == "include" {
+                let includes = &cmd[1].split("\"").collect::<Vec<&str>>()[1];
+                has_included.push(includes.to_string());
+            }
+        }
+    }
+
+    IncludeMapping {
+        filename: filename,
+        has_included: has_included
+    }
 }

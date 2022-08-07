@@ -3,7 +3,7 @@ use std::io::prelude::*;
 use std::{env, f64, fs, io, path::Path, process};
 
 mod funcs;
-mod lex;
+mod parser;
 mod tests;
 use funcs::{errors, jump, operations, print, stack, stdfn, var};
 
@@ -55,7 +55,7 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
-    let program: HashMap<String, Vec<String>> = lex::populate_labels(p_lines);
+    let program: HashMap<String, Vec<String>> = parser::populate_labels(p_lines);
 
     let vars = Vars {
         lx: 0.0,
