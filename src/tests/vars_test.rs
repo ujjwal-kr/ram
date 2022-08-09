@@ -3,7 +3,6 @@ use super::*;
 use std::collections::HashMap;
 
 pub fn global_var_works() {
-
     let mut hash_vars = super::super::HashVars {
         hash_str: HashMap::new(),
         hash_int: HashMap::new(),
@@ -21,7 +20,7 @@ pub fn global_var_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     // global_var x str >> something
@@ -93,7 +92,6 @@ pub fn global_var_works() {
         Some(value) => assert_vec_str(value.to_vec(), ["one", "two"].to_vec(), statement),
         _ => assert_str("fail", "something", statement),
     }
-
 
     vars.lx = 1.0;
     vars.rv = 2.0;
@@ -393,7 +391,7 @@ pub fn var_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     // var x str >> something
@@ -466,12 +464,10 @@ pub fn var_works() {
         _ => assert_str("fail", "something", statement),
     }
 
-
     vars.lx = 1.0;
     vars.rv = 2.0;
     vars.var_int.insert("name".to_string(), 3.0);
-    vars.var_int_vec
-        .insert("test".to_string(), [0.0].to_vec());
+    vars.var_int_vec.insert("test".to_string(), [0.0].to_vec());
 
     statement = "var test int vec push >> lx";
     cmd = statement.split(" ").collect();
@@ -523,8 +519,7 @@ pub fn var_works() {
 
     vars.string = "h".to_string();
     vars.lxstring = "e".to_string();
-    vars.var_str
-        .insert("name".to_string(), "ll".to_string());
+    vars.var_str.insert("name".to_string(), "ll".to_string());
     vars.var_str_vec
         .insert("test".to_string(), ["".to_string()].to_vec());
 
@@ -741,9 +736,7 @@ pub fn var_works() {
     } else {
         assert_str("fail", "something", statement);
     }
-
 }
-
 
 pub fn move_works() {
     let mut vars = super::super::Vars {
@@ -756,7 +749,7 @@ pub fn move_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     let mut hash_vars = super::super::HashVars {
@@ -970,7 +963,7 @@ pub fn local_move_works() {
         var_str: HashMap::new(),
         var_int: HashMap::new(),
         var_str_vec: HashMap::new(),
-        var_int_vec: HashMap::new()
+        var_int_vec: HashMap::new(),
     };
 
     let mut hash_vars = super::super::HashVars {
