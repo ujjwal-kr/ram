@@ -55,8 +55,7 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
-    let import_mappings: HashMap<String, Vec<&str>> = parser::traverse_includes(filename);
-    let program: HashMap<String, Vec<String>> = parser::populate_labels(p_lines);
+    let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines); // returns final file with imports
 
     let mut stack: Vec<f64> = vec![];
 
