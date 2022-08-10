@@ -30,6 +30,7 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
             .expect(format!("Error reading '{}'", path).trim());
             
         final_contents += &contents;
+        final_contents += "\n";
     }
 
     let final_import_vec: Vec<&str> = final_contents.split("\n").collect();
