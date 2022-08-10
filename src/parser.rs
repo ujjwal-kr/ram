@@ -23,6 +23,11 @@ pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut i = 0u32;
     for mut line in p_lines {
         line = line.trim();
+        if line != "" {
+            if line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
+                line = ""
+            }
+        }
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
@@ -65,6 +70,7 @@ pub fn traverse_includes(filename: String) -> MappedProgram<'static> {
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let file_map: IncludeMapping = file_map_includes(p_lines, filename);
+    println!("{:?}", file_map);
     
 
     MappedProgram {
