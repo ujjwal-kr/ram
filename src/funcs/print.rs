@@ -3,7 +3,7 @@ pub fn print(
     cmd: Vec<&str>,
     vars: &mut super::super::Vars,
     hash_vars: &mut super::super::HashVars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() == 1 {
@@ -31,30 +31,59 @@ pub fn print(
                 }
                 _ => super::errors::args_error(b, l),
             },
-            "var" => match cmd[2].trim() {
+            "global_var" => match cmd[3].trim() {
                 "int" => {
-                    if cmd.len() == 5 && cmd[3] == "vec" {
-                        match hash_vars.hash_int_vec.get(cmd[4].trim()) {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match hash_vars.hash_int_vec.get(cmd[2].trim()) {
                             Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[4].trim(), b, l),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
                         }
                     } else {
-                        match hash_vars.hash_int.get(cmd[3].trim()) {
+                        match hash_vars.hash_int.get(cmd[2].trim()) {
                             Some(&value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[3].trim(), b, l),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
                         }
                     }
                 }
                 "str" => {
-                    if cmd.len() == 5 && cmd[3] == "vec" {
-                        match hash_vars.hash_str_vec.get(cmd[4].trim()) {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match hash_vars.hash_str_vec.get(cmd[2].trim()) {
                             Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[4], b, l),
+                            _ => super::errors::var_error(cmd[2], b, l),
                         }
                     } else {
-                        match hash_vars.hash_str.get(cmd[3].trim()) {
+                        match hash_vars.hash_str.get(cmd[2].trim()) {
                             Some(value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[3].trim(), b, l),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    }
+                }
+                _ => super::errors::args_error(b, l),
+            },
+            "var" => match cmd[3].trim() {
+                "int" => {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match vars.var_int_vec.get(cmd[2].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    } else {
+                        match vars.var_int.get(cmd[2].trim()) {
+                            Some(&value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
+                        }
+                    }
+                }
+                "str" => {
+                    if cmd.len() == 5 && cmd[4] == "vec" {
+                        match vars.var_str_vec.get(cmd[2].trim()) {
+                            Some(value) => println!("{:?}", value),
+                            _ => super::errors::var_error(cmd[2], b, l),
+                        }
+                    } else {
+                        match vars.var_str.get(cmd[2].trim()) {
+                            Some(value) => println!("{}", value),
+                            _ => super::errors::var_error(cmd[2].trim(), b, l),
                         }
                     }
                 }
@@ -65,7 +94,7 @@ pub fn print(
     }
 }
 
-pub fn printc(cmd: Vec<&str>, statement: &str, b: usize, l: u32) {
+pub fn printc(cmd: Vec<&str>, statement: &str, b: &str, l: u32) {
     if cmd.len() < 3 {
         super::errors::args_error(b, l);
     } else {

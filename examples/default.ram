@@ -1,14 +1,18 @@
-ram 10
-ram 20
-add
-print
-jmp 1
 
-printc >> works
-ram 10
-ram 2
-cmp
-jgr 2
+main:
+    ram 10
+    ram 20
+    add
+    print
+    jmp fun:
 
+fun:
+    printc >> works
+    ram 10
+    ram 2
+    cmp
+    jgr fun2:
+
+fun2:
 printc >> works again
 halt

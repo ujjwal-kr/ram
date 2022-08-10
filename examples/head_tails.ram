@@ -1,14 +1,17 @@
-printc >> Coin Flip
-rand >> 0,1
-round
-ram 1
-cmp
-je 1
-pop
-ram 0
-cmp
-je 2
+main:
+    printc >> Coin Flip
+    rand >> 0,1
+    round
+    ram 1
+    cmp
+    je heads:
+    pop
+    ram 0
+    cmp
+    je tails:
 
-printc >> Heads
+heads:
+    printc >> Heads
 
-printc >> Tails
+tails:
+    printc >> Tails

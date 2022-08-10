@@ -1,15 +1,15 @@
-ram rv 1
-add lx rv
-ram lx prev
-print lx
-jmp 1
+// loop from 0 to 500
 
-ram lx
-ram 500
-cmp
-je 2
-cmp
-jne 0
+main:
+    ram lx
+    ram 1
+    add
+    ram lx prev
+    print
+    ram 20000
+    cmp
+    je halt
+    jmp main:
 
-printc >> loop end
-halt
+halt:
+    halt

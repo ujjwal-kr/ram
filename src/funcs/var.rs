@@ -8,7 +8,258 @@ pub fn var(
     statement: &str,
     vars: &mut Vars,
     hash_vars: &mut HashVars,
-    b: usize,
+    b: &str,
+    l: u32,
+) {
+    if cmd.len() < 4 {
+        errors::args_error(b, l)
+    }
+
+    match cmd[2] {
+        "str" => match cmd[3] {
+            ">>" => {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                vars.var_str.insert(cmd[1].trim().to_string(), value);
+            }
+            "vec" => match cmd[4].trim() {
+                ">>" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let value: String = lits[1].trim().to_string();
+                    let slice = &value[1..value.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    let mut str_vec: Vec<String> = vec![];
+                    for item in data_vec {
+                        str_vec.push(item.to_string());
+                    }
+                    vars.var_str_vec.insert(cmd[1].trim().to_string(), str_vec);
+                }
+                "push" => {
+                    let mut new_vec: Vec<String> = vec![];
+                    match vars.var_str_vec.get(cmd[1]) {
+                        Some(value) => new_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+                    match cmd[6].trim() {
+                        "string" => {
+                            new_vec.push(vars.string.clone());
+                            if let Some(x) = vars.var_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+                        "lxstring" => {
+                            new_vec.push(vars.lxstring.clone());
+                            if let Some(x) = vars.var_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+
+                        "var" => {
+                            let mut var_value: String = "".to_string();
+                            match vars.var_str.get(cmd[7].trim()) {
+                                Some(value) => var_value = value.to_string(),
+                                _ => errors::var_error(cmd[7].trim(), b, l),
+                            }
+                            new_vec.push(var_value);
+                            if let Some(x) = vars.var_str_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+                        _ => errors::args_error(b, l),
+                    }
+                }
+                "string" => {
+                    let mut var_vec: Vec<String> = vec![];
+                    match vars.var_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.string = var_vec[index].clone();
+                }
+                "lxstring" => {
+                    let mut var_vec: Vec<String> = vec![];
+                    match vars.var_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.lxstring = var_vec[index].clone();
+                }
+                "var" => {
+                    let mut var_vec: Vec<String> = vec![];
+                    match vars.var_str_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.var_str
+                        .insert(cmd[5].to_string(), var_vec[index].clone());
+                }
+                "len" => match vars.var_str_vec.get(cmd[1].trim()) {
+                    Some(value) => stack.push(errors::parse_float(
+                        value.to_vec().len().to_string().trim(),
+                        b,
+                        l,
+                    )),
+                    _ => errors::var_error(cmd[1].trim(), b, l),
+                },
+                _ => errors::args_error(b, l),
+            },
+            _ => errors::args_error(b, l),
+        },
+        "int" => match cmd[3] {
+            ">>" => {
+                let lits: Vec<&str> = statement.split(">>").collect();
+                let value: String = lits[1].trim().to_string();
+                vars.var_int.insert(
+                    cmd[1].trim().to_string(),
+                    errors::parse_float(value.trim(), b, l),
+                );
+            }
+            "vec" => match cmd[4].trim() {
+                ">>" => {
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let value: String = lits[1].trim().to_string();
+                    let slice = &value[1..value.len() - 1];
+                    let data_vec: Vec<&str> = slice.split(",").collect();
+                    let mut num_vec: Vec<f64> = vec![];
+                    for item in data_vec {
+                        num_vec.push(errors::parse_float(item, b, l));
+                    }
+                    vars.var_int_vec.insert(cmd[1].trim().to_string(), num_vec);
+                }
+                "push" => {
+                    let mut new_vec: Vec<f64> = vec![];
+                    match vars.var_int_vec.get(cmd[1]) {
+                        Some(value) => new_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+                    match cmd[6].trim() {
+                        "lx" => {
+                            new_vec.push(vars.lx.clone());
+                            if let Some(x) = vars.var_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+                        "rv" => {
+                            new_vec.push(vars.rv);
+                            if let Some(x) = vars.var_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+                        "var" => {
+                            let mut var_value: f64 = 0.0;
+                            match vars.var_int.get(cmd[7].trim()) {
+                                Some(&value) => var_value = value,
+                                _ => errors::var_error(cmd[7].trim(), b, l),
+                            }
+                            new_vec.push(var_value.clone());
+                            if let Some(x) = vars.var_int_vec.get_mut(cmd[1]) {
+                                *x = new_vec;
+                            }
+                        }
+                        _ => errors::args_error(b, l),
+                    }
+                }
+                "lx" => {
+                    let mut var_vec: Vec<f64> = vec![];
+                    match vars.var_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.lx = var_vec[index].clone();
+                }
+                "rv" => {
+                    let mut var_vec: Vec<f64> = vec![];
+                    match vars.var_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.rv = var_vec[index];
+                }
+                "var" => {
+                    let mut var_vec: Vec<f64> = vec![];
+                    match vars.var_int_vec.get(cmd[1]) {
+                        Some(value) => var_vec = value.to_vec(),
+                        _ => errors::var_error(cmd[7].trim(), b, l),
+                    }
+
+                    let lits: Vec<&str> = statement.split(">>").collect();
+                    let data_vec = lits[1].trim();
+                    let slice = &data_vec[1..data_vec.len() - 1];
+                    let index: usize = ret_index(slice.trim(), vars, hash_vars, b, l);
+                    if index >= var_vec.len() {
+                        errors::invalid_index(b, l, index);
+                    }
+
+                    vars.var_int.insert(cmd[5].to_string(), var_vec[index]);
+                }
+                "len" => match vars.var_int_vec.get(cmd[1].trim()) {
+                    Some(value) => stack.push(errors::parse_float(
+                        value.to_vec().len().to_string().trim(),
+                        b,
+                        l,
+                    )),
+                    _ => errors::var_error(cmd[1].trim(), b, l),
+                },
+                _ => errors::args_error(b, l),
+            },
+            _ => errors::args_error(b, l),
+        },
+        _ => errors::args_error(b, l),
+    }
+}
+
+pub fn global_var(
+    stack: &mut Vec<f64>,
+    cmd: Vec<&str>,
+    statement: &str,
+    vars: &mut Vars,
+    hash_vars: &mut HashVars,
+    b: &str,
     l: u32,
 ) {
     if cmd.len() < 4 {
@@ -56,13 +307,13 @@ pub fn var(
                             }
                         }
 
-                        "var" => {
+                        "global_var" => {
                             let mut var_value: String = "".to_string();
                             match hash_vars.hash_str.get(cmd[7].trim()) {
                                 Some(value) => var_value = value.to_string(),
                                 _ => errors::var_error(cmd[7].trim(), b, l),
                             }
-                            new_vec.push(var_value.clone());
+                            new_vec.push(var_value);
                             if let Some(x) = hash_vars.hash_str_vec.get_mut(cmd[1]) {
                                 *x = new_vec;
                             }
@@ -104,7 +355,7 @@ pub fn var(
 
                     vars.lxstring = var_vec[index].clone();
                 }
-                "var" => {
+                "global_var" => {
                     let mut var_vec: Vec<String> = vec![];
                     match hash_vars.hash_str_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -177,7 +428,7 @@ pub fn var(
                                 *x = new_vec;
                             }
                         }
-                        "var" => {
+                        "global_var" => {
                             let mut var_value: f64 = 0.0;
                             match hash_vars.hash_int.get(cmd[7].trim()) {
                                 Some(&value) => var_value = value,
@@ -195,7 +446,7 @@ pub fn var(
                     let mut var_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[7].trim(), b, l),
+                        _ => errors::var_error(cmd[1].trim(), b, l),
                     }
 
                     let lits: Vec<&str> = statement.split(">>").collect();
@@ -225,7 +476,7 @@ pub fn var(
 
                     vars.rv = var_vec[index];
                 }
-                "var" => {
+                "global_var" => {
                     let mut var_vec: Vec<f64> = vec![];
                     match hash_vars.hash_int_vec.get(cmd[1]) {
                         Some(value) => var_vec = value.to_vec(),
@@ -242,7 +493,7 @@ pub fn var(
 
                     hash_vars
                         .hash_int
-                        .insert(cmd[5].to_string(), var_vec[index].clone());
+                        .insert(cmd[5].to_string(), var_vec[index]);
                 }
                 "len" => match hash_vars.hash_int_vec.get(cmd[1].trim()) {
                     Some(value) => stack.push(errors::parse_float(
@@ -260,99 +511,243 @@ pub fn var(
     }
 }
 
-pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) {
-    if cmd.len() < 4 {
+pub fn movefn(cmd: Vec<&str>, vars: &mut Vars, hash_vars: &mut HashVars, b: &str, l: u32) {
+    if cmd.len() < 6 {
         errors::args_error(b, l);
     }
+
     match cmd[1] {
         "int" => match cmd[2] {
-            "lx" => match hash_vars.hash_int.get(&cmd[3].trim().to_string()) {
-                Some(&value) => vars.lx = value,
-                _ => errors::var_error(cmd[3], b, l),
-            },
-            "rv" => match hash_vars.hash_int.get(&cmd[3].trim().to_string()) {
-                Some(&value) => vars.rv = value,
-                _ => errors::var_error(cmd[3], b, l),
-            },
+            "lx" | "rv" => {
+                if cmd[3] != "=" || cmd[4] != "global_var" && cmd[4] != "var" {
+                    errors::args_error(b, l);
+                }
+                if cmd[2] == "lx" {
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.lx = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+
+                        "var" => match vars.var_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.lx = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        _ => errors::args_error(b, l),
+                    }
+                } else {
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.rv = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        "var" => match vars.var_int.get(&cmd[5].trim().to_string()) {
+                            Some(&value) => vars.rv = value,
+                            _ => errors::var_error(cmd[5], b, l),
+                        },
+                        _ => errors::args_error(b, l),
+                    }
+                }
+            }
+
+            "global_var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
+                }
+                match cmd[5] {
+                    "lx" => {
+                        hash_vars
+                            .hash_int
+                            .insert(cmd[3].trim().to_string(), vars.lx);
+                    }
+                    "rv" => {
+                        hash_vars
+                            .hash_int
+                            .insert(cmd[3].trim().to_string(), vars.rv);
+                    }
+                    _ => errors::args_error(b, l),
+                }
+            }
+
             "var" => {
-                if cmd[4].trim() == "lx" {
-                    hash_vars
-                        .hash_int
-                        .insert(cmd[3].trim().to_string(), vars.lx);
-                } else if cmd[4].trim() == "rv" {
-                    hash_vars
-                        .hash_int
-                        .insert(cmd[3].trim().to_string(), vars.rv);
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
+                }
+                match cmd[5] {
+                    "lx" => {
+                        vars.var_int.insert(cmd[3].trim().to_string(), vars.lx);
+                    }
+                    "rv" => {
+                        vars.var_int.insert(cmd[3].trim().to_string(), vars.rv);
+                    }
+                    _ => errors::args_error(b, l),
                 }
             }
             _ => errors::args_error(b, l),
         },
+
         "str" => match cmd[2] {
-            "string" => match hash_vars.hash_str.get(cmd[3].trim()) {
-                Some(value) => {
-                    vars.string = value.to_string();
+            "string" | "lxstring" => {
+                if cmd[3] != "=" || cmd[4] != "global_var" && cmd[4] != "var" {
+                    errors::args_error(b, l);
                 }
-                _ => {
-                    errors::var_error(cmd[3].trim(), b, l);
+                if cmd[2] == "string" {
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.string = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        "var" => match vars.var_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.string = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        _ => errors::args_error(b, l),
+                    }
+                } else {
+                    match cmd[4] {
+                        "global_var" => match hash_vars.hash_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.lxstring = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        "var" => match vars.var_str.get(cmd[5].trim()) {
+                            Some(value) => {
+                                vars.lxstring = value.to_string();
+                            }
+                            _ => {
+                                errors::var_error(cmd[5].trim(), b, l);
+                            }
+                        },
+
+                        _ => errors::args_error(b, l),
+                    }
                 }
-            },
-            "lxstring" => match hash_vars.hash_str.get(cmd[3].trim()) {
-                Some(value) => vars.lxstring = value.to_string(),
-                _ => {
-                    errors::var_error(cmd[3].trim(), b, l);
+            }
+            "global_var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
                 }
-            },
-            "var" => match cmd[4] {
-                "lxstring" => {
-                    hash_vars
-                        .hash_str
-                        .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                match cmd[5] {
+                    "lxstring" => {
+                        hash_vars
+                            .hash_str
+                            .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                    }
+                    "string" => {
+                        hash_vars
+                            .hash_str
+                            .insert(cmd[3].trim().to_string(), vars.string.clone());
+                    }
+                    _ => errors::args_error(b, l),
                 }
-                "string" => {
-                    hash_vars
-                        .hash_str
-                        .insert(cmd[3].trim().to_string(), vars.string.clone());
+            }
+            "var" => {
+                if cmd[4] != "=" {
+                    errors::args_error(b, l);
                 }
-                _ => errors::args_error(b, l),
-            },
+                match cmd[5] {
+                    "lxstring" => {
+                        vars.var_str
+                            .insert(cmd[3].trim().to_string(), vars.lxstring.clone());
+                    }
+                    "string" => {
+                        vars.var_str
+                            .insert(cmd[3].trim().to_string(), vars.string.clone());
+                    }
+                    _ => errors::args_error(b, l),
+                }
+            }
             _ => errors::args_error(b, l),
         },
         "vec" => match cmd[2] {
-            "vec" => {
-                if cmd[3] == "str" {
-                    match hash_vars.hash_str_vec.get(cmd[4].trim()) {
-                        Some(value) => vars.str_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[5].trim(), b, l),
+            "vec" => match cmd[3] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "global_var" && cmd[5] != "var" {
+                        errors::args_error(b, l);
                     }
-                } else if cmd[3] == "int" {
-                    match hash_vars.hash_int_vec.get(cmd[4].trim()) {
-                        Some(value) => vars.num_vec = value.to_vec(),
-                        _ => errors::var_error(cmd[5].trim(), b, l),
+                    if cmd[3] == "str" {
+                        match cmd[5] {
+                            "global_var" => match hash_vars.hash_str_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.str_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            "var" => match vars.var_str_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.str_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            _ => errors::args_error(b, l),
+                        }
+                    } else {
+                        match cmd[5] {
+                            "global_var" => match hash_vars.hash_int_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.num_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            "var" => match vars.var_int_vec.get(cmd[6].trim()) {
+                                Some(value) => vars.num_vec = value.to_vec(),
+                                _ => errors::var_error(cmd[6].trim(), b, l),
+                            },
+                            _ => errors::args_error(b, l),
+                        }
                     }
-                } else {
-                    errors::args_error(b, l);
                 }
-            }
-            "var" => {
-                if cmd[5].trim() == "str" {
-                    hash_vars
-                        .hash_str_vec
-                        .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
-                } else if cmd[5].trim() == "int" {
-                    hash_vars
-                        .hash_int_vec
-                        .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
-                } else {
-                    errors::args_error(b, l);
+                _ => errors::args_error(b, l),
+            },
+            "global_var" => match cmd[6] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "vec" {
+                        errors::args_error(b, l);
+                    }
+
+                    if cmd[6] == "str" {
+                        hash_vars
+                            .hash_str_vec
+                            .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
+                    } else {
+                        hash_vars
+                            .hash_int_vec
+                            .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
+                    }
                 }
-            }
+                _ => errors::args_error(b, l),
+            },
+            "var" => match cmd[6] {
+                "str" | "int" => {
+                    if cmd[4] != "=" || cmd[5] != "vec" {
+                        errors::args_error(b, l);
+                    }
+
+                    if cmd[6] == "str" {
+                        vars.var_str_vec
+                            .insert(cmd[3].trim().to_string(), vars.str_vec.clone());
+                    } else {
+                        vars.var_int_vec
+                            .insert(cmd[3].trim().to_string(), vars.num_vec.clone());
+                    }
+                }
+                _ => errors::args_error(b, l),
+            },
             _ => errors::args_error(b, l),
         },
         _ => errors::args_error(b, l),
     }
 }
 
-fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: usize, l: u32) -> usize {
+fn ret_index(str_idx: &str, vars: &mut Vars, hash_vars: &mut HashVars, b: &str, l: u32) -> usize {
     let idx_tokens: Vec<&str> = str_idx.split(" ").collect();
     if idx_tokens.len() == 1 {
         if str_idx == "lx" || str_idx == "rv" {

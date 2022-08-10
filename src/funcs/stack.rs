@@ -6,7 +6,7 @@ pub fn ram(
     statement: &str,
     vars: &mut super::super::Vars,
     hash_vars: &mut super::super::HashVars,
-    b: usize,
+    b: &str,
     l: u32,
 ) {
     match cmd[1].trim() {
@@ -89,7 +89,7 @@ pub fn ram(
             }
         }
 
-        "var" => {
+        "global_var" => {
             if cmd.len() < 3 {
                 errors::args_error(b, l);
             }
@@ -106,24 +106,46 @@ pub fn ram(
                 }
             }
         }
+
+        "var" => {
+            if cmd.len() < 3 {
+                errors::args_error(b, l);
+            }
+            if cmd.len() == 3 {
+                match vars.var_int.get(cmd[2].trim()) {
+                    Some(&value) => stack.push(value),
+                    _ => super::errors::var_error(cmd[2].trim(), b, l),
+                }
+            } else {
+                if cmd[3].trim() == "prev" {
+                    vars.var_int
+                        .insert(cmd[2].trim().to_string(), stack[stack.len() - 1]);
+                }
+            }
+        }
         _ => stack.push(errors::parse_float(cmd[1], b, l)),
     }
 }
 
-pub fn pop(stack: &mut Vec<f64>, b: usize, l: u32) {
-    if stack.len() < 1 {
+pub fn pop(stack: &mut Vec<f64>, cmd: Vec<&str>, b: &str, l: u32) {
+    if stack.is_empty() {
         super::errors::stack_len_error(b, l);
     }
-    stack.pop();
+    if cmd.len() == 1 {
+        stack.pop();
+    } else if cmd.len() == 2 {
+        let pop_amount: usize = super::errors::parse_usize(cmd[1], b, l);
+        if pop_amount <= stack.len() {
+            for _n in 0..pop_amount {
+                stack.pop();
+            }
+        } else {
+            super::errors::stack_len_error(b, l);
+        }
+    }
 }
 
-pub fn strfn(
-    stack: &mut Vec<f64>,
-    vars: &mut super::super::Vars,
-    cmd: Vec<&str>,
-    b: usize,
-    l: u32,
-) {
+pub fn strfn(stack: &mut Vec<f64>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
     }

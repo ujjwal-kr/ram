@@ -1,0 +1,18 @@
+include "ex2.ram"
+include  "ex3.ram
+
+main:
+    var x int >> 10
+    var y int >> 20
+    jmp one:
+    jmp ok:
+    jmp add:
+    ram global_var sum
+    print
+
+add:
+    ram var x
+    ram var y
+    add
+    global_var sum int >> 0
+    ram global_var sum prev

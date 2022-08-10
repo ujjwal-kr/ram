@@ -1,164 +1,161 @@
-stdfs open >> ./ram/test.txt
-split string >> "\n"
-var stack int vec >> [0]
-var i int >> 0
-jmp 1
+main:
+    stdfs open >> ./ram/test.txt
+    split string >> "\n"
+    global_var stack int vec >> [0]
+    global_var i int >> 0
+    jmp program_loop:
 
-// loop through the program [1]
-vec str len
-ram var i
-cmp
-jne 2
+program_loop:
+    vec str len
+    ram global_var i
+    cmp
+    jne program_router:
 
-// init router [2]
-// send command to cmd vec
-var cmd str vec >> [nil]
-move vec var cmd vec str
-var cmd str vec string >> [var i]
-// call lexer + parser
-jmp 3
-// increment the loop
-ram 1
-ram var i
-add
-ram var i prev
-jmp 1
+program_router:
+    // send command to cmd vec
+    global_var cmd str vec >> [nil]
+    move vec global_var cmd = vec str
+    global_var cmd str vec string >> [global_var i]
+    // call lexer + parser
+    jmp main_router:
+    // increment the loop
+    ram 1
+    ram global_var i
+    add
+    ram global_var i prev
+    jmp program_loop:
 
-// main router [3]
-split string >> " "
-vec str >> [0]
-ram lxstring >> ram
-// compare for "ram"
-str cmp
-je 4
-ram lxstring >> pop
-// compare for "pop"
-str cmp
-je 5
-ram lxstring >> print
-// compare for print
-str cmp
-je 6
-ram lxstring >> add
-// compare for "add"
-str cmp
-je 7
-ram lxstring >> sub
-// compare for "sub"
-str cmp
-je 8
-ram lxstring >> mul
-// compare for "mul"
-str cmp
-je 9
-ram lxstring >> div
-// compare for "div"
-str cmp
-je 10
+main_router:
+    split string >> " "
+    vec str >> [0]
+    ram lxstring >> ram
+    // compare for "ram"
+    str cmp
+    je ram:
+    ram lxstring >> pop
+    // compare for "pop"
+    str cmp
+    je pop:
+    ram lxstring >> print
+    // compare for print
+    str cmp
+    je print:
+    ram lxstring >> add
+    // compare for "add"
+    str cmp
+    je add:
+    ram lxstring >> sub
+    // compare for "sub"
+    str cmp
+    je sub:
+    ram lxstring >> mul
+    // compare for "mul"
+    str cmp
+    je mul:
+    ram lxstring >> div
+    // compare for "div"
+    str cmp
+    je div:
 
-// ram func [4]
-vec str string >> [1]
-parse int lx string
-var stack int vec push >> lx
+ram:
+    vec str >> [1]
+    parse int lx string
+    global_var stack int vec push >> lx
 
-// pop func [5]
-move vec vec int stack
-vec int pop
-move vec var stack vec int
+pop:
+    move vec vec int = global_var stack
+    vec int pop
+    move vec global_var stack = vec int
 
-// print func [6]
-var stack int vec len
-ram 1
-sub
-ram lx prev
-// store the last item of stack in string
-var stack int vec rv >> [lx]
-print rv
+print:
+    global_var stack int vec len
+    ram 1
+    sub
+    ram lx prev
+    // store the last item of stack in string
+    global_var stack int vec rv >> [lx]
+    print rv
 
-// add func [7]
-var stack int vec len
-ram 1
-sub
-// emits -1 idx
-ram lx prev
-var add_num_1 int >> 0
-var stack int vec var add_num_1 >> [lx]
-pop
-pop
-ram 2
-sub
-// emits -2 idx
-ram lx prev
-var add_num_2 int >> 0
-var stack int vec var add_num_2 >> [lx]
-ram var add_num_1
-ram var add_num_2
-add
-ram lx prev
-var stack int vec push >> lx
+add:
+    global_var stack int vec len
+    ram 1
+    sub
+    // emits -1 idx
+    ram lx prev
+    global_var add_num_1 int >> 0
+    global_var stack int vec global_var add_num_1 >> [lx]
+    pop 2
+    ram 2
+    sub
+    // emits -2 idx
+    ram lx prev
+    global_var add_num_2 int >> 0
+    global_var stack int vec global_var add_num_2 >> [lx]
+    ram global_var add_num_1
+    ram global_var add_num_2
+    add
+    ram lx prev
+    global_var stack int vec push >> lx
 
-// sub func [8]
-var stack int vec len
-ram 1
-sub
-// emits -1 idx
-ram lx prev
-var sub_num_1 int >> 0
-var stack int vec var sub_num_1 >> [lx]
-pop
-pop
-ram 2
-sub
-// emits -2 idx
-ram lx prev
-var sub_num_2 int >> 0
-var stack int vec var sub_num_2 >> [lx]
-ram var sub_num_2
-ram var sub_num_1
-sub
-ram lx prev
-var stack int vec push >> lx
+sub: 
+    global_var stack int vec len
+    ram 1
+    sub
+    // emits -1 idx
+    ram lx prev
+    global_var sub_num_1 int >> 0
+    global_var stack int vec global_var sub_num_1 >> [lx]
+    pop 2
+    ram 2
+    sub
+    // emits -2 idx
+    ram lx prev
+    global_var sub_num_2 int >> 0
+    global_var stack int vec global_var sub_num_2 >> [lx]
+    ram global_var sub_num_2
+    ram global_var sub_num_1
+    sub
+    ram lx prev
+    global_var stack int vec push >> lx
 
-// mul func [9]
-var stack int vec len
-ram 1
-sub
-// emits -1 idx
-ram lx prev
-var mul_num_1 int >> 0
-var stack int vec var mul_num_1 >> [lx]
-pop
-pop
-ram 2
-sub
-// emits -2 idx
-ram lx prev
-var mul_num_2 int >> 0
-var stack int vec var mul_num_2 >> [lx]
-ram var mul_num_1
-ram var mul_num_2
-mul
-ram lx prev
-var stack int vec push >> lx
+mul:
+    global_var stack int vec len
+    ram 1
+    sub
+    // emits -1 idx
+    ram lx prev
+    global_var mul_num_1 int >> 0
+    global_var stack int vec global_var mul_num_1 >> [lx]
+    pop 2
+    ram 2
+    sub
+    // emits -2 idx
+    ram lx prev
+    global_var mul_num_2 int >> 0
+    var stack int vec global_var mul_num_2 >> [lx]
+    ram global_var mul_num_1
+    ram global_var mul_num_2
+    mul
+    ram lx prev
+    global_var stack int vec push >> lx
 
-// div func [10]
-var stack int vec len
-ram 1
-sub
-// emits -1 idx
-ram lx prev
-var div_num_1 int >> 0
-var stack int vec var div_num_1 >> [lx]
-pop
-pop
-ram 2
-sub
-// emits -2 idx
-ram lx prev
-var div_num_2 int >> 0
-var stack int vec var div_num_2 >> [lx]
-ram var div_num_2
-ram var div_num_1
-div
-ram lx prev
-var stack int vec push >> lx
+div: 
+    global_var stack int vec len
+    ram 1
+    sub
+    // emits -1 idx
+    ram lx prev
+    global_var div_num_1 int >> 0
+    global_var stack int vec global_var div_num_1 >> [lx]
+    pop 2
+    ram 2
+    sub
+    // emits -2 idx
+    ram lx prev
+    global_var div_num_2 int >> 0
+    global_var stack int vec global_var div_num_2 >> [lx]
+    ram global_var div_num_2
+    ram global_var div_num_1
+    div
+    ram lx prev
+    global_var stack int vec push >> lx

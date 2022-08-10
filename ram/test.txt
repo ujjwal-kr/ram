@@ -1,4 +1,4 @@
-ram 100
-ram 20
-pop
+ram 200
+ram 300
+sub
 print
