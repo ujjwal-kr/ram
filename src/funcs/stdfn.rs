@@ -84,7 +84,7 @@ pub fn stdfs(vars: &mut super::super::Vars, cmd: Vec<&str>, _statement: &str, b:
 pub fn random(
     vars: &mut super::super::Vars,
     cmd: Vec<&str>,
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     statement: &str,
     b: &str,
     l: u32,

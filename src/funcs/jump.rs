@@ -3,7 +3,7 @@ use super::errors;
 use std::collections::HashMap;
 
 pub fn jmp(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
@@ -22,7 +22,7 @@ pub fn jmp(
 }
 
 pub fn je(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
@@ -45,7 +45,7 @@ pub fn je(
 }
 
 pub fn jne(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
@@ -68,7 +68,7 @@ pub fn jne(
 }
 
 pub fn jgr(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,
@@ -91,7 +91,7 @@ pub fn jgr(
 }
 
 pub fn jsm(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     program: HashMap<String, Vec<String>>,
     local_vars: Vars,

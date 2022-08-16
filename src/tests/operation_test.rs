@@ -30,7 +30,7 @@ fn add_works() {
         var_str_vec: HashMap::new(),
         var_int_vec: HashMap::new(),
     };
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(2.0);
     stack.push(3.0);
     let mut cmd: Vec<&str> = vec![];
@@ -51,7 +51,7 @@ fn add_works() {
 fn sub_works() {
     // sub
     let statement: &str = "sub";
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(3.0);
     stack.push(1.0);
     operations::sub(&mut stack, "0", 1);
@@ -73,7 +73,7 @@ fn mul_works() {
         var_str_vec: HashMap::new(),
         var_int_vec: HashMap::new(),
     };
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(2.0);
     stack.push(3.0);
     let mut cmd: Vec<&str> = vec![];
@@ -94,7 +94,7 @@ fn mul_works() {
 fn div_works() {
     // div
     let statement: &str = "div";
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(8.0);
     stack.push(2.0);
     operations::div(&mut stack, "0", 1);
@@ -117,7 +117,7 @@ fn sqr_works() {
         var_int_vec: HashMap::new(),
     };
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(5.0);
     let mut cmd: Vec<&str> = vec![];
     cmd.push("sqr");
@@ -157,7 +157,7 @@ fn sqrt_works() {
         var_int_vec: HashMap::new(),
     };
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(9.0);
     let mut cmd: Vec<&str> = vec![];
     cmd.push("sqrt");
@@ -197,7 +197,7 @@ fn round_works() {
         var_int_vec: HashMap::new(),
     };
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(9.3);
     let mut cmd: Vec<&str> = vec![];
     cmd.push("round");
@@ -224,7 +224,7 @@ fn round_works() {
 fn avg_works() {
     // avg
     let statement: &str = "avg";
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     stack.push(10.0);
     stack.push(12.0);
     stack.push(2.0);
@@ -255,7 +255,7 @@ fn split_works() {
 
 fn vec_ops_works() {
     // vec str push
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     let mut statement: &str = "vec str push";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     let mut vars = super::super::Vars {

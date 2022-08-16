@@ -1,7 +1,7 @@
 use super::errors;
 
 pub fn ram(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut super::super::Vars,
@@ -127,7 +127,7 @@ pub fn ram(
     }
 }
 
-pub fn pop(stack: &mut Vec<f64>, cmd: Vec<&str>, b: &str, l: u32) {
+pub fn pop(stack: &mut Vec<u8>, cmd: Vec<&str>, b: &str, l: u32) {
     if stack.is_empty() {
         super::errors::stack_len_error(b, l);
     }
@@ -145,7 +145,7 @@ pub fn pop(stack: &mut Vec<f64>, cmd: Vec<&str>, b: &str, l: u32) {
     }
 }
 
-pub fn strfn(stack: &mut Vec<f64>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
+pub fn strfn(stack: &mut Vec<u8>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
     if cmd.len() < 2 {
         super::errors::args_error(b, l);
     }

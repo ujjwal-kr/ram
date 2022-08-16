@@ -3,7 +3,7 @@ use super::super::HashVars;
 use super::super::Vars;
 
 pub fn var(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut Vars,
@@ -254,7 +254,7 @@ pub fn var(
 }
 
 pub fn global_var(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     statement: &str,
     vars: &mut Vars,

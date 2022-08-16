@@ -2,10 +2,9 @@ use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{env, f64, fs, io, path::Path, process};
 
-mod funcs;
+// mod funcs;
 mod parser;
-mod tests;
-use funcs::{errors, jump, operations, print, stack, stdfn, var};
+// use funcs::{errors, jump, operations, print, stack, stdfn, var};
 
 #[derive(Clone)]
 pub struct Vars {
@@ -38,7 +37,6 @@ fn main() -> std::io::Result<()> {
         filename = filename.trim().to_string();
     } else {
         if env::args().nth(1).unwrap() == "test" {
-            tests::test();
             if Path::new("log.txt").exists() {
                 fs::remove_file("log.txt").expect("");
                 panic!("Tests failed");
@@ -57,7 +55,15 @@ fn main() -> std::io::Result<()> {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines); // returns final file with imports
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
+    for _ in 0..1024 {
+        stack.push(0u8)
+    }
+
+    stack[1] = 65;
+    let c: char = format!("{}", stack[1] as char).chars().collect::<Vec<char>>()[0];
+    print!("{c}");
+
 
     let vars = Vars {
         lx: 0.0,
@@ -88,7 +94,7 @@ fn main() -> std::io::Result<()> {
 pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     vars: Vars,
     hash_vars: &mut HashVars,
 ) -> std::io::Result<()> {
@@ -123,108 +129,108 @@ pub fn execute_block(
         line += 1;
         let cmd: Vec<&str> = statement.split_whitespace().collect();
         match cmd[0].trim() {
-            "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
-            "printc" => print::printc(cmd, statement, run_label, line),
-            "ram" => stack::ram(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "global_var" => var::global_var(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "var" => var::var(
-                &mut stack,
-                cmd,
-                statement,
-                &mut local_vars,
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
-            "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
-            "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
-            "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
-            "pop" => stack::pop(&mut stack, cmd, run_label, line),
-            // "popall" => stack = vec![],
-            "add" => operations::add(&mut stack, cmd, &mut local_vars, run_label, line),
-            "sub" => operations::sub(&mut stack, run_label, line),
-            "mul" => operations::mul(&mut stack, cmd, &mut local_vars, run_label, line),
-            "div" => operations::div(&mut stack, run_label, line),
-            "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, run_label, line),
-            "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, run_label, line),
-            "round" => operations::round(&mut stack, cmd, &mut local_vars, run_label, line),
-            "avg" => operations::avg(&mut stack, run_label, line),
-            "rand" => stdfn::random(&mut local_vars, cmd, &mut stack, statement, run_label, line),
-            "split" => operations::split(cmd, statement, &mut local_vars, run_label, line),
-            "parse" => stdfn::parse_int(&mut local_vars, cmd, run_label, line),
-            "vec" => {
-                operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
-            }
-            "cmp" => operations::cmp(&mut stack, run_label, line),
-            "je" => jump::je(
-                &mut stack,
-                cmd,
-                program.clone(),
-                local_vars.clone(),
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "jne" => jump::jne(
-                &mut stack,
-                cmd,
-                program.clone(),
-                local_vars.clone(),
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "jgr" => jump::jgr(
-                &mut stack,
-                cmd,
-                program.clone(),
-                local_vars.clone(),
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "jsm" => jump::jsm(
-                &mut stack,
-                cmd,
-                program.clone(),
-                local_vars.clone(),
-                hash_vars,
-                run_label,
-                line,
-            ),
-            "jmp" => jump::jmp(
-                &mut stack,
-                cmd,
-                program.clone(),
-                local_vars.clone(),
-                hash_vars,
-                run_label,
-                line,
-            ),
+            // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
+            // "printc" => print::printc(cmd, statement, run_label, line),
+            // "ram" => stack::ram(
+            //     &mut stack,
+            //     cmd,
+            //     statement,
+            //     &mut local_vars,
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "global_var" => var::global_var(
+            //     &mut stack,
+            //     cmd,
+            //     statement,
+            //     &mut local_vars,
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "var" => var::var(
+            //     &mut stack,
+            //     cmd,
+            //     statement,
+            //     &mut local_vars,
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
+            // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
+            // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
+            // "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
+            // "pop" => stack::pop(&mut stack, cmd, run_label, line),
+            // // "popall" => stack = vec![],
+            // "add" => operations::add(&mut stack, cmd, &mut local_vars, run_label, line),
+            // "sub" => operations::sub(&mut stack, run_label, line),
+            // "mul" => operations::mul(&mut stack, cmd, &mut local_vars, run_label, line),
+            // "div" => operations::div(&mut stack, run_label, line),
+            // "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, run_label, line),
+            // "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, run_label, line),
+            // "round" => operations::round(&mut stack, cmd, &mut local_vars, run_label, line),
+            // "avg" => operations::avg(&mut stack, run_label, line),
+            // "rand" => stdfn::random(&mut local_vars, cmd, &mut stack, statement, run_label, line),
+            // "split" => operations::split(cmd, statement, &mut local_vars, run_label, line),
+            // "parse" => stdfn::parse_int(&mut local_vars, cmd, run_label, line),
+            // "vec" => {
+            //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
+            // }
+            // "cmp" => operations::cmp(&mut stack, run_label, line),
+            // "je" => jump::je(
+            //     &mut stack,
+            //     cmd,
+            //     program.clone(),
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "jne" => jump::jne(
+            //     &mut stack,
+            //     cmd,
+            //     program.clone(),
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "jgr" => jump::jgr(
+            //     &mut stack,
+            //     cmd,
+            //     program.clone(),
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "jsm" => jump::jsm(
+            //     &mut stack,
+            //     cmd,
+            //     program.clone(),
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
+            // "jmp" => jump::jmp(
+            //     &mut stack,
+            //     cmd,
+            //     program.clone(),
+            //     local_vars.clone(),
+            //     hash_vars,
+            //     run_label,
+            //     line,
+            // ),
             "halt" => process::exit(0),
             _ => {
                 println!(
                     "Cant recognize command '{}' at '{}' line: {}",
                     cmd[0],
-                    run_label.to_string(),
-                    line.to_string()
+                    run_label,
+                    line
                 );
                 process::exit(1)
             }

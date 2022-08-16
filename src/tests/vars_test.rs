@@ -26,7 +26,7 @@ pub fn global_var_works() {
     // global_var x str >> something
     let mut statement = "global_var x str >> something";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
 
     var::global_var(
         &mut stack,
@@ -397,7 +397,7 @@ pub fn var_works() {
     // var x str >> something
     let mut statement = "var x str >> something";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
 
     var::var(
         &mut stack,
@@ -759,7 +759,7 @@ pub fn move_works() {
         hash_str_vec: HashMap::new(),
     };
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
 
     // move int lx = var <name>
 
@@ -973,7 +973,7 @@ pub fn local_move_works() {
         hash_str_vec: HashMap::new(),
     };
 
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
 
     // move int lx = var <name>
 

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 pub fn ram_works() {
     // ram 10
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     let mut statement: &str = "ram 10";
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     let mut vars = super::super::Vars {
@@ -249,7 +249,7 @@ pub fn ram_works() {
 pub fn str_works() {
     // str lxstring string
     let mut statement: &str = "str lxstring string";
-    let mut stack: Vec<f64> = vec![];
+    let mut stack: Vec<u8> = vec![];
     let mut cmd: Vec<&str> = statement.split(" ").collect();
     let mut vars = super::super::Vars {
         lx: 0.0,

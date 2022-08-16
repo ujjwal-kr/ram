@@ -38,7 +38,6 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         final_lines.push(line)
     }
     let program = populate_labels(final_lines);
-    println!("{:?}", program);
     program
 }
 
@@ -70,10 +69,8 @@ pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut i = 0u32;
     for mut line in p_lines {
         line = line.trim();
-        if line != "" {
-            if line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
-                line = ""
-            }
+        if line != "" && line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
+            line = ""
         }
         if exp.is_match(line) {
             if i == 0 && line != "main:" {

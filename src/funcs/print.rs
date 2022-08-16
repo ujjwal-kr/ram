@@ -1,5 +1,5 @@
 pub fn print(
-    stack: &mut Vec<f64>,
+    stack: &mut Vec<u8>,
     cmd: Vec<&str>,
     vars: &mut super::super::Vars,
     hash_vars: &mut super::super::HashVars,
