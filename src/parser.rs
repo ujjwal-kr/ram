@@ -1,7 +1,7 @@
 use regex::Regex;
 use std::collections::HashMap;
 use std::io::prelude::*;
-use std::{fs, process, path::Path};
+use std::{fs, path::Path, process};
 
 pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut final_lines: Vec<&str> = vec![];
@@ -22,13 +22,12 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
 
         // read the file
 
-        let mut file = fs::File::open(path)
-            .expect(format!("Error opening '{}'", path).trim());
+        let mut file = fs::File::open(path).expect(format!("Error opening '{}'", path).trim());
         let mut contents = String::new();
 
         file.read_to_string(&mut contents)
             .expect(format!("Error reading '{}'", path).trim());
-            
+
         final_contents += &contents;
         final_contents += "\n";
     }
@@ -40,7 +39,6 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     let program = populate_labels(final_lines);
     program
 }
-
 
 // takes in all the lines and send imports of a file
 pub fn has_includes(p_lines: Vec<&str>) -> Vec<&str> {
@@ -58,8 +56,6 @@ pub fn has_includes(p_lines: Vec<&str>) -> Vec<&str> {
 
     has_included
 }
-
-
 
 pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
     has_includes(p_lines.clone());
