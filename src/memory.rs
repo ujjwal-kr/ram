@@ -1,3 +1,5 @@
+use rand::distributions::Alphanumeric;
+use rand::{thread_rng, Rng};
 use std::{collections::HashMap, vec};
 
 pub struct Memory {
@@ -47,13 +49,7 @@ impl Memory {
 
     // stack operations
 
-    pub fn push(&mut self, bytes: Vec<u8>) {
-        for byte in bytes {
-            self.stack.push(byte);
-        }
-    }
-
-    pub fn pop(&mut self, n: usize) {
+    pub fn pop_stack(&mut self, n: usize) {
         for _n in 0..n {
             self.stack.pop();
         }
@@ -70,7 +66,35 @@ impl Memory {
         bytes
     }
 
-    pub fn store(&mut self, bytes: Vec<u8>, location: Location) {
-        self.stack.splice(location.start..location.end, bytes);
+    pub fn store(&mut self, bytes: Vec<u8>) {
+        for byte in bytes {
+            self.stack.push(byte);
+        }
+    }
+
+    // heap operations
+
+    pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
+        let heap_addr: String = thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(15)
+            .map(char::from)
+            .collect();
+
+        self.heap.insert(heap_addr.clone(), bytes);
+        heap_addr
+    }
+
+    pub fn free(&mut self, addr: String) {
+        self.heap.remove(&addr);
+    }
+
+    pub fn heap_load(&mut self, addr: String) -> Vec<u8> {
+        let bytes: Vec<u8>;
+        match self.heap.get(&addr) {
+            Some(data) => bytes = data.to_vec(),
+            _ => panic!("Heap Overflow"),
+        }
+        bytes
     }
 }
