@@ -62,11 +62,9 @@ impl Memory {
     }
 
     pub fn load(&mut self, location: Location) -> Vec<u8> {
-        let mut bytes: Vec<u8> = vec![];
-        let refbytes = &self.stack[location.start..location.end].to_vec();
-        for b in refbytes {
-            bytes.push(*b)
-        }
+        let mut bytes: Vec<u8>;
+        let refbytes = &self.stack[location.start..location.end];
+        bytes = refbytes.to_vec();
         bytes
     }
 
