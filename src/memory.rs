@@ -11,29 +11,27 @@ pub struct Memory<'a> {
     pub ret: Vec<u8>
 }
 
-#[derive(Debug)]
+
 pub enum Type {
     Int(Int),
     Str(Str),
+    Vec(Vectr)
 }
 
-#[derive(Debug)]
 pub struct Location {
     start: usize,
     end: usize,
 }
 
 // allocation on stack
-#[derive(Debug)]
+
 pub struct Int(HashMap<String, Location>);
-#[derive(Debug)]
+
 pub struct Str(HashMap<String, Location>);
 
-// allocation on heap
-// pub struct Vectr {
-//     _type: Option<Type>,
-//     content: HashMap<String, String>,
-// }
+pub struct Vectr {
+    content: HashMap<String, Location>,
+}
 
 // implementations
 
