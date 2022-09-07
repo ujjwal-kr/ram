@@ -1,2 +1,5 @@
-ok:
-    printc >> hello from ok
+main:
+    ram 10
+    ram "string"
+    ram lx
+    ram rv  

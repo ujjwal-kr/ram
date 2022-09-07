@@ -1,32 +1,14 @@
 use std::collections::HashMap;
 use std::io::prelude::*;
-use std::{env, f64, fs, io, path::Path, process};
+use std::{env, fs, io, path::Path, process};
 
-// mod funcs;
+mod memory;
+
+mod funcs;
 mod parser;
+use memory::{Memory};
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
-
-// #[derive(Clone)]
-// pub struct Vars {
-//     pub lx: f64,
-//     pub rv: f64,
-//     pub string: String,
-//     pub lxstring: String,
-//     pub str_vec: Vec<String>,
-//     pub num_vec: Vec<f64>,
-//     pub var_str: HashMap<String, String>,
-//     pub var_int: HashMap<String, f64>,
-//     pub var_str_vec: HashMap<String, Vec<String>>,
-//     pub var_int_vec: HashMap<String, Vec<f64>>,
-// }
-
-// #[derive(Clone)]
-// pub struct HashVars {
-//     pub hash_str: HashMap<String, String>,
-//     pub hash_int: HashMap<String, f64>,
-//     pub hash_str_vec: HashMap<String, Vec<String>>,
-//     pub hash_int_vec: HashMap<String, Vec<f64>>,
-// }
+use funcs::{stack};
 
 fn main() -> std::io::Result<()> {
     let mut filename = String::new();
@@ -55,38 +37,11 @@ fn main() -> std::io::Result<()> {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines); // returns final file with imports
 
-    let mut stack: Vec<u8> = vec![];
-    for _ in 0..1024 {
-        stack.push(0u8)
-    }
+    let mut memory: Memory = Memory::new();
 
-    stack[1] = 65;
-    let c: char = format!("{}", stack[1] as char)
-        .chars()
-        .collect::<Vec<char>>()[0];
-    print!("{c}");
-
-    // let vars = Vars {
-    //     lx: 0.0,
-    //     rv: 0.0,
-    //     string: "".to_string(),
-    //     lxstring: "".to_string(),
-    //     num_vec: vec![],
-    //     str_vec: vec![],
-    //     var_str: HashMap::new(),
-    //     var_int: HashMap::new(),
-    //     var_str_vec: HashMap::new(),
-    //     var_int_vec: HashMap::new(),
-    // };
-
-    // let mut hash_vars = HashVars {
-    //     hash_str: HashMap::new(),
-    //     hash_int: HashMap::new(),
-    //     hash_int_vec: HashMap::new(),
-    //     hash_str_vec: HashMap::new(),
-    // };
     match execute_block(
-        program, "main:", &mut stack,
+        program, "main:",
+        &mut memory,
         // vars, &mut hash_vars
     ) {
         Ok(()) => (),
@@ -98,24 +53,9 @@ fn main() -> std::io::Result<()> {
 pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
-    stack: &mut Vec<u8>,
-    // vars: Vars,
-    // hash_vars: &mut HashVars,
+    mut memory: &mut Memory,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
-
-    // let mut local_vars = Vars {
-    //     lx: vars.lx,
-    //     rv: vars.rv,
-    //     string: vars.string,
-    //     lxstring: vars.lxstring,
-    //     num_vec: vars.num_vec,
-    //     str_vec: vars.str_vec,
-    //     var_str: vars.var_str,
-    //     var_int: vars.var_int,
-    //     var_str_vec: vars.var_str_vec,
-    //     var_int_vec: vars.var_int_vec,
-    // };
 
     let run_block: Vec<String>;
     match program.get(run_label) {
@@ -126,7 +66,8 @@ pub fn execute_block(
         }
     }
 
-    let mut stack = stack;
+    memory.lx = 10;
+
 
     for statement in run_block {
         let statement = statement.trim();
@@ -135,15 +76,13 @@ pub fn execute_block(
         match cmd[0].trim() {
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
-            // "ram" => stack::ram(
-            //     &mut stack,
-            //     cmd,
-            //     statement,
-            //     &mut local_vars,
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
+            "ram" => stack::ram(
+                &mut memory,
+                cmd,
+                statement,
+                run_label,
+                line,
+            ),
             // "global_var" => var::global_var(
             //     &mut stack,
             //     cmd,

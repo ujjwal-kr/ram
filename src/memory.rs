@@ -2,48 +2,49 @@ use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::{collections::HashMap, vec};
 
-pub struct Memory {
-    pub stack: Vec<u8>,
+#[derive(Debug)]
+pub struct Memory<'a> {
+    pub stack: Vec<&'a str>,
     pub heap: HashMap<String, Vec<u8>>,
     pub lx: i32,
     pub rv: i32,
-    pub ret: HashMap<Type, Location>,
+    pub ret: Vec<u8>
 }
 
+#[derive(Debug)]
 pub enum Type {
     Int(Int),
     Str(Str),
 }
 
+#[derive(Debug)]
 pub struct Location {
     start: usize,
     end: usize,
 }
 
 // allocation on stack
+#[derive(Debug)]
 pub struct Int(HashMap<String, Location>);
+#[derive(Debug)]
 pub struct Str(HashMap<String, Location>);
 
 // allocation on heap
-pub struct Vectr {
-    _type: Option<Type>,
-    content: HashMap<String, String>,
-}
+// pub struct Vectr {
+//     _type: Option<Type>,
+//     content: HashMap<String, String>,
+// }
 
 // implementations
 
-impl Memory {
+impl Memory<'static> {
     pub fn new() -> Self {
-        let mut stack: Vec<u8> = vec![];
-        for _ in 0..1024 {
-            stack.push(0u8)
-        }
         Self {
-            stack,
+            stack: vec![],
             heap: HashMap::new(),
             lx: 0i32,
             rv: 0i32,
-            ret: HashMap::new(),
+            ret: vec![],
         }
     }
 
@@ -59,16 +60,16 @@ impl Memory {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: Location) -> Vec<u8> {
-        let bytes: Vec<u8>;
-        let refbytes = &self.stack[location.start..location.end];
-        bytes = refbytes.to_vec();
-        bytes
+    pub fn load(&mut self, location: Location) -> Vec<&str> {
+        let addrs: Vec<&str>;
+        let refaddrs = &self.stack[location.start..location.end];
+        addrs = refaddrs.to_vec();
+        addrs
     }
 
-    pub fn store(&mut self, bytes: Vec<u8>) {
-        for byte in bytes {
-            self.stack.push(byte);
+    pub fn store(&mut self, addrs: Vec<&'static str>) {
+        for addr in addrs {
+            self.stack.push(addr);
         }
     }
 
@@ -86,7 +87,7 @@ impl Memory {
     }
 
     pub fn free(&mut self, addr: String) {
-        self.heap.remove(&addr);
+        self.heap.remove(&addr);    
     }
 
     pub fn heap_load(&mut self, addr: String) -> Vec<u8> {
@@ -97,4 +98,5 @@ impl Memory {
         }
         bytes
     }
+    
 }
