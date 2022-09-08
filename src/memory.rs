@@ -23,9 +23,9 @@ pub struct Location {
 }
 
 pub enum StructID {
-    Int(String),
-    Str(String),
-    Vec(String),
+    Int(String), // 0xffff
+    Str(String), // 0x0000
+    Vec(String), // 0xaaaa
 }
 
 // implementations
@@ -72,7 +72,7 @@ impl Memory {
     pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
         let heap_addr: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(16)
+            .take(12)
             .map(char::from)
             .collect();
 
@@ -88,7 +88,7 @@ impl Memory {
         let bytes: Vec<u8>;
         match self.heap.get(&addr) {
             Some(data) => bytes = data.to_vec(),
-            _ => panic!("Heap Overflow"),
+            _ => panic!("Illegal heap pointer"),
         }
         bytes
     }
@@ -117,7 +117,7 @@ impl Types {
             vec: HashMap::new(),
         }
     }
-
+ 
     // Integers
 
     pub fn set_int(value: &str, memory: &mut Memory) -> usize {
@@ -135,7 +135,7 @@ impl Types {
     // Strings
 
     pub fn set_string(name: String, value: &str, memory: &mut Memory) {
-        todo!()
+        
     }
 
     pub fn get_string(name: String, memory: &mut Memory) -> String {
