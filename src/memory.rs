@@ -12,20 +12,9 @@ pub struct Memory {
 }
 
 pub struct Types {
-    pub int: HashMap<String, Location>,
-    pub str: HashMap<String, Location>,
-    pub vec: HashMap<String, Location>,
-}
-
-pub struct Location {
-    start: usize,
-    end: usize,
-}
-
-pub enum StructID {
-    Int(String), // 0xffff
-    Str(String), // 0x0000
-    Vec(String), // 0xaaaa
+    pub int: HashMap<String, usize>,
+    pub str: HashMap<String, usize>,
+    pub vec: HashMap<String, usize>,
 }
 
 // implementations
@@ -53,17 +42,12 @@ impl Memory {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: Location) -> Vec<String> {
-        let addrs: Vec<String>;
-        let refaddrs = &self.stack[location.start..location.end];
-        addrs = refaddrs.to_vec();
-        addrs
+    pub fn load(&mut self, location: usize) -> String {
+        self.stack[location].clone()
     }
 
-    pub fn store(&mut self, addrs: Vec<String>) -> usize {
-        for addr in addrs {
-            self.stack.push(addr);
-        }
+    pub fn store(&mut self, val: String) -> usize {
+        self.stack.push(val);
         return self.stack.len();
     }
 
@@ -95,18 +79,29 @@ impl Memory {
 
     // Structure stuff
 
-    pub fn get_struct_id(value: String) -> StructID {
-        todo!()
+    pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
+        let type_slice = &structure[0..6];
+        if type_slice != "0x0000" {
+            panic!("Err in str struct id")
+        }
+        let slice = &structure[6..structure.len()];
+        let bytes = self.heap_load(slice.to_string());
+        let value = String::from_utf8_lossy(&bytes);
+        value.to_string()
     }
 
-    pub fn get_stack_struct_id() -> StructID {
-        todo!()
+    pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
+        let type_slice = &structure[0..6];
+        if type_slice != "0xffff" {
+            panic!("Err in int struct id")
+        }
+        let slice = &structure[6..structure.len()];
+        slice.parse::<i64>().expect("int struct parse err")
     }
 
-    pub fn yeild_value_from_struct_id<T>(id: StructID) -> T {
+    pub fn yeild_vec_from_struct(&mut self, structure: String) -> Vec<u8> {
         todo!()
     }
-
 }
 
 impl Types {
@@ -117,25 +112,37 @@ impl Types {
             vec: HashMap::new(),
         }
     }
- 
+
     // Integers
 
-    pub fn set_int(value: &str, memory: &mut Memory) -> usize {
-        memory.store(vec![value.to_owned()])
+    pub fn set_int(&mut self, value: &str, memory: &mut Memory) -> usize {
+        let final_value = format!("0xffff{}", value);
+        memory.store(final_value)
     }
 
-    pub fn set_var_int(name: String, value: &str, memory: &mut Memory) {
-        todo!()
+    pub fn set_var_int(&mut self, name: String, value: &str, memory: &mut Memory) {
+        let offset = self.set_int(value, memory);
+        let location = offset;
+
+        self.int.insert(name, location);
     }
 
-    pub fn get_int(name: String, memory: &mut Memory) -> i64 {
-        todo!()
+    pub fn get_int(&mut self,name: String, memory: &mut Memory) -> i64 {
+        let final_int: i64;
+        match self.int.get(&name) {
+            Some(&location) => {
+                let structure = memory.load(location);
+                final_int = memory.yeild_int_from_struct(structure)
+            },
+            _ => panic!("Var not found")
+        }
+        final_int
     }
 
     // Strings
 
     pub fn set_string(name: String, value: &str, memory: &mut Memory) {
-        
+        todo!()
     }
 
     pub fn get_string(name: String, memory: &mut Memory) -> String {
