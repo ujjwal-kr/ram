@@ -127,25 +127,37 @@ impl Types {
         self.int.insert(name, location);
     }
 
-    pub fn get_int(&mut self,name: String, memory: &mut Memory) -> i64 {
+    pub fn get_int(&mut self, name: String, memory: &mut Memory) -> i64 {
         let final_int: i64;
         match self.int.get(&name) {
             Some(&location) => {
                 let structure = memory.load(location);
-                final_int = memory.yeild_int_from_struct(structure)
-            },
-            _ => panic!("Var not found")
+                final_int = memory.yeild_int_from_struct(structure);
+            }
+            _ => todo!("Need to implement errs"),
         }
         final_int
     }
 
     // Strings
 
-    pub fn set_string(name: String, value: &str, memory: &mut Memory) {
-        todo!()
+    pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
+        let bytes = value.to_string().as_bytes().to_vec();
+        let heap_addr = memory.malloc(bytes);
+        let hex_heap_addr = format!("0x0000{}", heap_addr);
+        let location = memory.store(hex_heap_addr);
+        self.str.insert(name, location);
     }
 
-    pub fn get_string(name: String, memory: &mut Memory) -> String {
-        todo!()
+    pub fn get_string(&mut self, name: String, memory: &mut Memory) -> String {
+        let final_str: String;
+        match self.str.get(&name) {
+            Some(&location) => {
+                let structure = memory.load(location);
+                final_str = memory.yeild_string_from_struct(structure);
+            }
+            _ => todo!("Need to implement err"),
+        }
+        final_str
     }
 }
