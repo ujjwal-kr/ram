@@ -6,9 +6,9 @@ mod memory;
 
 mod funcs;
 mod parser;
-use memory::{Memory};
+use memory::Memory;
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
-use funcs::{stack};
+use funcs::stack;
 
 fn main() -> std::io::Result<()> {
     let mut filename = String::new();
@@ -40,7 +40,8 @@ fn main() -> std::io::Result<()> {
     let mut memory: Memory = Memory::new();
 
     match execute_block(
-        program, "main:",
+        program,
+        "main:",
         &mut memory,
         // vars, &mut hash_vars
     ) {
@@ -68,7 +69,6 @@ pub fn execute_block(
 
     memory.lx = 10;
 
-
     for statement in run_block {
         let statement = statement.trim();
         line += 1;
@@ -76,13 +76,7 @@ pub fn execute_block(
         match cmd[0].trim() {
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
-            "ram" => stack::ram(
-                &mut memory,
-                cmd,
-                statement,
-                run_label,
-                line,
-            ),
+            "ram" => stack::ram(&mut memory, cmd, statement, run_label, line),
             // "global_var" => var::global_var(
             //     &mut stack,
             //     cmd,

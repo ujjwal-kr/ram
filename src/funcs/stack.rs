@@ -1,16 +1,8 @@
-use crate::memory::{Memory, self};
+use crate::memory::{self, Memory};
 
 use super::errors;
 
-pub fn ram(
-    memory: &mut Memory,
-    cmd: Vec<&str>,
-    statement: &str,
-    b: &str,
-    l: u32,
-) {
-
-}
+pub fn ram(memory: &mut Memory, cmd: Vec<&str>, statement: &str, b: &str, l: u32) {}
 
 // pub fn ram(
 //     memory: &mut Memory,

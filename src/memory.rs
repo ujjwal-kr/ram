@@ -3,19 +3,18 @@ use rand::{thread_rng, Rng};
 use std::{collections::HashMap, vec};
 
 #[derive(Debug)]
-pub struct Memory<'a> {
-    pub stack: Vec<&'a str>,
+pub struct Memory {
+    pub stack: Vec<String>,
     pub heap: HashMap<String, Vec<u8>>,
     pub lx: i32,
     pub rv: i32,
-    pub ret: Vec<u8>
+    pub ret: Vec<u8>,
 }
 
-
-pub enum Type {
-    Int(Int),
-    Str(Str),
-    Vec(Vectr)
+pub struct Types {
+    pub int: HashMap<String, Location>,
+    pub str: HashMap<String, Location>,
+    pub vec: HashMap<String, Location>,
 }
 
 pub struct Location {
@@ -23,19 +22,15 @@ pub struct Location {
     end: usize,
 }
 
-// allocation on stack
-
-pub struct Int(HashMap<String, Location>);
-
-pub struct Str(HashMap<String, Location>);
-
-pub struct Vectr {
-    content: HashMap<String, Location>,
+pub enum StructID {
+    Int(String),
+    Str(String),
+    Vec(String),
 }
 
 // implementations
 
-impl Memory<'static> {
+impl Memory {
     pub fn new() -> Self {
         Self {
             stack: vec![],
@@ -58,17 +53,18 @@ impl Memory<'static> {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: Location) -> Vec<&str> {
-        let addrs: Vec<&str>;
+    pub fn load(&mut self, location: Location) -> Vec<String> {
+        let addrs: Vec<String>;
         let refaddrs = &self.stack[location.start..location.end];
         addrs = refaddrs.to_vec();
         addrs
     }
 
-    pub fn store(&mut self, addrs: Vec<&'static str>) {
+    pub fn store(&mut self, addrs: Vec<String>) -> usize {
         for addr in addrs {
             self.stack.push(addr);
         }
+        return self.stack.len();
     }
 
     // heap operations
@@ -76,7 +72,7 @@ impl Memory<'static> {
     pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
         let heap_addr: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(15)
+            .take(16)
             .map(char::from)
             .collect();
 
@@ -85,7 +81,7 @@ impl Memory<'static> {
     }
 
     pub fn free(&mut self, addr: String) {
-        self.heap.remove(&addr);    
+        self.heap.remove(&addr);
     }
 
     pub fn heap_load(&mut self, addr: String) -> Vec<u8> {
@@ -96,5 +92,53 @@ impl Memory<'static> {
         }
         bytes
     }
-    
+
+    // Structure stuff
+
+    pub fn get_struct_id(value: String) -> StructID {
+        todo!()
+    }
+
+    pub fn get_stack_struct_id() -> StructID {
+        todo!()
+    }
+
+    pub fn yeild_value_from_struct_id<T>(id: StructID) -> T {
+        todo!()
+    }
+
+}
+
+impl Types {
+    pub fn new() -> Self {
+        Self {
+            int: HashMap::new(),
+            str: HashMap::new(),
+            vec: HashMap::new(),
+        }
+    }
+
+    // Integers
+
+    pub fn set_int(value: &str, memory: &mut Memory) -> usize {
+        memory.store(vec![value.to_owned()])
+    }
+
+    pub fn set_var_int(name: String, value: &str, memory: &mut Memory) {
+        todo!()
+    }
+
+    pub fn get_int(name: String, memory: &mut Memory) -> i64 {
+        todo!()
+    }
+
+    // Strings
+
+    pub fn set_string(name: String, value: &str, memory: &mut Memory) {
+        todo!()
+    }
+
+    pub fn get_string(name: String, memory: &mut Memory) -> String {
+        todo!()
+    }
 }

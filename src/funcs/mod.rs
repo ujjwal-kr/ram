@@ -1,5 +1,5 @@
-pub mod stack;
 pub mod errors;
+pub mod stack;
 // pub mod jump;
 // pub mod operations;
 // pub mod print;
