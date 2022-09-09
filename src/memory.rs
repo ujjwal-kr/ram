@@ -120,7 +120,7 @@ impl Memory {
     }
 
     pub fn yeild_string_from_stack(&mut self) -> String {
-        let structure:String = self.stack[self.stack.len() - 1].clone();
+        let structure: String = self.stack[self.stack.len() - 1].clone();
         if self.get_struct_is_string(structure.clone()) {
             self.yeild_string_from_struct(structure)
         } else {
@@ -165,7 +165,7 @@ impl Types {
     // Integers
 
     pub fn set_int(&mut self, value: &str, memory: &mut Memory) -> usize {
-        let final_value:String = format!("0xffff{}", value);
+        let final_value: String = format!("0xffff{}", value);
         memory.store(final_value)
     }
 

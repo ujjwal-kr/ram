@@ -6,7 +6,7 @@ mod memory;
 
 mod funcs;
 mod parser;
-use memory::Memory;
+use memory::{Memory, Types};
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
 use funcs::stack;
 
@@ -26,12 +26,6 @@ fn main() -> std::io::Result<()> {
         filename = filename.trim().to_string();
     } else {
         if env::args().nth(1).unwrap() == "test" {
-            if Path::new("log.txt").exists() {
-                fs::remove_file("log.txt").expect("");
-                panic!("Tests failed");
-            } else {
-                process::exit(0);
-            }
         } else {
             filename = env::args().nth(1).unwrap();
         }
@@ -51,12 +45,14 @@ fn main() -> std::io::Result<()> {
         lxstring: String::from(""),
     };
     let mut memory: Memory = Memory::new();
+    let mut types: Types = Types::new();
 
     match execute_block(
         program,
         "main:",
         registers,
         &mut memory,
+        &mut types,
         // vars, &mut hash_vars
     ) {
         Ok(()) => (),
@@ -70,6 +66,7 @@ pub fn execute_block(
     run_label: &str,
     registers: Registers,
     mut memory: &mut Memory,
+    mut types: &mut Types,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
 
@@ -96,7 +93,7 @@ pub fn execute_block(
         match cmd[0].trim() {
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
-            "ram" => stack::ram(&mut memory, cmd, statement, run_label, line),
+            "ram" => stack::ram(memory, types, &mut local_registers, cmd, statement, run_label, line),
             // "global_var" => var::global_var(
             //     &mut stack,
             //     cmd,
