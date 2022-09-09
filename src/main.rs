@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::io::prelude::*;
-use std::{env, fs, io, path::Path, process};
+use std::{env, fs, io, process};
 
 mod memory;
 
@@ -47,14 +47,7 @@ fn main() -> std::io::Result<()> {
     let mut memory: Memory = Memory::new();
     let mut types: Types = Types::new();
 
-    match execute_block(
-        program,
-        "main:",
-        registers,
-        &mut memory,
-        &mut types,
-        // vars, &mut hash_vars
-    ) {
+    match execute_block(program, "main:", registers, &mut memory, &mut types) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -93,7 +86,15 @@ pub fn execute_block(
         match cmd[0].trim() {
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
-            "ram" => stack::ram(memory, types, &mut local_registers, cmd, statement, run_label, line),
+            "ram" => stack::ram(
+                memory,
+                types,
+                &mut local_registers,
+                cmd,
+                statement,
+                run_label,
+                line,
+            ),
             // "global_var" => var::global_var(
             //     &mut stack,
             //     cmd,

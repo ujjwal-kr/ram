@@ -1,7 +1,8 @@
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::borrow::Cow;
-use std::{collections::HashMap, vec};
+use byteorder::{BigEndian, ReadBytesExt};
+use std::{collections::HashMap};
 
 #[derive(Debug)]
 pub struct Memory {
@@ -53,7 +54,7 @@ impl Memory {
     pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
         let heap_addr: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(12)
+            .take(8)
             .map(char::from)
             .collect();
 
@@ -108,6 +109,21 @@ impl Memory {
         }
     }
 
+    fn get_vec_type_from_struct(&mut self, structure: String) -> &str {
+        let slice = &structure[6..10];
+        match slice {
+            "0000" => "string",
+            "ffff" => "int",
+            "aaaa" => "vec",
+            _ => panic!("Illegal struct type"),
+        }
+    }
+
+    fn get_heap_addr_from_struct(&mut self, structure: String) -> String {
+        let addr: &str = &structure[structure.len() - 8..structure.len() - 1];
+        addr.to_string()
+    }
+
     // stack yeilds
 
     pub fn yeild_int_from_stack(&mut self) -> i64 {
@@ -148,8 +164,23 @@ impl Memory {
         value.to_string()
     }
 
-    pub fn yeild_vec_from_struct(&mut self, structure: String) -> Vec<u8> {
-        todo!()
+    pub fn yeild_int_vec_from_struct(&mut self, structure: String) -> Vec<i32> {
+        if !self.get_struct_is_vec(structure.clone()) {
+            panic!("Err in vec struct id");
+        }
+        let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
+        if vec_type != "int" {
+            panic!("invalid invokation to yeld int vec")
+        }
+        let heap_addr: String = self.get_heap_addr_from_struct(structure);
+        let bytes:Vec<u8> = self.heap_load(heap_addr);
+        let mut final_vec: Vec<i32> = vec![];
+        for mut byte in bytes.chunks(4) {
+            let num: i32 = byte.read_i32::<BigEndian>().unwrap();
+            final_vec.push(num);
+        }
+
+        final_vec
     }
 }
 
