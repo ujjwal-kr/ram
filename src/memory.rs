@@ -111,6 +111,26 @@ impl Memory {
         }
     }
 
+    // stack yeilds
+
+    pub fn yeild_int_from_stack(&mut self) -> i64 {
+        let structure = self.stack[self.stack.len() - 1].clone();
+        if self.get_struct_is_int(structure.clone()) {
+            self.yeild_int_from_struct(structure)
+        } else {
+            panic!("Illegal use of yeild int from stack")
+        }
+    }
+
+    pub fn yeild_string_from_stack(&mut self) -> String {
+        let structure = self.stack[self.stack.len() - 1].clone();
+        if self.get_struct_is_string(structure.clone()) {
+            self.yeild_string_from_struct(structure)
+        } else {
+            panic!("Illegal use of yeild str from stack")
+        }
+    }
+
     pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
         if !self.get_struct_is_string(structure.clone()) {
             panic!("Err in str struct id")
