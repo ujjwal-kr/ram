@@ -1,8 +1,8 @@
+use byteorder::{BigEndian, ReadBytesExt};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::borrow::Cow;
-use byteorder::{BigEndian, ReadBytesExt};
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Memory {
@@ -54,7 +54,7 @@ impl Memory {
     pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
         let heap_addr: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(8)
+            .take(6)
             .map(char::from)
             .collect();
 
@@ -173,7 +173,7 @@ impl Memory {
             panic!("invalid invokation to yeld int vec")
         }
         let heap_addr: String = self.get_heap_addr_from_struct(structure);
-        let bytes:Vec<u8> = self.heap_load(heap_addr);
+        let bytes: Vec<u8> = self.heap_load(heap_addr);
         let mut final_vec: Vec<i32> = vec![];
         for mut byte in bytes.chunks(4) {
             let num: i32 = byte.read_i32::<BigEndian>().unwrap();
@@ -181,6 +181,25 @@ impl Memory {
         }
 
         final_vec
+    }
+
+    pub fn yeild_str_vec_from_struct(&mut self, structure: String) -> Vec<String> {
+         if !self.get_struct_is_vec(structure.clone()) {
+            panic!("Err in vec struct id");
+         }
+         let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
+         if vec_type != "str" {
+            panic!("invalid invokation to yeld str vec")
+         }
+         let mut final_vec: Vec<String> = vec![];
+         let heap_addr: String = self.get_heap_addr_from_struct(structure);
+         let bytes: Vec<u8> = self.heap_load(heap_addr);
+         for byte in bytes.chunks(16) {
+            let str: String = String::from_utf8_lossy(byte).to_string();
+            final_vec.push(str);
+         }
+        
+         final_vec
     }
 }
 
