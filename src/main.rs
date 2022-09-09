@@ -10,6 +10,13 @@ use memory::Memory;
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
 use funcs::stack;
 
+pub struct Registers {
+    pub lx: i32,
+    pub rv: i32,
+    pub string: String,
+    pub lxstring: String,
+}
+
 fn main() -> std::io::Result<()> {
     let mut filename = String::new();
     if env::args().nth(1).is_none() {
@@ -37,11 +44,18 @@ fn main() -> std::io::Result<()> {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines); // returns final file with imports
 
+    let registers = Registers {
+        lx: 0,
+        rv: 0,
+        string: String::from(""),
+        lxstring: String::from(""),
+    };
     let mut memory: Memory = Memory::new();
 
     match execute_block(
         program,
         "main:",
+        registers,
         &mut memory,
         // vars, &mut hash_vars
     ) {
@@ -54,6 +68,7 @@ fn main() -> std::io::Result<()> {
 pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
+    registers: Registers,
     mut memory: &mut Memory,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
@@ -66,6 +81,13 @@ pub fn execute_block(
             process::exit(1);
         }
     }
+
+    let mut local_registers = Registers {
+        lx: registers.lx,
+        rv: registers.rv,
+        string: registers.string,
+        lxstring: registers.lxstring,
+    };
 
     for statement in run_block {
         let statement = statement.trim();
