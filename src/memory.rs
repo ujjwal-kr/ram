@@ -1,5 +1,6 @@
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
+use std::borrow::Cow;
 use std::{collections::HashMap, vec};
 
 #[derive(Debug)]
@@ -76,12 +77,12 @@ impl Memory {
     // Structure stuff
 
     fn get_struct_id(&mut self, structure: String) -> String {
-        let type_slice = &structure[0..6];
+        let type_slice: &str = &structure[0..6];
         type_slice.to_owned()
     }
 
     fn get_struct_is_string(&mut self, structure: String) -> bool {
-        let struct_type = self.get_struct_id(structure);
+        let struct_type: String = self.get_struct_id(structure);
         if struct_type == "0x0000".to_string() {
             true
         } else {
@@ -90,7 +91,7 @@ impl Memory {
     }
 
     fn get_struct_is_int(&mut self, structure: String) -> bool {
-        let struct_type = self.get_struct_id(structure);
+        let struct_type: String = self.get_struct_id(structure);
         if struct_type == "0xffff".to_string() {
             true
         } else {
@@ -99,7 +100,7 @@ impl Memory {
     }
 
     fn get_struct_is_vec(&mut self, structure: String) -> bool {
-        let struct_type = self.get_struct_id(structure);
+        let struct_type: String = self.get_struct_id(structure);
         if struct_type == "0xaaaa".to_string() {
             true
         } else {
@@ -110,7 +111,7 @@ impl Memory {
     // stack yeilds
 
     pub fn yeild_int_from_stack(&mut self) -> i64 {
-        let structure = self.stack[self.stack.len() - 1].clone();
+        let structure: String = self.stack[self.stack.len() - 1].clone();
         if self.get_struct_is_int(structure.clone()) {
             self.yeild_int_from_struct(structure)
         } else {
@@ -119,7 +120,7 @@ impl Memory {
     }
 
     pub fn yeild_string_from_stack(&mut self) -> String {
-        let structure = self.stack[self.stack.len() - 1].clone();
+        let structure:String = self.stack[self.stack.len() - 1].clone();
         if self.get_struct_is_string(structure.clone()) {
             self.yeild_string_from_struct(structure)
         } else {
@@ -131,7 +132,7 @@ impl Memory {
         if !self.get_struct_is_int(structure.clone()) {
             panic!("Err in int struct id")
         }
-        let slice = &structure[6..structure.len()];
+        let slice: &str = &structure[6..structure.len()];
         slice.parse::<i64>().expect("int struct parse err")
     }
 
@@ -141,9 +142,9 @@ impl Memory {
         if !self.get_struct_is_string(structure.clone()) {
             panic!("Err in str struct id")
         }
-        let slice = &structure[6..structure.len()];
-        let bytes = self.heap_load(slice.to_string());
-        let value = String::from_utf8_lossy(&bytes);
+        let slice: &str = &structure[6..structure.len()];
+        let bytes: Vec<u8> = self.heap_load(slice.to_string());
+        let value: Cow<str> = String::from_utf8_lossy(&bytes);
         value.to_string()
     }
 
@@ -164,22 +165,20 @@ impl Types {
     // Integers
 
     pub fn set_int(&mut self, value: &str, memory: &mut Memory) -> usize {
-        let final_value = format!("0xffff{}", value);
+        let final_value:String = format!("0xffff{}", value);
         memory.store(final_value)
     }
 
     pub fn set_var_int(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let offset = self.set_int(value, memory);
-        let location = offset;
-
-        self.int.insert(name, location);
+        let offset: usize = self.set_int(value, memory);
+        self.int.insert(name, offset);
     }
 
     pub fn get_int(&mut self, name: String, memory: &mut Memory) -> i64 {
         let final_int: i64;
         match self.int.get(&name) {
             Some(&location) => {
-                let structure = memory.load(location);
+                let structure: String = memory.load(location);
                 final_int = memory.yeild_int_from_struct(structure);
             }
             _ => todo!("Need to implement errs"),
@@ -190,10 +189,10 @@ impl Types {
     // Strings
 
     pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let bytes = value.to_string().as_bytes().to_vec();
-        let heap_addr = memory.malloc(bytes);
-        let hex_heap_addr = format!("0x0000{}", heap_addr);
-        let location = memory.store(hex_heap_addr);
+        let bytes: Vec<u8> = value.to_string().as_bytes().to_vec();
+        let heap_addr: String = memory.malloc(bytes);
+        let hex_heap_addr: String = format!("0x0000{}", heap_addr);
+        let location: usize = memory.store(hex_heap_addr);
         self.str.insert(name, location);
     }
 
@@ -201,7 +200,7 @@ impl Types {
         let final_str: String;
         match self.str.get(&name) {
             Some(&location) => {
-                let structure = memory.load(location);
+                let structure: String = memory.load(location);
                 final_str = memory.yeild_string_from_struct(structure);
             }
             _ => todo!("Need to implement err"),
