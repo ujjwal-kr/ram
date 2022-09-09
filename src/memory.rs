@@ -79,9 +79,40 @@ impl Memory {
 
     // Structure stuff
 
-    pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
+    fn get_struct_id(&mut self, structure: String) -> String {
         let type_slice = &structure[0..6];
-        if type_slice != "0x0000" {
+        type_slice.to_owned()
+    }
+
+    fn get_struct_is_string(&mut self, structure: String) -> bool {
+        let struct_type = self.get_struct_id(structure);
+        if struct_type == "0x0000".to_string() {
+            true
+        } else {
+            false
+        }
+    }
+
+    fn get_struct_is_int(&mut self, structure: String) -> bool {
+        let struct_type = self.get_struct_id(structure);
+        if struct_type == "0xffff".to_string() {
+            true
+        } else {
+            false
+        }
+    }
+
+    fn get_struct_is_vec(&mut self, structure: String) -> bool {
+        let struct_type = self.get_struct_id(structure);
+        if struct_type == "0xaaaa".to_string() {
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
+        if !self.get_struct_is_string(structure.clone()) {
             panic!("Err in str struct id")
         }
         let slice = &structure[6..structure.len()];
@@ -91,8 +122,7 @@ impl Memory {
     }
 
     pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
-        let type_slice = &structure[0..6];
-        if type_slice != "0xffff" {
+        if !self.get_struct_is_int(structure.clone()) {
             panic!("Err in int struct id")
         }
         let slice = &structure[6..structure.len()];
