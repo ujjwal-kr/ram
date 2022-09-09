@@ -67,8 +67,6 @@ pub fn execute_block(
         }
     }
 
-    memory.lx = 10;
-
     for statement in run_block {
         let statement = statement.trim();
         line += 1;

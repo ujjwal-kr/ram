@@ -6,8 +6,6 @@ use std::{collections::HashMap, vec};
 pub struct Memory {
     pub stack: Vec<String>,
     pub heap: HashMap<String, Vec<u8>>,
-    pub lx: i32,
-    pub rv: i32,
     pub ret: Vec<u8>,
 }
 
@@ -24,8 +22,6 @@ impl Memory {
         Self {
             stack: vec![],
             heap: HashMap::new(),
-            lx: 0i32,
-            rv: 0i32,
             ret: vec![],
         }
     }
@@ -131,6 +127,16 @@ impl Memory {
         }
     }
 
+    pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
+        if !self.get_struct_is_int(structure.clone()) {
+            panic!("Err in int struct id")
+        }
+        let slice = &structure[6..structure.len()];
+        slice.parse::<i64>().expect("int struct parse err")
+    }
+
+    // heap yeilds
+
     pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
         if !self.get_struct_is_string(structure.clone()) {
             panic!("Err in str struct id")
@@ -139,14 +145,6 @@ impl Memory {
         let bytes = self.heap_load(slice.to_string());
         let value = String::from_utf8_lossy(&bytes);
         value.to_string()
-    }
-
-    pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
-        if !self.get_struct_is_int(structure.clone()) {
-            panic!("Err in int struct id")
-        }
-        let slice = &structure[6..structure.len()];
-        slice.parse::<i64>().expect("int struct parse err")
     }
 
     pub fn yeild_vec_from_struct(&mut self, structure: String) -> Vec<u8> {
