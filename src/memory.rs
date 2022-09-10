@@ -214,12 +214,12 @@ impl Types {
 
     // parsers
 
-    fn parse_int(value: &str, block: &str, line: i32) -> i32 {
+    fn parse_int(&mut self, value: &str, block: &str, line: i32) -> i32 {
         value.parse::<i32>().expect(
             format!("Parse int error at {}:{}", block, line).trim()
         )
     }
-    
+
     fn parse_int_vec(value: &str, block: &str, line: i32) -> Vec<i32> {
         todo!()
     }
@@ -273,4 +273,26 @@ impl Types {
         }
         final_str
     }
+
+    // vectors
+
+    pub fn set_int_vec(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+        let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
+        let mut final_bytes: Vec<u8> = vec![];
+        for item in items {
+            let int: i32 = self.parse_int(item, block, line);
+            let byte: &[u8] = &int.to_be_bytes();
+            for bit in byte {
+                final_bytes.push(*bit);
+            }
+        }
+
+        let addr_prefix: &str = "0xaaaaffff";
+        let heap_addr = memory.malloc(final_bytes);
+        let final_addr: String = format!("{}{}", addr_prefix, heap_addr);
+
+        let location: usize = memory.store(final_addr);
+        self.vec.insert(name, location);
+    }
+
 }
