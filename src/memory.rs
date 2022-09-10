@@ -212,6 +212,22 @@ impl Types {
         }
     }
 
+    // parsers
+
+    fn parse_int(value: &str, block: &str, line: i32) -> i32 {
+        value.parse::<i32>().expect(
+            format!("Parse int error at {}:{}", block, line).trim()
+        )
+    }
+    
+    fn parse_int_vec(value: &str, block: &str, line: i32) -> Vec<i32> {
+        todo!()
+    }
+
+    fn parse_str_vec(value: &str, block: &str, line: i32) -> Vec<String> {
+        todo!()
+    }
+
     // Integers
 
     pub fn set_int(&mut self, value: &str, memory: &mut Memory) -> usize {
