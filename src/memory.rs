@@ -308,7 +308,9 @@ impl Types {
                 heap_addrs_bytes.push(byte);
             }
         }
-        let final_heap_addr: String = memory.malloc(heap_addrs_bytes);
+        let addr_prefix: &str = "0xaaaa0000";
+        let heap_addr: String = memory.malloc(heap_addrs_bytes);
+        let final_heap_addr: String = format!("{}{}", addr_prefix, heap_addr);
         let location: usize = memory.store(final_heap_addr);
         self.vec.insert(name, location);
     }
