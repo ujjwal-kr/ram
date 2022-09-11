@@ -225,23 +225,16 @@ impl Types {
         )
     }
 
-    fn parse_int_vec(value: &str, block: &str, line: i32) -> Vec<i32> {
-        todo!()
-    }
-
-    fn parse_str_vec(value: &str, block: &str, line: i32) -> Vec<String> {
-        todo!()
-    }
-
     // Integers
 
-    pub fn set_int(&mut self, value: &str, memory: &mut Memory) -> usize {
-        let final_value: String = format!("0xffff{}", value);
+    pub fn set_int(&mut self, value: &str, memory: &mut Memory, block: &str, line: i32) -> usize {
+        let parsed_val = self.parse_int(value, block, line).to_string();
+        let final_value: String = format!("0xffff{}", parsed_val);
         memory.store(final_value)
     }
 
-    pub fn set_var_int(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let offset: usize = self.set_int(value, memory);
+    pub fn set_var_int(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+        let offset: usize = self.set_int(value, memory, block, line);
         self.int.insert(name, offset);
     }
 
