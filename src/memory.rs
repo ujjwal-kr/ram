@@ -194,7 +194,7 @@ impl Memory {
          let mut final_vec: Vec<String> = vec![];
          let heap_addr: String = self.get_heap_addr_from_struct(structure);
          let addr_bytes: Vec<u8> = self.heap_load(heap_addr);
-         for addr_byte in addr_bytes.chunks(16) {
+         for addr_byte in addr_bytes.chunks(6) {
             let addr_str: String = String::from_utf8_lossy(addr_byte).to_string();
             let bytes: &[u8] = &self.heap_load(addr_str);
             let final_str: String = String::from_utf8_lossy(bytes).to_string();
@@ -297,7 +297,7 @@ impl Types {
         self.vec.insert(name, location);
     }
 
-    pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) { // not working
+    pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
         let items: &Vec<&str> = &value[1..value.len() -2].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
