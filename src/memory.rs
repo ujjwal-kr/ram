@@ -193,10 +193,12 @@ impl Memory {
          }
          let mut final_vec: Vec<String> = vec![];
          let heap_addr: String = self.get_heap_addr_from_struct(structure);
-         let bytes: Vec<u8> = self.heap_load(heap_addr);
-         for byte in bytes.chunks(16) {
-            let str: String = String::from_utf8_lossy(byte).to_string();
-            final_vec.push(str);
+         let addr_bytes: Vec<u8> = self.heap_load(heap_addr);
+         for addr_byte in addr_bytes.chunks(16) {
+            let addr_str: String = String::from_utf8_lossy(addr_byte).to_string();
+            let bytes: &[u8] = &self.heap_load(addr_str);
+            let final_str: String = String::from_utf8_lossy(bytes).to_string();
+            final_vec.push(final_str);
          }
         
          final_vec
@@ -288,11 +290,16 @@ impl Types {
         }
 
         let addr_prefix: &str = "0xaaaaffff";
-        let heap_addr = memory.malloc(final_bytes);
+        let heap_addr:String = memory.malloc(final_bytes);
         let final_addr: String = format!("{}{}", addr_prefix, heap_addr);
 
         let location: usize = memory.store(final_addr);
         self.vec.insert(name, location);
+    }
+
+    pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+        let items: &Vec<&str> = &value[1..value.len() -2].split(',').collect::<Vec<&str>>();
+        
     }
 
 }
