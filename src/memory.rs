@@ -41,6 +41,9 @@ impl Memory {
     }
 
     pub fn load(&mut self, location: usize) -> String {
+        if location >= self.stack.len() {
+            panic!("Illegal memory address on stack")
+        }
         self.stack[location].clone()
     }
 
@@ -303,11 +306,12 @@ impl Types {
         for item in items {
             let byte: Vec<u8> = item.as_bytes().to_vec();
             let heap_addr_current: String = memory.malloc(byte);
-            let current_addr_bytes = heap_addr_current.as_bytes().to_vec();
+            let current_addr_bytes: Vec<u8> = heap_addr_current.as_bytes().to_vec();
             for byte in current_addr_bytes {
                 heap_addrs_bytes.push(byte);
             }
         }
+
         let addr_prefix: &str = "0xaaaa0000";
         let heap_addr: String = memory.malloc(heap_addrs_bytes);
         let final_heap_addr: String = format!("{}{}", addr_prefix, heap_addr);
