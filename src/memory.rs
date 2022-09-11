@@ -297,9 +297,20 @@ impl Types {
         self.vec.insert(name, location);
     }
 
-    pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+    pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) { // not working
         let items: &Vec<&str> = &value[1..value.len() -2].split(',').collect::<Vec<&str>>();
-        
+        let mut heap_addrs_bytes: Vec<u8> = vec![];
+        for item in items {
+            let byte: Vec<u8> = item.as_bytes().to_vec();
+            let heap_addr_current: String = memory.malloc(byte);
+            let current_addr_bytes = heap_addr_current.as_bytes().to_vec();
+            for byte in current_addr_bytes {
+                heap_addrs_bytes.push(byte);
+            }
+        }
+        let final_heap_addr: String = memory.malloc(heap_addrs_bytes);
+        let location: usize = memory.store(final_heap_addr);
+        self.vec.insert(name, location);
     }
 
 }
