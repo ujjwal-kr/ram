@@ -8,7 +8,7 @@ use std::collections::HashMap;
 #[derive(Debug)]
 pub struct Memory {
     pub stack: Vec<u8>,
-    pub heap: HashMap<String, Vec<u8>>,
+    pub heap: HashMap<u32, Vec<u8>>,
     pub ret: Vec<u8>,
 }
 
@@ -50,57 +50,24 @@ impl Memory {
 
     // heap operations
 
-    pub fn malloc(&mut self, bytes: Vec<u8>) -> String {
-        let heap_addr: String = thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(6)
-            .map(char::from)
-            .collect();
-
+    pub fn malloc(&mut self, bytes: Vec<u8>) -> u32 {
+        let mut rng = rand::thread_rng();
+        let heap_addr = rng.gen::<u32>();
         self.heap.insert(heap_addr.clone(), bytes);
         heap_addr
     }
 
-    pub fn free(&mut self, addr: String) {
+    pub fn free(&mut self, addr: u32) {
         self.heap.remove(&addr);
     }
 
-    pub fn heap_load(&mut self, addr: String) -> Vec<u8> {
+    pub fn heap_load(&mut self, addr: u32) -> Vec<u8> {
         let bytes: Vec<u8>;
         match self.heap.get(&addr) {
             Some(data) => bytes = data.to_vec(),
             _ => panic!("Illegal heap pointer"),
         }
         bytes
-    }
-
-    // Structure stuff
-
-    fn get_struct_is_int(&mut self, structure: &[u8]) -> bool {
-        if structure[0] == 0xff && structure[1] == 0xff {
-            true
-        } else {
-            false
-        }
-    }
-
-    fn get_struct_is_vec(&mut self, structure: String) -> bool {
-        let struct_type: String = self.get_struct_id(structure);
-        if struct_type == "0xaaaa".to_string() {
-            true
-        } else {
-            false
-        }
-    }
-
-    fn get_vec_type_from_struct(&mut self, structure: String) -> &str {
-        let slice = &structure[6..10];
-        match slice {
-            "0000" => "string",
-            "ffff" => "int",
-            "aaaa" => "vec",
-            _ => panic!("Illegal struct type"),
-        }
     }
 
     fn get_heap_addr_from_struct(&mut self, structure: String) -> String {
