@@ -1,7 +1,5 @@
 use byteorder::{BigEndian, ReadBytesExt};
-use hex;
-use rand::distributions::Alphanumeric;
-use rand::{thread_rng, Rng};
+use rand::Rng;
 use std::borrow::Cow;
 use std::collections::HashMap;
 
