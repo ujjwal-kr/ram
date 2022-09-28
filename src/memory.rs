@@ -1,4 +1,5 @@
 use byteorder::{BigEndian, ReadBytesExt};
+use hex;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::borrow::Cow;
@@ -6,7 +7,7 @@ use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Memory {
-    pub stack: Vec<String>,
+    pub stack: Vec<u8>,
     pub heap: HashMap<String, Vec<u8>>,
     pub ret: Vec<u8>,
 }
@@ -31,23 +32,18 @@ impl Memory {
     // stack operations
 
     pub fn pop_stack(&mut self, n: usize) {
-        for _n in 0..n {
-            self.stack.pop();
-        }
+        self.stack.pop();
     }
 
     pub fn reset_stack(&mut self) {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: usize) -> String {
-        if location >= self.stack.len() {
-            panic!("Illegal memory address on stack")
-        }
-        self.stack[location].clone()
+    pub fn load(&mut self, location: usize) -> u8 {
+        self.stack[location]
     }
 
-    pub fn store(&mut self, val: String) -> usize {
+    pub fn store(&mut self, val: u8) -> usize {
         self.stack.push(val);
         return self.stack.len();
     }
@@ -80,23 +76,8 @@ impl Memory {
 
     // Structure stuff
 
-    fn get_struct_id(&mut self, structure: String) -> String {
-        let type_slice: &str = &structure[0..6];
-        type_slice.to_owned()
-    }
-
-    fn get_struct_is_string(&mut self, structure: String) -> bool {
-        let struct_type: String = self.get_struct_id(structure);
-        if struct_type == "0x0000".to_string() {
-            true
-        } else {
-            false
-        }
-    }
-
-    fn get_struct_is_int(&mut self, structure: String) -> bool {
-        let struct_type: String = self.get_struct_id(structure);
-        if struct_type == "0xffff".to_string() {
+    fn get_struct_is_int(&mut self, structure: &[u8]) -> bool {
+        if structure[0] == 0xff && structure[1] == 0xff {
             true
         } else {
             false
@@ -187,24 +168,24 @@ impl Memory {
     }
 
     pub fn yeild_str_vec_from_struct(&mut self, structure: String) -> Vec<String> {
-         if !self.get_struct_is_vec(structure.clone()) {
+        if !self.get_struct_is_vec(structure.clone()) {
             panic!("Err in vec struct id");
-         }
-         let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
-         if vec_type != "str" {
+        }
+        let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
+        if vec_type != "str" {
             panic!("invalid invokation to yeld str vec")
-         }
-         let mut final_vec: Vec<String> = vec![];
-         let heap_addr: String = self.get_heap_addr_from_struct(structure);
-         let addr_bytes: Vec<u8> = self.heap_load(heap_addr);
-         for addr_byte in addr_bytes.chunks(6) {
+        }
+        let mut final_vec: Vec<String> = vec![];
+        let heap_addr: String = self.get_heap_addr_from_struct(structure);
+        let addr_bytes: Vec<u8> = self.heap_load(heap_addr);
+        for addr_byte in addr_bytes.chunks(6) {
             let addr_str: String = String::from_utf8_lossy(addr_byte).to_string();
             let bytes: &[u8] = &self.heap_load(addr_str);
             let final_str: String = String::from_utf8_lossy(bytes).to_string();
             final_vec.push(final_str);
-         }
-        
-         final_vec
+        }
+
+        final_vec
     }
 }
 
@@ -220,9 +201,9 @@ impl Types {
     // parsers
 
     fn parse_int(&mut self, value: &str, block: &str, line: i32) -> i32 {
-        value.parse::<i32>().expect(
-            format!("Parse int error at {}:{}", block, line).trim()
-        )
+        value
+            .parse::<i32>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
     }
 
     // Integers
@@ -233,7 +214,14 @@ impl Types {
         memory.store(final_value)
     }
 
-    pub fn set_var_int(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+    pub fn set_var_int(
+        &mut self,
+        name: String,
+        value: &str,
+        memory: &mut Memory,
+        block: &str,
+        line: i32,
+    ) {
         let offset: usize = self.set_int(value, memory, block, line);
         self.int.insert(name, offset);
     }
@@ -274,7 +262,14 @@ impl Types {
 
     // vectors
 
-    pub fn set_int_vec(&mut self, name: String, value: &str, memory: &mut Memory, block: &str, line: i32) {
+    pub fn set_int_vec(
+        &mut self,
+        name: String,
+        value: &str,
+        memory: &mut Memory,
+        block: &str,
+        line: i32,
+    ) {
         let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
         let mut final_bytes: Vec<u8> = vec![];
         for item in items {
@@ -286,7 +281,7 @@ impl Types {
         }
 
         let addr_prefix: &str = "0xaaaaffff";
-        let heap_addr:String = memory.malloc(final_bytes);
+        let heap_addr: String = memory.malloc(final_bytes);
         let final_addr: String = format!("{}{}", addr_prefix, heap_addr);
 
         let location: usize = memory.store(final_addr);
@@ -294,7 +289,7 @@ impl Types {
     }
 
     pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let items: &Vec<&str> = &value[1..value.len() -2].split(',').collect::<Vec<&str>>();
+        let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
             let byte: Vec<u8> = item.as_bytes().to_vec();
@@ -311,5 +306,4 @@ impl Types {
         let location: usize = memory.store(final_heap_addr);
         self.vec.insert(name, location);
     }
-
 }
