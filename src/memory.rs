@@ -41,9 +41,12 @@ impl Memory {
         self.stack[location]
     }
 
-    pub fn store(&mut self, val: u8) -> usize {
-        self.stack.push(val);
-        return self.stack.len();
+    pub fn store(&mut self, val: Vec<u8>) -> usize {
+        let address = self.stack.len();
+        for byte in val {
+            self.stack.push(byte);
+        }
+        address
     }
 
     // heap operations
@@ -75,23 +78,9 @@ impl Memory {
 
     // stack yeilds
 
-    pub fn yeild_int_from_stack(&mut self) -> i64 {
-        let structure: String = self.stack[self.stack.len() - 1].clone();
-        if self.get_struct_is_int(structure.clone()) {
-            self.yeild_int_from_struct(structure)
-        } else {
-            panic!("Illegal use of yeild int from stack")
-        }
-    }
+    pub fn yeild_int_from_stack(&mut self) -> i64 {}
 
-    pub fn yeild_string_from_stack(&mut self) -> String {
-        let structure: String = self.stack[self.stack.len() - 1].clone();
-        if self.get_struct_is_string(structure.clone()) {
-            self.yeild_string_from_struct(structure)
-        } else {
-            panic!("Illegal use of yeild str from stack")
-        }
-    }
+    pub fn yeild_string_from_stack(&mut self) -> String {}
 
     pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
         if !self.get_struct_is_int(structure.clone()) {
