@@ -22,7 +22,7 @@ impl Memory {
     pub fn new() -> Self {
         Self {
             stack: vec![],
-            heap: HashMap::new(),
+            heap: HashMap::from([(0, vec![0, 0, 0, 0])]),
             ret: vec![],
         }
     }
@@ -52,10 +52,10 @@ impl Memory {
     // heap operations
 
     pub fn malloc(&mut self, bytes: Vec<u8>) -> u32 {
-        let mut rng = rand::thread_rng();
-        let heap_addr = rng.gen::<u32>();
-        self.heap.insert(heap_addr.clone(), bytes);
-        heap_addr
+        let addr_bytes = rand::thread_rng().gen::<[u8; 4]>();
+        let addr: u32 = u32::from_be_bytes(addr_bytes);
+        self.heap.insert(addr, bytes);
+        addr
     }
 
     pub fn free(&mut self, addr: u32) {
