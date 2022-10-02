@@ -131,18 +131,15 @@ impl Memory {
         num
     }
 
-    // strings
-
     // heap yeilds
 
-    pub fn yeild_string_from_struct(&mut self, structure: String) -> String {
-        if !self.get_struct_is_string(structure.clone()) {
-            panic!("Err in str struct id")
-        }
-        let slice: &str = &structure[6..structure.len()];
-        let bytes: Vec<u8> = self.heap_load(slice.to_string());
-        let value: Cow<str> = String::from_utf8_lossy(&bytes);
-        value.to_string()
+    // strings
+    pub fn yeild_string(&mut self, location: Location) -> String {
+        let addr_bytes = self.load(location);
+        let heap_addr = u32::from_be_bytes(addr_bytes.try_into().expect("invalid heap addr len"));
+        let str_bytes = self.heap_load(heap_addr);
+        let final_str = String::from_utf8_lossy(&str_bytes);
+        final_str.into_owned()
     }
 
     pub fn yeild_int_vec_from_struct(&mut self, structure: String) -> Vec<i32> {
