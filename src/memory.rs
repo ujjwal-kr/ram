@@ -42,9 +42,9 @@ impl Memory {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: Location) -> Vec<u8> {
+    pub fn load(&mut self, location: Location) -> &[u8] {
         let slice = &self.stack[location.start..location.start + location.size];
-        slice.to_vec()
+        slice
     }
 
     pub fn store(&mut self, val: Vec<u8>) -> Location {
@@ -81,24 +81,57 @@ impl Memory {
         bytes
     }
 
-    fn get_heap_addr_from_struct(&mut self, structure: String) -> String {
-        let addr: &str = &structure[structure.len() - 8..structure.len() - 1];
-        addr.to_string()
-    }
-
     // stack yeilds
 
-    pub fn yeild_int_from_stack(&mut self) -> i64 {}
+    // ints
 
-    pub fn yeild_string_from_stack(&mut self) -> String {}
-
-    pub fn yeild_int_from_struct(&mut self, structure: String) -> i64 {
-        if !self.get_struct_is_int(structure.clone()) {
-            panic!("Err in int struct id")
-        }
-        let slice: &str = &structure[6..structure.len()];
-        slice.parse::<i64>().expect("int struct parse err")
+    pub fn get_int_from_stack(&mut self) -> i32 {
+        let location = Location {
+            start: self.stack.len() - 4,
+            size: 4,
+        };
+        let bytes = self.load(location);
+        let num: i32 = i32::from_be_bytes(bytes.try_into().expect("invalid i32 len"));
+        num
     }
+
+    pub fn yeild_i32(&mut self, location: Location) -> i32 {
+        let bytes = self.load(location);
+        let num: i32 = i32::from_be_bytes(bytes.try_into().expect("invalid i32 len"));
+        num
+    }
+
+    pub fn yeild_i64(&mut self, location: Location) -> i64 {
+        let bytes = self.load(location);
+        let num: i64 = i64::from_be_bytes(bytes.try_into().expect("invalid i64 len"));
+        num
+    }
+
+    pub fn yeild_i128(&mut self, location: Location) -> i128 {
+        let bytes = self.load(location);
+        let num: i128 = i128::from_be_bytes(bytes.try_into().expect("invalid i128 len"));
+        num
+    }
+
+    pub fn yeild_u32(&mut self, location: Location) -> u32 {
+        let bytes = self.load(location);
+        let num: u32 = u32::from_be_bytes(bytes.try_into().expect("invalid u32 len"));
+        num
+    }
+
+    pub fn yeild_u64(&mut self, location: Location) -> u64 {
+        let bytes = self.load(location);
+        let num: u64 = u64::from_be_bytes(bytes.try_into().expect("invalid u64 len"));
+        num
+    }
+
+    pub fn yeild_u128(&mut self, location: Location) -> u128 {
+        let bytes = self.load(location);
+        let num: u128 = u128::from_be_bytes(bytes.try_into().expect("invalid u128 len"));
+        num
+    }
+
+    // strings
 
     // heap yeilds
 
