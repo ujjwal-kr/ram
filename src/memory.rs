@@ -11,9 +11,14 @@ pub struct Memory {
 }
 
 pub struct Types {
-    pub int: HashMap<String, usize>,
-    pub str: HashMap<String, usize>,
-    pub vec: HashMap<String, usize>,
+    pub int: HashMap<String, Location>,
+    pub str: HashMap<String, Location>,
+    pub vec: HashMap<String, Location>,
+}
+
+pub struct Location {
+    start: usize,
+    size: usize,
 }
 
 // implementations
@@ -37,16 +42,21 @@ impl Memory {
         self.stack = vec![];
     }
 
-    pub fn load(&mut self, location: usize) -> u8 {
-        self.stack[location]
+    pub fn load(&mut self, location: Location) -> Vec<u8> {
+        let slice = &self.stack[location.start..location.start + location.size];
+        slice.to_vec()
     }
 
-    pub fn store(&mut self, val: Vec<u8>) -> usize {
+    pub fn store(&mut self, val: Vec<u8>) -> Location {
         let address = self.stack.len();
         for byte in val {
             self.stack.push(byte);
         }
-        address
+
+        Location {
+            start: address,
+            size: val.len(),
+        }
     }
 
     // heap operations
