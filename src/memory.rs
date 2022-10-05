@@ -1,6 +1,5 @@
 use byteorder::{BigEndian, ReadBytesExt};
 use rand::Rng;
-use std::borrow::Cow;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -142,22 +141,21 @@ impl Memory {
         final_str.into_owned()
     }
 
-    pub fn yeild_int_vec_from_struct(&mut self, structure: String) -> Vec<i32> {
-        if !self.get_struct_is_vec(structure.clone()) {
-            panic!("Err in vec struct id");
-        }
-        let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
-        if vec_type != "int" {
-            panic!("invalid invokation to yeld int vec")
-        }
-        let heap_addr: String = self.get_heap_addr_from_struct(structure);
-        let bytes: Vec<u8> = self.heap_load(heap_addr);
+    pub fn yeild_int_vec(&mut self, location: Location) -> Vec<i32> {
+        let addr_bytes = self.load(location);
+        let heap_addr_bytes = &addr_bytes[1..addr_bytes.len() - 1];
+        let heap_addr = u32::from_be_bytes(
+            heap_addr_bytes
+                .try_into()
+                .expect("invalid vec int heap addr len"),
+        );
+
         let mut final_vec: Vec<i32> = vec![];
-        for mut byte in bytes.chunks(4) {
-            let num: i32 = byte.read_i32::<BigEndian>().unwrap();
+        let vec_bytes = self.heap_load(heap_addr);
+        for num_bytes in vec_bytes.chunks(4) {
+            let num = i32::from_be_bytes(num_bytes.try_into().expect("Invalid vec int chunk len"));
             final_vec.push(num);
         }
-
         final_vec
     }
 
