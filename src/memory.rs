@@ -1,4 +1,3 @@
-use byteorder::{BigEndian, ReadBytesExt};
 use rand::Rng;
 use std::collections::HashMap;
 
@@ -159,24 +158,23 @@ impl Memory {
         final_vec
     }
 
-    pub fn yeild_str_vec_from_struct(&mut self, structure: String) -> Vec<String> {
-        if !self.get_struct_is_vec(structure.clone()) {
-            panic!("Err in vec struct id");
-        }
-        let vec_type: &str = self.get_vec_type_from_struct(structure.clone());
-        if vec_type != "str" {
-            panic!("invalid invokation to yeld str vec")
-        }
+    pub fn yeild_str_vec(&mut self, location: Location) -> Vec<String> {
+        let stack_addr_bytes = self.load(location);
+        let heap_addr_bytes = &stack_addr_bytes[1..stack_addr_bytes.len() - 1];
+        let heap_addr = u32::from_be_bytes(
+            heap_addr_bytes
+                .try_into()
+                .expect("invalid vec str heap addr len"),
+        );
         let mut final_vec: Vec<String> = vec![];
-        let heap_addr: String = self.get_heap_addr_from_struct(structure);
-        let addr_bytes: Vec<u8> = self.heap_load(heap_addr);
-        for addr_byte in addr_bytes.chunks(6) {
-            let addr_str: String = String::from_utf8_lossy(addr_byte).to_string();
-            let bytes: &[u8] = &self.heap_load(addr_str);
-            let final_str: String = String::from_utf8_lossy(bytes).to_string();
-            final_vec.push(final_str);
+        let vec_addr_bytes = self.heap_load(heap_addr);
+        for addr_bytes in vec_addr_bytes.chunks(4) {
+            let str_addr =
+                u32::from_be_bytes(addr_bytes.try_into().expect("invalid vec str heap str len"));
+            let str_bytes = self.heap_load(str_addr);
+            let final_str = String::from_utf8_lossy(&str_bytes);
+            final_vec.push(final_str.into_owned());
         }
-
         final_vec
     }
 }
