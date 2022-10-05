@@ -56,9 +56,7 @@ impl Types {
 
     // Integers
 
-    pub fn set_int(&mut self, value: &str, memory: &mut Memory, block: &str, line: i32) -> usize {}
-
-    pub fn set_var_int(
+    pub fn set_int(
         &mut self,
         name: String,
         value: &str,
@@ -66,20 +64,21 @@ impl Types {
         block: &str,
         line: i32,
     ) {
-        let offset: usize = self.set_int(value, memory, block, line);
-        self.int.insert(name, offset);
+        let int_bytes = self.parse_i32(value, block, line).to_be_bytes();
+        let location: Location = memory.store(int_bytes.to_vec());
+        self.int.insert(name, location);
     }
 
-    pub fn get_int(&mut self, name: String, memory: &mut Memory) -> i64 {
-        let final_int: i64;
+    // TODO: make stuff for other types of ints
+
+    pub fn get_int(&mut self, name: String, memory: &mut Memory, block: &str, line: i32) -> i32 {
+        let location: Location;
         match self.int.get(&name) {
-            Some(&location) => {
-                let structure: String = memory.load(location);
-                final_int = memory.yeild_int_from_struct(structure);
-            }
-            _ => todo!("Need to implement errs"),
+            Some(&loc) => location = loc,
+            _ => panic!("Var int not found at {}:{}", block, line),
         }
-        final_int
+
+        memory.yeild_i32(location)
     }
 
     // Strings
