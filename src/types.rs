@@ -65,7 +65,7 @@ impl Types {
         line: i32,
     ) {
         let int_bytes = self.parse_i32(value, block, line).to_be_bytes();
-        let location: Location = memory.store(int_bytes.to_vec());
+        let location: Location = memory.store(&int_bytes);
         self.int.insert(name, location);
     }
 
@@ -84,23 +84,32 @@ impl Types {
     // Strings
 
     pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let bytes: Vec<u8> = value.to_string().as_bytes().to_vec();
-        let heap_addr: String = memory.malloc(bytes);
-        let hex_heap_addr: String = format!("0x0000{}", heap_addr);
-        let location: usize = memory.store(hex_heap_addr);
+        let heap_addr = memory.malloc(value.as_bytes());
+        let location = memory.store(&heap_addr.to_be_bytes());
         self.str.insert(name, location);
     }
 
-    pub fn get_string(&mut self, name: String, memory: &mut Memory) -> String {
-        let final_str: String;
+    pub fn get_string(
+        &mut self,
+        name: String,
+        memory: &mut Memory,
+        block: &str,
+        line: i32,
+    ) -> String {
+        let location: Location;
         match self.str.get(&name) {
-            Some(&location) => {
-                let structure: String = memory.load(location);
-                final_str = memory.yeild_string_from_struct(structure);
-            }
-            _ => todo!("Need to implement err"),
+            Some(&loc) => location = loc,
+            _ => panic!("Var str not found at {}:{}", block, line),
         }
-        final_str
+        let heap_addr_bytes = memory.load(location);
+        let heap_addr = u32::from_be_bytes(
+            heap_addr_bytes
+                .try_into()
+                .expect("invalid heap addr len in get_string"),
+        );
+
+        let str_bytes = memory.heap_load(heap_addr);
+        String::from_utf8_lossy(&str_bytes).to_string()
     }
 
     // vectors
@@ -124,7 +133,7 @@ impl Types {
         }
 
         let addr_prefix: &str = "0xaaaaffff";
-        let heap_addr: String = memory.malloc(final_bytes);
+        let heap_addr: String = memory.malloc(&final_bytes);
         let final_addr: String = format!("{}{}", addr_prefix, heap_addr);
 
         let location: usize = memory.store(final_addr);

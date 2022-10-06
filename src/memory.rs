@@ -37,10 +37,10 @@ impl Memory {
         slice
     }
 
-    pub fn store(&mut self, val: Vec<u8>) -> Location {
+    pub fn store(&mut self, val: &[u8]) -> Location {
         let address = self.stack.len();
         for byte in val {
-            self.stack.push(byte);
+            self.stack.push(byte.clone());
         }
 
         Location {
@@ -51,10 +51,10 @@ impl Memory {
 
     // heap operations
 
-    pub fn malloc(&mut self, bytes: Vec<u8>) -> u32 {
+    pub fn malloc(&mut self, bytes: &[u8]) -> u32 {
         let addr_bytes = rand::thread_rng().gen::<[u8; 4]>();
         let addr: u32 = u32::from_be_bytes(addr_bytes);
-        self.heap.insert(addr, bytes);
+        self.heap.insert(addr, bytes.to_vec());
         addr
     }
 
