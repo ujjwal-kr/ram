@@ -151,4 +151,34 @@ impl Types {
         let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
         self.vec.insert(name, location);
     }
+
+    pub fn get_int_vec(
+        &mut self,
+        name: String,
+        memory: &mut Memory,
+        block: &str,
+        line: i32,
+    ) -> Vec<i32> {
+        let location: Location;
+        match self.vec.get_mut(&name) {
+            Some(loc) => location = loc.clone(),
+            _ => panic!("No vector named {} found at {}:{}", name, block, line),
+        }
+        memory.yeild_int_vec(location).to_vec()
+    }
+
+    pub fn get_str_vec(
+        &mut self,
+        name: String,
+        memory: &mut Memory,
+        block: &str,
+        line: i32,
+    ) -> Vec<String> {
+        let location: Location;
+        match self.vec.get_mut(&name) {
+            Some(loc) => location = loc.clone(),
+            _ => panic!("No vector named {} found at {}:{}", name, block, line),
+        }
+        memory.yeild_str_vec(location)
+    }
 }
