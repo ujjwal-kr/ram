@@ -8,6 +8,7 @@ pub struct Memory {
     pub ret: Vec<u8>,
 }
 
+#[derive(Clone)]
 pub struct Location {
     pub start: usize,
     pub size: usize,
@@ -24,7 +25,7 @@ impl Memory {
 
     // stack operations
 
-    pub fn pop_stack(&mut self, n: usize) {
+    pub fn pop_stack(&mut self) {
         self.stack.pop();
     }
 

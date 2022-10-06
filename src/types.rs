@@ -72,13 +72,13 @@ impl Types {
     // TODO: make stuff for other types of ints
 
     pub fn get_int(&mut self, name: String, memory: &mut Memory, block: &str, line: i32) -> i32 {
-        let location: Location;
+        let location;
         match self.int.get(&name) {
-            Some(&loc) => location = loc,
+            Some(loc) => location = loc,
             _ => panic!("Var int not found at {}:{}", block, line),
         }
 
-        memory.yeild_i32(location)
+        memory.yeild_i32(location.clone())
     }
 
     // Strings
@@ -98,7 +98,7 @@ impl Types {
     ) -> String {
         let location: Location;
         match self.str.get(&name) {
-            Some(&loc) => location = loc,
+            Some(loc) => location = loc.clone(),
             _ => panic!("Var str not found at {}:{}", block, line),
         }
         let heap_addr_bytes = memory.load(location);
@@ -125,37 +125,30 @@ impl Types {
         let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
         let mut final_bytes: Vec<u8> = vec![];
         for item in items {
-            let int: i32 = self.parse_int(item, block, line);
+            let int: i32 = self.parse_i32(item, block, line);
             let byte: &[u8] = &int.to_be_bytes();
             for bit in byte {
                 final_bytes.push(*bit);
             }
         }
 
-        let addr_prefix: &str = "0xaaaaffff";
-        let heap_addr: String = memory.malloc(&final_bytes);
-        let final_addr: String = format!("{}{}", addr_prefix, heap_addr);
-
-        let location: usize = memory.store(final_addr);
-        self.vec.insert(name, location);
+        let location: Location = memory.store(&final_bytes);
+        self.int.insert(name, location);
     }
 
     pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
         let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
-            let byte: Vec<u8> = item.as_bytes().to_vec();
-            let heap_addr_current: String = memory.malloc(byte);
-            let current_addr_bytes: Vec<u8> = heap_addr_current.as_bytes().to_vec();
-            for byte in current_addr_bytes {
-                heap_addrs_bytes.push(byte);
+            let current_heap_addr = memory.malloc(item.as_bytes());
+            let addr_bytes = current_heap_addr.to_be_bytes();
+            for byte in addr_bytes {
+                heap_addrs_bytes.push(byte)
             }
         }
 
-        let addr_prefix: &str = "0xaaaa0000";
-        let heap_addr: String = memory.malloc(heap_addrs_bytes);
-        let final_heap_addr: String = format!("{}{}", addr_prefix, heap_addr);
-        let location: usize = memory.store(final_heap_addr);
+        let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
+        let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
         self.vec.insert(name, location);
     }
 }
