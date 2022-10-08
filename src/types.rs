@@ -1,19 +1,29 @@
 use crate::memory::{Location, Memory};
 use std::collections::HashMap;
 
-pub struct Types {
-    pub int: HashMap<String, Location>,
-    pub str: HashMap<String, Location>,
-    pub vec: HashMap<String, Location>,
+pub struct Vars(HashMap<String, Type>);
+
+#[derive(Clone)]
+pub struct Type {
+    name: TypeName,
+    location: Location,
 }
 
-impl Types {
+#[derive(Clone)]
+enum TypeName {
+    I32,
+    I64,
+    I128,
+    U32,
+    U64,
+    U128,
+    String,
+    Vector,
+}
+
+impl Vars {
     pub fn new() -> Self {
-        Self {
-            int: HashMap::new(),
-            str: HashMap::new(),
-            vec: HashMap::new(),
-        }
+        Vars { 0: HashMap::new() }
     }
 
     // parsers
@@ -66,18 +76,29 @@ impl Types {
     ) {
         let int_bytes = self.parse_i32(value, block, line).to_be_bytes();
         let location: Location = memory.store(&int_bytes);
-        self.int.insert(name, location);
+        let new_int = Type {
+            name: TypeName::I32,
+            location,
+        };
+        self.0.insert(name, new_int);
     }
 
     // TODO: make stuff for other types of ints
 
     pub fn get_int(&mut self, name: String, memory: &mut Memory, block: &str, line: i32) -> i32 {
-        let location;
-        match self.int.get(&name) {
-            Some(loc) => location = loc,
-            _ => panic!("Var int not found at {}:{}", block, line),
-        }
+        let location: Location;
+        let new_int_type: Type;
+        match self.0.get(&name) {
+            Some(int_type) => new_int_type = int_type.clone(),
+            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
+        };
 
+        match new_int_type.name {
+            TypeName::I32 => (),
+            _ => panic!("No int exists for '{}', {}:{}", name, block, line),
+        };
+
+        location = new_int_type.location;
         memory.yeild_i32(location.clone())
     }
 
@@ -101,10 +122,16 @@ impl Types {
         line: i32,
     ) -> String {
         let location: Location;
-        match self.str.get(&name) {
-            Some(loc) => location = loc.clone(),
-            _ => panic!("Var str not found at {}:{}", block, line),
-        }
+        let new_str: Type;
+        match self.0.get(&name) {
+            Some(string_type) => new_str = string_type.clone(),
+            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
+        };
+        match new_str.name {
+            TypeName::String => (),
+            _ => panic!("No str exist for '{}' at {}:{}", name, block, line),
+        };
+        location = new_str.location;
         let heap_addr_bytes = memory.load(location);
         let heap_addr = u32::from_be_bytes(
             heap_addr_bytes
@@ -137,7 +164,12 @@ impl Types {
         }
 
         let location: Location = memory.store(&final_bytes);
-        self.int.insert(name, location);
+        let new_int_vec = Type {
+            name: TypeName::Vector,
+            location,
+        };
+
+        self.0.insert(name, new_int_vec);
     }
 
     pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
@@ -153,7 +185,11 @@ impl Types {
 
         let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
         let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
-        self.vec.insert(name, location);
+        let new_str_vec: Type = Type {
+            name: TypeName::Vector,
+            location,
+        };
+        self.0.insert(name, new_str_vec);
     }
 
     pub fn get_int_vec(
@@ -164,11 +200,18 @@ impl Types {
         line: i32,
     ) -> Vec<i32> {
         let location: Location;
-        match self.vec.get_mut(&name) {
-            Some(loc) => location = loc.clone(),
-            _ => panic!("No vector named {} found at {}:{}", name, block, line),
+        let new_int_vec: Type;
+        match self.0.get(&name) {
+            Some(int_vec) => new_int_vec = int_vec.clone(),
+            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
+        };
+
+        match new_int_vec.name {
+            TypeName::Vector => (),
+            _ => panic!("No int_vec found for '{}' at {}:{}", name, block, line),
         }
-        memory.yeild_int_vec(location).to_vec()
+        location = new_int_vec.location;
+        memory.yeild_int_vec(location)
     }
 
     pub fn get_str_vec(
@@ -179,10 +222,17 @@ impl Types {
         line: i32,
     ) -> Vec<String> {
         let location: Location;
-        match self.vec.get_mut(&name) {
-            Some(loc) => location = loc.clone(),
-            _ => panic!("No vector named {} found at {}:{}", name, block, line),
-        }
+        let new_str_vec: Type;
+
+        match self.0.get(&name) {
+            Some(str_vec) => new_str_vec = str_vec.clone(),
+            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
+        };
+        location = new_str_vec.location;
+        match new_str_vec.name {
+            TypeName::Vector => (),
+            _ => panic!("No str_vec found for '{}' at {}:{}", name, block, line),
+        };
         memory.yeild_str_vec(location)
     }
 }

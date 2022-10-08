@@ -1,19 +1,63 @@
-use crate::{
-    memory::{Memory, Types},
-    Registers,
-};
+use crate::types::Vars;
+use crate::{memory::Memory, Registers};
 
 use super::errors;
 
 pub fn ram(
     memory: &mut Memory,
-    types: &mut Types,
+    vars: &mut Vars,
     registers: &mut Registers,
     cmd: Vec<&str>,
     statement: &str,
     b: &str,
     l: u32,
 ) {
+    // ram 10
+    // ram lx/rv 10
+    // ram lx/rv prev
+    // ram lx
+    // ram rv
+    // ram <var> :str = "test"
+    // ram <var> :int = 10
+    // ram <var> :vec = [1,2,3]
+    // ram <var> = <another-var> [casting]
+
+    if cmd.len() < 2 {
+        errors::args_error(b, l);
+    }
+
+    match cmd[1] {
+        "lx" => {
+            if cmd[2] == "prev" {
+            } else {
+                // parse cmd[2] as int
+            }
+        }
+        "rv" => {
+            if cmd[2] == "prev" {
+            } else {
+                // parse cmd[2] as int
+            }
+        }
+        _ => {
+            if cmd.len() > 3 {
+                if cmd[2] == "=" {
+                    // casting
+                } else if &cmd[2][0..1] == ":" {
+                    match &cmd[2][1..cmd[2].len() - 1] {
+                        "str" => {}
+                        "int" => {}
+                        "vec" => {}
+                        _ => errors::args_error(b, l),
+                    }
+                } else {
+                    errors::args_error(b, l)
+                }
+            } else {
+                // try to parse cmd[1] as int
+            }
+        }
+    }
 }
 
 // pub fn ram(

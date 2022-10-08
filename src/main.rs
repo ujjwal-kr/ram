@@ -3,10 +3,13 @@ use std::io::prelude::*;
 use std::{env, fs, io, process};
 
 mod memory;
+mod types;
 
 mod funcs;
 mod parser;
-use memory::{Memory, Types};
+use memory::Memory;
+use types::Vars;
+
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
 use funcs::stack;
 
@@ -45,9 +48,9 @@ fn main() -> std::io::Result<()> {
         lxstring: String::from(""),
     };
     let mut memory: Memory = Memory::new();
-    let mut types: Types = Types::new();
+    let mut vars: Vars = Vars::new();
 
-    match execute_block(program, "main:", registers, &mut memory, &mut types) {
+    match execute_block(program, "main:", registers, &mut memory, &mut vars) {
         Ok(()) => (),
         _ => println!("Something went wrong"),
     }
@@ -59,7 +62,7 @@ pub fn execute_block(
     run_label: &str,
     registers: Registers,
     mut memory: &mut Memory,
-    mut types: &mut Types,
+    mut types: &mut Vars,
 ) -> std::io::Result<()> {
     let mut line = 0u32;
 

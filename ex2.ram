@@ -1,5 +1,2 @@
 main:
     ram 10
-    ram "string"
-    ram lx
-    ram rv  
