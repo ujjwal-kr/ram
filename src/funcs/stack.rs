@@ -28,13 +28,17 @@ pub fn ram(
 
     match cmd[1] {
         "lx" => {
-            if cmd[2] == "prev" {
+            if cmd.len() == 2 {
+                // ram lx
+            } else if cmd[2] == "prev" {
             } else {
                 // parse cmd[2] as int
             }
         }
         "rv" => {
-            if cmd[2] == "prev" {
+            if cmd.len() == 2 {
+                // ram rv
+            } else if cmd[2] == "prev" {
             } else {
                 // parse cmd[2] as int
             }
