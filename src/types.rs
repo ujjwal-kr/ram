@@ -86,7 +86,11 @@ impl Types {
     pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
         let heap_addr = memory.malloc(value.as_bytes());
         let location = memory.store(&heap_addr.to_be_bytes());
-        self.str.insert(name, location);
+        let new_string = Type {
+            name: TypeName::String,
+            location,
+        };
+        self.0.insert(name, new_string);
     }
 
     pub fn get_string(
