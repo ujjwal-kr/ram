@@ -9,6 +9,14 @@ pub fn stack_len_error(run_label: &str, line: u32) {
     process::exit(1)
 }
 
+pub fn parse_int(arg: &str, block: &str, line: i32) -> i32 {
+    let num: i32;
+    num = arg
+        .parse()
+        .expect(format!("Invalid int value at {}:{}", block, line).trim());
+    num
+}
+
 pub fn parse_usize(arg: &str, block: &str, line: u32) -> usize {
     let num: usize;
     num = arg.parse().expect(
@@ -22,7 +30,7 @@ pub fn parse_usize(arg: &str, block: &str, line: u32) -> usize {
     num
 }
 
-pub fn args_error(run_label: &str, line: u32) {
+pub fn args_error(run_label: &str, line: i32) {
     println!(
         "Invalid syntax at '{}' line:{}",
         run_label.to_string(),
