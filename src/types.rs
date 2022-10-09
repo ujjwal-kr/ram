@@ -1,4 +1,4 @@
-use crate::memory::{self, Location, Memory};
+use crate::memory::{Location, Memory};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -247,8 +247,35 @@ impl Vars {
         memory.yeild_str_vec(location)
     }
 
-    pub fn cast(&mut self, src: String, dest: String, memory: &mut Memory) {
+    // Casting stuff
+
+    pub fn load_src_data(&mut self, src: String, dest: String, memory: &mut Memory) -> Vec<u8> {
         // check if the type of both vars are same
-        // copy bytes of soruce to destination
+        let source: Type;
+        let destination: Type;
+        match self.0.get(&src) {
+            Some(s) => source = s.clone(),
+            _ => panic!("Var {} not found", src),
+        }
+
+        match self.0.get(&dest) {
+            Some(d) => destination = d.clone(),
+            _ => panic!("Var {} not found", src),
+        }
+        if destination.name != source.name {
+            panic!("Cannot assign {:?} to {:?}", source.name, destination.name)
+        }
+        // returns src data
+        let data: &[u8] = memory.load(source.location);
+        data.to_vec()
+    }
+
+    pub fn cast_to_dest(&mut self, dest: String, src_data: Vec<u8>, memory: &mut Memory) {
+        let dest_location: Location;
+        match self.0.get(&dest) {
+            Some(s) => dest_location = s.clone().location,
+            _ => panic!("Var {} not found", dest),
+        }
+        memory.stack_mod(dest_location, &src_data);
     }
 }
