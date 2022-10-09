@@ -64,7 +64,7 @@ pub fn execute_block(
     mut memory: &mut Memory,
     mut types: &mut Vars,
 ) -> std::io::Result<()> {
-    let mut line = 0u32;
+    let mut line = 0i32;
 
     let run_block: Vec<String>;
     match program.get(run_label) {

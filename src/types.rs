@@ -1,4 +1,4 @@
-use crate::memory::{Location, Memory};
+use crate::memory::{self, Location, Memory};
 use std::collections::HashMap;
 
 pub struct Vars(HashMap<String, Type>);
@@ -9,7 +9,7 @@ pub struct Type {
     location: Location,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 enum TypeName {
     I32,
     I64,
@@ -102,6 +102,16 @@ impl Vars {
         memory.yeild_i32(location.clone())
     }
 
+    pub fn get_int_from_stack(&mut self, memory: &mut Memory) -> i32 {
+        memory.get_int_from_stack()
+    }
+
+    pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str, block: &str, line: i32) {
+        let num = self.parse_i32(value, block, line);
+        let bytes = num.to_be_bytes();
+        memory.store(&bytes);
+    }
+
     // Strings
 
     pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
@@ -173,7 +183,7 @@ impl Vars {
     }
 
     pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
-        let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
+        let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
             let current_heap_addr = memory.malloc(item.as_bytes());
@@ -234,5 +244,10 @@ impl Vars {
             _ => panic!("No str_vec found for '{}' at {}:{}", name, block, line),
         };
         memory.yeild_str_vec(location)
+    }
+
+    pub fn cast(&mut self, src: String, dest: String, memory: &mut Memory) {
+        // check if the type of both vars are same
+        // copy bytes of soruce to destination
     }
 }
