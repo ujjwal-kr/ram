@@ -50,6 +50,13 @@ impl Memory {
         }
     }
 
+    pub fn stack_mod(&mut self, location: Location, data: &[u8]) {
+        if data.len() != location.size {
+            panic!("Illegal memory modification");
+        }
+        self.stack.splice(location.start.., data.iter().cloned());
+    }
+
     // heap operations
 
     pub fn malloc(&mut self, bytes: &[u8]) -> u32 {
@@ -72,6 +79,11 @@ impl Memory {
         bytes
     }
 
+    pub fn heap_mod(&mut self, addr: u32, data: &[u8]) {
+        self.heap.remove(&addr);
+        self.heap.insert(addr, data.to_vec());
+    }
+
     // stack yeilds
 
     // ints
@@ -84,6 +96,11 @@ impl Memory {
         let bytes = self.load(location);
         let num: i32 = i32::from_be_bytes(bytes.try_into().expect("invalid i32 len"));
         num
+    }
+
+    pub fn set_int_to_stack(&mut self, value: i32) {
+        let bytes = value.to_be_bytes();
+        self.store(&bytes);
     }
 
     pub fn yeild_i32(&mut self, location: Location) -> i32 {
