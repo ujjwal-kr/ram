@@ -13,6 +13,7 @@ use types::Vars;
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
 use funcs::stack;
 
+#[derive(Debug)]
 pub struct Registers {
     pub lx: i32,
     pub rv: i32,
@@ -61,8 +62,8 @@ pub fn execute_block(
     program: HashMap<String, Vec<String>>,
     run_label: &str,
     registers: Registers,
-    mut memory: &mut Memory,
-    mut types: &mut Vars,
+    memory: &mut Memory,
+    types: &mut Vars,
 ) -> std::io::Result<()> {
     let mut line = 0i32;
 
@@ -86,7 +87,8 @@ pub fn execute_block(
         let statement = statement.trim();
         line += 1;
         let cmd: Vec<&str> = statement.split_whitespace().collect();
-        match cmd[0].trim() {
+        match cmd[0] {
+            "dbg" => println!("{:#?} \n {:#?}", memory, local_registers),
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
             "ram" => stack::ram(
@@ -183,6 +185,7 @@ pub fn execute_block(
             //     line,
             // ),
             "halt" => process::exit(0),
+
             _ => {
                 println!(
                     "Cant recognize command '{}' at '{}' line: {}",
