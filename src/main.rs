@@ -90,11 +90,14 @@ pub fn execute_block(
         match cmd[0] {
             "dbg" => {
                 println!("Stack: ");
-                for i in memory.stack.chunks(4) {
+                for i in memory.stack.chunks(8) {
                     println!("{:?}", i)
                 }
-                println!("{:#?} \n {:#?}", types, local_registers)
-            },
+                println!(
+                    "{:#?} \n {:#?} \n HEAP: {:#?}",
+                    types, local_registers, memory.heap
+                )
+            }
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
             "ram" => stack::ram(

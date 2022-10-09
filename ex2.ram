@@ -1,4 +1,3 @@
 main:
-    ram test :int = 2
-    ram test_vec :vec :int = [1, 2, 3, 4]
-    dbg
+     ram ok :vec :str = [ok, ok, ok, ok, o, k, dwquhwqiudhwiqudhwuqdhwuidhwdhwuqidhwquidhiwuqhduiqwhduwqhduiwqhduiwqhduiwqhudqwhuidhqwdhwqiudhwquidhiwqudhwuqidhwuqidhwuqidhwuqihduiwhd:]
+     dbg

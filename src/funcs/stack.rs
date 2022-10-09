@@ -53,6 +53,7 @@ pub fn ram(
             }
         }
         "string" => {
+            // ram string = hello
             let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
             registers.string = exp.to_string();
         }
