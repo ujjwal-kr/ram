@@ -163,10 +163,10 @@ impl Vars {
         block: &str,
         line: i32,
     ) {
-        let items: &Vec<&str> = &value[1..value.len() - 2].split(',').collect::<Vec<&str>>();
+        let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut final_bytes: Vec<u8> = vec![];
         for item in items {
-            let int: i32 = self.parse_i32(item, block, line);
+            let int: i32 = self.parse_i32(item.trim(), block, line);
             let byte: &[u8] = &int.to_be_bytes();
             for bit in byte {
                 final_bytes.push(*bit);
@@ -186,7 +186,7 @@ impl Vars {
         let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
-            let current_heap_addr = memory.malloc(item.as_bytes());
+            let current_heap_addr = memory.malloc(item.trim().as_bytes());
             let addr_bytes = current_heap_addr.to_be_bytes();
             for byte in addr_bytes {
                 heap_addrs_bytes.push(byte)
