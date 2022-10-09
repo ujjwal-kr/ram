@@ -1,15 +1,16 @@
 use crate::memory::{self, Location, Memory};
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Type {
     name: TypeName,
     location: Location,
 }
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum TypeName {
     I32,
     I64,

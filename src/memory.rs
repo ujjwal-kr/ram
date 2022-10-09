@@ -8,7 +8,7 @@ pub struct Memory {
     pub ret: Vec<u8>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Location {
     pub start: usize,
     pub size: usize,

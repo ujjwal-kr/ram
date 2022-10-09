@@ -88,7 +88,13 @@ pub fn execute_block(
         line += 1;
         let cmd: Vec<&str> = statement.split_whitespace().collect();
         match cmd[0] {
-            "dbg" => println!("{:#?} \n {:#?}", memory, local_registers),
+            "dbg" => {
+                println!("Stack: ");
+                for i in memory.stack.chunks(4) {
+                    println!("{:?}", i)
+                }
+                println!("{:#?} \n {:#?}", types, local_registers)
+            },
             // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
             // "printc" => print::printc(cmd, statement, run_label, line),
             "ram" => stack::ram(
