@@ -6,12 +6,12 @@ pub struct Vars(HashMap<String, Type>);
 
 #[derive(Clone, Debug)]
 pub struct Type {
-    name: TypeName,
-    location: Location,
+    pub name: TypeName,
+    pub location: Location,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-enum TypeName {
+pub enum TypeName {
     I32,
     I64,
     I128,
@@ -63,6 +63,13 @@ impl Vars {
         value
             .parse::<u128>()
             .expect(format!("Parse int error at {}:{}", block, line).trim())
+    }
+
+    pub fn get_type(&mut self, name: String, b: &str, l: i32) -> Type {
+        match self.0.get(&name) {
+            Some(ty) => ty.clone(),
+            _ => panic!("Var {} not found at {}{}", name, b, l),
+        }
     }
 
     // Integers
