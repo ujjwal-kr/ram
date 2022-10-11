@@ -11,7 +11,7 @@ use memory::Memory;
 use types::Vars;
 
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
-use funcs::stack;
+use funcs::{print, stack};
 
 #[derive(Debug)]
 pub struct Registers {
@@ -63,7 +63,7 @@ pub fn execute_block(
     run_label: &str,
     registers: Registers,
     memory: &mut Memory,
-    types: &mut Vars,
+    vars: &mut Vars,
 ) -> std::io::Result<()> {
     let mut line = 0i32;
 
@@ -95,14 +95,21 @@ pub fn execute_block(
                 }
                 println!(
                     "{:#?} \n {:#?} \n HEAP: {:#?}",
-                    types, local_registers, memory.heap
+                    vars, local_registers, memory.heap
                 )
             }
-            // "print" => print::print(&mut stack, cmd, &mut local_vars, hash_vars, run_label, line),
-            // "printc" => print::printc(cmd, statement, run_label, line),
+            "print" => print::print(
+                memory,
+                vars,
+                &mut local_registers,
+                cmd,
+                statement,
+                run_label,
+                line,
+            ),
             "ram" => stack::ram(
                 memory,
-                types,
+                vars,
                 &mut local_registers,
                 cmd,
                 statement,
