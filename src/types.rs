@@ -22,47 +22,14 @@ pub enum TypeName {
     Vector,
 }
 
+pub struct CastReturn {
+    pub dest_location: Location,
+    pub src_data: Vec<u8>,
+}
+
 impl Vars {
     pub fn new() -> Self {
         Vars { 0: HashMap::new() }
-    }
-
-    // parsers
-
-    fn parse_i32(&mut self, value: &str, block: &str, line: i32) -> i32 {
-        value
-            .parse::<i32>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
-
-    fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {
-        value
-            .parse::<u32>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
-
-    fn parse_i64(&mut self, value: &str, block: &str, line: i32) -> i64 {
-        value
-            .parse::<i64>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
-
-    fn parse_u64(&mut self, value: &str, block: &str, line: i32) -> u64 {
-        value
-            .parse::<u64>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
-
-    fn parse_i128(&mut self, value: &str, block: &str, line: i32) -> i128 {
-        value
-            .parse::<i128>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
-
-    fn parse_u128(&mut self, value: &str, block: &str, line: i32) -> u128 {
-        value
-            .parse::<u128>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
     }
 
     pub fn get_type(&mut self, name: String, b: &str, l: i32) -> Type {
@@ -160,53 +127,9 @@ impl Vars {
         self.0.insert(name, new_str_vec);
     }
 
-    pub fn get_int_vec(
-        &mut self,
-        name: String,
-        memory: &mut Memory,
-        block: &str,
-        line: i32,
-    ) -> Vec<i32> {
-        let location: Location;
-        let new_int_vec: Type;
-        match self.0.get(&name) {
-            Some(int_vec) => new_int_vec = int_vec.clone(),
-            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
-        };
-
-        match new_int_vec.name {
-            TypeName::Vector => (),
-            _ => panic!("No int_vec found for '{}' at {}:{}", name, block, line),
-        }
-        location = new_int_vec.location;
-        memory.yeild_int_vec(location)
-    }
-
-    pub fn get_str_vec(
-        &mut self,
-        name: String,
-        memory: &mut Memory,
-        block: &str,
-        line: i32,
-    ) -> Vec<String> {
-        let location: Location;
-        let new_str_vec: Type;
-
-        match self.0.get(&name) {
-            Some(str_vec) => new_str_vec = str_vec.clone(),
-            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
-        };
-        location = new_str_vec.location;
-        match new_str_vec.name {
-            TypeName::Vector => (),
-            _ => panic!("No str_vec found for '{}' at {}:{}", name, block, line),
-        };
-        memory.yeild_str_vec(location)
-    }
-
     // Casting stuff
 
-    pub fn load_src_data(&mut self, src: String, dest: String, memory: &mut Memory) -> Vec<u8> {
+    pub fn load_src_cast(&mut self, src: String, dest: String, memory: &mut Memory) -> CastReturn {
         // check if the type of both vars are same
         let source: Type;
         let destination: Type;
@@ -222,17 +145,50 @@ impl Vars {
         if destination.name != source.name {
             panic!("Cannot assign {:?} to {:?}", source.name, destination.name)
         }
-        // returns src data
         let data: &[u8] = memory.load(source.location);
-        data.to_vec()
+        CastReturn {
+            dest_location: destination.location,
+            src_data: data.to_vec(),
+        }
+    }
+}
+
+impl Vars {
+    // parsers
+
+    fn parse_i32(&mut self, value: &str, block: &str, line: i32) -> i32 {
+        value
+            .parse::<i32>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
     }
 
-    pub fn cast_to_dest(&mut self, dest: String, src_data: Vec<u8>, memory: &mut Memory) {
-        let dest_location: Location;
-        match self.0.get(&dest) {
-            Some(s) => dest_location = s.clone().location,
-            _ => panic!("Var {} not found", dest),
-        }
-        memory.stack_mod(dest_location, &src_data);
+    fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {
+        value
+            .parse::<u32>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
+    }
+
+    fn parse_i64(&mut self, value: &str, block: &str, line: i32) -> i64 {
+        value
+            .parse::<i64>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
+    }
+
+    fn parse_u64(&mut self, value: &str, block: &str, line: i32) -> u64 {
+        value
+            .parse::<u64>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
+    }
+
+    fn parse_i128(&mut self, value: &str, block: &str, line: i32) -> i128 {
+        value
+            .parse::<i128>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
+    }
+
+    fn parse_u128(&mut self, value: &str, block: &str, line: i32) -> u128 {
+        value
+            .parse::<u128>()
+            .expect(format!("Parse int error at {}:{}", block, line).trim())
     }
 }
