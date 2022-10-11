@@ -93,27 +93,6 @@ impl Vars {
 
     // TODO: make stuff for other types of ints
 
-    pub fn get_int(&mut self, name: String, memory: &mut Memory, block: &str, line: i32) -> i32 {
-        let location: Location;
-        let new_int_type: Type;
-        match self.0.get(&name) {
-            Some(int_type) => new_int_type = int_type.clone(),
-            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
-        };
-
-        match new_int_type.name {
-            TypeName::I32 => (),
-            _ => panic!("No int exists for '{}', {}:{}", name, block, line),
-        };
-
-        location = new_int_type.location;
-        memory.yeild_i32(location.clone())
-    }
-
-    pub fn get_int_from_stack(&mut self, memory: &mut Memory) -> i32 {
-        memory.get_int_from_stack()
-    }
-
     pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str, block: &str, line: i32) {
         let num = self.parse_i32(value, block, line);
         let bytes = num.to_be_bytes();
@@ -130,35 +109,6 @@ impl Vars {
             location,
         };
         self.0.insert(name, new_string);
-    }
-
-    pub fn get_string(
-        &mut self,
-        name: String,
-        memory: &mut Memory,
-        block: &str,
-        line: i32,
-    ) -> String {
-        let location: Location;
-        let new_str: Type;
-        match self.0.get(&name) {
-            Some(string_type) => new_str = string_type.clone(),
-            _ => panic!("Variable '{}' not found at {}:{}", name, block, line),
-        };
-        match new_str.name {
-            TypeName::String => (),
-            _ => panic!("No str exist for '{}' at {}:{}", name, block, line),
-        };
-        location = new_str.location;
-        let heap_addr_bytes = memory.load(location);
-        let heap_addr = u32::from_be_bytes(
-            heap_addr_bytes
-                .try_into()
-                .expect("invalid heap addr len in get_string"),
-        );
-
-        let str_bytes = memory.heap_load(heap_addr);
-        String::from_utf8_lossy(&str_bytes).to_string()
     }
 
     // vectors

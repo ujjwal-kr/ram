@@ -7,7 +7,6 @@ pub fn print(
     vars: &mut Vars,
     registers: &mut Registers,
     cmd: Vec<&str>,
-    statement: &str,
     b: &str,
     l: i32,
 ) {

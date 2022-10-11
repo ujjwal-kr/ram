@@ -98,15 +98,7 @@ pub fn execute_block(
                     vars, local_registers, memory.heap
                 )
             }
-            "print" => print::print(
-                memory,
-                vars,
-                &mut local_registers,
-                cmd,
-                statement,
-                run_label,
-                line,
-            ),
+            "print" => print::print(memory, vars, &mut local_registers, cmd, run_label, line),
             "ram" => stack::ram(
                 memory,
                 vars,
