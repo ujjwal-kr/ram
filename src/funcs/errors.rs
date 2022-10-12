@@ -1,6 +1,6 @@
 use std::process;
 
-pub fn stack_len_error(run_label: &str, line: u32) {
+pub fn stack_len_error(run_label: &str, line: i32) {
     println!(
         "Not enough items in the stack, '{}' line:{}",
         run_label.to_string(),

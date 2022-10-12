@@ -12,8 +12,9 @@ pub fn print(
 ) {
     // print var <var_name> { lx/rv/string/lxstring/var-name }
     // print hello world
-
-    if cmd[1] == "var" {
+    if cmd.len() == 1 {
+        println!("{}", memory.get_int_from_stack())
+    } else if cmd[1] == "var" {
         match cmd[2] {
             "lx" => println!("{}", registers.lx),
             "rv" => println!("{}", registers.rv),

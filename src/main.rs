@@ -11,9 +11,9 @@ use memory::Memory;
 use types::Vars;
 
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
-use funcs::{print, stack};
+use funcs::{jump, print, stack};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Registers {
     pub lx: i32,
     pub rv: i32,
@@ -51,10 +51,7 @@ fn main() -> std::io::Result<()> {
     let mut memory: Memory = Memory::new();
     let mut vars: Vars = Vars::new();
 
-    match execute_block(program, "main:", registers, &mut memory, &mut vars) {
-        Ok(()) => (),
-        _ => println!("Something went wrong"),
-    }
+    execute_block(program, "main:", registers, &mut memory, &mut vars);
     Ok(())
 }
 
@@ -64,7 +61,7 @@ pub fn execute_block(
     registers: Registers,
     memory: &mut Memory,
     vars: &mut Vars,
-) -> std::io::Result<()> {
+) {
     let mut line = 0i32;
 
     let run_block: Vec<String>;
@@ -147,51 +144,51 @@ pub fn execute_block(
             //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
             // }
             // "cmp" => operations::cmp(&mut stack, run_label, line),
-            // "je" => jump::je(
-            //     &mut stack,
-            //     cmd,
-            //     program.clone(),
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
-            // "jne" => jump::jne(
-            //     &mut stack,
-            //     cmd,
-            //     program.clone(),
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
-            // "jgr" => jump::jgr(
-            //     &mut stack,
-            //     cmd,
-            //     program.clone(),
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
-            // "jsm" => jump::jsm(
-            //     &mut stack,
-            //     cmd,
-            //     program.clone(),
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
-            // "jmp" => jump::jmp(
-            //     &mut stack,
-            //     cmd,
-            //     program.clone(),
-            //     local_vars.clone(),
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
+            "je" => jump::je(
+                memory,
+                vars,
+                local_registers.clone(),
+                program.clone(),
+                cmd,
+                run_label,
+                line,
+            ),
+            "jne" => jump::jne(
+                memory,
+                vars,
+                local_registers.clone(),
+                program.clone(),
+                cmd,
+                run_label,
+                line,
+            ),
+            "jgr" => jump::jgr(
+                memory,
+                vars,
+                local_registers.clone(),
+                program.clone(),
+                cmd,
+                run_label,
+                line,
+            ),
+            "jsm" => jump::jsm(
+                memory,
+                vars,
+                local_registers.clone(),
+                program.clone(),
+                cmd,
+                run_label,
+                line,
+            ),
+            "jmp" => jump::jmp(
+                memory,
+                vars,
+                local_registers.clone(),
+                program.clone(),
+                cmd,
+                run_label,
+                line,
+            ),
             "halt" => process::exit(0),
 
             _ => {
@@ -203,5 +200,4 @@ pub fn execute_block(
             }
         }
     }
-    Ok(())
 }

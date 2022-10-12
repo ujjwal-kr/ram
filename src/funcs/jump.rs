@@ -1,114 +1,109 @@
-use super::super::{execute_block, HashVars, Vars};
+use crate::{execute_block, Registers};
+use crate::{memory::Memory, types::Vars};
+
 use super::errors;
 use std::collections::HashMap;
 
 pub fn jmp(
-    stack: &mut Vec<u8>,
-    cmd: Vec<&str>,
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: Registers,
     program: HashMap<String, Vec<String>>,
-    local_vars: Vars,
-    hash_vars: &mut HashVars,
-    block_number: &str,
-    line: u32,
+    cmd: Vec<&str>,
+    b: &str,
+    l: i32,
 ) {
     if cmd.len() != 2 {
-        errors::args_error(block_number, line);
+        errors::args_error(b, l);
     }
     let label = cmd[1].trim();
-    match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
-        Ok(()) => (),
-        _ => println!("Something went wrong"),
-    }
+    execute_block(program, label, registers, memory, vars);
 }
 
 pub fn je(
-    stack: &mut Vec<u8>,
-    cmd: Vec<&str>,
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: Registers,
     program: HashMap<String, Vec<String>>,
-    local_vars: Vars,
-    hash_vars: &mut HashVars,
-    block_number: &str,
-    line: u32,
+    cmd: Vec<&str>,
+    b: &str,
+    l: i32,
 ) {
-    if cmd.len() != 2 {
-        errors::args_error(block_number, line);
+    if cmd.len() < 2 {
+        errors::args_error(b, l)
     }
-    if stack[stack.len() - 1] == 0.0 {
+    let num = memory.get_int_from_stack();
+    if num == 0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
-            Ok(()) => (),
-            _ => println!("Something went wrong"),
+        for _ in 0..4 {
+            memory.pop_stack()
         }
-        stack.pop();
+        execute_block(program, label, registers, memory, vars)
     }
-    stack.pop();
 }
 
 pub fn jne(
-    stack: &mut Vec<u8>,
-    cmd: Vec<&str>,
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: Registers,
     program: HashMap<String, Vec<String>>,
-    local_vars: Vars,
-    hash_vars: &mut HashVars,
-    block_number: &str,
-    line: u32,
+    cmd: Vec<&str>,
+    b: &str,
+    l: i32,
 ) {
-    if cmd.len() != 2 {
-        errors::args_error(block_number, line);
+    if cmd.len() < 2 {
+        errors::args_error(b, l)
     }
-    if stack[stack.len() - 1] != 0.0 {
+    let num = memory.get_int_from_stack();
+    if num != 0 {
         let label = cmd[1].trim();
-        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
-            Ok(()) => (),
-            _ => println!("Something went wrong"),
+        for _ in 0..4 {
+            memory.pop_stack()
         }
-        stack.pop();
+        execute_block(program, label, registers, memory, vars)
     }
-    stack.pop();
 }
 
 pub fn jgr(
-    stack: &mut Vec<u8>,
-    cmd: Vec<&str>,
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: Registers,
     program: HashMap<String, Vec<String>>,
-    local_vars: Vars,
-    hash_vars: &mut HashVars,
-    block_number: &str,
-    line: u32,
+    cmd: Vec<&str>,
+    b: &str,
+    l: i32,
 ) {
-    if cmd.len() != 2 {
-        errors::args_error(block_number, line);
+    if cmd.len() < 2 {
+        errors::args_error(b, l)
     }
-    if stack[stack.len() - 1] == 1.0 {
+    let num = memory.get_int_from_stack();
+    if num == 1 {
         let label = cmd[1].trim();
-        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
-            Ok(()) => (),
-            _ => println!("Something went wrong"),
+        for _ in 0..4 {
+            memory.pop_stack()
         }
-        stack.pop();
+        execute_block(program, label, registers, memory, vars)
     }
-    stack.pop();
 }
 
 pub fn jsm(
-    stack: &mut Vec<u8>,
-    cmd: Vec<&str>,
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: Registers,
     program: HashMap<String, Vec<String>>,
-    local_vars: Vars,
-    hash_vars: &mut HashVars,
-    block_number: &str,
-    line: u32,
+    cmd: Vec<&str>,
+    b: &str,
+    l: i32,
 ) {
-    if cmd.len() != 2 {
-        errors::args_error(block_number, line);
+    if cmd.len() < 2 {
+        errors::args_error(b, l)
     }
-    if stack[stack.len() - 1] == -1.0 {
+    let num = memory.get_int_from_stack();
+    if num == -1 {
         let label = cmd[1].trim();
-        match execute_block(program, label, stack, local_vars.clone(), hash_vars) {
-            Ok(()) => (),
-            _ => println!("Something went wrong"),
+        for _ in 0..4 {
+            memory.pop_stack()
         }
-        stack.pop();
+        execute_block(program, label, registers, memory, vars)
     }
-    stack.pop();
 }
