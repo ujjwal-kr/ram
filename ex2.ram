@@ -1,12 +1,8 @@
 main:
-     ram 100
-     ram lmao :int = 400
-     ram 200
-     print
-     dbg
-     jmp kek:
-     
-kek: 
-     ram 100
-     print
-     dbg
+     ram a :int = 50
+     ram b :str = test
+     cmp a b
+     je omk:
+
+omk:
+     print henlo from omk

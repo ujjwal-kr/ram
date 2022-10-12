@@ -11,7 +11,7 @@ use memory::Memory;
 use types::Vars;
 
 // use funcs::{errors, jump, operations, print, stack, stdfn, var};
-use funcs::{jump, print, stack};
+use funcs::{jump, operations, print, stack};
 
 #[derive(Debug, Clone)]
 pub struct Registers {
@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
-    let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines); // returns final file with imports
+    let program: HashMap<String, Vec<String>> = parser::parse_lines(p_lines);
 
     let registers = Registers {
         lx: 0,
@@ -105,24 +105,6 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
-            // "global_var" => var::global_var(
-            //     &mut stack,
-            //     cmd,
-            //     statement,
-            //     &mut local_vars,
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
-            // "var" => var::var(
-            //     &mut stack,
-            //     cmd,
-            //     statement,
-            //     &mut local_vars,
-            //     hash_vars,
-            //     run_label,
-            //     line,
-            // ),
             // "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
             // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
             // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
@@ -143,7 +125,7 @@ pub fn execute_block(
             // "vec" => {
             //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
             // }
-            // "cmp" => operations::cmp(&mut stack, run_label, line),
+            "cmp" => operations::cmp(memory, vars, &mut local_registers, cmd, run_label, line),
             "je" => jump::je(
                 memory,
                 vars,

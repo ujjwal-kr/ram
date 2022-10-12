@@ -1,7 +1,7 @@
 pub mod errors;
 pub mod jump;
-pub mod stack;
-// pub mod operations;i
+pub mod operations;
 pub mod print;
+pub mod stack;
 // pub mod stdfn;
 // pub mod var;
