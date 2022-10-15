@@ -97,8 +97,8 @@ impl Vars {
                 final_bytes.push(*bit);
             }
         }
-
-        let location: Location = memory.store(&final_bytes);
+        let heap_addr: u32 = memory.malloc(&final_bytes);
+        let location: Location = memory.store(&heap_addr.to_be_bytes());
         let new_int_vec = Type {
             name: TypeName::Vector,
             location,
