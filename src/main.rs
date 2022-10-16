@@ -80,6 +80,8 @@ pub fn execute_block(
         lxstring: registers.lxstring,
     };
 
+    let block_ref = run_block.clone();
+
     for statement in run_block {
         let statement = statement.trim();
         line += 1;
@@ -93,7 +95,9 @@ pub fn execute_block(
                 println!(
                     "{:#?} \n {:#?} \n HEAP: {:#?}",
                     vars, local_registers, memory.heap
-                )
+                );
+
+                println!("{:?}", block_ref);
             }
             "print" => print::print(memory, vars, &mut local_registers, cmd, run_label, line),
             "ram" => stack::ram(
@@ -105,6 +109,7 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
+            "reset" => memory.reset_stack(),
             // "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
             // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
             // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
