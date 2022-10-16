@@ -22,7 +22,7 @@ pub fn cmp(
         for _ in 0..4 {
             memory.pop_stack()
         }
-        let diff = num_1 - num_2;
+        let diff = num_2 - num_1;
         if diff == 0 {
             memory.set_int_to_stack(0)
         } else if diff > 0 {
