@@ -1,2 +1,3 @@
 #[cfg(test)]
-pub mod stack_test;
+pub mod operations;
+pub mod stack;
