@@ -224,18 +224,16 @@ pub fn cmp(
     }
 }
 
-// pub fn add(stack: &mut Vec<u8>, cmd: Vec<&str>, vars: &mut super::super::Vars, b: &str, l: u32) {
-//     if cmd.len() > 1 {
-//         stack.push(vars.lx + vars.rv);
-//     } else {
-//         if stack.len() < 2 {
-//             super::errors::stack_len_error(b, l);
-//         } else {
-//             let result = stack[stack.len() - 1] + stack[stack.len() - 2];
-//             stack.push(result);
-//         }
-//     }
-// }
+pub fn add(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut Registers,
+    cmd: Vec<&str>,
+    statement: &str,
+    b: &str,
+    l: i32,
+) {
+}
 
 // pub fn sub(stack: &mut Vec<u8>, b: &str, l: u32) {
 //     if stack.len() < 2 {
