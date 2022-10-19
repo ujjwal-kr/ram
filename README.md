@@ -24,14 +24,14 @@ halt:
 
 4. run `./ram ./example.ram` and press enter.
 
-## How to test
-Run `cargo run test` to run the custom tests to test all the commands in the suit. Make sure to run this before pushing any PRs. The tests are automatically ran when there is a PR/commit on the master branch.
-
-![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
-
 # Documentation
 
-The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation---v2.7)
+The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation-v3.0)
+
+## How to test
+Run `cargo test` to run all the tests. This is the output of the cargo-nextest test runner:
+
+![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
 
 # Contributing
 
