@@ -235,6 +235,16 @@ pub fn add(
 ) {
 }
 
+pub fn sub(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut Registers,
+    cmd: Vec<&str>,
+    statement: &str,
+    b: &str,
+    l: i32,
+) {
+}
 // pub fn sub(stack: &mut Vec<u8>, b: &str, l: u32) {
 //     if stack.len() < 2 {
 //         super::errors::stack_len_error(b, l);
