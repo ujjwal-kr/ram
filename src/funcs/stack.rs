@@ -49,7 +49,7 @@ pub fn ram(
                 registers.rv = memory.get_int_from_stack()
             } else {
                 // parse cmd[2] as int
-                registers.lx = errors::parse_int(cmd[2], b, l)
+                registers.rv = errors::parse_int(cmd[2], b, l)
             }
         }
         "string" => {
