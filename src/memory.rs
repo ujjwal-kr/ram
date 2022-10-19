@@ -152,9 +152,8 @@ impl Memory {
 
     pub fn yeild_int_vec(&mut self, location: Location) -> Vec<i32> {
         let addr_bytes = self.load(location);
-        let heap_addr_bytes = &addr_bytes[1..addr_bytes.len() - 1];
         let heap_addr = u32::from_be_bytes(
-            heap_addr_bytes
+            addr_bytes
                 .try_into()
                 .expect("invalid vec int heap addr len"),
         );
@@ -169,10 +168,9 @@ impl Memory {
     }
 
     pub fn yeild_str_vec(&mut self, location: Location) -> Vec<String> {
-        let stack_addr_bytes = self.load(location);
-        let heap_addr_bytes = &stack_addr_bytes[1..stack_addr_bytes.len() - 1];
+        let addr_bytes = self.load(location);
         let heap_addr = u32::from_be_bytes(
-            heap_addr_bytes
+            addr_bytes
                 .try_into()
                 .expect("invalid vec str heap addr len"),
         );
