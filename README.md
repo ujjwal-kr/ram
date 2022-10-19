@@ -27,7 +27,7 @@ halt:
 ## How to test
 Run `cargo run test` to run the custom tests to test all the commands in the suit. Make sure to run this before pushing any PRs. The tests are automatically ran when there is a PR/commit on the master branch.
 
-![tests](https://media.discordapp.net/attachments/867819380464680980/947347676503089172/unknown.png?width=350&height=510)
+![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
 
 # Documentation
 
