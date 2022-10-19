@@ -1,6 +1,8 @@
 pub mod funcs;
 pub mod memory;
 pub mod parser;
+
+#[cfg(test)]
 pub mod tests;
 pub mod types;
 
