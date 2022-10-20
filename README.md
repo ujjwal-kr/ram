@@ -33,6 +33,6 @@ Run `cargo test` to run all the tests. This is the output of the cargo-nextest t
 
 ![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
 
-# Contributing
+# Contribution
 
 Im not accepting any braking changes to the specs, as the syntax of the language is still in development. But suggestions can be made using the issue tracker. All other types of contributions are welcome. Make sure to check the `dev` branch, PRs to che master branch wont be accepted.
