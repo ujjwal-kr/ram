@@ -162,33 +162,33 @@ impl Vars {
             .expect(format!("Parse int error at {}:{}", block, line).trim())
     }
 
-    fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {
-        value
-            .parse::<u32>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
+    // fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {
+    //     value
+    //         .parse::<u32>()
+    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
+    // }
 
-    fn parse_i64(&mut self, value: &str, block: &str, line: i32) -> i64 {
-        value
-            .parse::<i64>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
+    // fn parse_i64(&mut self, value: &str, block: &str, line: i32) -> i64 {
+    //     value
+    //         .parse::<i64>()
+    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
+    // }
 
-    fn parse_u64(&mut self, value: &str, block: &str, line: i32) -> u64 {
-        value
-            .parse::<u64>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
+    // fn parse_u64(&mut self, value: &str, block: &str, line: i32) -> u64 {
+    //     value
+    //         .parse::<u64>()
+    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
+    // }
 
-    fn parse_i128(&mut self, value: &str, block: &str, line: i32) -> i128 {
-        value
-            .parse::<i128>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
+    // fn parse_i128(&mut self, value: &str, block: &str, line: i32) -> i128 {
+    //     value
+    //         .parse::<i128>()
+    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
+    // }
 
-    fn parse_u128(&mut self, value: &str, block: &str, line: i32) -> u128 {
-        value
-            .parse::<u128>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
-    }
+    // fn parse_u128(&mut self, value: &str, block: &str, line: i32) -> u128 {
+    //     value
+    //         .parse::<u128>()
+    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
+    // }
 }
