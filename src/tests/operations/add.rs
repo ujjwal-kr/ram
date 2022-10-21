@@ -257,3 +257,51 @@ fn add_rv_var() {
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
+
+#[test]
+fn add_lx_lx() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lx = 3;
+
+    let statement = "add lx lx";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    operations::add(
+        &mut memory,
+        &mut vars,
+        &mut registers,
+        cmd,
+        statement,
+        "main",
+        1,
+    );
+
+    assert_eq!(memory.get_int_from_stack(), 6)
+}
+
+#[test]
+fn add_rv_rv() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.rv = 3;
+
+    let statement = "add rv rv";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    operations::add(
+        &mut memory,
+        &mut vars,
+        &mut registers,
+        cmd,
+        statement,
+        "main",
+        1,
+    );
+
+    assert_eq!(memory.get_int_from_stack(), 6)
+}

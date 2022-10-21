@@ -287,3 +287,51 @@ fn sub_rv_var() {
 
     assert_eq!(memory.get_int_from_stack(), 1)
 }
+
+#[test]
+fn sub_lx_lx() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lx = 3;
+
+    let statement = "sub lx lx";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    operations::sub(
+        &mut memory,
+        &mut vars,
+        &mut registers,
+        cmd,
+        statement,
+        "main",
+        1,
+    );
+
+    assert_eq!(memory.get_int_from_stack(), 0)
+}
+
+#[test]
+fn sub_rv_rv() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.rv = 3;
+
+    let statement = "add rv rv";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    operations::sub(
+        &mut memory,
+        &mut vars,
+        &mut registers,
+        cmd,
+        statement,
+        "main",
+        1,
+    );
+
+    assert_eq!(memory.get_int_from_stack(), 0)
+}
