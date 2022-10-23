@@ -29,7 +29,7 @@ halt:
 The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation-v3.0)
 
 ## How to test
-Run `cargo test` to run all the tests. This is the output of the cargo-nextest test runner:
+Run `cargo test` to run all the tests. This is the output of the test runner:
 
 ![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
 
