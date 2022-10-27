@@ -25,7 +25,7 @@ fn sub() {
     let statement = "sub";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -50,7 +50,7 @@ fn sub_lx() {
     let statement = "sub lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -75,7 +75,7 @@ fn sub_rv() {
     let statement = "sub rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -100,7 +100,7 @@ fn sub_var() {
     let statement = "sub x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -125,7 +125,7 @@ fn sub_lx_rv() {
     let statement = "sub lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -150,7 +150,7 @@ fn sub_rv_lx() {
     let statement = "sub rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -175,7 +175,7 @@ fn sub_var_var() {
     let statement = "sub x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -200,7 +200,7 @@ fn sub_var_lx() {
     let statement = "sub x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -225,7 +225,7 @@ fn sub_var_rv() {
     let statement = "sub x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -250,7 +250,7 @@ fn sub_lx_var() {
     let statement = "sub lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -275,7 +275,7 @@ fn sub_rv_var() {
     let statement = "sub rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -299,7 +299,7 @@ fn sub_lx_lx() {
     let statement = "sub lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,
@@ -323,7 +323,7 @@ fn sub_rv_rv() {
     let statement = "add rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub(
+    operations::sub::sub(
         &mut memory,
         &mut vars,
         &mut registers,

@@ -107,7 +107,7 @@ pub fn execute_block(
             // "vec" => {
             //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
             // }
-            "cmp" => operations::cmp(memory, vars, &mut local_registers, cmd, run_label, line),
+            "cmp" => operations::cmp::cmp(memory, vars, &mut local_registers, cmd, run_label, line),
             "je" => jump::je(
                 memory,
                 vars,
