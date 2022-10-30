@@ -99,6 +99,18 @@ pub fn ram(
     }
 }
 
+pub fn copy(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut Registers,
+    cmd: Vec<&str>,
+    statement: &str,
+    b: &str,
+    l: i32,
+) {
+
+}
+
 // pub fn pop(stack: &mut Vec<u8>, cmd: Vec<&str>, b: &str, l: u32) {
 //     if stack.is_empty() {
 //         super::errors::stack_len_error(b, l);
