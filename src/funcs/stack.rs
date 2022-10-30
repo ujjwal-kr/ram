@@ -1,4 +1,4 @@
-use crate::types::Vars;
+use crate::types::{Vars, TypeName};
 use crate::{memory::Memory, Registers};
 
 use super::errors;
@@ -111,27 +111,64 @@ pub fn copy(
     if cmd.len() < 4 || cmd[2] != "=" {
         errors::args_error(b, l)
     }
-    let src: &str = statement.split('=').collect::<Vec<&str>>()[1];
+
+    let src: &str = statement.split('=').collect::<Vec<&str>>()[1].trim();
 
     match cmd[1] {
         "lx" => match src {
             "rv" => registers.rv = registers.lx,
-            _ => (),
+            _ => {
+                let t = vars.get_type(src.to_string(), b, l);
+                let var: i32;
+                if t.name == TypeName::I32 {
+                    var = memory.yeild_i32(t.location);
+                    registers.lx = var
+                } else {
+                    panic!("Expected {} to be int at {}{}", src, b, l)
+                }
+            },
         },
 
         "rv" => match src {
             "lx" => registers.lx = registers.rv,
-            _ => ()
+            _ => {
+                let t = vars.get_type(src.to_string(), b, l);
+                let var: i32;
+                if t.name == TypeName::I32 {
+                    var = memory.yeild_i32(t.location);
+                    registers.rv = var
+                } else {
+                    panic!("Expected {} to be int at {}{}", src, b, l)
+                }
+            }
         },
 
         "string" => match src {
             "lxstring" => registers.string = registers.lxstring.clone(),
-            _ => ()
+            _ => {
+                let t = vars.get_type(src.to_string(), b, l);
+                let var: String;
+                if t.name == TypeName::String {
+                    var = memory.yeild_string(t.location);
+                    registers.string = var
+                } else {
+                    panic!("Expected {} to be string at {}{}", src, b, l)
+                }
+            }
         },
 
         "lxstring" => match src {
             "string" => registers.lxstring = registers.string.clone(),
-            _ => ()
+            _ => {
+                let t = vars.get_type(src.to_string(), b, l);
+                let var: String;
+                if t.name == TypeName::String {
+                    var = memory.yeild_string(t.location);
+                    registers.lxstring = var
+                } else {
+                    panic!("Expected {} to be string at {}{}", src, b, l)
+                }
+            }
         },
 
         _ => (),

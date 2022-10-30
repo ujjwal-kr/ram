@@ -25,7 +25,7 @@ fn copy_lx_rv() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    registers.lx = 5;
+    registers.rv = 5;
     let statement: &str = "copy lx = rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
