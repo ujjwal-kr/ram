@@ -35,7 +35,7 @@ fn div() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -60,7 +60,7 @@ fn div_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -85,7 +85,7 @@ fn div_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn div_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -135,7 +135,7 @@ fn div_lx_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -160,7 +160,7 @@ fn div_rv_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -185,7 +185,7 @@ fn div_var_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -210,7 +210,7 @@ fn div_var_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -235,7 +235,7 @@ fn div_var_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -260,7 +260,7 @@ fn div_lx_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -285,7 +285,7 @@ fn div_rv_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 2)
+    assert_eq!(memory.get_int_from_stack("main", 1), 2)
 }
 
 #[test]
@@ -309,7 +309,7 @@ fn div_lx_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -333,5 +333,5 @@ fn div_rv_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }

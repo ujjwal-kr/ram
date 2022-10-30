@@ -35,7 +35,7 @@ fn mul() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -60,7 +60,7 @@ fn mul_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -85,7 +85,7 @@ fn mul_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 22)
+    assert_eq!(memory.get_int_from_stack("main", 1), 22)
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn mul_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 6)
+    assert_eq!(memory.get_int_from_stack("main", 1), 6)
 }
 
 #[test]
@@ -135,7 +135,7 @@ fn mul_lx_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -160,7 +160,7 @@ fn mul_rv_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -185,7 +185,7 @@ fn mul_var_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -210,7 +210,7 @@ fn mul_var_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -235,7 +235,7 @@ fn mul_var_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -260,7 +260,7 @@ fn mul_lx_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 4)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -285,7 +285,7 @@ fn mul_rv_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -309,7 +309,7 @@ fn mul_lx_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 9)
+    assert_eq!(memory.get_int_from_stack("main", 1), 9)
 }
 
 #[test]
@@ -333,5 +333,5 @@ fn mul_rv_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), 9)
+    assert_eq!(memory.get_int_from_stack("main", 1), 9)
 }

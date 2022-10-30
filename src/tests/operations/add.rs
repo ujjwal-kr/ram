@@ -32,7 +32,7 @@ fn add() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -49,7 +49,7 @@ fn add_lx() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -66,7 +66,7 @@ fn add_rv() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -83,7 +83,7 @@ fn add_var() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -100,7 +100,7 @@ fn add_lx_rv() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -117,7 +117,7 @@ fn add_rv_lx() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -134,7 +134,7 @@ fn add_var_var() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -151,7 +151,7 @@ fn add_var_lx() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -168,7 +168,7 @@ fn add_var_rv() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -185,7 +185,7 @@ fn add_lx_var() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -202,7 +202,7 @@ fn add_rv_var() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 3)
+    assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
 
 #[test]
@@ -218,7 +218,7 @@ fn add_lx_lx() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 6)
+    assert_eq!(memory.get_int_from_stack("main", 1), 6)
 }
 
 #[test]
@@ -234,5 +234,5 @@ fn add_rv_rv() {
 
     operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
-    assert_eq!(memory.get_int_from_stack(), 6)
+    assert_eq!(memory.get_int_from_stack("main", 1), 6)
 }

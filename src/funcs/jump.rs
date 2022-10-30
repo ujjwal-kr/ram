@@ -32,7 +32,7 @@ pub fn je(
     if cmd.len() < 2 {
         errors::args_error(b, l)
     }
-    let num = memory.get_int_from_stack();
+    let num = memory.get_int_from_stack(b, l);
     if num == 0 {
         let label = cmd[1].trim();
         for _ in 0..4 {
@@ -54,7 +54,7 @@ pub fn jne(
     if cmd.len() < 2 {
         errors::args_error(b, l)
     }
-    let num = memory.get_int_from_stack();
+    let num = memory.get_int_from_stack(b, l);
     if num != 0 {
         let label = cmd[1].trim();
         for _ in 0..4 {
@@ -76,7 +76,7 @@ pub fn jgr(
     if cmd.len() < 2 {
         errors::args_error(b, l)
     }
-    let num = memory.get_int_from_stack();
+    let num = memory.get_int_from_stack(b, l);
     if num == 1 {
         let label = cmd[1].trim();
         for _ in 0..4 {
@@ -98,7 +98,7 @@ pub fn jsm(
     if cmd.len() < 2 {
         errors::args_error(b, l)
     }
-    let num = memory.get_int_from_stack();
+    let num = memory.get_int_from_stack(b, l);
     if num == -1 {
         let label = cmd[1].trim();
         for _ in 0..4 {

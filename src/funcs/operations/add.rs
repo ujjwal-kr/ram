@@ -1,7 +1,7 @@
 use crate::{
     memory::Memory,
     types::{Type, TypeName, Vars},
-    Registers,
+    Registers, funcs::errors,
 };
 
 pub fn add(
@@ -13,11 +13,11 @@ pub fn add(
     l: i32,
 ) {
     if cmd.len() == 1 {
-        let n1: i32 = memory.get_int_from_stack();
+        let n1: i32 = memory.get_int_from_stack(b, l);
         for _ in 0..4 {
             memory.pop_stack()
         }
-        let n2: i32 = memory.get_int_from_stack();
+        let n2: i32 = memory.get_int_from_stack(b, l);
         for _ in 0..4 {
             memory.pop_stack()
         }
@@ -26,7 +26,7 @@ pub fn add(
         match cmd[1] {
             "lx" => {
                 if cmd.len() == 2 {
-                    let n: i32 = memory.get_int_from_stack();
+                    let n: i32 = memory.get_int_from_stack(b, l);
                     for _ in 0..4 {
                         memory.pop_stack()
                     }
@@ -49,7 +49,7 @@ pub fn add(
             }
             "rv" => {
                 if cmd.len() == 2 {
-                    let n: i32 = memory.get_int_from_stack();
+                    let n: i32 = memory.get_int_from_stack(b, l);
                     for _ in 0..4 {
                         memory.pop_stack()
                     }
@@ -78,7 +78,7 @@ pub fn add(
                         TypeName::I32 => var = memory.yeild_i32(t.location),
                         _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
                     }
-                    let n: i32 = memory.get_int_from_stack();
+                    let n: i32 = memory.get_int_from_stack(b, l);
                     for _ in 0..4 {
                         memory.pop_stack()
                     }

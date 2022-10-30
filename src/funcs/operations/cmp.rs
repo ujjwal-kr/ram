@@ -14,14 +14,11 @@ pub fn cmp(
     l: i32,
 ) {
     if cmd.len() == 1 {
-        if memory.stack.len() < 8 {
-            errors::stack_len_error(b, l);
-        }
-        let num_1 = memory.get_int_from_stack();
+        let num_1 = memory.get_int_from_stack(b, l);
         for _ in 0..4 {
             memory.pop_stack()
         }
-        let num_2 = memory.get_int_from_stack();
+        let num_2 = memory.get_int_from_stack(b, l);
         for _ in 0..4 {
             memory.pop_stack()
         }

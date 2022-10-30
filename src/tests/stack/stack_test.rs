@@ -18,7 +18,7 @@ fn ram_10() {
         "main",
         1,
     );
-    assert_eq!(memory.get_int_from_stack(), 10)
+    assert_eq!(memory.get_int_from_stack("main", 1), 10)
 }
 
 #[test]
@@ -126,7 +126,7 @@ fn ram_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), registers.lx)
+    assert_eq!(memory.get_int_from_stack("main", 1), registers.lx)
 }
 
 #[test]
@@ -148,7 +148,7 @@ fn ram_rv() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack(), registers.rv)
+    assert_eq!(memory.get_int_from_stack("main", 1), registers.rv)
 }
 
 #[test]

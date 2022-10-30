@@ -34,7 +34,7 @@ pub fn ram(
                 vars.set_int_to_stack(memory, registers.lx.to_string().trim(), b, l)
             } else if cmd[2] == "prev" {
                 // ram lx prev
-                registers.lx = memory.get_int_from_stack();
+                registers.lx = memory.get_int_from_stack(b, l);
                 for _ in 0..4 {
                     memory.pop_stack()
                 }
@@ -49,7 +49,7 @@ pub fn ram(
                 vars.set_int_to_stack(memory, registers.rv.to_string().trim(), b, l)
             } else if cmd[2] == "prev" {
                 // ram lx prev
-                registers.rv = memory.get_int_from_stack();
+                registers.rv = memory.get_int_from_stack(b, l);
                 for _ in 0..4 {
                     memory.pop_stack()
                 }

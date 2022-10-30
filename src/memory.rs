@@ -1,6 +1,8 @@
 use rand::Rng;
 use std::collections::HashMap;
 
+use crate::funcs::errors;
+
 #[derive(Debug)]
 pub struct Memory {
     pub stack: Vec<u8>,
@@ -88,7 +90,10 @@ impl Memory {
 
     // ints
 
-    pub fn get_int_from_stack(&mut self) -> i32 {
+    pub fn get_int_from_stack(&mut self, b: &str, l: i32) -> i32 {
+        if self.stack.len() < 4 {
+            errors::stack_len_error(b, l);
+        }
         let location = Location {
             start: self.stack.len() - 4,
             size: 4,
