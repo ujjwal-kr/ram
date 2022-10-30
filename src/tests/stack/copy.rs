@@ -1,5 +1,3 @@
-use std::result;
-
 use crate::funcs::stack::copy;
 use crate::{memory::Memory, types::Vars, Registers};
 
@@ -14,6 +12,14 @@ use crate::{memory::Memory, types::Vars, Registers};
 
 // copy lxstring = string
 // copy lxstring = var
+
+// copy var = lx
+// copy var = rv
+
+// copy var = string
+// copy var = lxstring
+
+// copy var = var
 
 #[test]
 fn copy_lx_rv() {
@@ -134,4 +140,112 @@ fn copy_lxstring_var() {
 
     copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
     assert_eq!(registers.lxstring, "hello".to_string())
+}
+
+#[test]
+fn copy_var_lx() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_int("x".to_string(), "0", &mut memory, "main:", 1);
+    registers.lx = 1;
+
+    let statement: &str = "copy x = lx";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+    let t = vars.get_type("x".to_string(), "main", 1);
+
+    assert_eq!(memory.yeild_i32(t.location), 1)
+}
+
+#[test]
+fn copy_var_rv() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_int("x".to_string(), "0", &mut memory, "main:", 1);
+    registers.rv = 1;
+
+    let statement: &str = "copy x = rv";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+    let t = vars.get_type("x".to_string(), "main", 1);
+
+    assert_eq!(memory.yeild_i32(t.location), 1)
+}
+
+#[test]
+fn copy_var_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "", &mut memory);
+    registers.string = "hello".to_string();
+
+    let statement: &str = "copy x = string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+    let t = vars.get_type("x".to_string(), "main", 1);
+
+    assert_eq!(memory.yeild_string(t.location), "hello".to_string())
+}
+
+#[test]
+fn copy_var_lxstring() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "", &mut memory);
+    registers.lxstring = "hello".to_string();
+
+    let statement: &str = "copy x = lxstring";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+    let t = vars.get_type("x".to_string(), "main", 1);
+
+    assert_eq!(memory.yeild_string(t.location), "hello".to_string())
+}
+
+#[test]
+fn copy_var_var_int() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
+    vars.set_int("y".to_string(), "0", &mut memory, "main", 1);
+
+    let statement: &str = "copy y = x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+
+    let t = vars.get_type("y".to_string(), "main", 1);
+    assert_eq!(memory.yeild_i32(t.location), 1)
+}
+
+#[test]
+fn copy_var_var_str() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "hello", &mut memory);
+    vars.set_string("y".to_string(), "", &mut memory);
+
+    let statement: &str = "copy y = x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement, "main:", 1);
+
+    let t = vars.get_type("y".to_string(), "main", 1);
+    assert_eq!(memory.yeild_string(t.location), "hello".to_string())
 }
