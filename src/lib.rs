@@ -86,6 +86,7 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
+            "add" => operations::add::add(memory, vars, &mut local_registers, cmd, run_label, line),
             // "reset" => memory.reset_stack(),
             // "move" => var::movefn(cmd, &mut local_vars, hash_vars, run_label, line),
             // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),

@@ -2,11 +2,21 @@ use crate::funcs::operations;
 use crate::{memory::Memory, types::Vars, Registers};
 
 // add
+
 // add lx
-// add rv
-// add var
 // add lx rv
+// add lx lx
+// add lx var
+
+// add rv
+// add rv lx
+// add rv rv
+// add rv var
+
+// add var
 // add var1 var2
+// add var lx
+// add var rv
 
 #[test]
 fn add() {
@@ -25,7 +35,6 @@ fn add() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -50,7 +59,6 @@ fn add_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -75,7 +83,6 @@ fn add_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -89,8 +96,8 @@ fn add_var() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(1);
     vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
+    memory.set_int_to_stack(1);
 
     let statement = "add x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
@@ -100,7 +107,6 @@ fn add_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -125,7 +131,30 @@ fn add_lx_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
+        "main",
+        1,
+    );
+
+    assert_eq!(memory.get_int_from_stack(), 3)
+}
+
+#[test]
+fn add_rv_lx() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lx = 1;
+    registers.rv = 2;
+
+    let statement = "add rv lx";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    operations::add::add(
+        &mut memory,
+        &mut vars,
+        &mut registers,
+        cmd,
         "main",
         1,
     );
@@ -150,7 +179,6 @@ fn add_var_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -175,7 +203,6 @@ fn add_var_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -200,7 +227,6 @@ fn add_var_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -225,7 +251,6 @@ fn add_lx_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -250,7 +275,6 @@ fn add_rv_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -274,7 +298,6 @@ fn add_lx_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -298,7 +321,6 @@ fn add_rv_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
