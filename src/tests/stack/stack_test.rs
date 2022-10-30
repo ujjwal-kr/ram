@@ -82,7 +82,7 @@ fn ram_lx_prev() {
         1,
     );
 
-    assert_eq!(registers.lx, memory.get_int_from_stack())
+    assert_eq!(registers.lx, 10)
 }
 
 #[test]
@@ -104,7 +104,7 @@ fn ram_rv_prev() {
         1,
     );
 
-    assert_eq!(registers.rv, memory.get_int_from_stack())
+    assert_eq!(registers.rv, 10)
 }
 
 #[test]
