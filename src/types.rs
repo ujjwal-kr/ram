@@ -129,7 +129,14 @@ impl Vars {
 
     // Casting stuff
 
-    pub fn load_src_cast(&mut self, src: String, dest: String, memory: &mut Memory) -> CastReturn {
+    pub fn load_src_cast(
+        &mut self,
+        src: String,
+        dest: String,
+        memory: &mut Memory,
+        b: &str,
+        l: i32,
+    ) -> CastReturn {
         // check if the type of both vars are same
         let source: Type;
         let destination: Type;
@@ -143,7 +150,10 @@ impl Vars {
             _ => panic!("Var {} not found", src),
         }
         if destination.name != source.name {
-            panic!("Cannot assign {:?} to {:?}", source.name, destination.name)
+            panic!(
+                "Cannot assign {:?} to {:?} at {}{}",
+                source.name, destination.name, b, l
+            )
         }
         let data: &[u8] = memory.load(source.location);
         CastReturn {

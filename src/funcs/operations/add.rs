@@ -69,7 +69,7 @@ pub fn add(
                         }
                     }
                 }
-            },
+            }
             _ => {
                 if cmd.len() == 2 {
                     let var: i32;
@@ -91,7 +91,7 @@ pub fn add(
                         _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
                     }
                     match cmd[2] {
-                        "lx" =>  memory.set_int_to_stack(registers.lx + var),
+                        "lx" => memory.set_int_to_stack(registers.lx + var),
                         "rv" => memory.set_int_to_stack(registers.rv + var),
                         _ => {
                             let var2: i32;
@@ -104,7 +104,7 @@ pub fn add(
                         }
                     }
                 }
-            },
+            }
         }
     }
 }

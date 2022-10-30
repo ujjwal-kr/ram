@@ -30,14 +30,7 @@ fn add() {
     let statement = "add";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -54,14 +47,7 @@ fn add_lx() {
     let statement = "add lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -78,14 +64,7 @@ fn add_rv() {
     let statement = "add rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -102,14 +81,7 @@ fn add_var() {
     let statement = "add x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -126,14 +98,7 @@ fn add_lx_rv() {
     let statement = "add lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -150,14 +115,7 @@ fn add_rv_lx() {
     let statement = "add rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -174,14 +132,7 @@ fn add_var_var() {
     let statement = "add x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -198,14 +149,7 @@ fn add_var_lx() {
     let statement = "add x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -222,14 +166,7 @@ fn add_var_rv() {
     let statement = "add x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -246,14 +183,7 @@ fn add_lx_var() {
     let statement = "add lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -270,14 +200,7 @@ fn add_rv_var() {
     let statement = "add rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 3)
 }
@@ -293,14 +216,7 @@ fn add_lx_lx() {
     let statement = "add lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 6)
 }
@@ -316,14 +232,7 @@ fn add_rv_rv() {
     let statement = "add rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::add::add(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::add::add(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack(), 6)
 }

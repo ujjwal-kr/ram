@@ -108,41 +108,6 @@ pub fn copy(
     b: &str,
     l: i32,
 ) {
-
+    
 }
 
-// pub fn pop(stack: &mut Vec<u8>, cmd: Vec<&str>, b: &str, l: u32) {
-//     if stack.is_empty() {
-//         super::errors::stack_len_error(b, l);
-//     }
-//     if cmd.len() == 1 {
-//         stack.pop();
-//     } else if cmd.len() == 2 {
-//         let pop_amount: usize = super::errors::parse_usize(cmd[1], b, l);
-//         if pop_amount <= stack.len() {
-//             for _n in 0..pop_amount {
-//                 stack.pop();
-//             }
-//         } else {
-//             super::errors::stack_len_error(b, l);
-//         }
-//     }
-// }
-
-// pub fn strfn(stack: &mut Vec<u8>, vars: &mut super::super::Vars, cmd: Vec<&str>, b: &str, l: u32) {
-//     if cmd.len() < 2 {
-//         super::errors::args_error(b, l);
-//     }
-//     match cmd[1].trim() {
-//         "cmp" => {
-//             if vars.lxstring.trim() == vars.string.trim() {
-//                 stack.push(0.0);
-//             } else {
-//                 stack.push(-1.0);
-//             }
-//         }
-//         "string" => vars.string = vars.lxstring.clone(),
-//         "lxstring" => vars.string = vars.lxstring.clone(),
-//         _ => errors::args_error(b, l),
-//     }
-// }

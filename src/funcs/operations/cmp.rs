@@ -1,4 +1,9 @@
-use crate::{types::{TypeName, Vars}, memory::Memory, Registers, funcs::errors};
+use crate::{
+    funcs::errors,
+    memory::Memory,
+    types::{TypeName, Vars},
+    Registers,
+};
 
 pub fn cmp(
     memory: &mut Memory,
