@@ -1,7 +1,7 @@
 use crate::{
     memory::Memory,
     types::{Type, TypeName, Vars},
-    Registers, funcs::errors,
+    Registers,
 };
 
 pub fn add(

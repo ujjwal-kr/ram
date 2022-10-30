@@ -108,6 +108,32 @@ pub fn copy(
     b: &str,
     l: i32,
 ) {
-    
-}
+    if cmd.len() < 4 || cmd[2] != "=" {
+        errors::args_error(b, l)
+    }
+    let src: &str = statement.split('=').collect::<Vec<&str>>()[1];
 
+    match cmd[1] {
+        "lx" => match src {
+            "rv" => registers.rv = registers.lx,
+            _ => (),
+        },
+
+        "rv" => match src {
+            "lx" => registers.lx = registers.rv,
+            _ => ()
+        },
+
+        "string" => match src {
+            "lxstring" => registers.string = registers.lxstring.clone(),
+            _ => ()
+        },
+
+        "lxstring" => match src {
+            "string" => registers.lxstring = registers.string.clone(),
+            _ => ()
+        },
+
+        _ => (),
+    }
+}

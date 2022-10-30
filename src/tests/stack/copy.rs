@@ -15,10 +15,8 @@ use crate::{memory::Memory, types::Vars, Registers};
 
 // copy var = lx
 // copy var = rv
-
 // copy var = string
 // copy var = lxstring
-
 // copy var = var
 
 #[test]
