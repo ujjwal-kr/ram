@@ -17,7 +17,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 // copy var = rv
 // copy var = string
 // copy var = lxstring
-// copy var = var
+// copy var1 = var2
 
 #[test]
 fn copy_lx_rv() {

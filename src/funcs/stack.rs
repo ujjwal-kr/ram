@@ -1,4 +1,4 @@
-use crate::types::{Vars, TypeName};
+use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, Registers};
 
 use super::errors;
@@ -113,8 +113,9 @@ pub fn copy(
     }
 
     let src: &str = statement.split('=').collect::<Vec<&str>>()[1].trim();
+    let dest: &str = cmd[1];
 
-    match cmd[1] {
+    match dest {
         "lx" => match src {
             "rv" => registers.rv = registers.lx,
             _ => {
@@ -126,7 +127,7 @@ pub fn copy(
                 } else {
                     panic!("Expected {} to be int at {}{}", src, b, l)
                 }
-            },
+            }
         },
 
         "rv" => match src {
@@ -171,6 +172,65 @@ pub fn copy(
             }
         },
 
-        _ => (),
+        _ => {
+            match src {
+                "lx" => {
+                    let t: Type;
+                    t = vars.get_type(dest.to_string(), b, l);
+                    if t.name == TypeName::I32 {
+                        memory.stack_mod(t.location, &registers.lx.to_be_bytes())
+                    } else {
+                        panic!("Expected {} to be int at {}{}", dest, b, l)
+                    }
+                }
+                "rv" => {
+                    let t: Type;
+                    t = vars.get_type(dest.to_string(), b, l);
+                    if t.name == TypeName::I32 {
+                        memory.stack_mod(t.location, &registers.rv.to_be_bytes())
+                    } else {
+                        panic!("Expected {} to be int at {}{}", dest, b, l)
+                    }
+                }
+                "string" => {
+                    let t: Type;
+                    t = vars.get_type(dest.to_string(), b, l);
+                    if t.name == TypeName::String {
+                        // gc
+                        let addr: [u8; 4] = memory
+                            .load(t.location)
+                            .try_into()
+                            .expect("Error converting location to addr");
+                        memory.free(u32::from_be_bytes(addr));
+                        // end gc
+                        vars.set_string(dest.to_string(), &registers.string, memory)
+                    } else {
+                        panic!("Expected {} to be string at {}{}", dest, b, l)
+                    }
+                }
+                "lxstring" => {
+                    let t: Type;
+                    t = vars.get_type(dest.to_string(), b, l);
+                    if t.name == TypeName::String {
+                        // gc
+                        let addr: [u8; 4] = memory
+                            .load(t.location)
+                            .try_into()
+                            .expect("Error converting location to addr");
+                        memory.free(u32::from_be_bytes(addr));
+                        // end gc
+                        vars.set_string(dest.to_string(), &registers.lxstring, memory)
+                    } else {
+                        panic!("Expected {} to be string at {}{}", dest, b, l)
+                    }
+                }
+                _ => match vars.cast(src, dest, memory, b, l) {
+                    Some(cast_stack) => {
+                        memory.stack_mod(cast_stack.dest_location, &cast_stack.src_data)
+                    }
+                    None => (),
+                },
+            }
+        }
     }
 }

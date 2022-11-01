@@ -82,7 +82,7 @@ impl Memory {
     }
 
     pub fn heap_mod(&mut self, addr: u32, data: &[u8]) {
-        self.heap.remove(&addr);
+        self.free(addr);
         self.heap.insert(addr, data.to_vec());
     }
 

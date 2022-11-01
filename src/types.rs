@@ -1,4 +1,4 @@
-use crate::memory::{Location, Memory};
+use crate::memory::{self, Location, Memory};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -22,7 +22,7 @@ pub enum TypeName {
     Vector,
 }
 
-pub struct CastReturn {
+pub struct CastStack {
     pub dest_location: Location,
     pub src_data: Vec<u8>,
 }
@@ -129,36 +129,51 @@ impl Vars {
 
     // Casting stuff
 
-    pub fn load_src_cast(
+    pub fn cast(
         &mut self,
-        src: String,
-        dest: String,
+        src: &str,
+        dest: &str,
         memory: &mut Memory,
         b: &str,
         l: i32,
-    ) -> CastReturn {
+    ) -> Option<CastStack> {
         // check if the type of both vars are same
         let source: Type;
         let destination: Type;
-        match self.0.get(&src) {
+        match self.0.get(src) {
             Some(s) => source = s.clone(),
             _ => panic!("Var {} not found", src),
         }
-
-        match self.0.get(&dest) {
+        match self.0.get(dest) {
             Some(d) => destination = d.clone(),
             _ => panic!("Var {} not found", src),
         }
         if destination.name != source.name {
             panic!(
-                "Cannot assign {:?} to {:?} at {}{}",
+                "Cannot assign {:?} to {:?} at {}{}, type casting error",
                 source.name, destination.name, b, l
             )
         }
-        let data: &[u8] = memory.load(source.location);
-        CastReturn {
-            dest_location: destination.location,
-            src_data: data.to_vec(),
+        if destination.name == TypeName::String || destination.name == TypeName::Vector {
+            let src_addr: [u8; 4] = memory
+                .load(source.location)
+                .try_into()
+                .expect("Error converting location to addr");
+            let src_heap_addr = u32::from_be_bytes(src_addr);
+            let src_heap_data = memory.heap_load(src_heap_addr);
+
+            let dest_addr: [u8; 4] = memory
+                .load(destination.location.clone())
+                .try_into()
+                .expect("Error converting location to addr");
+            memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data);
+            None
+        } else {
+            let data: &[u8] = memory.load(source.location);
+            Some(CastStack {
+                dest_location: destination.location,
+                src_data: data.to_vec(),
+            })
         }
     }
 }
