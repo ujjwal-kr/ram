@@ -30,7 +30,6 @@ fn div() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -55,7 +54,6 @@ fn div_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -80,7 +78,6 @@ fn div_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -105,7 +102,6 @@ fn div_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -130,7 +126,6 @@ fn div_lx_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -155,7 +150,6 @@ fn div_rv_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -180,7 +174,6 @@ fn div_var_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -205,7 +198,6 @@ fn div_var_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -230,7 +222,6 @@ fn div_var_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -255,7 +246,6 @@ fn div_lx_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -280,7 +270,6 @@ fn div_rv_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -304,7 +293,6 @@ fn div_lx_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -328,7 +316,6 @@ fn div_rv_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
