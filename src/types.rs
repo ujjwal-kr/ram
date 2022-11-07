@@ -1,4 +1,4 @@
-use crate::memory::{self, Location, Memory};
+use crate::memory::{Location, Memory};
 use std::collections::HashMap;
 
 #[derive(Debug)]

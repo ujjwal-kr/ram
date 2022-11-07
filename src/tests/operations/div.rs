@@ -19,7 +19,7 @@ fn div() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(2);
+    memory.set_int_to_stack(10);
     memory.set_int_to_stack(2);
 
     let statement = "div";
@@ -35,7 +35,7 @@ fn div() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
 
 #[test]
@@ -44,7 +44,7 @@ fn div_lx() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(2);
+    memory.set_int_to_stack(10);
     registers.lx = 2;
 
     let statement = "div lx";
@@ -60,7 +60,7 @@ fn div_lx() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
 
 #[test]
@@ -94,8 +94,8 @@ fn div_var() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(6);
     vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
+    memory.set_int_to_stack(6);
 
     let statement = "div x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
@@ -245,7 +245,7 @@ fn div_lx_var() {
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
-    registers.lx = 2;
+    registers.lx = 10;
 
     let statement = "div lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
@@ -260,7 +260,7 @@ fn div_lx_var() {
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
 
 #[test]
