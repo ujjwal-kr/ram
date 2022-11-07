@@ -19,7 +19,7 @@ fn sub() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(2);
+    memory.set_int_to_stack(5);
     memory.set_int_to_stack(1);
 
     let statement = "sub";
@@ -30,12 +30,11 @@ fn sub() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
 
 #[test]
@@ -55,7 +54,6 @@ fn sub_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -80,7 +78,6 @@ fn sub_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -94,8 +91,8 @@ fn sub_var() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    memory.set_int_to_stack(1);
     vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
+    memory.set_int_to_stack(1);
 
     let statement = "sub x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
@@ -105,12 +102,11 @@ fn sub_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
 
 #[test]
@@ -130,7 +126,6 @@ fn sub_lx_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -155,7 +150,6 @@ fn sub_rv_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -180,7 +174,6 @@ fn sub_var_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -205,7 +198,6 @@ fn sub_var_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -230,7 +222,6 @@ fn sub_var_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -255,7 +246,6 @@ fn sub_lx_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -280,7 +270,6 @@ fn sub_rv_var() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -304,7 +293,6 @@ fn sub_lx_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
@@ -328,7 +316,6 @@ fn sub_rv_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
         "main",
         1,
     );
