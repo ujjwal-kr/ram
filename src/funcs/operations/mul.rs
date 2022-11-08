@@ -17,7 +17,7 @@ pub fn mul(
         for _ in 0..4 {
             memory.pop_stack()
         }
-        let n2: i32 = memory.get_int_from_stack(b, l);
+        let n2: i32 = memory.get_int_from_stack(b, l);  
         for _ in 0..4 {
             memory.pop_stack()
         }
