@@ -5,7 +5,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 // parse rv :str
 
 // parse string :int
-// parse lxstring :int 
+// parse lxstring :int
 
 // parse var :int
 // parse var :str
@@ -20,14 +20,7 @@ fn parse_lx() {
     let statement: &str = "parse lx :str";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
     assert_eq!(registers.string, "5".to_string())
 }
 
@@ -41,14 +34,7 @@ fn parse_rv() {
     let statement: &str = "parse rv :str";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
     assert_eq!(registers.string, "5".to_string())
 }
 
@@ -62,17 +48,9 @@ fn parse_string() {
     let statement: &str = "parse string :int";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
     assert_eq!(registers.lx, 10)
 }
-
 
 #[test]
 fn parse_lxstring() {
@@ -84,14 +62,7 @@ fn parse_lxstring() {
     let statement: &str = "parse lxstring :int";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
     assert_eq!(registers.lx, 10)
 }
 
@@ -105,16 +76,8 @@ fn parse_var_int() {
     let statement: &str = "parse x :int";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
-    let t = vars.get_type("x".to_string(), "main", 1);
-    assert_eq!(memory.yeild_i32(t.location), 10)
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
+    assert_eq!(registers.lx, 10)
 }
 
 #[test]
@@ -127,14 +90,6 @@ fn parse_var_str() {
     let statement: &str = "parse x :str";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    parse(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main:",
-        1,
-    );
-    let t = vars.get_type("x".to_string(), "main", 1);
-    assert_eq!(memory.yeild_string(t.location), "10".to_string())
+    parse(&mut memory, &mut vars, &mut registers, cmd, "main:", 1);
+    assert_eq!(registers.string, "10".to_string())
 }
