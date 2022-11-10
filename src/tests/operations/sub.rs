@@ -25,14 +25,7 @@ fn sub() {
     let statement = "sub";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -49,14 +42,7 @@ fn sub_lx() {
     let statement = "sub lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -73,14 +59,7 @@ fn sub_rv() {
     let statement = "sub rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -97,14 +76,7 @@ fn sub_var() {
     let statement = "sub x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -121,14 +93,7 @@ fn sub_lx_rv() {
     let statement = "sub lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -145,14 +110,7 @@ fn sub_rv_lx() {
     let statement = "sub rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -169,14 +127,7 @@ fn sub_var_var() {
     let statement = "sub x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -193,14 +144,7 @@ fn sub_var_lx() {
     let statement = "sub x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -217,14 +161,7 @@ fn sub_var_rv() {
     let statement = "sub x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), -1)
 }
@@ -241,14 +178,7 @@ fn sub_lx_var() {
     let statement = "sub lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -265,14 +195,7 @@ fn sub_rv_var() {
     let statement = "sub rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -288,14 +211,7 @@ fn sub_lx_lx() {
     let statement = "sub lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 0)
 }
@@ -311,14 +227,7 @@ fn sub_rv_rv() {
     let statement = "add rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 0)
 }

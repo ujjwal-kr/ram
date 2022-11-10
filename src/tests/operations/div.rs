@@ -25,14 +25,7 @@ fn div() {
     let statement = "div";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
@@ -49,14 +42,7 @@ fn div_lx() {
     let statement = "div lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
@@ -73,14 +59,7 @@ fn div_rv() {
     let statement = "div rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -97,14 +76,7 @@ fn div_var() {
     let statement = "div x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 3)
 }
@@ -121,14 +93,7 @@ fn div_lx_rv() {
     let statement = "div lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -145,14 +110,7 @@ fn div_rv_lx() {
     let statement = "div rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -169,14 +127,7 @@ fn div_var_var() {
     let statement = "div x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -193,14 +144,7 @@ fn div_var_lx() {
     let statement = "div x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -217,14 +161,7 @@ fn div_var_rv() {
     let statement = "div x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -241,14 +178,7 @@ fn div_lx_var() {
     let statement = "div lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 5)
 }
@@ -265,14 +195,7 @@ fn div_rv_var() {
     let statement = "div rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 2)
 }
@@ -288,14 +211,7 @@ fn div_lx_lx() {
     let statement = "div lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }
@@ -311,14 +227,7 @@ fn div_rv_rv() {
     let statement = "div rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::div::div(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::div::div(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 1)
 }

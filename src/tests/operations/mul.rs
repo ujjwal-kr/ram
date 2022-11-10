@@ -25,14 +25,7 @@ fn mul() {
     let statement = "mul";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -49,14 +42,7 @@ fn mul_lx() {
     let statement = "mul lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -73,14 +59,7 @@ fn mul_rv() {
     let statement = "mul rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 22)
 }
@@ -97,14 +76,7 @@ fn mul_var() {
     let statement = "mul x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 6)
 }
@@ -121,14 +93,7 @@ fn mul_lx_rv() {
     let statement = "mul lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -145,14 +110,7 @@ fn mul_rv_lx() {
     let statement = "mul rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -169,14 +127,7 @@ fn mul_var_var() {
     let statement = "mul x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -193,14 +144,7 @@ fn mul_var_lx() {
     let statement = "mul x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -217,14 +161,7 @@ fn mul_var_rv() {
     let statement = "mul x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -241,14 +178,7 @@ fn mul_lx_var() {
     let statement = "mul lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 4)
 }
@@ -265,14 +195,7 @@ fn mul_rv_var() {
     let statement = "mul rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 2)
 }
@@ -288,14 +211,7 @@ fn mul_lx_lx() {
     let statement = "mul lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 9)
 }
@@ -311,14 +227,7 @@ fn mul_rv_rv() {
     let statement = "mul rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::mul::mul(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        "main",
-        1,
-    );
+    operations::mul::mul(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
 
     assert_eq!(memory.get_int_from_stack("main", 1), 9)
 }
