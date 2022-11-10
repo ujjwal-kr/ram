@@ -92,6 +92,8 @@ pub fn execute_block(
             "mul" => operations::mul::mul(memory, vars, &mut local_registers, cmd, run_label, line),
             "reset" => memory.reset_stack(),
             "pop" => memory.pop_stack(),
+            "parse" => stdf::parse::parse(memory, vars, &mut local_registers, cmd, run_label, line),
+            "rand" => stdf::rand::rand(memory, &mut local_registers, cmd, statement, run_label, line),
             // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
             // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
             // "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
@@ -105,7 +107,15 @@ pub fn execute_block(
             // "vec" => {
             //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
             // }
-            "copy" => stack::copy(memory, vars, &mut local_registers, cmd, statement, run_label, line),
+            "copy" => stack::copy(
+                memory,
+                vars,
+                &mut local_registers,
+                cmd,
+                statement,
+                run_label,
+                line,
+            ),
             "cmp" => operations::cmp::cmp(memory, vars, &mut local_registers, cmd, run_label, line),
             "je" => jump::je(
                 memory,
