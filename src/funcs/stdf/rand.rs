@@ -19,9 +19,24 @@ pub fn rand(
     let num1: u32;
     let num2: u32;
     let coma_split: Vec<&str> = statement.split(',').collect();
-    num1 = coma_split[0].split('[').collect::<Vec<&str>>()[1].trim().parse().expect("ok");
-    num2 = coma_split[1].split(']').collect::<Vec<&str>>()[0].trim().parse().expect("ok");
-    // todo: implement for lx and rv as ranges
+    let num1_str = coma_split[0].split('[').collect::<Vec<&str>>()[1];
+    let num2_str = coma_split[1].split(']').collect::<Vec<&str>>()[0];
+
+    match num1_str {
+        "lx" => num1 = registers.lx as u32,
+        "rv" => num1 = registers.rv as u32,
+        _ => num1 = num1_str.parse().expect(
+            format!("Expected int at {}{}", b, l).trim()
+        ),
+    }
+
+    match num2_str {
+        "lx" => num2 = registers.lx as u32,
+        "rv" => num2 = registers.rv as u32,
+        _ => num2 = num2_str.parse().expect(
+            format!("Expected int at {}{}", b, l).trim()
+        ),
+    }
 
     if num1 >= num2 {
         panic!("Range cannot be negative {}{}", b, l)
