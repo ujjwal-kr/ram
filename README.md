@@ -12,7 +12,8 @@ main:
     ram 1
     add
     ram lx prev
-    print
+    print var lx
+    ram lx
     ram 500
     cmp
     je halt:

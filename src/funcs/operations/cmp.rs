@@ -24,7 +24,7 @@ pub fn cmp(
         }
         let diff = num_2 - num_1;
         if diff == 0 {
-            memory.set_int_to_stack(1)
+            memory.set_int_to_stack(0)
         } else if diff > 0 {
             memory.set_int_to_stack(1)
         } else if diff < 0 {
