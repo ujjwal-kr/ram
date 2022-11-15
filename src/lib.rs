@@ -101,16 +101,14 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
-            // "str" => stack::strfn(&mut stack, &mut local_vars, cmd, run_label, line),
+            "split" => stdf::string::split(memory, vars, &mut local_registers, cmd, statement, run_label, line),
+            "concat" => stdf::string::concat(memory, vars, &mut local_registers, cmd, run_label, line),
             // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
             // "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
             // "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, run_label, line),
             // "sqrt" => operations::sqrt(&mut stack, cmd, &mut local_vars, run_label, line),
             // "round" => operations::round(&mut stack, cmd, &mut local_vars, run_label, line),
-            // "avg" => operations::avg(&mut stack, run_label, line),
-            // "rand" => stdfn::random(&mut local_vars, cmd, &mut stack, statement, run_label, line),
             // "split" => operations::split(cmd, statement, &mut local_vars, run_label, line),
-            // "parse" => stdfn::parse_int(&mut local_vars, cmd, run_label, line),
             // "vec" => {
             //     operations::vec_ops(&mut stack, cmd, statement, &mut local_vars, run_label, line)
             // }
