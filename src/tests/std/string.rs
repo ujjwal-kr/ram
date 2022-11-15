@@ -6,10 +6,12 @@ use crate::{memory::Memory, types::Vars, Registers};
 // split var > "\n" = var
 
 // concat string lxstring
-// concat lxstring string
-// concat var string
 // concat string var
+
+// concat lxstring string
 // concat lxstring var
+
+// concat var string
 // concat var var
 
 #[test]
@@ -133,7 +135,7 @@ pub fn concat_string_var() {
     let mut registers: Registers = Registers::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_string("x".to_string(), "world ", &mut memory);
+    vars.set_string("x".to_string(), "world", &mut memory);
     registers.string = "hello ".to_string();
     let statement = "concat string x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();

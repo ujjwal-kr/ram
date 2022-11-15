@@ -56,4 +56,45 @@ pub fn concat(
     b: &str,
     l: i32,
 ) {
+    if cmd.len() > 3 {
+        errors::args_error(b, l)
+    }
+
+    match cmd[1] {
+        "string" => match cmd[2] {
+            "string" => registers.string = format!("{}{}", registers.string, registers.string),
+            "lxstring" => registers.string = format!("{}{}", registers.string, registers.lxstring),
+            _ => {
+                let t = vars.get_type(cmd[2].to_string(), b, l);
+                if t.name == TypeName::String {
+                    registers.string = format!("{}{}", registers.string, memory.yeild_string(t.location))
+                } else {
+                    panic!("Expected {} to be string at {}{}", cmd[2], b, l);
+                }
+            }
+        },
+        "lxstring" => match cmd[2] {
+            "string" => registers.string = format!("{}{}", registers.lxstring, registers.string),
+            "lxstring" => registers.string = format!("{}{}", registers.lxstring, registers.lxstring),
+            _ => {
+                let t = vars.get_type(cmd[2].to_string(), b, l);
+                if t.name == TypeName::String {
+                    registers.string = format!("{}{}", registers.lxstring, memory.yeild_string(t.location))
+                } else {
+                    panic!("Expected {} to be string at {}{}", cmd[2], b, l);
+                }
+            }
+        },
+        _ => {
+            let t = vars.get_type(cmd[1].to_string(), b, l);
+            match cmd[2] {
+                "string" => registers.string = format!("{}{}", memory.yeild_string(t.location), registers.string),
+                "lxstring" => registers.string = format!("{}{}", memory.yeild_string(t.location), registers.lxstring),
+                _ => {
+                    let t2 = vars.get_type(cmd[2].to_string(), b, l);
+                    registers.string = format!("{}{}", memory.yeild_string(t.location), memory.yeild_string(t2.location))
+                }
+            }
+        }
+    }
 }
