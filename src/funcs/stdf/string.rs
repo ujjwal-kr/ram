@@ -11,7 +11,41 @@ pub fn split(
     b: &str,
     l: i32,
 ) {
+    let var_str = statement.split('=').collect::<Vec<&str>>()[1].trim();
+    let t = vars.get_type(var_str.to_string(), b, l);
+    if t.name != TypeName::Vector {
+        panic!("Expected {} to be string vec at {}{}", var_str, b, l);
+    }
+    let del_str = statement.split('>').collect::<Vec<&str>>()[1];
+    let final_str = del_str.split('=').collect::<Vec<&str>>()[0].trim();
+    let delimiter = &final_str[1..final_str.len() - 1];
 
+    match cmd[1] {
+        "string" => vars.set_raw_str_vec(
+            var_str.to_string(),
+            registers.string.split(delimiter).collect::<Vec<&str>>(),
+            memory,
+        ),
+        "lxstring" => vars.set_raw_str_vec(
+            var_str.to_string(),
+            registers.lxstring.split(delimiter).collect::<Vec<&str>>(),
+            memory,
+        ),
+        _ => {
+            let split_var_str = cmd[1];
+            let split_var_str_type = vars.get_type(split_var_str.to_string(), b, l);
+            if split_var_str_type.name == TypeName::String {
+                let split_var = memory.yeild_string(split_var_str_type.location);
+                vars.set_raw_str_vec(
+                    var_str.to_string(),
+                    split_var.split(delimiter).collect::<Vec<&str>>(),
+                    memory,
+                );
+            } else {
+                panic!("Expected {} to be string at {}{}", split_var_str, b, l);
+            }
+        }
+    }
 }
 
 pub fn concat(
@@ -22,5 +56,4 @@ pub fn concat(
     b: &str,
     l: i32,
 ) {
-
 }

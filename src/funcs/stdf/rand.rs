@@ -23,17 +23,21 @@ pub fn rand(
     match num1_str {
         "lx" => num1 = registers.lx as u32,
         "rv" => num1 = registers.rv as u32,
-        _ => num1 = num1_str.parse().expect(
-            format!("Expected int at {}{}", b, l).trim()
-        ),
+        _ => {
+            num1 = num1_str
+                .parse()
+                .expect(format!("Expected int at {}{}", b, l).trim())
+        }
     }
 
     match num2_str {
         "lx" => num2 = registers.lx as u32,
         "rv" => num2 = registers.rv as u32,
-        _ => num2 = num2_str.parse().expect(
-            format!("Expected int at {}{}", b, l).trim()
-        ),
+        _ => {
+            num2 = num2_str
+                .parse()
+                .expect(format!("Expected int at {}{}", b, l).trim())
+        }
     }
 
     if num1 >= num2 {
@@ -46,6 +50,6 @@ pub fn rand(
     match cmd[1] {
         "lx" => registers.lx = random_num as i32,
         "rv" => registers.rv = random_num as i32,
-        _ => memory.set_int_to_stack(random_num as i32)
+        _ => memory.set_int_to_stack(random_num as i32),
     }
 }

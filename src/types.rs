@@ -127,6 +127,25 @@ impl Vars {
         self.0.insert(name, new_str_vec);
     }
 
+    pub fn set_raw_str_vec(&mut self, name: String, items: Vec<&str>, memory: &mut Memory) {
+        let mut heap_addrs_bytes: Vec<u8> = vec![];
+        for item in items {
+            let current_heap_addr = memory.malloc(item.trim().as_bytes());
+            let addr_bytes = current_heap_addr.to_be_bytes();
+            for byte in addr_bytes {
+                heap_addrs_bytes.push(byte)
+            }
+        }
+
+        let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
+        let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
+        let new_str_vec: Type = Type {
+            name: TypeName::Vector,
+            location,
+        };
+        self.0.insert(name, new_str_vec);
+    }
+
     // Casting stuff
 
     pub fn cast(
