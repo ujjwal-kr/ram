@@ -59,3 +59,91 @@ pub fn split_var() {
     let t = vars.get_type("x".to_string(), "main", 1);
     assert_eq!(memory.yeild_str_vec(t.location), ["hello", "world"]);
 }
+
+#[test]
+pub fn concat_string_lxstring() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.string = "hello ".to_string();
+    registers.lxstring = "world".to_string();
+    let statement = "concat string lxstring";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
+
+pub fn concat_lxstring_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lxstring = "hello ".to_string();
+    registers.string = "world".to_string();
+    let statement = "concat lxstring string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
+
+pub fn concat_var_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "hello ", &mut memory);
+    registers.string = "world".to_string();
+    let statement = "concat x string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
+
+#[test]
+pub fn concat_string_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "world ", &mut memory);
+    registers.string = "hello ".to_string();
+    let statement = "concat string x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
+
+#[test]
+pub fn concat_lxstring_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "world", &mut memory);
+    registers.lxstring = "hello ".to_string();
+    let statement = "concat lxstring x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
+
+#[test]
+pub fn concat_var_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: Registers = Registers::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "hello ", &mut memory);
+    vars.set_string("y".to_string(), "world", &mut memory);
+    let statement = "concat x y";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    
+    concat(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    assert_eq!(registers.string, "hello world".to_string())
+}
