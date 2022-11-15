@@ -1,5 +1,3 @@
-use crate::funcs::errors;
-use crate::types::{TypeName, Vars};
 use crate::{memory::Memory, Registers};
 use rand::Rng;
 
@@ -19,8 +17,8 @@ pub fn rand(
     let num1: u32;
     let num2: u32;
     let coma_split: Vec<&str> = statement.split(',').collect();
-    let num1_str = coma_split[0].split('[').collect::<Vec<&str>>()[1];
-    let num2_str = coma_split[1].split(']').collect::<Vec<&str>>()[0];
+    let num1_str = coma_split[0].split('[').collect::<Vec<&str>>()[1].trim();
+    let num2_str = coma_split[1].split(']').collect::<Vec<&str>>()[0].trim();
 
     match num1_str {
         "lx" => num1 = registers.lx as u32,
