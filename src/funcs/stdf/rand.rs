@@ -1,4 +1,4 @@
-use crate::{memory::Memory, Registers};
+use crate::{memory::Memory, CPU};
 use rand::Rng;
 
 // rand [1,10]
@@ -8,7 +8,7 @@ use rand::Rng;
 
 pub fn rand(
     memory: &mut Memory,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
     b: &str,

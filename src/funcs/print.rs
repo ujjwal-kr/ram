@@ -1,11 +1,11 @@
 use crate::memory::Memory;
 use crate::types::{Type, TypeName, Vars};
-use crate::Registers;
+use crate::CPU;
 
 pub fn print(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     b: &str,
     l: i32,

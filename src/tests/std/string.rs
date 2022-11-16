@@ -1,5 +1,5 @@
 use crate::funcs::stdf::string::*;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 // split string > "" = var
 // split lxstring > " " = var
@@ -17,7 +17,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 #[test]
 pub fn split_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.string = "he,llo".to_string();
@@ -41,7 +41,7 @@ pub fn split_string() {
 #[test]
 pub fn split_lxstring() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = "hello world".to_string();
@@ -65,7 +65,7 @@ pub fn split_lxstring() {
 #[test]
 pub fn split_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "split str > \"\n\" = x";
@@ -89,7 +89,7 @@ pub fn split_var() {
 #[test]
 pub fn concat_string_lxstring() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.string = "hello ".to_string();
@@ -103,7 +103,7 @@ pub fn concat_string_lxstring() {
 
 pub fn concat_lxstring_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = "hello ".to_string();
@@ -117,7 +117,7 @@ pub fn concat_lxstring_string() {
 
 pub fn concat_var_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "hello ", &mut memory);
@@ -132,7 +132,7 @@ pub fn concat_var_string() {
 #[test]
 pub fn concat_string_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "world", &mut memory);
@@ -147,7 +147,7 @@ pub fn concat_string_var() {
 #[test]
 pub fn concat_lxstring_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "world", &mut memory);
@@ -162,7 +162,7 @@ pub fn concat_lxstring_var() {
 #[test]
 pub fn concat_var_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "hello ", &mut memory);

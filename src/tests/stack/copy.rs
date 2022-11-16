@@ -1,5 +1,5 @@
 use crate::funcs::stack::copy;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 // copy lx = rv
 // copy lx = var
@@ -22,7 +22,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 #[test]
 fn copy_lx_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 5;
@@ -44,7 +44,7 @@ fn copy_lx_rv() {
 #[test]
 fn copy_lx_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 5;
@@ -68,7 +68,7 @@ fn copy_lx_var() {
 #[test]
 fn copy_rv_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 5;
@@ -90,7 +90,7 @@ fn copy_rv_lx() {
 #[test]
 fn copy_rv_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 5;
@@ -114,7 +114,7 @@ fn copy_rv_var() {
 #[test]
 fn copy_string_lxstring() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = "hello".to_string();
@@ -137,7 +137,7 @@ fn copy_string_lxstring() {
 #[test]
 fn copy_string_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "hello", &mut memory);
@@ -160,7 +160,7 @@ fn copy_string_var() {
 #[test]
 fn copy_lxstring_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.string = "hello".to_string();
@@ -183,7 +183,7 @@ fn copy_lxstring_string() {
 #[test]
 fn copy_lxstring_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "hello", &mut memory);
@@ -206,7 +206,7 @@ fn copy_lxstring_var() {
 #[test]
 fn copy_var_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "0", &mut memory, "main:", 1);
@@ -232,7 +232,7 @@ fn copy_var_lx() {
 #[test]
 fn copy_var_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "0", &mut memory, "main:", 1);
@@ -258,7 +258,7 @@ fn copy_var_rv() {
 #[test]
 fn copy_var_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "", &mut memory);
@@ -284,7 +284,7 @@ fn copy_var_string() {
 #[test]
 fn copy_var_lxstring() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "", &mut memory);
@@ -310,7 +310,7 @@ fn copy_var_lxstring() {
 #[test]
 fn copy_var_var_int() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -336,7 +336,7 @@ fn copy_var_var_int() {
 #[test]
 fn copy_var_var_str() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "hello", &mut memory);

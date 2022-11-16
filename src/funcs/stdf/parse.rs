@@ -1,11 +1,11 @@
 use crate::funcs::errors;
 use crate::types::{TypeName, Vars};
-use crate::{memory::Memory, Registers};
+use crate::{memory::Memory, CPU};
 
 pub fn parse(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     b: &str,
     l: i32,

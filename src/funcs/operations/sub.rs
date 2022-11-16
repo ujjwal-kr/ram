@@ -1,13 +1,13 @@
 use crate::{
     memory::Memory,
     types::{Type, TypeName, Vars},
-    Registers,
+    CPU,
 };
 
 pub fn sub(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     b: &str,
     l: i32,

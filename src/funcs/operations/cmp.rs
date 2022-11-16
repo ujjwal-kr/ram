@@ -2,13 +2,13 @@ use crate::{
     funcs::errors,
     memory::Memory,
     types::{TypeName, Vars},
-    Registers,
+    CPU,
 };
 
 pub fn cmp(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     b: &str,
     l: i32,

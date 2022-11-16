@@ -1,10 +1,10 @@
 use crate::funcs::stack;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 #[test]
 fn ram_10() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram 10";
@@ -24,7 +24,7 @@ fn ram_10() {
 #[test]
 fn ram_lx_10() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram lx 10";
@@ -45,7 +45,7 @@ fn ram_lx_10() {
 #[test]
 fn ram_rv_10() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram rv 10";
@@ -66,7 +66,7 @@ fn ram_rv_10() {
 #[test]
 fn ram_lx_prev() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int_to_stack(&mut memory, "10", "main", 1);
@@ -88,7 +88,7 @@ fn ram_lx_prev() {
 #[test]
 fn ram_rv_prev() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int_to_stack(&mut memory, "10", "main", 1);
@@ -110,7 +110,7 @@ fn ram_rv_prev() {
 #[test]
 fn ram_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 10;
@@ -132,7 +132,7 @@ fn ram_lx() {
 #[test]
 fn ram_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 10;
@@ -154,7 +154,7 @@ fn ram_rv() {
 #[test]
 fn ram_string_eq_hellow() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 10;
@@ -176,7 +176,7 @@ fn ram_string_eq_hellow() {
 #[test]
 fn ram_lxstring_eq_hellow() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 10;
@@ -198,7 +198,7 @@ fn ram_lxstring_eq_hellow() {
 #[test]
 fn ram_var_int() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram x :int = 5";
@@ -220,7 +220,7 @@ fn ram_var_int() {
 #[test]
 fn ram_var_str() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram x :str = meow";
@@ -242,7 +242,7 @@ fn ram_var_str() {
 #[test]
 fn ram_vec_int() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram x :vec :int = [1, 2]";
@@ -264,7 +264,7 @@ fn ram_vec_int() {
 #[test]
 fn ram_vec_str() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     let statement = "ram x :vec :str = [ok, meow]";

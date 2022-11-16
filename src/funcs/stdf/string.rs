@@ -1,11 +1,11 @@
 use crate::funcs::errors;
 use crate::types::{TypeName, Vars};
-use crate::{memory::Memory, Registers};
+use crate::{memory::Memory, CPU};
 
 pub fn split(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
     b: &str,
@@ -51,7 +51,7 @@ pub fn split(
 pub fn concat(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     b: &str,
     l: i32,

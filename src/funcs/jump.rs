@@ -1,4 +1,4 @@
-use crate::{execute_block, Registers};
+use crate::{execute_block, CPU};
 use crate::{memory::Memory, types::Vars};
 
 use super::errors;
@@ -7,7 +7,7 @@ use std::collections::HashMap;
 pub fn jmp(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: Registers,
+    registers: CPU,
     program: HashMap<String, Vec<String>>,
     cmd: Vec<&str>,
     b: &str,
@@ -23,7 +23,7 @@ pub fn jmp(
 pub fn je(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: Registers,
+    registers: CPU,
     program: HashMap<String, Vec<String>>,
     cmd: Vec<&str>,
     b: &str,
@@ -45,7 +45,7 @@ pub fn je(
 pub fn jne(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: Registers,
+    registers: CPU,
     program: HashMap<String, Vec<String>>,
     cmd: Vec<&str>,
     b: &str,
@@ -67,7 +67,7 @@ pub fn jne(
 pub fn jgr(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: Registers,
+    registers: CPU,
     program: HashMap<String, Vec<String>>,
     cmd: Vec<&str>,
     b: &str,
@@ -89,7 +89,7 @@ pub fn jgr(
 pub fn jsm(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: Registers,
+    registers: CPU,
     program: HashMap<String, Vec<String>>,
     cmd: Vec<&str>,
     b: &str,

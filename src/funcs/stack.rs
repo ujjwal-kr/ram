@@ -1,12 +1,12 @@
 use crate::types::{Type, TypeName, Vars};
-use crate::{memory::Memory, Registers};
+use crate::{memory::Memory, CPU};
 
 use super::errors;
 
 pub fn ram(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
     b: &str,
@@ -102,7 +102,7 @@ pub fn ram(
 pub fn copy(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut Registers,
+    registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
     b: &str,

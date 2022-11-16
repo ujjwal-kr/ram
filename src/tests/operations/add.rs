@@ -1,5 +1,5 @@
 use crate::funcs::operations;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 // add
 
@@ -21,7 +21,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 #[test]
 fn add() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(1);
@@ -38,7 +38,7 @@ fn add() {
 #[test]
 fn add_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(1);
@@ -55,7 +55,7 @@ fn add_lx() {
 #[test]
 fn add_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(1);
@@ -72,7 +72,7 @@ fn add_rv() {
 #[test]
 fn add_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
@@ -89,7 +89,7 @@ fn add_var() {
 #[test]
 fn add_lx_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 1;
@@ -106,7 +106,7 @@ fn add_lx_rv() {
 #[test]
 fn add_rv_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 1;
@@ -123,7 +123,7 @@ fn add_rv_lx() {
 #[test]
 fn add_var_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -140,7 +140,7 @@ fn add_var_var() {
 #[test]
 fn add_var_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -157,7 +157,7 @@ fn add_var_lx() {
 #[test]
 fn add_var_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -174,7 +174,7 @@ fn add_var_rv() {
 #[test]
 fn add_lx_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -191,7 +191,7 @@ fn add_lx_var() {
 #[test]
 fn add_rv_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
@@ -208,7 +208,7 @@ fn add_rv_var() {
 #[test]
 fn add_lx_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 3;
@@ -224,7 +224,7 @@ fn add_lx_lx() {
 #[test]
 fn add_rv_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 3;

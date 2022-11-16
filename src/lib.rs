@@ -14,20 +14,38 @@ use std::collections::HashMap;
 use std::process;
 
 #[derive(Debug, Clone)]
-pub struct Registers {
+pub struct CPU {
     pub lx: i32,
     pub rv: i32,
     pub string: String,
     pub lxstring: String,
+    pub program_counter: u32,
 }
 
-impl Registers {
+impl CPU {
     pub fn new() -> Self {
         Self {
             lx: 0,
             rv: 0,
             string: String::new(),
             lxstring: String::new(),
+            program_counter: 0u32,
+        }
+    }
+
+    pub fn execute(&mut self, program: Vec<&str>, memory: &mut Memory, vars: &mut Vars) {
+        loop {
+            self.program_counter += 1;
+            let statement = program[self.program_counter as usize];
+            let cmd: Vec<&str> = statement.split_whitespace().collect();
+            match cmd[1] {
+                _ => {
+                    println!(
+                        "Cant recognize statement: {}", statement
+                    );
+                    process::exit(1)
+                }
+            }
         }
     }
 }
@@ -35,7 +53,7 @@ impl Registers {
 pub fn execute_block(
     instructions: HashMap<String, Vec<String>>,
     run_label: &str,
-    registers: Registers,
+    registers: CPU,
     memory: &mut Memory,
     vars: &mut Vars,
 ) {
@@ -50,11 +68,12 @@ pub fn execute_block(
         }
     }
 
-    let mut local_registers = Registers {
+    let mut local_registers = CPU {
         lx: registers.lx,
         rv: registers.rv,
         string: registers.string,
         lxstring: registers.lxstring,
+        program_counter: registers.program_counter,
     };
 
     let block_ref = run_block.clone();

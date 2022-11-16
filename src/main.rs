@@ -7,7 +7,7 @@ use ram::execute_block;
 use ram::memory::Memory;
 use ram::parser;
 use ram::types::Vars;
-use ram::Registers;
+use ram::CPU;
 
 fn main() {
     let mut filename: String = String::new();
@@ -29,7 +29,7 @@ fn main() {
     let p_lines: Vec<&str> = contents.split("\n").collect();
     let instructions: HashMap<String, Vec<String>> = parser::parse_lines(p_lines);
 
-    let registers: Registers = Registers::new();
+    let registers: CPU = CPU::new();
     let mut memory: Memory = Memory::new();
     let mut vars: Vars = Vars::new();
 

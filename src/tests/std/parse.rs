@@ -1,5 +1,5 @@
 use crate::funcs::stdf::parse::*;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 // parse lx :str
 // parse rv :str
@@ -13,7 +13,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 #[test]
 fn parse_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 5;
@@ -27,7 +27,7 @@ fn parse_lx() {
 #[test]
 fn parse_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 5;
@@ -41,7 +41,7 @@ fn parse_rv() {
 #[test]
 fn parse_string() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.string = "10".to_string();
@@ -55,7 +55,7 @@ fn parse_string() {
 #[test]
 fn parse_lxstring() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = "10".to_string();
@@ -69,7 +69,7 @@ fn parse_lxstring() {
 #[test]
 fn parse_var_int() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_string("x".to_string(), "10", &mut memory);
@@ -83,7 +83,7 @@ fn parse_var_int() {
 #[test]
 fn parse_var_str() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     vars.set_int("x".to_string(), "10", &mut memory, "main", 1);
