@@ -33,21 +33,31 @@ impl CPU {
         }
     }
 
-    pub fn execute(&mut self, program: Vec<&str>, memory: &mut Memory, vars: &mut Vars) {
+    pub fn execute(
+        &mut self,
+        instructions: Vec<String>,
+        label_map: HashMap<String, usize>,
+        memory: &mut Memory,
+        vars: &mut Vars,
+    ) {
         loop {
             self.program_counter += 1;
-            let statement = program[self.program_counter as usize];
+            let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
+            change(self);
+            println!("{}", self.lx);
             match cmd[1] {
                 _ => {
-                    println!(
-                        "Cant recognize statement: {}", statement
-                    );
+                    println!("Cant recognize statement: {}", statement);
                     process::exit(1)
                 }
             }
         }
     }
+}
+
+fn change(cpu: &mut CPU) {
+    cpu.lx = 10;
 }
 
 pub fn execute_block(
@@ -120,8 +130,18 @@ pub fn execute_block(
                 run_label,
                 line,
             ),
-            "split" => stdf::string::split(memory, vars, &mut local_registers, cmd, statement, run_label, line),
-            "concat" => stdf::string::concat(memory, vars, &mut local_registers, cmd, run_label, line),
+            "split" => stdf::string::split(
+                memory,
+                vars,
+                &mut local_registers,
+                cmd,
+                statement,
+                run_label,
+                line,
+            ),
+            "concat" => {
+                stdf::string::concat(memory, vars, &mut local_registers, cmd, run_label, line)
+            }
             // "stdin" => stdfn::stdin(&mut local_vars, cmd, run_label, line),
             // "stdfs" => stdfn::stdfs(&mut local_vars, cmd, statement, run_label, line),
             // "sqr" => operations::sqr(&mut stack, cmd, &mut local_vars, run_label, line),

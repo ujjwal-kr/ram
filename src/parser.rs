@@ -3,7 +3,12 @@ use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{fs, path::Path, process};
 
-pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
+pub struct LabelMap { 
+    pub map: HashMap<String, usize>,
+    pub instructions: Vec<String>
+}
+
+pub fn parse_lines(p_lines: Vec<&str>) -> LabelMap {
     let mut final_lines: Vec<&str> = vec![];
     for line in p_lines.clone() {
         final_lines.push(line);
@@ -37,7 +42,8 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         final_lines.push(line)
     }
     let program = populate_labels(final_lines);
-    program
+    program;
+    todo!()
 }
 
 // takes in all the lines and send imports of a file
