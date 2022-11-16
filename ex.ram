@@ -1,11 +1,4 @@
-include "ex3.ram"
-
 main:
     ram y :int = 500
-    add x y
-    jmp ok:
-
-ok:
-    ram ok :str = hello
     dbg
-    jmp one:
+    halt

@@ -41,26 +41,26 @@ impl CPU {
         vars: &mut Vars,
     ) {
         loop {
-            self.program_counter += 1;
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
-            println!("{}", self.lx);
-            match cmd[1] {
+
+            match cmd[0] {
                 "dbg" => {
                     println!("Stack: ");
                     for i in memory.stack.chunks(8) {
                         println!("{:?}", i)
                     }
                     println!("{:#?} \n {:#?} \n HEAP: {:#?}", vars, self, memory.heap);
-
-                    println!("{:?}", statement);
                 }
                 "ram" => stack::ram(memory, vars, self, cmd, statement),
+                "halt" => process::exit(0),
                 _ => {
                     println!("Cant recognize statement: {}", statement);
                     process::exit(1)
                 }
             }
+
+            self.program_counter += 1;
         }
     }
 }
