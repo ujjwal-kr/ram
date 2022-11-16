@@ -44,9 +44,18 @@ impl CPU {
             self.program_counter += 1;
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
-            change(self);
             println!("{}", self.lx);
             match cmd[1] {
+                "dbg" => {
+                    println!("Stack: ");
+                    for i in memory.stack.chunks(8) {
+                        println!("{:?}", i)
+                    }
+                    println!("{:#?} \n {:#?} \n HEAP: {:#?}", vars, self, memory.heap);
+
+                    println!("{:?}", statement);
+                }
+                "ram" => stack::ram(memory, vars, self, cmd, statement),
                 _ => {
                     println!("Cant recognize statement: {}", statement);
                     process::exit(1)
@@ -54,10 +63,6 @@ impl CPU {
             }
         }
     }
-}
-
-fn change(cpu: &mut CPU) {
-    cpu.lx = 10;
 }
 
 pub fn execute_block(
@@ -106,15 +111,15 @@ pub fn execute_block(
                 println!("{:?}", block_ref);
             }
             "print" => print::print(memory, vars, &mut local_registers, cmd, run_label, line),
-            "ram" => stack::ram(
-                memory,
-                vars,
-                &mut local_registers,
-                cmd,
-                statement,
-                run_label,
-                line,
-            ),
+            // "ram" => stack::ram(
+            //     memory,
+            //     vars,
+            //     &mut local_registers,
+            //     cmd,
+            //     statement,
+            //     run_label,
+            //     line,
+            // ),
             "add" => operations::add::add(memory, vars, &mut local_registers, cmd, run_label, line),
             "div" => operations::div::div(memory, vars, &mut local_registers, cmd, run_label, line),
             "sub" => operations::sub::sub(memory, vars, &mut local_registers, cmd, run_label, line),

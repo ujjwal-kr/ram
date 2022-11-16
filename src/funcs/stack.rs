@@ -8,9 +8,7 @@ pub fn ram(
     vars: &mut Vars,
     registers: &mut CPU,
     cmd: Vec<&str>,
-    statement: &str,
-    b: &str,
-    l: i32,
+    statement: &str
 ) {
     // ram 10
     // ram lx/rv 10
@@ -23,6 +21,9 @@ pub fn ram(
     // ram <var> :vec :int = [1,2,3]
     // ram <var> :vec :str = [meow, dog]
 
+    let b = "";
+    let l = 1;
+    
     if cmd.len() < 2 {
         errors::args_error(b, l);
     }
