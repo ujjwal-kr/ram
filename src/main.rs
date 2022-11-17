@@ -1,9 +1,7 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::{env, io};
 
-use ram::execute_block;
 use ram::memory::Memory;
 use ram::parser::{self, LabelMap};
 use ram::types::Vars;

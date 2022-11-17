@@ -1,4 +1,11 @@
 main:
-    ram y :int = 500
+    ram m :int = 50
+    jmp kekw:
+
+kekw:
+    ram 10
+    ram 23
+    ram x :int = 10
     dbg
+    jmp main:
     halt

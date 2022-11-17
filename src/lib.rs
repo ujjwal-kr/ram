@@ -43,24 +43,44 @@ impl CPU {
         loop {
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
+            let mut jmp: bool = false;
 
             match cmd[0] {
                 "dbg" => {
                     println!("Stack: ");
-                    for i in memory.stack.chunks(8) {
-                        println!("{:?}", i)
-                    }
-                    println!("{:#?} \n {:#?} \n HEAP: {:#?}", vars, self, memory.heap);
+                    // for i in memory.stack.chunks(8) {
+                    //     println!("{:?}", i)
+                    // }
+                    println!("{:#?} \n {:#?} \n HEAP: {:#?} \n", vars, self, memory.heap);
+                    println!("{:?}", instructions)
                 }
-                "ram" => stack::ram(memory, vars, self, cmd, statement),
+                "print" => print::print(memory, vars, self, cmd, "", 1),
+                "ram" => stack::ram(memory, vars, self, cmd, statement, "", 1),
+                "add" => operations::add::add(memory, vars, self, cmd, "", 1),
+                "div" => operations::div::div(memory, vars, self, cmd, "", 1),
+                "sub" => operations::sub::sub(memory, vars, self, cmd, "", 1),
+                "mul" => operations::mul::mul(memory, vars, self, cmd, "", 1),
+                "reset" => memory.reset_stack(),
+                "pop" => memory.pop_stack(),
+                "parse" => stdf::parse::parse(memory, vars, self, cmd, "", 1),
+                "rand" => stdf::rand::rand(memory, self, cmd, statement, "", 1),
+                "split" => stdf::string::split(memory, vars, self, cmd, statement, "", 1),
+                "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
+                "copy" => stack::copy(memory, vars, self, cmd, statement, "", 1),
+                "cmp" => operations::cmp::cmp(memory, vars, self, cmd, "", 1),
+                "jmp" => {
+                    jmp = true;
+                    jump::jmp(self, cmd, label_map.clone());
+                }
                 "halt" => process::exit(0),
                 _ => {
                     println!("Cant recognize statement: {}", statement);
                     process::exit(1)
                 }
             }
-
-            self.program_counter += 1;
+            if !jmp {
+                self.program_counter += 1;
+            }
         }
     }
 }
@@ -166,51 +186,51 @@ pub fn execute_block(
                 line,
             ),
             "cmp" => operations::cmp::cmp(memory, vars, &mut local_registers, cmd, run_label, line),
-            "je" => jump::je(
-                memory,
-                vars,
-                local_registers.clone(),
-                instructions.clone(),
-                cmd,
-                run_label,
-                line,
-            ),
-            "jne" => jump::jne(
-                memory,
-                vars,
-                local_registers.clone(),
-                instructions.clone(),
-                cmd,
-                run_label,
-                line,
-            ),
-            "jgr" => jump::jgr(
-                memory,
-                vars,
-                local_registers.clone(),
-                instructions.clone(),
-                cmd,
-                run_label,
-                line,
-            ),
-            "jsm" => jump::jsm(
-                memory,
-                vars,
-                local_registers.clone(),
-                instructions.clone(),
-                cmd,
-                run_label,
-                line,
-            ),
-            "jmp" => jump::jmp(
-                memory,
-                vars,
-                local_registers.clone(),
-                instructions.clone(),
-                cmd,
-                run_label,
-                line,
-            ),
+            // "je" => jump::je(
+            //     memory,
+            //     vars,
+            //     local_registers.clone(),
+            //     instructions.clone(),
+            //     cmd,
+            //     run_label,
+            //     line,
+            // ),
+            // "jne" => jump::jne(
+            //     memory,
+            //     vars,
+            //     local_registers.clone(),
+            //     instructions.clone(),
+            //     cmd,
+            //     run_label,
+            //     line,
+            // ),
+            // "jgr" => jump::jgr(
+            //     memory,
+            //     vars,
+            //     local_registers.clone(),
+            //     instructions.clone(),
+            //     cmd,
+            //     run_label,
+            //     line,
+            // ),
+            // "jsm" => jump::jsm(
+            //     memory,
+            //     vars,
+            //     local_registers.clone(),
+            //     instructions.clone(),
+            //     cmd,
+            //     run_label,
+            //     line,
+            // ),
+            // "jmp" => jump::jmp(
+            //     memory,
+            //     vars,
+            //     local_registers.clone(),
+            //     instructions.clone(),
+            //     cmd,
+            //     run_label,
+            //     line,
+            // ),
             "halt" => process::exit(0),
 
             _ => {
