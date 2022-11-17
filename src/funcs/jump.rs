@@ -1,5 +1,5 @@
 use crate::CPU;
-use crate::{memory::Memory};
+use crate::memory::Memory;
 
 use super::errors;
 use std::collections::HashMap;
@@ -14,13 +14,18 @@ fn get_dest_counter(lmap:  HashMap<String, usize>, label: &str) -> usize {
 pub fn jmp(
     cpu: &mut CPU,
     cmd: Vec<&str>,
-    label_map: HashMap<String, usize>
+    label_map: HashMap<String, usize>,
+    memory: &mut Memory
 ) {
     if cmd.len() != 2 {
         errors::args_error("", 1);
     }
+    for _ in 0..4 {
+        memory.pop_stack()
+    }
     let label = cmd[1].trim();
     let dest_counter = get_dest_counter(label_map, label);
+    cpu.callstack.push(cpu.program_counter + 1);
     cpu.program_counter = dest_counter as u32;
     cpu.jmp = true;
 }
@@ -35,8 +40,12 @@ pub fn je(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == 0 {
+        for _ in 0..4 {
+            memory.pop_stack()
+        }
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
+        cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
@@ -52,8 +61,12 @@ pub fn jne(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) != 0 {
+        for _ in 0..4 {
+            memory.pop_stack()
+        }
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
+        cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
@@ -69,8 +82,12 @@ pub fn jgr(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == 1 {
+        for _ in 0..4 {
+            memory.pop_stack()
+        }
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
+        cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
@@ -86,9 +103,22 @@ pub fn jsm(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == -1 {
+        for _ in 0..4 {
+            memory.pop_stack()
+        }
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
+        cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
+}
+
+pub fn ret(cpu: &mut CPU) {
+    if cpu.callstack.len() < 1 {
+        panic!("No place to return to.")
+    }
+    cpu.jmp = true;
+    cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1];
+    cpu.callstack.pop();
 }
