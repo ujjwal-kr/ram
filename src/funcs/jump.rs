@@ -1,6 +1,5 @@
 use crate::CPU;
-use crate::parser::LabelMap;
-use crate::{memory::Memory, types::Vars};
+use crate::{memory::Memory};
 
 use super::errors;
 use std::collections::HashMap;
@@ -23,92 +22,73 @@ pub fn jmp(
     let label = cmd[1].trim();
     let dest_counter = get_dest_counter(label_map, label);
     cpu.program_counter = dest_counter as u32;
+    cpu.jmp = true;
 }
 
-// pub fn je(
-//     memory: &mut Memory,
-//     vars: &mut Vars,
-//     registers: CPU,
-//     program: HashMap<String, Vec<String>>,
-//     cmd: Vec<&str>,
-//     b: &str,
-//     l: i32,
-// ) {
-//     if cmd.len() < 2 {
-//         errors::args_error(b, l)
-//     }
-//     let num = memory.get_int_from_stack(b, l);
-//     if num == 0 {
-//         let label = cmd[1].trim();
-//         for _ in 0..4 {
-//             memory.pop_stack()
-//         }
-//         execute_block(program, label, registers, memory, vars)
-//     }
-// }
+pub fn je(
+    cpu: &mut CPU,
+    cmd: Vec<&str>,
+    label_map: HashMap<String, usize>,
+    memory: &mut Memory
+) {
+    if cmd.len() != 2 {
+        errors::args_error("", 1);
+    }
+    if memory.get_int_from_stack("", 1) == 0 {
+        let label = cmd[1].trim();
+        let dest_counter = get_dest_counter(label_map, label);
+        cpu.program_counter = dest_counter as u32;
+        cpu.jmp = true;
+    }
+}
 
-// pub fn jne(
-//     memory: &mut Memory,
-//     vars: &mut Vars,
-//     registers: CPU,
-//     program: HashMap<String, Vec<String>>,
-//     cmd: Vec<&str>,
-//     b: &str,
-//     l: i32,
-// ) {
-//     if cmd.len() < 2 {
-//         errors::args_error(b, l)
-//     }
-//     let num = memory.get_int_from_stack(b, l);
-//     if num != 0 {
-//         let label = cmd[1].trim();
-//         for _ in 0..4 {
-//             memory.pop_stack()
-//         }
-//         execute_block(program, label, registers, memory, vars)
-//     }
-// }
+pub fn jne(
+    cpu: &mut CPU,
+    cmd: Vec<&str>,
+    label_map: HashMap<String, usize>,
+    memory: &mut Memory
+) {
+    if cmd.len() != 2 {
+        errors::args_error("", 1);
+    }
+    if memory.get_int_from_stack("", 1) != 0 {
+        let label = cmd[1].trim();
+        let dest_counter = get_dest_counter(label_map, label);
+        cpu.program_counter = dest_counter as u32;
+        cpu.jmp = true;
+    }
+}
 
-// pub fn jgr(
-//     memory: &mut Memory,
-//     vars: &mut Vars,
-//     registers: CPU,
-//     program: HashMap<String, Vec<String>>,
-//     cmd: Vec<&str>,
-//     b: &str,
-//     l: i32,
-// ) {
-//     if cmd.len() < 2 {
-//         errors::args_error(b, l)
-//     }
-//     let num = memory.get_int_from_stack(b, l);
-//     if num == 1 {
-//         let label = cmd[1].trim();
-//         for _ in 0..4 {
-//             memory.pop_stack()
-//         }
-//         execute_block(program, label, registers, memory, vars)
-//     }
-// }
+pub fn jgr(
+    cpu: &mut CPU,
+    cmd: Vec<&str>,
+    label_map: HashMap<String, usize>,
+    memory: &mut Memory
+) {
+    if cmd.len() != 2 {
+        errors::args_error("", 1);
+    }
+    if memory.get_int_from_stack("", 1) == 1 {
+        let label = cmd[1].trim();
+        let dest_counter = get_dest_counter(label_map, label);
+        cpu.program_counter = dest_counter as u32;
+        cpu.jmp = true;
+    }
+}
 
-// pub fn jsm(
-//     memory: &mut Memory,
-//     vars: &mut Vars,
-//     registers: CPU,
-//     program: HashMap<String, Vec<String>>,
-//     cmd: Vec<&str>,
-//     b: &str,
-//     l: i32,
-// ) {
-//     if cmd.len() < 2 {
-//         errors::args_error(b, l)
-//     }
-//     let num = memory.get_int_from_stack(b, l);
-//     if num == -1 {
-//         let label = cmd[1].trim();
-//         for _ in 0..4 {
-//             memory.pop_stack()
-//         }
-//         execute_block(program, label, registers, memory, vars)
-//     }
-// }
+pub fn jsm(
+    cpu: &mut CPU,
+    cmd: Vec<&str>,
+    label_map: HashMap<String, usize>,
+    memory: &mut Memory
+) {
+    if cmd.len() != 2 {
+        errors::args_error("", 1);
+    }
+    if memory.get_int_from_stack("", 1) == -1 {
+        let label = cmd[1].trim();
+        let dest_counter = get_dest_counter(label_map, label);
+        cpu.program_counter = dest_counter as u32;
+        cpu.jmp = true;
+    }
+}
