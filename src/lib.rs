@@ -21,6 +21,7 @@ pub struct CPU {
     pub string: String,
     pub lxstring: String,
     pub program_counter: u32,
+    pub callstack: Vec<u32>
 }
 
 impl CPU {
@@ -32,6 +33,7 @@ impl CPU {
             string: String::new(),
             lxstring: String::new(),
             program_counter: 0u32,
+            callstack: vec![]
         }
     }
 
@@ -69,12 +71,12 @@ impl CPU {
                 "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
                 "copy" => stack::copy(memory, vars, self, cmd, statement, "", 1),
                 "cmp" => operations::cmp::cmp(memory, vars, self, cmd, "", 1),
-
                 "jmp" => jump::jmp(self, cmd, label_map.clone()),
                 "je" => jump::je(self, cmd, label_map.clone(), memory),
                 "jgr" => jump::je(self, cmd, label_map.clone(), memory),
                 "jsm" => jump::je(self, cmd, label_map.clone(), memory),
                 "jne" => jump::je(self, cmd, label_map.clone(), memory),
+                "ret" => jump::ret(self),
                 "halt" => process::exit(0),
                 _ => {
                     println!("Cant recognize statement: {}", statement);

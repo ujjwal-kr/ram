@@ -1,3 +1,15 @@
 main:
-    ram x :int = 200
+    ram lx
+    ram 1
+    add
+    ram lx prev
+    print var lx
+    ram lx
+    ram 1000000
+    cmp
+    je halt:
+    jmp main:
+
+halt:
     dbg
+    halt
