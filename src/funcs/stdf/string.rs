@@ -67,7 +67,8 @@ pub fn concat(
             _ => {
                 let t = vars.get_type(cmd[2].to_string(), b, l);
                 if t.name == TypeName::String {
-                    registers.string = format!("{}{}", registers.string, memory.yeild_string(t.location))
+                    registers.string =
+                        format!("{}{}", registers.string, memory.yeild_string(t.location))
                 } else {
                     panic!("Expected {} to be string at {}{}", cmd[2], b, l);
                 }
@@ -75,11 +76,14 @@ pub fn concat(
         },
         "lxstring" => match cmd[2] {
             "string" => registers.string = format!("{}{}", registers.lxstring, registers.string),
-            "lxstring" => registers.string = format!("{}{}", registers.lxstring, registers.lxstring),
+            "lxstring" => {
+                registers.string = format!("{}{}", registers.lxstring, registers.lxstring)
+            }
             _ => {
                 let t = vars.get_type(cmd[2].to_string(), b, l);
                 if t.name == TypeName::String {
-                    registers.string = format!("{}{}", registers.lxstring, memory.yeild_string(t.location))
+                    registers.string =
+                        format!("{}{}", registers.lxstring, memory.yeild_string(t.location))
                 } else {
                     panic!("Expected {} to be string at {}{}", cmd[2], b, l);
                 }
@@ -88,11 +92,21 @@ pub fn concat(
         _ => {
             let t = vars.get_type(cmd[1].to_string(), b, l);
             match cmd[2] {
-                "string" => registers.string = format!("{}{}", memory.yeild_string(t.location), registers.string),
-                "lxstring" => registers.string = format!("{}{}", memory.yeild_string(t.location), registers.lxstring),
+                "string" => {
+                    registers.string =
+                        format!("{}{}", memory.yeild_string(t.location), registers.string)
+                }
+                "lxstring" => {
+                    registers.string =
+                        format!("{}{}", memory.yeild_string(t.location), registers.lxstring)
+                }
                 _ => {
                     let t2 = vars.get_type(cmd[2].to_string(), b, l);
-                    registers.string = format!("{}{}", memory.yeild_string(t.location), memory.yeild_string(t2.location))
+                    registers.string = format!(
+                        "{}{}",
+                        memory.yeild_string(t.location),
+                        memory.yeild_string(t2.location)
+                    )
                 }
             }
         }

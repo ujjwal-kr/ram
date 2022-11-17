@@ -4,9 +4,9 @@ use std::io::prelude::*;
 use std::{fs, path::Path, process};
 
 #[derive(Debug)]
-pub struct LabelMap { 
+pub struct LabelMap {
     pub map: HashMap<String, usize>,
-    pub instructions: Vec<String>
+    pub instructions: Vec<String>,
 }
 
 pub fn parse_lines(p_lines: Vec<&str>) -> LabelMap {
@@ -69,15 +69,15 @@ pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
         let mut incr: bool = true;
         line = line.trim();
         if line != "" && line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
-           incr = false;
-           line = "";
+            incr = false;
+            line = "";
         } else if line.len() > 1 {
             if &line[..2] == "//" {
                 incr = false;
                 line = "";
             }
         }
-        
+
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
@@ -90,6 +90,6 @@ pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
             }
         }
     }
-    
+
     LabelMap { map, instructions }
 }
