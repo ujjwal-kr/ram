@@ -5,7 +5,7 @@ main:
     ram lx prev
     print var lx
     ram lx
-    ram 1000000
+    ram 1000
     cmp
     je halt:
     jmp main:
