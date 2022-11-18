@@ -15,13 +15,12 @@ pub fn cmp(
 ) {
     if cmd.len() == 1 {
         let num_1 = memory.get_int_from_stack(b, l);
-        for _ in 0..4 {
-            memory.pop_stack()
-        }
+        let sub = memory.stack.len().saturating_sub(4);
+        memory.stack.truncate(sub);
+
         let num_2 = memory.get_int_from_stack(b, l);
-        for _ in 0..4 {
-            memory.pop_stack()
-        }
+        let sub = memory.stack.len().saturating_sub(4);
+        memory.stack.truncate(sub);
         let diff = num_2 - num_1;
         if diff == 0 {
             memory.set_int_to_stack(0)
