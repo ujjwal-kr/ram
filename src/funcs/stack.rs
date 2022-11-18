@@ -35,9 +35,8 @@ pub fn ram(
             } else if cmd[2] == "prev" {
                 // ram lx prev
                 registers.lx = memory.get_int_from_stack(b, l);
-                for _ in 0..4 {
-                    memory.pop_stack()
-                }
+                let sub = memory.stack.len().saturating_sub(4);
+                memory.stack.truncate(sub);
             } else {
                 // parse cmd[2] as int
                 registers.lx = errors::parse_int(cmd[2], b, l)
@@ -50,9 +49,8 @@ pub fn ram(
             } else if cmd[2] == "prev" {
                 // ram lx prev
                 registers.rv = memory.get_int_from_stack(b, l);
-                for _ in 0..4 {
-                    memory.pop_stack()
-                }
+                let sub = memory.stack.len().saturating_sub(4);
+                memory.stack.truncate(sub);
             } else {
                 // parse cmd[2] as int
                 registers.rv = errors::parse_int(cmd[2], b, l)
