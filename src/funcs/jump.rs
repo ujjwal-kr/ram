@@ -15,13 +15,10 @@ pub fn jmp(
     cpu: &mut CPU,
     cmd: Vec<&str>,
     label_map: HashMap<String, usize>,
-    memory: &mut Memory
 ) {
     if cmd.len() != 2 {
         errors::args_error("", 1);
     }
-    let sub = memory.stack.len().saturating_sub(4);
-    memory.stack.truncate(sub);
     let label = cmd[1].trim();
     let dest_counter = get_dest_counter(label_map, label);
     cpu.callstack.push(cpu.program_counter + 1);
@@ -39,14 +36,14 @@ pub fn je(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == 0 {
-        let sub = memory.stack.len().saturating_sub(4);
-        memory.stack.truncate(sub);
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
         cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
+    let sub = memory.stack.len().saturating_sub(4);
+    memory.stack.truncate(sub);
 }
 
 pub fn jne(
@@ -59,14 +56,14 @@ pub fn jne(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) != 0 {
-        let sub = memory.stack.len().saturating_sub(4);
-        memory.stack.truncate(sub);
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
         cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
+    let sub = memory.stack.len().saturating_sub(4);
+    memory.stack.truncate(sub);
 }
 
 pub fn jgr(
@@ -79,14 +76,14 @@ pub fn jgr(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == 1 {
-        let sub = memory.stack.len().saturating_sub(4);
-        memory.stack.truncate(sub);
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
         cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
+    let sub = memory.stack.len().saturating_sub(4);
+    memory.stack.truncate(sub);
 }
 
 pub fn jsm(
@@ -99,14 +96,14 @@ pub fn jsm(
         errors::args_error("", 1);
     }
     if memory.get_int_from_stack("", 1) == -1 {
-        let sub = memory.stack.len().saturating_sub(4);
-        memory.stack.truncate(sub);
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label);
         cpu.callstack.push(cpu.program_counter + 1);
         cpu.program_counter = dest_counter as u32;
         cpu.jmp = true;
     }
+    let sub = memory.stack.len().saturating_sub(4);
+    memory.stack.truncate(sub);
 }
 
 pub fn ret(cpu: &mut CPU) {

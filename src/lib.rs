@@ -71,7 +71,7 @@ impl CPU {
                 "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
                 "copy" => stack::copy(memory, vars, self, cmd, statement, "", 1),
                 "cmp" => operations::cmp::cmp(memory, vars, self, cmd, "", 1),
-                "jmp" => jump::jmp(self, cmd, label_map.clone(), memory),
+                "jmp" => jump::jmp(self, cmd, label_map.clone()),
                 "je" => jump::je(self, cmd, label_map.clone(), memory),
                 "jgr" => jump::je(self, cmd, label_map.clone(), memory),
                 "jsm" => jump::je(self, cmd, label_map.clone(), memory),
