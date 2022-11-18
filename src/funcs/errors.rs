@@ -59,18 +59,22 @@ pub fn vec_items(run_label: &str, line: u32) {
 }
 
 fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
-    let mut label_point_vec = map.values().cloned().collect::<Vec<usize>>();
-    label_point_vec.sort();
+    let mut value_point_vec: Vec<usize> = vec![];
+    let mut key_vec: Vec<String> = vec![];
+    for (k, v) in map.clone().into_iter() {
+        value_point_vec.push(v);
+        key_vec.push(k);
+    }
+    value_point_vec.sort();
     let final_point: usize;
     let mut final_label = String::from("");
     let mut point_stack: Vec<usize> = vec![];
-    for point in label_point_vec {
+    for point in value_point_vec {
         if pc >= point as u32 {
             point_stack.push(point)
         }
     }
     final_point = point_stack[point_stack.len() -1];
-    let key_vec = map.keys().cloned().collect::<Vec<String>>();
     for k in key_vec {
         match map.get(&k) {
             Some(&n) => {
