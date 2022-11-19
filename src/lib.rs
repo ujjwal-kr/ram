@@ -7,6 +7,7 @@ pub mod tests;
 pub mod types;
 
 use funcs::*;
+use funcs::errors::ErrorKind;
 use memory::Memory;
 use types::Vars;
 
@@ -45,6 +46,7 @@ impl CPU {
         vars: &mut Vars,
     ) {
         loop {
+            let ret_val: Result<(), errors::ErrorKind>;
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
             self.jmp = false;
@@ -59,9 +61,9 @@ impl CPU {
                 }
                 "print" => print::print(memory, vars, self, cmd, "", 1),
                 "ram" => stack::ram(memory, vars, self, cmd, statement, "", 1),
-                "add" => operations::add::add(memory, vars, self, cmd, "", 1),
+                "add" => ret_val = operations::add::add(memory, vars, self, cmd, "", 1),
                 "div" => operations::div::div(memory, vars, self, cmd, "", 1),
-                "sub" => operations::sub::sub(memory, vars, self, cmd, "", 1),
+                "sub" => ret_val = operations::sub::sub(memory, vars, self, cmd, "", 1),
                 "mul" => operations::mul::mul(memory, vars, self, cmd, "", 1),
                 "reset" => memory.reset_stack(),
                 "pop" => memory.pop_stack(),
@@ -82,6 +84,17 @@ impl CPU {
                     println!("Cant recognize statement: {}", statement);
                     process::exit(1)
                 }
+            }
+
+            match ret_val {
+                Ok(()) => (),
+                Err(t) => match t {
+                    ErrorKind::ArgErr => (),
+                    ErrorKind::ParseInt => (),
+                    ErrorKind::StackLen => (),
+                    ErrorKind::VarNotFound => (),
+                    ErrorKind::Casting => (),
+                },
             }
             if !self.jmp {
                 self.program_counter += 1;

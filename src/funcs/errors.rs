@@ -1,5 +1,13 @@
 use std::{collections::HashMap, process};
 
+pub enum ErrorKind {
+    ParseInt,
+    ArgErr,
+    StackLen,
+    VarNotFound,
+    Casting
+}
+
 pub fn stack_len_error(run_label: &str, line: i32) {
     println!(
         "Not enough items in the stack, '{}' line:{}",

@@ -1,5 +1,5 @@
-use crate::memory::{Location, Memory};
-use std::collections::HashMap;
+use crate::{memory::{Location, Memory}, funcs::errors::ErrorKind};
+use std::{collections::HashMap, num::ParseIntError};
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
@@ -32,10 +32,10 @@ impl Vars {
         Vars { 0: HashMap::new() }
     }
 
-    pub fn get_type(&mut self, name: String, b: &str, l: i32) -> Type {
+    pub fn get_type(&mut self, name: String) -> Result<Type, ErrorKind> {
         match self.0.get(&name) {
-            Some(ty) => ty.clone(),
-            _ => panic!("Var {} not found at {}{}", name, b, l),
+            Some(ty) => Ok(ty.clone()),
+            _ => Err(ErrorKind::VarNotFound),
         }
     }
 
@@ -45,25 +45,25 @@ impl Vars {
         &mut self,
         name: String,
         value: &str,
-        memory: &mut Memory,
-        block: &str,
-        line: i32,
-    ) {
-        let int_bytes = self.parse_i32(value, block, line).to_be_bytes();
+        memory: &mut Memory
+    ) -> Result<(), ParseIntError> {
+        let int_bytes = self.parse_i32(value)?.to_be_bytes();
         let location: Location = memory.store(&int_bytes);
         let new_int = Type {
             name: TypeName::I32,
             location,
         };
         self.0.insert(name, new_int);
+        Ok(())
     }
 
     // TODO: make stuff for other types of ints
 
-    pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str, block: &str, line: i32) {
-        let num = self.parse_i32(value, block, line);
+    pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str) -> Result<(), ParseIntError> {
+        let num = self.parse_i32(value)?;
         let bytes = num.to_be_bytes();
         memory.store(&bytes);
+        Ok(())
     }
 
     // Strings
@@ -87,11 +87,11 @@ impl Vars {
         memory: &mut Memory,
         block: &str,
         line: i32,
-    ) {
+    ) -> Result<(), ParseIntError> {
         let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut final_bytes: Vec<u8> = vec![];
         for item in items {
-            let int: i32 = self.parse_i32(item.trim(), block, line);
+            let int: i32 = self.parse_i32(item.trim())?;
             let byte: &[u8] = &int.to_be_bytes();
             for bit in byte {
                 final_bytes.push(*bit);
@@ -105,6 +105,7 @@ impl Vars {
         };
 
         self.0.insert(name, new_int_vec);
+        Ok(())
     }
 
     pub fn set_str_vec(&mut self, name: String, value: &str, memory: &mut Memory) {
@@ -153,9 +154,7 @@ impl Vars {
         src: &str,
         dest: &str,
         memory: &mut Memory,
-        b: &str,
-        l: i32,
-    ) -> Option<CastStack> {
+    ) -> Result<Option<CastStack>, ErrorKind> {
         // check if the type of both vars are same
         let source: Type;
         let destination: Type;
@@ -168,10 +167,7 @@ impl Vars {
             _ => panic!("Var {} not found", src),
         }
         if destination.name != source.name {
-            panic!(
-                "Cannot assign {:?} to {:?} at {}{}, type casting error",
-                source.name, destination.name, b, l
-            )
+            return Err(ErrorKind::Casting);
         }
         if destination.name == TypeName::String || destination.name == TypeName::Vector {
             let src_addr: [u8; 4] = memory
@@ -186,13 +182,13 @@ impl Vars {
                 .try_into()
                 .expect("Error converting location to addr");
             memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data);
-            None
+            Ok(None)
         } else {
             let data: &[u8] = memory.load(source.location);
-            Some(CastStack {
+            Ok(Some(CastStack {
                 dest_location: destination.location,
                 src_data: data.to_vec(),
-            })
+            }))
         }
     }
 }
@@ -200,10 +196,9 @@ impl Vars {
 impl Vars {
     // parsers
 
-    fn parse_i32(&mut self, value: &str, block: &str, line: i32) -> i32 {
-        value
-            .parse::<i32>()
-            .expect(format!("Parse int error at {}:{}", block, line).trim())
+    fn parse_i32(&mut self, value: &str) -> Result<i32, ParseIntError> {
+        let n = value.parse::<i32>()?;
+        Ok(n)
     }
 
     // fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {

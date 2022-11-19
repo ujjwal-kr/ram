@@ -1,7 +1,7 @@
 use crate::{
     memory::Memory,
     types::{Type, TypeName, Vars},
-    CPU,
+    CPU, funcs::errors::ErrorKind,
 };
 
 pub fn sub(
@@ -11,7 +11,7 @@ pub fn sub(
     cmd: Vec<&str>,
     b: &str,
     l: i32,
-) {
+) -> Result<(), ErrorKind> {
     if cmd.len() == 1 {
         let n1: i32 = memory.get_int_from_stack(b, l);
         let sub = memory.stack.len().saturating_sub(4);
