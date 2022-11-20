@@ -35,7 +35,7 @@ impl Vars {
     pub fn get_type(&mut self, name: String) -> Result<Type, ErrorKind> {
         match self.0.get(&name) {
             Some(ty) => Ok(ty.clone()),
-            _ => Err(ErrorKind::VarNotFound),
+            _ => Err(ErrorKind::VarNotFound(name)),
         }
     }
 
@@ -167,7 +167,7 @@ impl Vars {
             _ => panic!("Var {} not found", src),
         }
         if destination.name != source.name {
-            return Err(ErrorKind::Casting);
+            return Err(ErrorKind::Casting{src: src.to_string(), dest: dest.to_string()});
         }
         if destination.name == TypeName::String || destination.name == TypeName::Vector {
             let src_addr: [u8; 4] = memory

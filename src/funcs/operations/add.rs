@@ -8,9 +8,7 @@ pub fn add(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
-    cmd: Vec<&str>,
-    b: &str,
-    l: i32,
+    cmd: Vec<&str>
 ) -> Result<(), ErrorKind> {
     if cmd.len() == 1 {
         let n1: i32 = memory.get_int_from_stack()?;
@@ -33,19 +31,19 @@ pub fn add(
                     Ok(())
                 } else {
                     match cmd[2] {
-                        "rv" => { memory.set_int_to_stack(registers.lx + registers.rv); Ok(())},
-                        "lx" => {memory.set_int_to_stack(registers.lx + registers.lx); Ok(())},
+                        "rv" => memory.set_int_to_stack(registers.lx + registers.rv),
+                        "lx" => memory.set_int_to_stack(registers.lx + registers.lx),
                         _ => {
                             let n: i32;
-                            let t: Type = vars.get_type(cmd[2].to_string(), b, l);
+                            let t: Type = vars.get_type(cmd[2].to_string())?;
                             match t.name {
                                 TypeName::I32 => n = memory.yeild_i32(t.location),
-                                _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
+                                _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                             }
                             memory.set_int_to_stack(registers.lx + n);
-                            Ok(())
                         }
                     }
+                    Ok(())
                 }
             }
             "rv" => {
@@ -57,28 +55,28 @@ pub fn add(
                     Ok(())
                 } else {
                     match cmd[2] {
-                        "rv" =>{ memory.set_int_to_stack(registers.rv + registers.rv); Ok(())},
-                        "lx" => {memory.set_int_to_stack(registers.rv + registers.lx); Ok(())},
+                        "rv" => memory.set_int_to_stack(registers.rv + registers.rv),
+                        "lx" => memory.set_int_to_stack(registers.rv + registers.lx),
                         _ => {
                             let n: i32;
-                            let t: Type = vars.get_type(cmd[2].to_string(), b, l);
+                            let t: Type = vars.get_type(cmd[2].to_string())?;
                             match t.name {
                                 TypeName::I32 => n = memory.yeild_i32(t.location),
-                                _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
+                                _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                             }
                             memory.set_int_to_stack(registers.rv + n);
-                            Ok(())
                         }
                     }
+                    Ok(())
                 }
             }
             _ => {
                 if cmd.len() == 2 {
                     let var: i32;
-                    let t: Type = vars.get_type(cmd[1].to_string(), b, l);
+                    let t: Type = vars.get_type(cmd[1].to_string())?;
                     match t.name {
                         TypeName::I32 => var = memory.yeild_i32(t.location),
-                        _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
+                        _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                     }
                     let n: i32 = memory.get_int_from_stack()?;
                     let sub = memory.stack.len().saturating_sub(4);
@@ -87,25 +85,25 @@ pub fn add(
                     Ok(())
                 } else if cmd.len() == 3 {
                     let var: i32;
-                    let t: Type = vars.get_type(cmd[1].to_string(), b, l);
+                    let t: Type = vars.get_type(cmd[1].to_string())?;
                     match t.name {
                         TypeName::I32 => var = memory.yeild_i32(t.location),
-                        _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
+                        _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                     }
                     match cmd[2] {
-                        "lx" => {memory.set_int_to_stack(registers.lx + var); Ok(())},
-                        "rv" => {memory.set_int_to_stack(registers.rv + var); Ok(())},
+                        "lx" => memory.set_int_to_stack(registers.lx + var),
+                        "rv" => memory.set_int_to_stack(registers.rv + var),
                         _ => {
                             let var2: i32;
-                            let t2: Type = vars.get_type(cmd[2].to_string(), b, l);
+                            let t2: Type = vars.get_type(cmd[2].to_string())?;
                             match t2.name {
                                 TypeName::I32 => var2 = memory.yeild_i32(t2.location),
-                                _ => panic!("Expected {} to be an int at {}{}", cmd[2], b, l),
+                                _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                             }
                             memory.set_int_to_stack(var + var2);
-                            Ok(())
                         }
                     }
+                    Ok(())
                 } else {
                     Ok(())
                 }

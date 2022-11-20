@@ -4,8 +4,11 @@ pub enum ErrorKind {
     ParseInt,
     ArgErr,
     StackLen,
-    VarNotFound,
-    Casting
+    VarNotFound(String),
+    Casting {src: String, dest: String},
+    ExpectedInt(String),
+    ExpectedStr(String),
+    ExpectedVec(String),
 }
 
 pub fn stack_len_error(run_label: &str, line: i32) {

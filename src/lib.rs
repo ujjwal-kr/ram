@@ -61,8 +61,8 @@ impl CPU {
                 }
                 "print" => print::print(memory, vars, self, cmd, "", 1),
                 "ram" => stack::ram(memory, vars, self, cmd, statement, "", 1),
-                "add" => ret_val = operations::add::add(memory, vars, self, cmd, "", 1),
-                "div" => operations::div::div(memory, vars, self, cmd, "", 1),
+                "add" => ret_val = operations::add::add(memory, vars, self, cmd),
+                "div" => ret_val = operations::div::div(memory, vars, self, cmd),
                 "sub" => ret_val = operations::sub::sub(memory, vars, self, cmd, "", 1),
                 "mul" => operations::mul::mul(memory, vars, self, cmd, "", 1),
                 "reset" => memory.reset_stack(),
@@ -72,7 +72,7 @@ impl CPU {
                 "split" => stdf::string::split(memory, vars, self, cmd, statement, "", 1),
                 "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
                 "copy" => stack::copy(memory, vars, self, cmd, statement, "", 1),
-                "cmp" => operations::cmp::cmp(memory, vars, self, cmd, "", 1),
+                "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd, "", 1),
                 "jmp" => jump::jmp(self, cmd, label_map.clone()),
                 "je" => jump::je(self, cmd, label_map.clone(), memory),
                 "jgr" => jump::je(self, cmd, label_map.clone(), memory),
@@ -92,8 +92,11 @@ impl CPU {
                     ErrorKind::ArgErr => (),
                     ErrorKind::ParseInt => (),
                     ErrorKind::StackLen => (),
-                    ErrorKind::VarNotFound => (),
-                    ErrorKind::Casting => (),
+                    ErrorKind::VarNotFound(var) => (),
+                    ErrorKind::Casting{src, dest} => (),
+                    ErrorKind::ExpectedInt(var) => (),
+                    ErrorKind::ExpectedVec(var) => (),
+                    ErrorKind::ExpectedStr(var) => ()
                 },
             }
             if !self.jmp {
