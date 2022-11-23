@@ -107,7 +107,7 @@ impl CPU {
                         ErrorKind::ExpectedInt(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
                         ErrorKind::ExpectedVec(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
                         ErrorKind::ExpectedStr(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
-                        ErrorKind::RangeNegative() => println!("Range should be non-zero and positive at {} {}", label, statement)
+                        ErrorKind::RangeNegative => println!("Range should be non-zero and positive at {} {}", label, statement)
                     }
                     process::exit(1)
                 }

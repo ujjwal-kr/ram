@@ -35,7 +35,7 @@ pub fn rand(
     }
 
     if num1 >= num2 {
-        return Err(ErrorKind::RangeNegative());
+        return Err(ErrorKind::RangeNegative);
     }
 
     let mut rng = rand::thread_rng();

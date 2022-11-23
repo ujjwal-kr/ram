@@ -10,7 +10,7 @@ pub enum ErrorKind {
     ExpectedInt(String),
     ExpectedStr(String),
     ExpectedVec(String),
-    RangeNegative(),
+    RangeNegative,
 }
 
 pub fn stack_len_error(run_label: &str, line: i32) {
