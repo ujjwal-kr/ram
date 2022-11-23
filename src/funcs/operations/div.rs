@@ -32,8 +32,8 @@ pub fn div(
                     Ok(())
                 } else {
                     match cmd[2] {
-                        "rv" => {memory.set_int_to_stack(registers.lx / registers.rv); Ok(())},
-                        "lx" =>{ memory.set_int_to_stack(registers.lx / registers.lx); Ok(())},
+                        "rv" => memory.set_int_to_stack(registers.lx / registers.rv) ,
+                        "lx" => memory.set_int_to_stack(registers.lx / registers.lx) ,
                         _ => {
                             let n: i32;
                             let t: Type = vars.get_type(cmd[2].to_string(), )?;
@@ -42,9 +42,9 @@ pub fn div(
                                 _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                             }
                             memory.set_int_to_stack(registers.lx / n);
-                            Ok(())
                         }
                     }
+                    Ok(())
                 }
             }
             "rv" => {

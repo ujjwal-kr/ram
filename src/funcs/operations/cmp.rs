@@ -1,5 +1,5 @@
 use crate::{
-    funcs::errors::{self, ErrorKind},
+    funcs::errors::ErrorKind,
     memory::Memory,
     types::{TypeName, Vars},
     CPU,
@@ -10,8 +10,6 @@ pub fn cmp(
     vars: &mut Vars,
     registers: &mut CPU,
     cmd: Vec<&str>,
-    b: &str,
-    l: i32,
 ) -> Result<(), ErrorKind> {
     if cmd.len() == 1 {
         let num_1 = memory.get_int_from_stack()?;
@@ -42,7 +40,6 @@ pub fn cmp(
                     } else if diff < 0 {
                         memory.set_int_to_stack(-1)
                     }
-                    Ok(())
                 } else {
                     let var = vars.get_type(cmd[2].to_string())?;
                     if var.name == TypeName::I32 {
@@ -55,11 +52,11 @@ pub fn cmp(
                         } else if diff < 0 {
                             memory.set_int_to_stack(-1)
                         }
-                        Ok(())
                     } else {
-                        Err(ErrorKind::Casting)
+                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lx".to_string()})
                     }
                 }
+                Ok(())
             }
             "rv" => {
                 if cmd[2] == "lx" {
@@ -84,7 +81,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lx".to_string()})
                     }
                 }
                 Ok(())
@@ -105,7 +102,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "string".to_string()})
                     }
                 }
                 Ok(())
@@ -126,7 +123,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lxstring".to_string()})
                     }
                 }
                 Ok(())
@@ -145,7 +142,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: "lx".to_string(), dest: cmd[1].to_string()})
                     }
                     Ok(())
                 }
@@ -162,7 +159,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: "rv".to_string(), dest: cmd[1].to_string()})
                     }
                     Ok(())
                 }
@@ -175,7 +172,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: "string".to_string(), dest: cmd[1].to_string()})
                     }
                     Ok(())
                 }
@@ -188,7 +185,7 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: "string".to_string(), dest: cmd[1].to_string()})
                     }
                     Ok(())
                 }
@@ -224,7 +221,7 @@ pub fn cmp(
                         }
                         Ok(())
                     } else {
-                        panic!("Invalid type casting at {}{}", b, l)
+                        return Err(ErrorKind::Casting{src: cmd[1].to_string(), dest: cmd[2].to_string()})
                     }
                 }
             },
