@@ -1,14 +1,14 @@
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
-use super::errors::{ErrorKind, self};
+use super::errors::{self, ErrorKind};
 
 pub fn ram(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
     cmd: Vec<&str>,
-    statement: &str
+    statement: &str,
 ) -> Result<(), ErrorKind> {
     // ram 10
     // ram lx/rv 10
@@ -22,7 +22,7 @@ pub fn ram(
     // ram <var> :vec :str = [meow, dog]
 
     if cmd.len() < 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
 
     match cmd[1] {
@@ -76,11 +76,11 @@ pub fn ram(
                                 match &cmd[3][1..cmd[3].len()] {
                                     "str" => vars.set_str_vec(name.to_string(), exp, memory),
                                     "int" => vars.set_int_vec(name.to_string(), exp, memory)?,
-                                    _ => return Err(ErrorKind::ArgErr)
+                                    _ => return Err(ErrorKind::ArgErr),
                                 }
                             }
                         }
-                        _ => return Err(ErrorKind::ArgErr)
+                        _ => return Err(ErrorKind::ArgErr),
                     }
                 }
             } else {
@@ -100,7 +100,7 @@ pub fn copy(
     statement: &str,
 ) -> Result<(), ErrorKind> {
     if cmd.len() < 4 || cmd[2] != "=" {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
 
     let src: &str = statement.split('=').collect::<Vec<&str>>()[1].trim();
@@ -116,7 +116,7 @@ pub fn copy(
                     var = memory.yeild_i32(t.location);
                     registers.lx = var
                 } else {
-                   return Err(ErrorKind::ExpectedInt(src.to_string()))
+                    return Err(ErrorKind::ExpectedInt(src.to_string()));
                 }
             }
         },
@@ -130,7 +130,7 @@ pub fn copy(
                     var = memory.yeild_i32(t.location);
                     registers.rv = var
                 } else {
-                    return Err(ErrorKind::ExpectedInt(src.to_string()))
+                    return Err(ErrorKind::ExpectedInt(src.to_string()));
                 }
             }
         },
@@ -144,7 +144,7 @@ pub fn copy(
                     var = memory.yeild_string(t.location);
                     registers.string = var
                 } else {
-                    return Err(ErrorKind::ExpectedStr(src.to_string()))
+                    return Err(ErrorKind::ExpectedStr(src.to_string()));
                 }
             }
         },
@@ -158,7 +158,7 @@ pub fn copy(
                     var = memory.yeild_string(t.location);
                     registers.lxstring = var
                 } else {
-                    return Err(ErrorKind::ExpectedStr(src.to_string()))
+                    return Err(ErrorKind::ExpectedStr(src.to_string()));
                 }
             }
         },
@@ -171,7 +171,7 @@ pub fn copy(
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.lx.to_be_bytes())
                     } else {
-                        return Err(ErrorKind::ExpectedInt(dest.to_string()))
+                        return Err(ErrorKind::ExpectedInt(dest.to_string()));
                     }
                 }
                 "rv" => {
@@ -180,7 +180,7 @@ pub fn copy(
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.rv.to_be_bytes())
                     } else {
-                        return Err(ErrorKind::ExpectedInt(dest.to_string()))
+                        return Err(ErrorKind::ExpectedInt(dest.to_string()));
                     }
                 }
                 "string" => {
@@ -196,7 +196,7 @@ pub fn copy(
                         // end gc
                         vars.set_string(dest.to_string(), &registers.string, memory)
                     } else {
-                        return Err(ErrorKind::ExpectedStr(dest.to_string()))
+                        return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
                 "lxstring" => {
@@ -212,7 +212,7 @@ pub fn copy(
                         // end gc
                         vars.set_string(dest.to_string(), &registers.lxstring, memory)
                     } else {
-                        return Err(ErrorKind::ExpectedStr(dest.to_string()))
+                        return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
                 _ => match vars.cast(src, dest, memory)? {

@@ -53,7 +53,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lx".to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: cmd[2].to_string(),
+                            dest: "lx".to_string(),
+                        });
                     }
                 }
                 Ok(())
@@ -81,7 +84,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lx".to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: cmd[2].to_string(),
+                            dest: "lx".to_string(),
+                        });
                     }
                 }
                 Ok(())
@@ -102,7 +108,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "string".to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: cmd[2].to_string(),
+                            dest: "string".to_string(),
+                        });
                     }
                 }
                 Ok(())
@@ -123,7 +132,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: cmd[2].to_string(), dest: "lxstring".to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: cmd[2].to_string(),
+                            dest: "lxstring".to_string(),
+                        });
                     }
                 }
                 Ok(())
@@ -142,7 +154,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: "lx".to_string(), dest: cmd[1].to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: "lx".to_string(),
+                            dest: cmd[1].to_string(),
+                        });
                     }
                     Ok(())
                 }
@@ -159,7 +174,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: "rv".to_string(), dest: cmd[1].to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: "rv".to_string(),
+                            dest: cmd[1].to_string(),
+                        });
                     }
                     Ok(())
                 }
@@ -172,7 +190,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: "string".to_string(), dest: cmd[1].to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: "string".to_string(),
+                            dest: cmd[1].to_string(),
+                        });
                     }
                     Ok(())
                 }
@@ -185,7 +206,10 @@ pub fn cmp(
                             memory.set_int_to_stack(-1)
                         }
                     } else {
-                        return Err(ErrorKind::Casting{src: "string".to_string(), dest: cmd[1].to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: "string".to_string(),
+                            dest: cmd[1].to_string(),
+                        });
                     }
                     Ok(())
                 }
@@ -217,11 +241,14 @@ pub fn cmp(
                                     memory.set_int_to_stack(-1)
                                 }
                             }
-                            _ => todo!("Implement for other types")
+                            _ => todo!("Implement for other types"),
                         }
                         Ok(())
                     } else {
-                        return Err(ErrorKind::Casting{src: cmd[1].to_string(), dest: cmd[2].to_string()})
+                        return Err(ErrorKind::Casting {
+                            src: cmd[1].to_string(),
+                            dest: cmd[2].to_string(),
+                        });
                     }
                 }
             },

@@ -1,5 +1,8 @@
-use crate::{memory::{Location, Memory}, funcs::errors::ErrorKind};
-use std::{collections::HashMap, num::ParseIntError};
+use crate::{
+    funcs::errors::ErrorKind,
+    memory::{Location, Memory},
+};
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
@@ -45,7 +48,7 @@ impl Vars {
         &mut self,
         name: String,
         value: &str,
-        memory: &mut Memory
+        memory: &mut Memory,
     ) -> Result<(), ErrorKind> {
         let int_bytes = self.parse_i32(value)?.to_be_bytes();
         let location: Location = memory.store(&int_bytes);
@@ -165,7 +168,10 @@ impl Vars {
             _ => panic!("Var {} not found", src),
         }
         if destination.name != source.name {
-            return Err(ErrorKind::Casting{src: src.to_string(), dest: dest.to_string()});
+            return Err(ErrorKind::Casting {
+                src: src.to_string(),
+                dest: dest.to_string(),
+            });
         }
         if destination.name == TypeName::String || destination.name == TypeName::Vector {
             let src_addr: [u8; 4] = memory
@@ -198,7 +204,7 @@ impl Vars {
         let n: i32;
         match value.parse::<i32>() {
             Ok(n) => n = n,
-            ParseIntError => return Err(ErrorKind::ParseInt)
+            ParseIntError => return Err(ErrorKind::ParseInt),
         }
         Ok(n)
     }

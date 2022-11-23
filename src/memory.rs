@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::collections::HashMap;
 
-use crate::funcs::errors::{ErrorKind};
+use crate::funcs::errors::ErrorKind;
 
 #[derive(Debug)]
 pub struct Memory {
@@ -92,7 +92,7 @@ impl Memory {
 
     pub fn get_int_from_stack(&mut self) -> Result<i32, ErrorKind> {
         if self.stack.len() < 4 {
-            return Err(ErrorKind::StackLen)
+            return Err(ErrorKind::StackLen);
         }
         let location = Location {
             start: self.stack.len() - 4,

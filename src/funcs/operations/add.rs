@@ -1,14 +1,15 @@
 use crate::{
+    funcs::errors::ErrorKind,
     memory::Memory,
     types::{Type, TypeName, Vars},
-    CPU, funcs::errors::ErrorKind,
+    CPU,
 };
 
 pub fn add(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
-    cmd: Vec<&str>
+    cmd: Vec<&str>,
 ) -> Result<(), ErrorKind> {
     if cmd.len() == 1 {
         let n1: i32 = memory.get_int_from_stack()?;

@@ -6,8 +6,8 @@ pub mod parser;
 pub mod tests;
 pub mod types;
 
-use funcs::*;
 use funcs::errors::ErrorKind;
+use funcs::*;
 use memory::Memory;
 use types::Vars;
 
@@ -22,7 +22,7 @@ pub struct CPU {
     pub string: String,
     pub lxstring: String,
     pub program_counter: u32,
-    pub callstack: Vec<u32>
+    pub callstack: Vec<u32>,
 }
 
 impl CPU {
@@ -34,7 +34,7 @@ impl CPU {
             string: String::new(),
             lxstring: String::new(),
             program_counter: 0u32,
-            callstack: vec![]
+            callstack: vec![],
         }
     }
 
@@ -94,10 +94,10 @@ impl CPU {
                     ErrorKind::ParseInt => (),
                     ErrorKind::StackLen => (),
                     ErrorKind::VarNotFound(var) => (),
-                    ErrorKind::Casting{src, dest} => (),
+                    ErrorKind::Casting { src, dest } => (),
                     ErrorKind::ExpectedInt(var) => (),
                     ErrorKind::ExpectedVec(var) => (),
-                    ErrorKind::ExpectedStr(var) => ()
+                    ErrorKind::ExpectedStr(var) => (),
                 },
             }
             if !self.jmp {

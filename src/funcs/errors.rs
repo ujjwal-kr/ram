@@ -5,7 +5,7 @@ pub enum ErrorKind {
     ArgErr,
     StackLen,
     VarNotFound(String),
-    Casting {src: String, dest: String},
+    Casting { src: String, dest: String },
     ExpectedInt(String),
     ExpectedStr(String),
     ExpectedVec(String),
@@ -24,7 +24,7 @@ pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {
     let n: i32;
     match value.parse::<i32>() {
         Ok(n) => n = n,
-        ParseIntError => return Err(ErrorKind::ParseInt)
+        ParseIntError => return Err(ErrorKind::ParseInt),
     }
     Ok(n)
 }
@@ -86,7 +86,7 @@ fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
             point_stack.push(point)
         }
     }
-    final_point = point_stack[point_stack.len() -1];
+    final_point = point_stack[point_stack.len() - 1];
     for k in key_vec {
         match map.get(&k) {
             Some(&n) => {
@@ -94,7 +94,7 @@ fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
                     final_label = k;
                     break;
                 }
-            },
+            }
             None => panic!("nani?"),
         }
     }

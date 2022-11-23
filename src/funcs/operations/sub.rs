@@ -1,7 +1,8 @@
 use crate::{
+    funcs::errors::ErrorKind,
     memory::Memory,
     types::{Type, TypeName, Vars},
-    CPU, funcs::errors::ErrorKind,
+    CPU,
 };
 
 pub fn sub(

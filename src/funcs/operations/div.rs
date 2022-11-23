@@ -1,7 +1,8 @@
 use crate::{
+    funcs::errors::ErrorKind,
     memory::Memory,
     types::{Type, TypeName, Vars},
-    CPU, funcs::errors::ErrorKind,
+    CPU,
 };
 
 pub fn div(
@@ -32,11 +33,11 @@ pub fn div(
                     Ok(())
                 } else {
                     match cmd[2] {
-                        "rv" => memory.set_int_to_stack(registers.lx / registers.rv) ,
-                        "lx" => memory.set_int_to_stack(registers.lx / registers.lx) ,
+                        "rv" => memory.set_int_to_stack(registers.lx / registers.rv),
+                        "lx" => memory.set_int_to_stack(registers.lx / registers.lx),
                         _ => {
                             let n: i32;
-                            let t: Type = vars.get_type(cmd[2].to_string(), )?;
+                            let t: Type = vars.get_type(cmd[2].to_string())?;
                             match t.name {
                                 TypeName::I32 => n = memory.yeild_i32(t.location),
                                 _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
@@ -56,11 +57,17 @@ pub fn div(
                     Ok(())
                 } else {
                     match cmd[2] {
-                        "rv" => {memory.set_int_to_stack(registers.rv / registers.rv); Ok(())},
-                        "lx" => {memory.set_int_to_stack(registers.rv / registers.lx); Ok(())},
+                        "rv" => {
+                            memory.set_int_to_stack(registers.rv / registers.rv);
+                            Ok(())
+                        }
+                        "lx" => {
+                            memory.set_int_to_stack(registers.rv / registers.lx);
+                            Ok(())
+                        }
                         _ => {
                             let n: i32;
-                            let t: Type = vars.get_type(cmd[2].to_string(), )?;
+                            let t: Type = vars.get_type(cmd[2].to_string())?;
                             match t.name {
                                 TypeName::I32 => n = memory.yeild_i32(t.location),
                                 _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
@@ -74,7 +81,7 @@ pub fn div(
             _ => {
                 if cmd.len() == 2 {
                     let var: i32;
-                    let t: Type = vars.get_type(cmd[1].to_string(), )?;
+                    let t: Type = vars.get_type(cmd[1].to_string())?;
                     match t.name {
                         TypeName::I32 => var = memory.yeild_i32(t.location),
                         _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
@@ -86,17 +93,23 @@ pub fn div(
                     Ok(())
                 } else if cmd.len() == 3 {
                     let var: i32;
-                    let t: Type = vars.get_type(cmd[1].to_string(), )?;
+                    let t: Type = vars.get_type(cmd[1].to_string())?;
                     match t.name {
                         TypeName::I32 => var = memory.yeild_i32(t.location),
                         _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),
                     }
                     match cmd[2] {
-                        "lx" => {memory.set_int_to_stack(var / registers.lx); Ok(())},
-                        "rv" => {memory.set_int_to_stack(var / registers.rv); Ok(())},
+                        "lx" => {
+                            memory.set_int_to_stack(var / registers.lx);
+                            Ok(())
+                        }
+                        "rv" => {
+                            memory.set_int_to_stack(var / registers.rv);
+                            Ok(())
+                        }
                         _ => {
                             let var2: i32;
-                            let t2: Type = vars.get_type(cmd[2].to_string(), )?;
+                            let t2: Type = vars.get_type(cmd[2].to_string())?;
                             match t2.name {
                                 TypeName::I32 => var2 = memory.yeild_i32(t2.location),
                                 _ => return Err(ErrorKind::ExpectedInt(cmd[2].to_string())),

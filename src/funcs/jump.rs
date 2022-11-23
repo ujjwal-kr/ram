@@ -1,10 +1,10 @@
-use crate::CPU;
 use crate::memory::Memory;
+use crate::CPU;
 
 use super::errors::ErrorKind;
 use std::collections::HashMap;
 
-fn get_dest_counter(lmap:  HashMap<String, usize>, label: &str) -> usize {
+fn get_dest_counter(lmap: HashMap<String, usize>, label: &str) -> usize {
     match lmap.get(label) {
         Some(&c) => c,
         _ => panic!("Label {} not found", label),
@@ -17,7 +17,7 @@ pub fn jmp(
     label_map: HashMap<String, usize>,
 ) -> Result<(), ErrorKind> {
     if cmd.len() != 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     let label = cmd[1].trim();
     let dest_counter = get_dest_counter(label_map, label);
@@ -31,10 +31,10 @@ pub fn je(
     cpu: &mut CPU,
     cmd: Vec<&str>,
     label_map: HashMap<String, usize>,
-    memory: &mut Memory
+    memory: &mut Memory,
 ) -> Result<(), ErrorKind> {
     if cmd.len() != 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     if memory.get_int_from_stack()? == 0 {
         let label = cmd[1].trim();
@@ -52,10 +52,10 @@ pub fn jne(
     cpu: &mut CPU,
     cmd: Vec<&str>,
     label_map: HashMap<String, usize>,
-    memory: &mut Memory
+    memory: &mut Memory,
 ) -> Result<(), ErrorKind> {
     if cmd.len() != 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     if memory.get_int_from_stack()? != 0 {
         let label = cmd[1].trim();
@@ -73,10 +73,10 @@ pub fn jgr(
     cpu: &mut CPU,
     cmd: Vec<&str>,
     label_map: HashMap<String, usize>,
-    memory: &mut Memory
+    memory: &mut Memory,
 ) -> Result<(), ErrorKind> {
     if cmd.len() != 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     if memory.get_int_from_stack()? == 1 {
         let label = cmd[1].trim();
@@ -94,10 +94,10 @@ pub fn jsm(
     cpu: &mut CPU,
     cmd: Vec<&str>,
     label_map: HashMap<String, usize>,
-    memory: &mut Memory
+    memory: &mut Memory,
 ) -> Result<(), ErrorKind> {
     if cmd.len() != 2 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     if memory.get_int_from_stack()? == -1 {
         let label = cmd[1].trim();
@@ -113,7 +113,7 @@ pub fn jsm(
 
 pub fn ret(cpu: &mut CPU) -> Result<(), ErrorKind> {
     if cpu.callstack.len() < 1 {
-        return Err(ErrorKind::ArgErr)
+        return Err(ErrorKind::ArgErr);
     }
     cpu.jmp = true;
     cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1];

@@ -8,7 +8,7 @@ pub fn print(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
-    cmd: Vec<&str>
+    cmd: Vec<&str>,
 ) -> Result<(), ErrorKind> {
     // print var <var_name> { lx/rv/string/lxstring/var-name }
     // print hello world
