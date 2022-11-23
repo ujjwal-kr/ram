@@ -1,4 +1,4 @@
-use crate::funcs::errors::{self, ErrorKind};
+use crate::funcs::errors::ErrorKind;
 use crate::types::{TypeName, Vars};
 use crate::{memory::Memory, CPU};
 

@@ -78,10 +78,14 @@ pub fn ram(
                                     "int" => vars.set_int_vec(name.to_string(), exp, memory)?,
                                     _ => return Err(ErrorKind::ArgErr),
                                 }
+                            } else {
+                                return Err(ErrorKind::ArgErr)
                             }
                         }
                         _ => return Err(ErrorKind::ArgErr),
                     }
+                } else {
+                    return Err(ErrorKind::ArgErr)
                 }
             } else {
                 // try to parse cmd[1] as int

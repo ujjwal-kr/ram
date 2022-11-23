@@ -97,7 +97,10 @@ impl CPU {
             match ret_val {
                 Ok(()) => (),
                 Err(t) => match t {
-                    ErrorKind::ArgErr => (),
+                    ErrorKind::ArgErr => {
+                        let label = errors::get_label(self.program_counter, label_map.clone());
+                        println!("Invalid arguments at {}: {}", label, statement)
+                    },
                     ErrorKind::ParseInt => (),
                     ErrorKind::StackLen => (),
                     ErrorKind::VarNotFound(var) => (),
