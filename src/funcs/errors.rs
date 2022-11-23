@@ -1,5 +1,6 @@
 use std::{collections::HashMap, process};
 
+#[derive(Debug)]
 pub enum ErrorKind {
     ParseInt,
     ArgErr,
@@ -25,7 +26,7 @@ pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {
     let num: i32;
     match value.parse::<i32>() {
         Ok(n) => num = n,
-        ParseIntError => return Err(ErrorKind::ParseInt),
+        _parse_int_errorr => return Err(ErrorKind::ParseInt),
     }
     Ok(num)
 }
@@ -71,7 +72,7 @@ pub fn vec_items(run_label: &str, line: u32) {
     process::exit(1)
 }
 
-fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
+pub fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
     let mut value_point_vec: Vec<usize> = vec![];
     let mut key_vec: Vec<String> = vec![];
     for (k, v) in map.clone().into_iter() {

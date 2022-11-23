@@ -14,11 +14,9 @@ fn ram_10() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
-    assert_eq!(memory.get_int_from_stack("main", 1), 10)
+        statement
+    ).unwrap();
+    assert_eq!(memory.get_int_from_stack().unwrap(), 10)
 }
 
 #[test]
@@ -34,10 +32,8 @@ fn ram_lx_10() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.lx, 10)
 }
@@ -55,10 +51,8 @@ fn ram_rv_10() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.rv, 10)
 }
@@ -69,7 +63,7 @@ fn ram_lx_prev() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int_to_stack(&mut memory, "10", "main", 1);
+    vars.set_int_to_stack(&mut memory, "10", ).unwrap();
     let statement = "ram lx prev";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
@@ -77,10 +71,8 @@ fn ram_lx_prev() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.lx, 10)
 }
@@ -91,7 +83,7 @@ fn ram_rv_prev() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int_to_stack(&mut memory, "10", "main", 1);
+    vars.set_int_to_stack(&mut memory, "10", ).unwrap();
     let statement = "ram rv prev";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
@@ -99,10 +91,8 @@ fn ram_rv_prev() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.rv, 10)
 }
@@ -121,12 +111,10 @@ fn ram_lx() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), registers.lx)
+    assert_eq!(memory.get_int_from_stack().unwrap(), registers.lx)
 }
 
 #[test]
@@ -143,12 +131,10 @@ fn ram_rv() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), registers.rv)
+    assert_eq!(memory.get_int_from_stack().unwrap(), registers.rv)
 }
 
 #[test]
@@ -165,10 +151,8 @@ fn ram_string_eq_hellow() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.string, "hello".to_string())
 }
@@ -187,10 +171,8 @@ fn ram_lxstring_eq_hellow() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
     assert_eq!(registers.lxstring, "hello".to_string())
 }
@@ -208,12 +190,10 @@ fn ram_var_int() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    let t = vars.get_type("x".to_string(), "main", 1);
+    let t = vars.get_type("x".to_string(), ).unwrap();
     assert_eq!(memory.yeild_i32(t.location), 5)
 }
 
@@ -230,12 +210,10 @@ fn ram_var_str() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    let t = vars.get_type("x".to_string(), "main", 1);
+    let t = vars.get_type("x".to_string(), ).unwrap();
     assert_eq!(memory.yeild_string(t.location), "meow".to_string())
 }
 
@@ -252,12 +230,10 @@ fn ram_vec_int() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    let t = vars.get_type("x".to_string(), "main", 1);
+    let t = vars.get_type("x".to_string(), ).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location), [1, 2].to_vec())
 }
 
@@ -274,12 +250,10 @@ fn ram_vec_str() {
         &mut vars,
         &mut registers,
         cmd,
-        statement,
-        "main",
-        1,
-    );
+        statement
+    ).unwrap();
 
-    let t = vars.get_type("x".to_string(), "main", 1);
+    let t = vars.get_type("x".to_string(), ).unwrap();
     assert_eq!(
         memory.yeild_str_vec(t.location),
         ["ok".to_string(), "meow".to_string()].to_vec()

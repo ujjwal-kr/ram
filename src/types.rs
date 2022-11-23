@@ -204,7 +204,7 @@ impl Vars {
         let num: i32;
         match value.parse::<i32>() {
             Ok(n) => num = n,
-            ParseIntError => return Err(ErrorKind::ParseInt),
+            _parse_int_error => return Err(ErrorKind::ParseInt),
         }
         Ok(num)
     }
