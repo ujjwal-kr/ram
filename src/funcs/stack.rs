@@ -1,7 +1,7 @@
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
-use super::errors;
+use super::errors::{self, ErrorKind};
 
 pub fn ram(
     memory: &mut Memory,
@@ -9,9 +9,7 @@ pub fn ram(
     registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
-    b: &str,
-    l: i32,
-) {
+) -> Result<(), ErrorKind> {
     // ram 10
     // ram lx/rv 10
     // ram lx/rv prev
@@ -24,36 +22,36 @@ pub fn ram(
     // ram <var> :vec :str = [meow, dog]
 
     if cmd.len() < 2 {
-        errors::args_error(b, l);
+        return Err(ErrorKind::ArgErr);
     }
 
     match cmd[1] {
         "lx" => {
             if cmd.len() == 2 {
                 // ram lx
-                vars.set_int_to_stack(memory, registers.lx.to_string().trim(), b, l)
+                vars.set_int_to_stack(memory, registers.lx.to_string().trim())?
             } else if cmd[2] == "prev" {
                 // ram lx prev
-                registers.lx = memory.get_int_from_stack(b, l);
+                registers.lx = memory.get_int_from_stack()?;
                 let sub = memory.stack.len().saturating_sub(4);
                 memory.stack.truncate(sub);
             } else {
                 // parse cmd[2] as int
-                registers.lx = errors::parse_int(cmd[2], b, l)
+                registers.lx = errors::parse_int(cmd[2])?
             }
         }
         "rv" => {
             if cmd.len() == 2 {
                 // ram rv
-                vars.set_int_to_stack(memory, registers.rv.to_string().trim(), b, l)
+                vars.set_int_to_stack(memory, registers.rv.to_string().trim())?;
             } else if cmd[2] == "prev" {
                 // ram lx prev
-                registers.rv = memory.get_int_from_stack(b, l);
+                registers.rv = memory.get_int_from_stack()?;
                 let sub = memory.stack.len().saturating_sub(4);
                 memory.stack.truncate(sub);
             } else {
                 // parse cmd[2] as int
-                registers.rv = errors::parse_int(cmd[2], b, l)
+                registers.rv = errors::parse_int(cmd[2])?;
             }
         }
         "string" => {
@@ -72,29 +70,30 @@ pub fn ram(
                     let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
                     match &cmd[2][1..cmd[2].len()] {
                         "str" => vars.set_string(name.to_string(), exp, memory),
-                        "int" => vars.set_int(name.to_string(), exp, memory, b, l),
+                        "int" => vars.set_int(name.to_string(), exp, memory)?,
                         "vec" => {
                             if &cmd[3][0..1] == ":" {
                                 match &cmd[3][1..cmd[3].len()] {
                                     "str" => vars.set_str_vec(name.to_string(), exp, memory),
-                                    "int" => vars.set_int_vec(name.to_string(), exp, memory, b, l),
-                                    _ => errors::args_error(b, l),
+                                    "int" => vars.set_int_vec(name.to_string(), exp, memory)?,
+                                    _ => return Err(ErrorKind::ArgErr),
                                 }
                             } else {
-                                errors::args_error(b, l)
+                                return Err(ErrorKind::ArgErr)
                             }
                         }
-                        _ => errors::args_error(b, l),
+                        _ => return Err(ErrorKind::ArgErr),
                     }
                 } else {
-                    errors::args_error(b, l)
+                    return Err(ErrorKind::ArgErr)
                 }
             } else {
                 // try to parse cmd[1] as int
-                vars.set_int_to_stack(memory, cmd[1], b, l)
+                vars.set_int_to_stack(memory, cmd[1])?
             }
         }
     }
+    Ok(())
 }
 
 pub fn copy(
@@ -103,11 +102,9 @@ pub fn copy(
     registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
-    b: &str,
-    l: i32,
-) {
+) -> Result<(), ErrorKind> {
     if cmd.len() < 4 || cmd[2] != "=" {
-        errors::args_error(b, l)
+        return Err(ErrorKind::ArgErr);
     }
 
     let src: &str = statement.split('=').collect::<Vec<&str>>()[1].trim();
@@ -117,13 +114,13 @@ pub fn copy(
         "lx" => match src {
             "rv" => registers.rv = registers.lx,
             _ => {
-                let t = vars.get_type(src.to_string(), b, l);
+                let t = vars.get_type(src.to_string())?;
                 let var: i32;
                 if t.name == TypeName::I32 {
                     var = memory.yeild_i32(t.location);
                     registers.lx = var
                 } else {
-                    panic!("Expected {} to be int at {}{}", src, b, l)
+                    return Err(ErrorKind::ExpectedInt(src.to_string()));
                 }
             }
         },
@@ -131,13 +128,13 @@ pub fn copy(
         "rv" => match src {
             "lx" => registers.lx = registers.rv,
             _ => {
-                let t = vars.get_type(src.to_string(), b, l);
+                let t = vars.get_type(src.to_string())?;
                 let var: i32;
                 if t.name == TypeName::I32 {
                     var = memory.yeild_i32(t.location);
                     registers.rv = var
                 } else {
-                    panic!("Expected {} to be int at {}{}", src, b, l)
+                    return Err(ErrorKind::ExpectedInt(src.to_string()));
                 }
             }
         },
@@ -145,13 +142,13 @@ pub fn copy(
         "string" => match src {
             "lxstring" => registers.string = registers.lxstring.clone(),
             _ => {
-                let t = vars.get_type(src.to_string(), b, l);
+                let t = vars.get_type(src.to_string())?;
                 let var: String;
                 if t.name == TypeName::String {
                     var = memory.yeild_string(t.location);
                     registers.string = var
                 } else {
-                    panic!("Expected {} to be string at {}{}", src, b, l)
+                    return Err(ErrorKind::ExpectedStr(src.to_string()));
                 }
             }
         },
@@ -159,13 +156,13 @@ pub fn copy(
         "lxstring" => match src {
             "string" => registers.lxstring = registers.string.clone(),
             _ => {
-                let t = vars.get_type(src.to_string(), b, l);
+                let t = vars.get_type(src.to_string())?;
                 let var: String;
                 if t.name == TypeName::String {
                     var = memory.yeild_string(t.location);
                     registers.lxstring = var
                 } else {
-                    panic!("Expected {} to be string at {}{}", src, b, l)
+                    return Err(ErrorKind::ExpectedStr(src.to_string()));
                 }
             }
         },
@@ -174,25 +171,25 @@ pub fn copy(
             match src {
                 "lx" => {
                     let t: Type;
-                    t = vars.get_type(dest.to_string(), b, l);
+                    t = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.lx.to_be_bytes())
                     } else {
-                        panic!("Expected {} to be int at {}{}", dest, b, l)
+                        return Err(ErrorKind::ExpectedInt(dest.to_string()));
                     }
                 }
                 "rv" => {
                     let t: Type;
-                    t = vars.get_type(dest.to_string(), b, l);
+                    t = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.rv.to_be_bytes())
                     } else {
-                        panic!("Expected {} to be int at {}{}", dest, b, l)
+                        return Err(ErrorKind::ExpectedInt(dest.to_string()));
                     }
                 }
                 "string" => {
                     let t: Type;
-                    t = vars.get_type(dest.to_string(), b, l);
+                    t = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc
                         let addr: [u8; 4] = memory
@@ -203,12 +200,12 @@ pub fn copy(
                         // end gc
                         vars.set_string(dest.to_string(), &registers.string, memory)
                     } else {
-                        panic!("Expected {} to be string at {}{}", dest, b, l)
+                        return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
                 "lxstring" => {
                     let t: Type;
-                    t = vars.get_type(dest.to_string(), b, l);
+                    t = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc
                         let addr: [u8; 4] = memory
@@ -219,10 +216,10 @@ pub fn copy(
                         // end gc
                         vars.set_string(dest.to_string(), &registers.lxstring, memory)
                     } else {
-                        panic!("Expected {} to be string at {}{}", dest, b, l)
+                        return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
-                _ => match vars.cast(src, dest, memory, b, l) {
+                _ => match vars.cast(src, dest, memory)? {
                     Some(cast_stack) => {
                         memory.stack_mod(cast_stack.dest_location, &cast_stack.src_data)
                     }
@@ -231,4 +228,5 @@ pub fn copy(
             }
         }
     }
+    Ok(())
 }

@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::collections::HashMap;
 
-use crate::funcs::errors;
+use crate::funcs::errors::ErrorKind;
 
 #[derive(Debug)]
 pub struct Memory {
@@ -90,9 +90,9 @@ impl Memory {
 
     // ints
 
-    pub fn get_int_from_stack(&mut self, b: &str, l: i32) -> i32 {
+    pub fn get_int_from_stack(&mut self) -> Result<i32, ErrorKind> {
         if self.stack.len() < 4 {
-            errors::stack_len_error(b, l);
+            return Err(ErrorKind::StackLen);
         }
         let location = Location {
             start: self.stack.len() - 4,
@@ -100,7 +100,7 @@ impl Memory {
         };
         let bytes = self.load(location);
         let num: i32 = i32::from_be_bytes(bytes.try_into().expect("invalid i32 len"));
-        num
+        Ok(num)
     }
 
     pub fn set_int_to_stack(&mut self, value: i32) {

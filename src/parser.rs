@@ -77,7 +77,6 @@ pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
                 line = "";
             }
         }
-
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
