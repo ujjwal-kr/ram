@@ -96,20 +96,21 @@ impl CPU {
 
             match ret_val {
                 Ok(()) => (),
-                Err(t) => match t {
-                    ErrorKind::ArgErr => {
-                        let label = errors::get_label(self.program_counter, label_map.clone());
-                        println!("Invalid arguments at {}: {}", label, statement)
-                    },
-                    ErrorKind::ParseInt => (),
-                    ErrorKind::StackLen => (),
-                    ErrorKind::VarNotFound(var) => (),
-                    ErrorKind::Casting { src, dest } => (),
-                    ErrorKind::ExpectedInt(var) => (),
-                    ErrorKind::ExpectedVec(var) => (),
-                    ErrorKind::ExpectedStr(var) => (),
-                    ErrorKind::RangeNegative() => (),
-                },
+                Err(t) => {
+                    let label = errors::get_label(self.program_counter, label_map.clone());
+                    match t {
+                        ErrorKind::ArgErr => println!("Invalid arguments at {} {}", label, statement),
+                        ErrorKind::ParseInt => println!("Expected Int at {} {}", label, statement),
+                        ErrorKind::StackLen => println!("Not enough items in stack at {} {}", label, statement),
+                        ErrorKind::VarNotFound(var) => println!("Var '{}' not found at {} {}", var, label, statement),
+                        ErrorKind::Casting { src, dest } => println!("Cannot cast '{}' to '{}' at {} {}", src, dest, label, statement),
+                        ErrorKind::ExpectedInt(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
+                        ErrorKind::ExpectedVec(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
+                        ErrorKind::ExpectedStr(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
+                        ErrorKind::RangeNegative() => println!("Range should be non-zero and positive at {} {}", label, statement)
+                    }
+                    process::exit(1)
+                }
             }
             if !self.jmp {
                 self.program_counter += 1;
