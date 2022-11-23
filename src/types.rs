@@ -201,12 +201,12 @@ impl Vars {
     // parsers
 
     fn parse_i32(&mut self, value: &str) -> Result<i32, ErrorKind> {
-        let n: i32;
+        let num: i32;
         match value.parse::<i32>() {
-            Ok(n) => n = n,
+            Ok(n) => num = n,
             ParseIntError => return Err(ErrorKind::ParseInt),
         }
-        Ok(n)
+        Ok(num)
     }
 
     // fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {

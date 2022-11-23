@@ -9,6 +9,7 @@ pub enum ErrorKind {
     ExpectedInt(String),
     ExpectedStr(String),
     ExpectedVec(String),
+    RangeNegative(),
 }
 
 pub fn stack_len_error(run_label: &str, line: i32) {
@@ -21,12 +22,12 @@ pub fn stack_len_error(run_label: &str, line: i32) {
 }
 
 pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {
-    let n: i32;
+    let num: i32;
     match value.parse::<i32>() {
-        Ok(n) => n = n,
+        Ok(n) => num = n,
         ParseIntError => return Err(ErrorKind::ParseInt),
     }
-    Ok(n)
+    Ok(num)
 }
 
 pub fn parse_usize(arg: &str, block: &str, line: u32) -> usize {

@@ -57,7 +57,8 @@ impl CPU {
                         println!("{:?}", i)
                     }
                     println!("{:#?} \n {:#?} \n HEAP: {:#?} \n", vars, self, memory.heap);
-                    println!("{:?}", instructions)
+                    println!("{:?}", instructions);
+                    ret_val = Ok(());
                 }
                 "print" => ret_val = print::print(memory, vars, self, cmd),
                 "ram" => ret_val = stack::ram(memory, vars, self, cmd, statement),
@@ -65,12 +66,18 @@ impl CPU {
                 "div" => ret_val = operations::div::div(memory, vars, self, cmd),
                 "sub" => ret_val = operations::sub::sub(memory, vars, self, cmd),
                 "mul" => ret_val = operations::mul::mul(memory, vars, self, cmd),
-                "reset" => memory.reset_stack(),
-                "pop" => memory.pop_stack(),
-                "parse" => stdf::parse::parse(memory, vars, self, cmd, "", 1),
-                "rand" => stdf::rand::rand(memory, self, cmd, statement, "", 1),
-                "split" => stdf::string::split(memory, vars, self, cmd, statement, "", 1),
-                "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
+                "reset" => {
+                    memory.reset_stack();
+                    ret_val = Ok(());
+                }
+                "pop" => {
+                    memory.pop_stack();
+                    ret_val = Ok(());
+                }
+                "parse" => ret_val = stdf::parse::parse(memory, vars, self, cmd),
+                "rand" => ret_val = stdf::rand::rand(memory, self, cmd, statement),
+                "split" => ret_val = stdf::string::split(memory, vars, self, cmd, statement),
+                "concat" => ret_val = stdf::string::concat(memory, vars, self, cmd),
                 "copy" => ret_val = stack::copy(memory, vars, self, cmd, statement),
 
                 "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd),
@@ -98,6 +105,7 @@ impl CPU {
                     ErrorKind::ExpectedInt(var) => (),
                     ErrorKind::ExpectedVec(var) => (),
                     ErrorKind::ExpectedStr(var) => (),
+                    ErrorKind::RangeNegative() => (),
                 },
             }
             if !self.jmp {
