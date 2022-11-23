@@ -71,7 +71,7 @@ impl CPU {
                 "rand" => stdf::rand::rand(memory, self, cmd, statement, "", 1),
                 "split" => stdf::string::split(memory, vars, self, cmd, statement, "", 1),
                 "concat" => stdf::string::concat(memory, vars, self, cmd, "", 1),
-                "copy" => ret_val = stack::copy(memory, vars, self, cmd, statement, "", 1),
+                "copy" => ret_val = stack::copy(memory, vars, self, cmd, statement),
 
                 "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd),
                 "jmp" => ret_val = jump::jmp(self, cmd, label_map.clone()),

@@ -46,7 +46,7 @@ impl Vars {
         name: String,
         value: &str,
         memory: &mut Memory
-    ) -> Result<(), ParseIntError> {
+    ) -> Result<(), ErrorKind> {
         let int_bytes = self.parse_i32(value)?.to_be_bytes();
         let location: Location = memory.store(&int_bytes);
         let new_int = Type {
@@ -59,7 +59,7 @@ impl Vars {
 
     // TODO: make stuff for other types of ints
 
-    pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str) -> Result<(), ParseIntError> {
+    pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str) -> Result<(), ErrorKind> {
         let num = self.parse_i32(value)?;
         let bytes = num.to_be_bytes();
         memory.store(&bytes);
@@ -85,9 +85,7 @@ impl Vars {
         name: String,
         value: &str,
         memory: &mut Memory,
-        block: &str,
-        line: i32,
-    ) -> Result<(), ParseIntError> {
+    ) -> Result<(), ErrorKind> {
         let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut final_bytes: Vec<u8> = vec![];
         for item in items {
