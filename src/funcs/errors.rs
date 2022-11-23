@@ -20,12 +20,13 @@ pub fn stack_len_error(run_label: &str, line: i32) {
     process::exit(1)
 }
 
-pub fn parse_int(arg: &str, block: &str, line: i32) -> i32 {
-    let num: i32;
-    num = arg
-        .parse()
-        .expect(format!("Invalid int value at {}:{}", block, line).trim());
-    num
+pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {
+    let n: i32;
+    match value.parse::<i32>() {
+        Ok(n) => n = n,
+        ParseIntError => return Err(ErrorKind::ParseInt)
+    }
+    Ok(n)
 }
 
 pub fn parse_usize(arg: &str, block: &str, line: u32) -> usize {
