@@ -196,8 +196,12 @@ impl Vars {
 impl Vars {
     // parsers
 
-    fn parse_i32(&mut self, value: &str) -> Result<i32, ParseIntError> {
-        let n = value.parse::<i32>()?;
+    fn parse_i32(&mut self, value: &str) -> Result<i32, ErrorKind> {
+        let n: i32;
+        match value.parse::<i32>() {
+            Ok(n) => n = n,
+            ParseIntError => return Err(ErrorKind::ParseInt)
+        }
         Ok(n)
     }
 

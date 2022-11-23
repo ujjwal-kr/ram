@@ -1,17 +1,15 @@
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
-use super::errors;
+use super::errors::ErrorKind;
 
 pub fn ram(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
     cmd: Vec<&str>,
-    statement: &str,
-    b: &str,
-    l: i32,
-) {
+    statement: &str
+) -> Result<(), ErrorKind> {
     // ram 10
     // ram lx/rv 10
     // ram lx/rv prev
@@ -24,14 +22,14 @@ pub fn ram(
     // ram <var> :vec :str = [meow, dog]
 
     if cmd.len() < 2 {
-        errors::args_error(b, l);
+        return Err(ErrorKind::ArgErr)
     }
 
     match cmd[1] {
         "lx" => {
             if cmd.len() == 2 {
                 // ram lx
-                vars.set_int_to_stack(memory, registers.lx.to_string().trim(), b, l)
+                vars.set_int_to_stack(memory, registers.lx.to_string().trim())?
             } else if cmd[2] == "prev" {
                 // ram lx prev
                 registers.lx = memory.get_int_from_stack(b, l);
@@ -45,7 +43,7 @@ pub fn ram(
         "rv" => {
             if cmd.len() == 2 {
                 // ram rv
-                vars.set_int_to_stack(memory, registers.rv.to_string().trim(), b, l)
+                vars.set_int_to_stack(memory, registers.rv.to_string().trim())?;
             } else if cmd[2] == "prev" {
                 // ram lx prev
                 registers.rv = memory.get_int_from_stack(b, l);
@@ -95,6 +93,7 @@ pub fn ram(
             }
         }
     }
+    Ok(())
 }
 
 pub fn copy(
@@ -105,7 +104,7 @@ pub fn copy(
     statement: &str,
     b: &str,
     l: i32,
-) {
+) -> Result<(), ErrorKind> {
     if cmd.len() < 4 || cmd[2] != "=" {
         errors::args_error(b, l)
     }
