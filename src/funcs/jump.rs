@@ -113,7 +113,7 @@ pub fn jsm(
 
 pub fn ret(cpu: &mut CPU) -> Result<(), ErrorKind> {
     if cpu.callstack.len() < 1 {
-        return Err(ErrorKind::ArgErr);
+        panic!("Empty callstack")
     }
     cpu.jmp = true;
     cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1];

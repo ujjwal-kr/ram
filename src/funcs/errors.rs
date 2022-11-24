@@ -11,6 +11,7 @@ pub enum ErrorKind {
     ExpectedStr(String),
     ExpectedVec(String),
     RangeNegative,
+    EmptyCallstack,
 }
 
 pub fn stack_len_error(run_label: &str, line: i32) {
