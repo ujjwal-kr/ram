@@ -1,3 +1,15 @@
-main:    
-    ram test :vec :int = [1, 2, 3, 4, 5, 6]
+main:
+    ram lx
+    ram 1
+    add
+    ram lx prev
+    print var lx
+    ram lx
+    ram 1000
+    cmp
+    je halt:
+    jmp main:
+
+halt:
     dbg
+    halt

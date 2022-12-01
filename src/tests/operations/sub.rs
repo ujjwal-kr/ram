@@ -1,5 +1,5 @@
 use crate::funcs::operations;
-use crate::{memory::Memory, types::Vars, Registers};
+use crate::{memory::Memory, types::Vars, CPU};
 
 // sub
 // sub lx
@@ -16,7 +16,7 @@ use crate::{memory::Memory, types::Vars, Registers};
 #[test]
 fn sub() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(5);
@@ -25,15 +25,15 @@ fn sub() {
     let statement = "sub";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 4)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 4)
 }
 
 #[test]
 fn sub_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(1);
@@ -42,15 +42,15 @@ fn sub_lx() {
     let statement = "sub lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     memory.set_int_to_stack(1);
@@ -59,32 +59,32 @@ fn sub_rv() {
     let statement = "sub rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "2", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "2", &mut memory, ).unwrap();
     memory.set_int_to_stack(1);
 
     let statement = "sub x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 1)
 }
 
 #[test]
 fn sub_lx_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 1;
@@ -93,15 +93,15 @@ fn sub_lx_rv() {
     let statement = "sub lx rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_rv_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 1;
@@ -110,100 +110,100 @@ fn sub_rv_lx() {
     let statement = "sub rv lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 1)
 }
 
 #[test]
 fn sub_var_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
-    vars.set_int("y".to_string(), "2", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
+    vars.set_int("y".to_string(), "2", &mut memory, ).unwrap();
 
     let statement = "sub x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_var_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
     registers.lx = 2;
 
     let statement = "sub x lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_var_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
     registers.rv = 2;
 
     let statement = "sub x rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), -1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), -1)
 }
 
 #[test]
 fn sub_lx_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
     registers.lx = 2;
 
     let statement = "sub lx x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 1)
 }
 
 #[test]
 fn sub_rv_var() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, "main", 1);
+    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
     registers.rv = 2;
 
     let statement = "sub rv x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 1)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 1)
 }
 
 #[test]
 fn sub_lx_lx() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.lx = 3;
@@ -211,15 +211,15 @@ fn sub_lx_lx() {
     let statement = "sub lx lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 0)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 0)
 }
 
 #[test]
 fn sub_rv_rv() {
     let mut memory: Memory = Memory::new();
-    let mut registers: Registers = Registers::new();
+    let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
     registers.rv = 3;
@@ -227,7 +227,7 @@ fn sub_rv_rv() {
     let statement = "add rv rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, "main", 1);
+    operations::sub::sub(&mut memory, &mut vars, &mut registers, cmd, ).unwrap();
 
-    assert_eq!(memory.get_int_from_stack("main", 1), 0)
+    assert_eq!(memory.get_int_from_stack().unwrap(), 0)
 }

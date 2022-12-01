@@ -1,13 +1,11 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::{env, io};
 
-use ram::execute_block;
 use ram::memory::Memory;
-use ram::parser;
+use ram::parser::{self, LabelMap};
 use ram::types::Vars;
-use ram::Registers;
+use ram::CPU;
 
 fn main() {
     let mut filename: String = String::new();
@@ -27,11 +25,13 @@ fn main() {
         .expect("Error reading file");
 
     let p_lines: Vec<&str> = contents.split("\n").collect();
-    let instructions: HashMap<String, Vec<String>> = parser::parse_lines(p_lines);
+    let program: LabelMap = parser::parse_lines(p_lines);
+    let instructions = program.instructions;
+    let label_map = program.map;
 
-    let registers: Registers = Registers::new();
-    let mut memory: Memory = Memory::new();
-    let mut vars: Vars = Vars::new();
+    let mut cpu = CPU::new();
+    let mut memory = Memory::new();
+    let mut vars = Vars::new();
 
-    execute_block(instructions, "main:", registers, &mut memory, &mut vars);
+    cpu.execute(instructions, label_map, &mut memory, &mut vars);
 }

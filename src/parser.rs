@@ -3,11 +3,15 @@ use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{fs, path::Path, process};
 
-pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
-    let mut final_lines: Vec<&str> = vec![];
-    for line in p_lines.clone() {
-        final_lines.push(line);
-    }
+#[derive(Debug)]
+pub struct LabelMap {
+    pub map: HashMap<String, usize>,
+    pub instructions: Vec<String>,
+}
+
+pub fn parse_lines(p_lines: Vec<&str>) -> LabelMap {
+    let mut _final_lines: Vec<&str> = vec![];
+    _final_lines = p_lines.clone();
 
     let mut final_contents = String::new();
 
@@ -32,11 +36,9 @@ pub fn parse_lines(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
         final_contents += "\n";
     }
 
-    let final_import_vec: Vec<&str> = final_contents.split("\n").collect();
-    for line in final_import_vec {
-        final_lines.push(line)
-    }
-    let program = populate_labels(final_lines);
+    let mut final_import_vec: Vec<&str> = final_contents.split("\n").collect();
+    _final_lines.append(&mut final_import_vec);
+    let program: LabelMap = populate_labels(_final_lines);
     program
 }
 
@@ -57,38 +59,36 @@ pub fn has_includes(p_lines: Vec<&str>) -> Vec<&str> {
     has_included
 }
 
-pub fn populate_labels(p_lines: Vec<&str>) -> HashMap<String, Vec<String>> {
-    has_includes(p_lines.clone());
-    let mut program: HashMap<String, Vec<String>> = HashMap::new();
-    let mut current_key: String = String::new();
+pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
+    let mut map: HashMap<String, usize> = HashMap::new();
+    let mut instructions: Vec<String> = vec![];
     let exp = Regex::new(r"^[a-zA-Z0-9_]+:$").unwrap();
     let mut i = 0u32;
+
     for mut line in p_lines {
+        let mut incr: bool = true;
         line = line.trim();
         if line != "" && line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
-            line = ""
+            incr = false;
+            line = "";
+        } else if line.len() > 1 {
+            if &line[..2] == "//" {
+                incr = false;
+                line = "";
+            }
         }
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
             }
-            current_key = line.to_string();
-            program.insert(line.to_string(), vec![]);
-        } else if line != "" && &line[..2] != "//" {
-            let mut _new_vec: Vec<String> = vec![];
-            match program.get(current_key.trim()) {
-                Some(value) => _new_vec = value.to_vec(),
-                _ => {
-                    println!("command '{}' not recognized", line);
-                    process::exit(1)
-                }
+            map.insert(line.to_string(), i as usize);
+        } else {
+            if line != "" && incr {
+                i = i + 1;
+                instructions.push(line.to_string())
             }
-            _new_vec.push(line.to_string());
-            if let Some(x) = program.get_mut(current_key.trim()) {
-                *x = _new_vec;
-            }
-            i += 1;
         }
     }
-    program
+
+    LabelMap { map, instructions }
 }
