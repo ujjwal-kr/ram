@@ -144,7 +144,7 @@ fn ram_string_eq_hellow() {
     let mut vars: Vars = Vars::new();
 
     registers.rv = 10;
-    let statement = "ram string = hello";
+    let statement = "ram string = 'hello'";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
         &mut memory,
@@ -164,7 +164,7 @@ fn ram_lxstring_eq_hellow() {
     let mut vars: Vars = Vars::new();
 
     registers.rv = 10;
-    let statement = "ram lxstring = hello";
+    let statement = "ram lxstring = 'hello'";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
         &mut memory,
@@ -203,7 +203,7 @@ fn ram_var_str() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    let statement = "ram x :str = meow";
+    let statement = "ram x :str = 'meow'";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
         &mut memory,
@@ -243,7 +243,7 @@ fn ram_vec_str() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    let statement = "ram x :vec :str = [ok, meow]";
+    let statement = "ram x :vec :str = ['ok', 'meow']";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::ram(
         &mut memory,
