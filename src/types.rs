@@ -113,7 +113,8 @@ impl Vars {
         let items: &Vec<&str> = &value[1..value.len() - 1].split(',').collect::<Vec<&str>>();
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
-            let current_heap_addr = memory.malloc(item.trim().as_bytes());
+            let item = item.trim();
+            let current_heap_addr = memory.malloc(&item[1..item.len() - 1].as_bytes());
             let addr_bytes = current_heap_addr.to_be_bytes();
             for byte in addr_bytes {
                 heap_addrs_bytes.push(byte)
