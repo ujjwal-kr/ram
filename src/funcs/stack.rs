@@ -15,11 +15,11 @@ pub fn ram(
     // ram lx/rv prev
     // ram lx
     // ram rv
-    // ram string/lxstring = hello world
-    // ram <var> :str = hello world
+    // ram string/lxstring = 'hello world'
+    // ram <var> :str = 'hello world'
     // ram <var> :int = 10
     // ram <var> :vec :int = [1,2,3]
-    // ram <var> :vec :str = [meow, dog]
+    // ram <var> :vec :str = ['meow', 'dog']
 
     if cmd.len() < 2 {
         return Err(ErrorKind::ArgErr);
@@ -55,13 +55,13 @@ pub fn ram(
             }
         }
         "string" => {
-            // ram string = hello
+            // ram string = 'hello'
             let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
-            registers.string = exp.to_string();
+            let _ = &exp[1..exp.len()-1].clone_into(&mut registers.string);
         }
         "lxstring" => {
-            let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
-            registers.lxstring = exp.to_string();
+            let exp = statement.split('=').collect::<Vec<&str>>()[1].trim(); 
+             let _ = &exp[1..exp.len()-1].clone_into(&mut registers.lxstring);
         }
         _ => {
             if cmd.len() > 3 {
@@ -69,7 +69,7 @@ pub fn ram(
                     let name = cmd[1];
                     let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
                     match &cmd[2][1..cmd[2].len()] {
-                        "str" => vars.set_string(name.to_string(), exp, memory),
+                        "str" => vars.set_string(name.to_string(), &exp[1..exp.len() - 1], memory),
                         "int" => vars.set_int(name.to_string(), exp, memory)?,
                         "vec" => {
                             if &cmd[3][0..1] == ":" {
