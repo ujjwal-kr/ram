@@ -21,7 +21,7 @@ pub fn split_string() {
     let mut vars: Vars = Vars::new();
 
     registers.string = "he,llo".to_string();
-    vars.set_str_vec("x".to_string(), "[]", &mut memory);
+    vars.set_str_vec("x".to_string(), "['']", &mut memory);
     let statement = "split string > \",\" = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
@@ -43,7 +43,7 @@ pub fn split_lxstring() {
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = "hello world".to_string();
-    vars.set_str_vec("x".to_string(), "[]", &mut memory);
+    vars.set_str_vec("x".to_string(), "['']", &mut memory);
     let statement = "split lxstring > \" \" = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
@@ -67,7 +67,7 @@ pub fn split_var() {
     let statement = "split str > \"\n\" = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     vars.set_string("str".to_string(), "hello\nworld", &mut memory);
-    vars.set_str_vec("x".to_string(), "[]", &mut memory);
+    vars.set_str_vec("x".to_string(), "['']", &mut memory);
 
     split(
         &mut memory,
