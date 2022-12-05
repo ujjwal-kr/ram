@@ -108,7 +108,8 @@ impl CPU {
                         ErrorKind::ExpectedVec(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
                         ErrorKind::ExpectedStr(var) => println!("Expected '{}' to be int at {} {}", var, label, statement),
                         ErrorKind::RangeNegative => println!("Range should be non-zero and positive at {} {}", label, statement),
-                        ErrorKind::EmptyCallstack => println!("Nowhere to return to at {} {}", label, statement)
+                        ErrorKind::EmptyCallstack => println!("Nowhere to return to at {} {}", label, statement),
+                        ErrorKind::LabelNotFound(l) => println!("Label '{}' not found at {}: {}", l, label, statement),
                     }
                     process::exit(1)
                 }
