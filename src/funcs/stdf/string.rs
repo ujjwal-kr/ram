@@ -1,5 +1,5 @@
 use crate::funcs::errors::ErrorKind;
-use crate::types::{TypeName, Vars};
+use crate::types::{TypeName, Vars, Vector};
 use crate::{memory::Memory, CPU};
 
 pub fn split(
@@ -11,7 +11,7 @@ pub fn split(
 ) -> Result<(), ErrorKind> {
     let var_str = statement.split('=').collect::<Vec<&str>>()[1].trim();
     let t = vars.get_type(var_str.to_string())?;
-    if t.name != TypeName::Vector {
+    if t.name != TypeName::Vector(Vector::String) {
         return Err(ErrorKind::ExpectedVec(var_str.to_string()));
     }
     let del_str = statement.split('>').collect::<Vec<&str>>()[1];

@@ -16,13 +16,15 @@ pub struct Type {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeName {
     I32,
-    I64,
-    I128,
-    U32,
-    U64,
-    U128,
     String,
-    Vector,
+    Vector(Vector),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Vector {
+    String,
+    Int,
+    Vector(Box<Vector>)
 }
 
 pub struct CastStack {
@@ -59,8 +61,6 @@ impl Vars {
         self.0.insert(name, new_int);
         Ok(())
     }
-
-    // TODO: make stuff for other types of ints
 
     pub fn set_int_to_stack(&mut self, memory: &mut Memory, value: &str) -> Result<(), ErrorKind> {
         let num = self.parse_i32(value)?;
@@ -101,7 +101,7 @@ impl Vars {
         let heap_addr: u32 = memory.malloc(&final_bytes);
         let location: Location = memory.store(&heap_addr.to_be_bytes());
         let new_int_vec = Type {
-            name: TypeName::Vector,
+            name: TypeName::Vector(Vector::Int),
             location,
         };
 
@@ -124,7 +124,7 @@ impl Vars {
         let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
         let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
         let new_str_vec: Type = Type {
-            name: TypeName::Vector,
+            name: TypeName::Vector(Vector::String),
             location,
         };
         self.0.insert(name, new_str_vec);
@@ -143,7 +143,7 @@ impl Vars {
         let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
         let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
         let new_str_vec: Type = Type {
-            name: TypeName::Vector,
+            name: TypeName::Vector(Vector::String),
             location,
         };
         self.0.insert(name, new_str_vec);
@@ -174,7 +174,7 @@ impl Vars {
                 dest: dest.to_string(),
             });
         }
-        if destination.name == TypeName::String || destination.name == TypeName::Vector {
+        if destination.name == TypeName::String || destination.name == TypeName::Vector(Vector::String) {
             let src_addr: [u8; 4] = memory
                 .load(source.location)
                 .try_into()
@@ -209,34 +209,4 @@ impl Vars {
         }
         Ok(num)
     }
-
-    // fn parse_u32(&mut self, value: &str, block: &str, line: i32) -> u32 {
-    //     value
-    //         .parse::<u32>()
-    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
-    // }
-
-    // fn parse_i64(&mut self, value: &str, block: &str, line: i32) -> i64 {
-    //     value
-    //         .parse::<i64>()
-    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
-    // }
-
-    // fn parse_u64(&mut self, value: &str, block: &str, line: i32) -> u64 {
-    //     value
-    //         .parse::<u64>()
-    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
-    // }
-
-    // fn parse_i128(&mut self, value: &str, block: &str, line: i32) -> i128 {
-    //     value
-    //         .parse::<i128>()
-    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
-    // }
-
-    // fn parse_u128(&mut self, value: &str, block: &str, line: i32) -> u128 {
-    //     value
-    //         .parse::<u128>()
-    //         .expect(format!("Parse int error at {}:{}", block, line).trim())
-    // }
 }

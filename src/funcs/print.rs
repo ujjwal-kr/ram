@@ -1,5 +1,5 @@
 use crate::memory::Memory;
-use crate::types::{Type, TypeName, Vars};
+use crate::types::{Type, TypeName, Vars, Vector};
 use crate::CPU;
 
 use super::errors::ErrorKind;
@@ -27,8 +27,9 @@ pub fn print(
                     match _type.name {
                         TypeName::I32 => println!("{}", memory.yeild_i32(_type.location)),
                         TypeName::String => println!("{}", memory.yeild_string(_type.location)),
-                        TypeName::Vector => todo!("Need to identify vector types"),
-                        _ => todo!("map for other types"),
+                        TypeName::Vector(Vector::String) => println!("{:?}", memory.yeild_str_vec(_type.location)),
+                        TypeName::Vector(Vector::Int) => println!("{:?}", memory.yeild_int_vec(_type.location)),
+                        TypeName::Vector(Vector::Vector(_)) => todo!("Need to identify vector types for Box?")
                     }
                 } else {
                     let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();
