@@ -24,7 +24,7 @@ pub enum TypeName {
 pub enum Vector {
     String,
     Int,
-    Vector(Box<Vector>)
+    // Vector(Box<Vector>),
 }
 
 pub struct CastStack {
@@ -174,7 +174,9 @@ impl Vars {
                 dest: dest.to_string(),
             });
         }
-        if destination.name == TypeName::String || destination.name == TypeName::Vector(Vector::String) {
+        if destination.name == TypeName::String
+            || destination.name == TypeName::Vector(Vector::String)
+        {
             let src_addr: [u8; 4] = memory
                 .load(source.location)
                 .try_into()

@@ -27,9 +27,12 @@ pub fn print(
                     match _type.name {
                         TypeName::I32 => println!("{}", memory.yeild_i32(_type.location)),
                         TypeName::String => println!("{}", memory.yeild_string(_type.location)),
-                        TypeName::Vector(Vector::String) => println!("{:?}", memory.yeild_str_vec(_type.location)),
-                        TypeName::Vector(Vector::Int) => println!("{:?}", memory.yeild_int_vec(_type.location)),
-                        TypeName::Vector(Vector::Vector(_)) => todo!("Need to identify vector types for Box?")
+                        TypeName::Vector(Vector::String) => {
+                            println!("{:?}", memory.yeild_str_vec(_type.location))
+                        }
+                        TypeName::Vector(Vector::Int) => {
+                            println!("{:?}", memory.yeild_int_vec(_type.location))
+                        }
                     }
                 } else {
                     let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();

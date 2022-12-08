@@ -29,13 +29,7 @@ fn copy_lx_rv() {
     let statement: &str = "copy lx = rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.rv, registers.lx)
 }
 
@@ -46,18 +40,12 @@ fn copy_lx_var() {
     let mut vars: Vars = Vars::new();
 
     registers.lx = 5;
-    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
+    vars.set_int("x".to_string(), "1", &mut memory).unwrap();
 
     let statement: &str = "copy lx = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lx, 1)
 }
 
@@ -71,13 +59,7 @@ fn copy_rv_lx() {
     let statement: &str = "copy rv = lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.rv, registers.lx)
 }
 
@@ -88,18 +70,12 @@ fn copy_rv_var() {
     let mut vars: Vars = Vars::new();
 
     registers.rv = 5;
-    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
+    vars.set_int("x".to_string(), "1", &mut memory).unwrap();
 
     let statement: &str = "copy rv = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.rv, 1)
 }
 
@@ -114,13 +90,7 @@ fn copy_string_lxstring() {
     let statement: &str = "copy string = lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.string, registers.lxstring)
 }
 
@@ -135,13 +105,7 @@ fn copy_string_var() {
     let statement: &str = "copy string = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.string, "hello".to_string())
 }
 
@@ -156,13 +120,7 @@ fn copy_lxstring_string() {
     let statement: &str = "copy lxstring = string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.string, registers.lxstring)
 }
 
@@ -177,13 +135,7 @@ fn copy_lxstring_var() {
     let statement: &str = "copy lxstring = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lxstring, "hello".to_string())
 }
 
@@ -199,14 +151,8 @@ fn copy_var_lx() {
     let statement: &str = "copy x = lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(), ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
 
     assert_eq!(memory.yeild_i32(t.location), 1)
 }
@@ -223,14 +169,8 @@ fn copy_var_rv() {
     let statement: &str = "copy x = rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(), ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
 
     assert_eq!(memory.yeild_i32(t.location), 1)
 }
@@ -247,14 +187,8 @@ fn copy_var_string() {
     let statement: &str = "copy x = string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(), ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
 
     assert_eq!(memory.yeild_string(t.location), "hello".to_string())
 }
@@ -271,14 +205,8 @@ fn copy_var_lxstring() {
     let statement: &str = "copy x = lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(), ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
 
     assert_eq!(memory.yeild_string(t.location), "hello".to_string())
 }
@@ -289,21 +217,15 @@ fn copy_var_var_int() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
 
-    vars.set_int("x".to_string(), "1", &mut memory, ).unwrap();
-    vars.set_int("y".to_string(), "0", &mut memory, ).unwrap();
+    vars.set_int("x".to_string(), "1", &mut memory).unwrap();
+    vars.set_int("y".to_string(), "0", &mut memory).unwrap();
 
     let statement: &str = "copy y = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
-    let t = vars.get_type("y".to_string(), ).unwrap();
+    let t = vars.get_type("y".to_string()).unwrap();
     assert_eq!(memory.yeild_i32(t.location), 1)
 }
 
@@ -319,14 +241,8 @@ fn copy_var_var_str() {
     let statement: &str = "copy y = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    copy(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
+    copy(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
-    let t = vars.get_type("y".to_string(), ).unwrap();
+    let t = vars.get_type("y".to_string()).unwrap();
     assert_eq!(memory.yeild_string(t.location), "hello".to_string())
 }

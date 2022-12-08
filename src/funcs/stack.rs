@@ -57,11 +57,11 @@ pub fn ram(
         "string" => {
             // ram string = 'hello'
             let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
-            let _ = &exp[1..exp.len()-1].clone_into(&mut registers.string);
+            let _ = &exp[1..exp.len() - 1].clone_into(&mut registers.string);
         }
         "lxstring" => {
-            let exp = statement.split('=').collect::<Vec<&str>>()[1].trim(); 
-             let _ = &exp[1..exp.len()-1].clone_into(&mut registers.lxstring);
+            let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
+            let _ = &exp[1..exp.len() - 1].clone_into(&mut registers.lxstring);
         }
         _ => {
             if cmd.len() > 3 {
@@ -79,13 +79,13 @@ pub fn ram(
                                     _ => return Err(ErrorKind::ArgErr),
                                 }
                             } else {
-                                return Err(ErrorKind::ArgErr)
+                                return Err(ErrorKind::ArgErr);
                             }
                         }
                         _ => return Err(ErrorKind::ArgErr),
                     }
                 } else {
-                    return Err(ErrorKind::ArgErr)
+                    return Err(ErrorKind::ArgErr);
                 }
             } else {
                 // try to parse cmd[1] as int

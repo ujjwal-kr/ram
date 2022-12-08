@@ -7,7 +7,7 @@ use std::collections::HashMap;
 fn get_dest_counter(lmap: HashMap<String, usize>, label: &str) -> Result<usize, ErrorKind> {
     match lmap.get(label) {
         Some(&c) => Ok(c),
-        _ => return Err(ErrorKind::LabelNotFound(label.to_string()))
+        _ => return Err(ErrorKind::LabelNotFound(label.to_string())),
     }
 }
 

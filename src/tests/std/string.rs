@@ -25,14 +25,8 @@ pub fn split_string() {
     let statement = "split string > \",\" = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    split(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(),).unwrap();
+    split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location), ["he", "llo"]);
 }
 
@@ -47,14 +41,8 @@ pub fn split_lxstring() {
     let statement = "split lxstring > \" \" = x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    split(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(),).unwrap();
+    split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location), ["hello", "world"]);
 }
 
@@ -69,14 +57,8 @@ pub fn split_var() {
     vars.set_string("str".to_string(), "hello\nworld", &mut memory);
     vars.set_str_vec("x".to_string(), "['']", &mut memory);
 
-    split(
-        &mut memory,
-        &mut vars,
-        &mut registers,
-        cmd,
-        statement
-    ).unwrap();
-    let t = vars.get_type("x".to_string(),).unwrap();
+    split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location), ["hello", "world"]);
 }
 
@@ -91,7 +73,7 @@ pub fn concat_string_lxstring() {
     let statement = "concat string lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
 
@@ -105,7 +87,7 @@ pub fn concat_lxstring_string() {
     let statement = "concat lxstring string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
 
@@ -119,7 +101,7 @@ pub fn concat_var_string() {
     let statement = "concat x string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
 
@@ -134,7 +116,7 @@ pub fn concat_string_var() {
     let statement = "concat string x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
 
@@ -149,7 +131,7 @@ pub fn concat_lxstring_var() {
     let statement = "concat lxstring x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
 
@@ -164,6 +146,6 @@ pub fn concat_var_var() {
     let statement = "concat x y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    concat(&mut memory, &mut vars, &mut registers, cmd,).unwrap();
+    concat(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello world".to_string())
 }
