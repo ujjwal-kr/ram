@@ -44,6 +44,15 @@ impl Vars {
         }
     }
 
+    fn parse_i32(&mut self, value: &str) -> Result<i32, ErrorKind> {
+        let num: i32;
+        match value.parse::<i32>() {
+            Ok(n) => num = n,
+            _parse_int_error => return Err(ErrorKind::ParseInt),
+        }
+        Ok(num)
+    }
+
     // Integers
 
     pub fn set_int(
@@ -197,18 +206,5 @@ impl Vars {
                 src_data: data.to_vec(),
             }))
         }
-    }
-}
-
-impl Vars {
-    // parsers
-
-    fn parse_i32(&mut self, value: &str) -> Result<i32, ErrorKind> {
-        let num: i32;
-        match value.parse::<i32>() {
-            Ok(n) => num = n,
-            _parse_int_error => return Err(ErrorKind::ParseInt),
-        }
-        Ok(num)
     }
 }

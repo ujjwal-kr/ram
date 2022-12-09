@@ -161,3 +161,54 @@ impl Memory {
         final_vec
     }
 }
+
+impl Memory {
+    // push
+
+    pub fn vec_int_push(&mut self, heap_bytes: &[u8], value: &[u8]) {
+        let heap_value = &mut *self
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
+
+            for &byte in value {
+                heap_value.push(byte)
+            }
+    }
+
+    pub fn vec_str_push() {}
+
+    // return by index
+
+    pub fn vec_str_item() -> String {
+        unimplemented!()
+    }
+
+    pub fn vec_int_item() -> i32 {
+        unimplemented!()
+    }
+
+    // modify using index
+
+    pub fn mod_vec_int() {}
+
+    pub fn mod_vec_str() {}
+
+    // pop
+
+    pub fn pop_vec_int() {}
+
+    pub fn pop_vec_str() {}
+
+    // return length
+
+    pub fn vec_int_len() -> i32 {
+        unimplemented!()
+    }
+
+    pub fn vec_str_len() -> i32 {
+        unimplemented!()
+    }
+}
