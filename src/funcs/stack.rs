@@ -230,3 +230,14 @@ pub fn copy(
     }
     Ok(())
 }
+
+pub fn vec(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut CPU,
+    cmd: Vec<&str>,
+    statement: &str
+) -> Result<(), ErrorKind> {
+
+    unimplemented!()
+}
