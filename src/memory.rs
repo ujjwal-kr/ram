@@ -178,7 +178,17 @@ impl Memory {
             }
     }
 
-    pub fn vec_str_push() {}
+    pub fn vec_str_push(&mut self, heap_bytes: &[u8], value: &[u8]) {
+        let new_str_addr = self.malloc(value).to_be_bytes();
+
+        let heap_value = &mut *self.heap.get_mut(&u32::from_be_bytes(
+            heap_bytes.try_into().expect("Illegal heap pointer")
+        )).expect("Illegal heap pointer");
+
+        for byte in new_str_addr {
+            heap_value.push(byte)
+        }
+    }
 
     // return by index
 
