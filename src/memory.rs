@@ -207,14 +207,14 @@ impl Memory {
 
     pub fn mod_vec_int(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
         let heap_value = &mut *self
-        .heap
-        .get_mut(&u32::from_be_bytes(
-            heap_bytes.try_into().expect("Illegal heap pointer"),
-        ))
-        .expect("Illegal heap pointer");
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
 
-        if idx < heap_value.len()/4 {
-            heap_value.splice(idx*4+1..=idx*4+4, value.to_vec());
+        if idx < heap_value.len() / 4 {
+            heap_value.splice(idx * 4 + 1..=idx * 4 + 4, value.to_vec());
         } else {
             panic!("vec idx more than len")
         }
@@ -223,25 +223,51 @@ impl Memory {
     pub fn mod_vec_str(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
         let str_addr = self.malloc(value).to_be_bytes();
         let heap_value = &mut *self
-        .heap
-        .get_mut(&u32::from_be_bytes(
-            heap_bytes.try_into().expect("Illegal heap pointer"),
-        ))
-        .expect("Illegal heap pointer");
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
 
-        if idx < heap_value.len()/4 {
-            heap_value.splice(idx*4+1..=idx*4+4, str_addr.to_vec());
+        if idx < heap_value.len() / 4 {
+            let str_addr_bytes = heap_value.drain(idx * 4..idx * 4 + 4).collect::<Vec<u8>>(); // needs testing
+            let old_str_addr =
+                u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
+            heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec()); // needs testing
+            self.free(old_str_addr);
         } else {
             panic!("vec idx more than len")
         }
-
     }
 
     // pop
 
-    pub fn pop_vec_int() {}
+    pub fn pop_vec_int(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
 
-    pub fn pop_vec_str() {}
+        let sub = heap_value.len().saturating_sub(4);
+        heap_value.truncate(sub);
+    }
+
+    pub fn pop_vec_str(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
+
+        let str_addr_bytes = heap_value
+            .drain(heap_value.len() - 4..heap_value.len())
+            .collect::<Vec<u8>>(); // needs testing
+        let str_addr = u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
+        self.free(str_addr);
+    }
 
     // return length
 
