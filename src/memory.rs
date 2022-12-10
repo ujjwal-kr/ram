@@ -162,10 +162,12 @@ impl Memory {
     }
 }
 
+// vec ops 
+
 impl Memory {
     // push
 
-    pub fn vec_int_push(&mut self, heap_bytes: &[u8], value: &[u8]) {
+    pub fn vec_int_push(&mut self, heap_bytes: &[u8], value: [u8; 4]) {
         let heap_value = &mut *self
             .heap
             .get_mut(&u32::from_be_bytes(
@@ -173,7 +175,7 @@ impl Memory {
             ))
             .expect("Illegal heap pointer");
 
-        for &byte in value {
+        for byte in value {
             heap_value.push(byte)
         }
     }
