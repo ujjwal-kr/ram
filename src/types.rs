@@ -239,20 +239,30 @@ impl Vars {
         if t.name != TypeName::Vector(Vector::Int) {
             return Err(ErrorKind::ExpectedVec(name));
         };
-        let str_vec = memory.yeild_int_vec(t.location);
-        if idx >= str_vec.len() {
+        let int_vec = memory.yeild_int_vec(t.location);
+        if idx >= int_vec.len() {
             return Err(ErrorKind::VecLen(name));
         }
-        return Ok(str_vec[idx].clone());
+        return Ok(int_vec[idx]);
     }
 
     // return length
 
-    pub fn vec_int_len() -> i32 {
-        unimplemented!()
+    pub fn vec_int_len(&mut self, name: String, memory: &mut Memory) -> Result<i32, ErrorKind> {
+        let t = self.get_type(name.clone())?;
+        if t.name != TypeName::Vector(Vector::Int) {
+            return Err(ErrorKind::ExpectedVec(name));
+        };
+        let int_vec = memory.yeild_int_vec(t.location);
+        Ok(int_vec.len() as i32)
     }
 
-    pub fn vec_str_len() -> i32 {
-        unimplemented!()
+    pub fn vec_str_len(&mut self, name: String, memory: &mut Memory) -> Result<i32, ErrorKind> {
+        let t = self.get_type(name.clone())?;
+        if t.name != TypeName::Vector(Vector::Int) {
+            return Err(ErrorKind::ExpectedVec(name));
+        };
+        let str_vec = memory.yeild_str_vec(t.location);
+        Ok(str_vec.len() as i32)
     }
 }
