@@ -132,6 +132,12 @@ impl CPU {
                         ErrorKind::LabelNotFound(l) => {
                             println!("Label '{}' not found at {}: {}", l, label, statement)
                         }
+                        ErrorKind::VecLen(name) => {
+                            println!(
+                                "'{}' dosent have enough length at {}: {}",
+                                name, label, statement
+                            )
+                        }
                     }
                     process::exit(1)
                 }

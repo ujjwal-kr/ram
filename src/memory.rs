@@ -193,19 +193,9 @@ impl Memory {
         }
     }
 
-    // return by index
-
-    // pub fn vec_str_item() -> String {
-    //     unimplemented!()
-    // }
-
-    // pub fn vec_int_item() -> i32 {
-    //     unimplemented!()
-    // }
-
     // modify using index
 
-    pub fn mod_vec_int(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
+    pub fn mod_vec_int(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) -> Result<(), ()> {
         let heap_value = &mut *self
             .heap
             .get_mut(&u32::from_be_bytes(
@@ -216,11 +206,12 @@ impl Memory {
         if idx < heap_value.len() / 4 {
             heap_value.splice(idx * 4 + 1..=idx * 4 + 4, value.to_vec());
         } else {
-            panic!("vec idx more than len")
+            return Err(());
         }
+        Ok(())
     }
 
-    pub fn mod_vec_str(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
+    pub fn mod_vec_str(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) -> Result<(), ()> {
         let str_addr = self.malloc(value).to_be_bytes();
         let heap_value = &mut *self
             .heap
@@ -236,8 +227,9 @@ impl Memory {
             heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec()); // needs testing
             self.free(old_str_addr);
         } else {
-            panic!("vec idx more than len")
+            return Err(());
         }
+        Ok(())
     }
 
     // pop
@@ -268,14 +260,4 @@ impl Memory {
         let str_addr = u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
         self.free(str_addr);
     }
-
-    // return length
-
-    // pub fn vec_int_len() -> i32 {
-    //     unimplemented!()
-    // }
-
-    // pub fn vec_str_len() -> i32 {
-    //     unimplemented!()
-    // }
 }

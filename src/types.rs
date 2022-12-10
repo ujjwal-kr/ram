@@ -208,3 +208,51 @@ impl Vars {
         }
     }
 }
+
+impl Vars {
+    // return by index
+
+    pub fn vec_str_item(
+        &mut self,
+        name: String,
+        idx: usize,
+        memory: &mut Memory,
+    ) -> Result<String, ErrorKind> {
+        let t = self.get_type(name.clone())?;
+        if t.name != TypeName::Vector(Vector::String) {
+            return Err(ErrorKind::ExpectedVec(name));
+        };
+        let str_vec = memory.yeild_str_vec(t.location);
+        if idx >= str_vec.len() {
+            return Err(ErrorKind::VecLen(name));
+        }
+        return Ok(str_vec[idx].clone());
+    }
+
+    pub fn vec_int_item(
+        &mut self,
+        name: String,
+        idx: usize,
+        memory: &mut Memory,
+    ) -> Result<i32, ErrorKind> {
+        let t = self.get_type(name.clone())?;
+        if t.name != TypeName::Vector(Vector::Int) {
+            return Err(ErrorKind::ExpectedVec(name));
+        };
+        let str_vec = memory.yeild_int_vec(t.location);
+        if idx >= str_vec.len() {
+            return Err(ErrorKind::VecLen(name));
+        }
+        return Ok(str_vec[idx].clone());
+    }
+
+    // return length
+
+    pub fn vec_int_len() -> i32 {
+        unimplemented!()
+    }
+
+    pub fn vec_str_len() -> i32 {
+        unimplemented!()
+    }
+}

@@ -13,6 +13,7 @@ pub enum ErrorKind {
     RangeNegative,
     EmptyCallstack,
     LabelNotFound(String),
+    VecLen(String),
 }
 
 pub fn stack_len_error(run_label: &str, line: i32) {
