@@ -173,17 +173,20 @@ impl Memory {
             ))
             .expect("Illegal heap pointer");
 
-            for &byte in value {
-                heap_value.push(byte)
-            }
+        for &byte in value {
+            heap_value.push(byte)
+        }
     }
 
     pub fn vec_str_push(&mut self, heap_bytes: &[u8], value: &[u8]) {
         let new_str_addr = self.malloc(value).to_be_bytes();
 
-        let heap_value = &mut *self.heap.get_mut(&u32::from_be_bytes(
-            heap_bytes.try_into().expect("Illegal heap pointer")
-        )).expect("Illegal heap pointer");
+        let heap_value = &mut *self
+            .heap
+            .get_mut(&u32::from_be_bytes(
+                heap_bytes.try_into().expect("Illegal heap pointer"),
+            ))
+            .expect("Illegal heap pointer");
 
         for byte in new_str_addr {
             heap_value.push(byte)
@@ -192,19 +195,47 @@ impl Memory {
 
     // return by index
 
-    pub fn vec_str_item() -> String {
-        unimplemented!()
-    }
+    // pub fn vec_str_item() -> String {
+    //     unimplemented!()
+    // }
 
-    pub fn vec_int_item() -> i32 {
-        unimplemented!()
-    }
+    // pub fn vec_int_item() -> i32 {
+    //     unimplemented!()
+    // }
 
     // modify using index
 
-    pub fn mod_vec_int() {}
+    pub fn mod_vec_int(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
+        let heap_value = &mut *self
+        .heap
+        .get_mut(&u32::from_be_bytes(
+            heap_bytes.try_into().expect("Illegal heap pointer"),
+        ))
+        .expect("Illegal heap pointer");
 
-    pub fn mod_vec_str() {}
+        if idx < heap_value.len()/4 {
+            heap_value.splice(idx*4+1..=idx*4+4, value.to_vec());
+        } else {
+            panic!("vec idx more than len")
+        }
+    }
+
+    pub fn mod_vec_str(&mut self, heap_bytes: &[u8], idx: usize, value: &[u8]) {
+        let str_addr = self.malloc(value).to_be_bytes();
+        let heap_value = &mut *self
+        .heap
+        .get_mut(&u32::from_be_bytes(
+            heap_bytes.try_into().expect("Illegal heap pointer"),
+        ))
+        .expect("Illegal heap pointer");
+
+        if idx < heap_value.len()/4 {
+            heap_value.splice(idx*4+1..=idx*4+4, str_addr.to_vec());
+        } else {
+            panic!("vec idx more than len")
+        }
+
+    }
 
     // pop
 
@@ -214,11 +245,11 @@ impl Memory {
 
     // return length
 
-    pub fn vec_int_len() -> i32 {
-        unimplemented!()
-    }
+    // pub fn vec_int_len() -> i32 {
+    //     unimplemented!()
+    // }
 
-    pub fn vec_str_len() -> i32 {
-        unimplemented!()
-    }
+    // pub fn vec_str_len() -> i32 {
+    //     unimplemented!()
+    // }
 }
