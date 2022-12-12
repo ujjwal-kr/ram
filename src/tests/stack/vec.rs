@@ -326,3 +326,19 @@ fn vec_str_idx_to_var() {
     assert_eq!(memory.yeild_string(t.location), "omk".to_string());
 }
 
+// get length
+
+#[test]
+fn vec_str_len() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_str_vec("x".to_string(), "['ok', 'omk']", &mut memory);
+    let statement = "vec x len";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    assert_eq!(memory.get_int_from_stack().unwrap(), 2);
+}
+
+// vec mod
