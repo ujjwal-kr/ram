@@ -96,9 +96,9 @@ impl CPU {
 
             match ret_val {
                 Ok(()) => (),
-                Err(t) => {
+                Err(e) => {
                     let label = errors::get_label(self.program_counter, label_map.clone());
-                    match t {
+                    match e {
                         ErrorKind::ArgErr => {
                             println!("Invalid arguments at {} {}", label, statement)
                         }

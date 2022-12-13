@@ -236,8 +236,7 @@ pub fn vec(
     vars: &mut Vars,
     registers: &mut CPU,
     cmd: Vec<&str>,
-    statement: &str
+    statement: &str,
 ) -> Result<(), ErrorKind> {
-
     unimplemented!()
 }

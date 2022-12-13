@@ -162,7 +162,7 @@ impl Memory {
     }
 }
 
-// vec ops 
+// vec ops
 
 impl Memory {
     // push
@@ -206,7 +206,7 @@ impl Memory {
             .expect("Illegal heap pointer");
 
         if idx < heap_value.len() / 4 {
-            heap_value.splice(idx * 4 + 1..=idx * 4 + 4, value.to_vec());
+            heap_value.splice(idx * 4..=idx * 4 + 4, value.to_vec()); // needs testing
         } else {
             return Err(());
         }
