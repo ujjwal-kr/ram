@@ -1,3 +1,4 @@
+use crate::types::Vector;
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
@@ -238,5 +239,86 @@ pub fn vec(
     cmd: Vec<&str>,
     statement: &str,
 ) -> Result<(), ErrorKind> {
-    unimplemented!()
+    if cmd.len() < 3 {
+        return Err(ErrorKind::ArgErr);
+    }
+    match cmd[2] {
+        "push" => {
+            let var = vars.get_type(cmd[1].to_string()).unwrap();
+            let value = cmd[3];
+            if var.name == TypeName::Vector(Vector::Int) {
+                match value {
+                    "lx" => {
+                        let vec_mod = vars.get_vec_int_mod(var, registers.lx, memory);
+                        memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
+                    },
+                    "rv" => {
+                        let vec_mod = vars.get_vec_int_mod(var, registers.rv, memory);
+                        memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
+                    },
+                    _ => {
+                        let var2 = vars.get_type(value.to_string())?;
+                        if var2.name == TypeName::I32 {
+                            let var2_int = memory.yeild_i32(var2.clone().location);
+                            let vec_mod = vars.get_vec_int_mod(var, var2_int, memory);
+                            memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
+                        } else {
+                            return Err(ErrorKind::ExpectedInt(value.to_string()));
+                        }
+                    },
+                }
+            } else if var.name == TypeName::Vector(Vector::String) {
+                match value {
+                    "string" => {
+                        let vec_mod = vars.get_vec_str_mod(var, memory, &registers.string);
+                        memory.vec_str_push(&vec_mod.heap_addr, &vec_mod.value_bytes);
+                    },
+                    "lxstring" => {
+                        let vec_mod = vars.get_vec_str_mod(var, memory, &registers.lxstring);
+                        memory.vec_str_push(&vec_mod.heap_addr, &vec_mod.value_bytes);
+                    },
+                    _ => {
+                        let var2 = vars.get_type(value.to_string())?;
+                        if var2.name == TypeName::String {
+                            let str_value = memory.yeild_string(var2.location);
+                            let vec_mod = vars.get_vec_str_mod(var, memory, &str_value);
+                            memory.vec_str_push(&vec_mod.heap_addr, &vec_mod.value_bytes);
+                        } else {
+                            return Err(ErrorKind::ExpectedStr(value.to_string()));
+                        }
+                    },
+                }
+            } else {
+                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
+            }
+        }
+        "len" => {
+            let var = vars.get_type(cmd[1].to_string()).unwrap();
+            if var.name == TypeName::Vector(Vector::Int) {
+                
+            } else if var.name == TypeName::Vector(Vector::String) {
+
+            } else {
+                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
+            }
+        },
+        _ => {
+            let s = cmd.join("");
+            let chars = s.split("").collect::<Vec<&str>>();
+            if !chars.contains(&"[") || !chars.contains(&"]") || !chars.contains(&"=") {
+                return Err(ErrorKind::ArgErr);
+            } // performance overhead
+
+            let bracket_i = chars.iter().position(|&r| r == "[").unwrap();
+            let equal_i = chars.iter().position(|&r| r == "=").unwrap();
+
+            if bracket_i > equal_i {
+                // return idx
+            } else {
+                // vec mod
+            }
+        }
+    }
+
+    Ok(())
 }

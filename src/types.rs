@@ -268,18 +268,32 @@ impl Vars {
 
     // mem mods
 
-    pub fn get_vec_mod(
+    pub fn get_vec_int_mod(
         &mut self,
         t: Type,
-        value: &str,
+        value: i32,
         memory: &mut Memory,
-    ) -> Result<VecMod, ErrorKind> {
-        let value_bytes = self.parse_i32(value)?.to_be_bytes();
+    ) -> VecMod {
+        let value_bytes = value.to_be_bytes();
         let heap_addr = memory.load(t.location).to_vec();
-        Ok(VecMod {
+        VecMod {
             value_bytes,
             heap_addr,
-        })
+        }
+    }
+
+    pub fn get_vec_str_mod(
+        &mut self,
+        t: Type,
+        memory: &mut Memory,
+        value: &str
+    ) -> VecMod {
+        let heap_addr = memory.load(t.location).to_vec();
+        let value_bytes = memory.malloc(value.as_bytes()).to_be_bytes();
+        VecMod {
+            heap_addr,
+            value_bytes
+        }
     }
 }
 
