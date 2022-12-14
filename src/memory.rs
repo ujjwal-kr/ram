@@ -211,7 +211,12 @@ impl Memory {
         Ok(())
     }
 
-    pub fn mod_vec_str(&mut self, heap_bytes: &[u8], idx: usize, str_addr: &[u8]) -> Result<(), ()> {
+    pub fn mod_vec_str(
+        &mut self,
+        heap_bytes: &[u8],
+        idx: usize,
+        str_addr: &[u8],
+    ) -> Result<(), ()> {
         // let str_addr = self.malloc(value).to_be_bytes();
         let heap_value = &mut *self
             .heap

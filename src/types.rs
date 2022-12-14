@@ -214,15 +214,12 @@ impl Vars {
 
     pub fn vec_str_item(
         &mut self,
+        location: Location,
         name: String,
         idx: usize,
         memory: &mut Memory,
     ) -> Result<String, ErrorKind> {
-        let t = self.get_type(name.clone())?;
-        if t.name != TypeName::Vector(Vector::String) {
-            return Err(ErrorKind::ExpectedVec(name));
-        };
-        let str_vec = memory.yeild_str_vec(t.location);
+        let str_vec = memory.yeild_str_vec(location);
         if idx >= str_vec.len() {
             return Err(ErrorKind::VecLen(name));
         }
@@ -231,15 +228,12 @@ impl Vars {
 
     pub fn vec_int_item(
         &mut self,
+        location: Location,
         name: String,
         idx: usize,
         memory: &mut Memory,
     ) -> Result<i32, ErrorKind> {
-        let t = self.get_type(name.clone())?;
-        if t.name != TypeName::Vector(Vector::Int) {
-            return Err(ErrorKind::ExpectedVec(name));
-        };
-        let int_vec = memory.yeild_int_vec(t.location);
+        let int_vec = memory.yeild_int_vec(location);
         if idx >= int_vec.len() {
             return Err(ErrorKind::VecLen(name));
         }
@@ -253,19 +247,14 @@ impl Vars {
         int_vec.len() as i32
     }
 
-    pub fn vec_str_len(&mut self,location: Location, memory: &mut Memory) -> i32 {
+    pub fn vec_str_len(&mut self, location: Location, memory: &mut Memory) -> i32 {
         let str_vec = memory.yeild_str_vec(location);
         str_vec.len() as i32
     }
 
     // mem mods
 
-    pub fn get_vec_int_mod(
-        &mut self,
-        t: Type,
-        value: i32,
-        memory: &mut Memory,
-    ) -> VecMod {
+    pub fn get_vec_int_mod(&mut self, t: Type, value: i32, memory: &mut Memory) -> VecMod {
         let value_bytes = value.to_be_bytes();
         let heap_addr = memory.load(t.location).to_vec();
         VecMod {
@@ -274,17 +263,12 @@ impl Vars {
         }
     }
 
-    pub fn get_vec_str_mod(
-        &mut self,
-        t: Type,
-        memory: &mut Memory,
-        value: &str
-    ) -> VecMod {
+    pub fn get_vec_str_mod(&mut self, t: Type, memory: &mut Memory, value: &str) -> VecMod {
         let heap_addr = memory.load(t.location).to_vec();
         let value_bytes = memory.malloc(value.as_bytes()).to_be_bytes();
         VecMod {
             heap_addr,
-            value_bytes
+            value_bytes,
         }
     }
 }

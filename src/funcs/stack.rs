@@ -251,11 +251,11 @@ pub fn vec(
                     "lx" => {
                         let vec_mod = vars.get_vec_int_mod(var, registers.lx, memory);
                         memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
-                    },
+                    }
                     "rv" => {
                         let vec_mod = vars.get_vec_int_mod(var, registers.rv, memory);
                         memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
-                    },
+                    }
                     _ => {
                         let var2 = vars.get_type(value.to_string())?;
                         if var2.name == TypeName::I32 {
@@ -265,18 +265,18 @@ pub fn vec(
                         } else {
                             return Err(ErrorKind::ExpectedInt(value.to_string()));
                         }
-                    },
+                    }
                 }
             } else if var.name == TypeName::Vector(Vector::String) {
                 match value {
                     "string" => {
                         let vec_mod = vars.get_vec_str_mod(var, memory, &registers.string);
                         memory.vec_str_push(&vec_mod.heap_addr, &vec_mod.value_bytes);
-                    },
+                    }
                     "lxstring" => {
                         let vec_mod = vars.get_vec_str_mod(var, memory, &registers.lxstring);
                         memory.vec_str_push(&vec_mod.heap_addr, &vec_mod.value_bytes);
-                    },
+                    }
                     _ => {
                         let var2 = vars.get_type(value.to_string())?;
                         if var2.name == TypeName::String {
@@ -286,7 +286,7 @@ pub fn vec(
                         } else {
                             return Err(ErrorKind::ExpectedStr(value.to_string()));
                         }
-                    },
+                    }
                 }
             } else {
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
@@ -303,7 +303,7 @@ pub fn vec(
             } else {
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
             }
-        },
+        }
         _ => {
             let s = cmd.join("");
             let chars = s.split("").collect::<Vec<&str>>();
@@ -315,7 +315,90 @@ pub fn vec(
             let equal_i = chars.iter().position(|&r| r == "=").unwrap();
 
             if bracket_i > equal_i {
-                // return idx
+                let to_assign = cmd[1];
+                let var_exp = statement.split("=").collect::<Vec<&str>>()[1].trim();
+                let var_str = var_exp.split("[").collect::<Vec<&str>>()[0].trim();
+                let idx_str = var_exp.split("[").collect::<Vec<&str>>()[1]
+                    .trim()
+                    .split("]")
+                    .collect::<Vec<&str>>()[0]
+                    .trim();
+                let index: usize;
+                match idx_str {
+                    "lx" => index = registers.lx as usize,
+                    "rv" => index = registers.rv as usize,
+                    _ => {
+                        let num = idx_str.parse::<i32>();
+                        match num {
+                            Ok(n) => index = n as usize,
+                            _parse_int_error => {
+                                let idx_var = vars.get_type(idx_str.to_string())?;
+                                if idx_var.name == TypeName::I32 {
+                                    index = memory.yeild_i32(idx_var.location) as usize;
+                                } else {
+                                    return Err(ErrorKind::ExpectedInt(idx_str.to_string()));
+                                }
+                            }
+                        }
+                    }
+                }
+                let var = vars.get_type(var_str.to_string())?;
+                if var.name == TypeName::Vector(Vector::Int) {
+                    match to_assign {
+                        "lx" => {
+                            registers.lx =
+                                vars.vec_int_item(var.location, var_str.to_string(), index, memory)?
+                        }
+                        "rv" => {
+                            registers.rv =
+                                vars.vec_int_item(var.location, var_str.to_string(), index, memory)?
+                        }
+                        _ => {
+                            let assign_var = vars.get_type(to_assign.to_string())?;
+                            if assign_var.name == TypeName::I32 {
+                                let data: &[u8] = &vars
+                                    .vec_int_item(var.location, var_str.to_string(), index, memory)?
+                                    .to_be_bytes();
+                                memory.stack_mod(assign_var.location, data);
+                            } else {
+                                return Err(ErrorKind::ExpectedInt(to_assign.to_string()));
+                            }
+                        }
+                    }
+                } else if var.name == TypeName::Vector(Vector::String) {
+                    match to_assign {
+                        "string" => {
+                            registers.string =
+                                vars.vec_str_item(var.location, var_str.to_string(), index, memory)?
+                        }
+                        "lxstring" => {
+                            registers.lxstring =
+                                vars.vec_str_item(var.location, var_str.to_string(), index, memory)?
+                        }
+                        _ => {
+                            let assign_var = vars.get_type(to_assign.to_string())?;
+                            if assign_var.name == TypeName::String {
+                                let str = vars.vec_str_item(
+                                    var.location,
+                                    var_str.to_string(),
+                                    index,
+                                    memory,
+                                )?;
+                                let new_str_addr = memory.malloc(str.as_bytes());
+                                let heap_addr: [u8; 4] = memory
+                                    .load(assign_var.clone().location)
+                                    .try_into()
+                                    .expect("illegal heap addr");
+                                memory.stack_mod(assign_var.location, &new_str_addr.to_be_bytes());
+                                memory.free(u32::from_be_bytes(heap_addr));
+                            } else {
+                                return Err(ErrorKind::ExpectedStr(to_assign.to_string()));
+                            }
+                        }
+                    }
+                } else {
+                    return Err(ErrorKind::ExpectedVec(var_str.to_string()));
+                }
             } else {
                 // vec mod
             }
