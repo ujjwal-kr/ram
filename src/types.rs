@@ -248,22 +248,14 @@ impl Vars {
 
     // return length
 
-    pub fn vec_int_len(&mut self, name: String, memory: &mut Memory) -> Result<i32, ErrorKind> {
-        let t = self.get_type(name.clone())?;
-        if t.name != TypeName::Vector(Vector::Int) {
-            return Err(ErrorKind::ExpectedVec(name));
-        };
-        let int_vec = memory.yeild_int_vec(t.location);
-        Ok(int_vec.len() as i32)
+    pub fn vec_int_len(&mut self, location: Location, memory: &mut Memory) -> i32 {
+        let int_vec = memory.yeild_int_vec(location);
+        int_vec.len() as i32
     }
 
-    pub fn vec_str_len(&mut self, name: String, memory: &mut Memory) -> Result<i32, ErrorKind> {
-        let t = self.get_type(name.clone())?;
-        if t.name != TypeName::Vector(Vector::Int) {
-            return Err(ErrorKind::ExpectedVec(name));
-        };
-        let str_vec = memory.yeild_str_vec(t.location);
-        Ok(str_vec.len() as i32)
+    pub fn vec_str_len(&mut self,location: Location, memory: &mut Memory) -> i32 {
+        let str_vec = memory.yeild_str_vec(location);
+        str_vec.len() as i32
     }
 
     // mem mods

@@ -7,22 +7,6 @@ use crate::{memory::Memory, types::Vars, CPU};
 // vec x[1] = y
 
 #[test]
-fn vec_int_push_1() {
-    let mut memory: Memory = Memory::new();
-    let mut registers: CPU = CPU::new();
-    let mut vars: Vars = Vars::new();
-
-    vars.set_int_vec("x".to_string(), "[1, 2]", &mut memory)
-        .unwrap();
-    let statement = "vec x push 1";
-    let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
-
-    let t = vars.get_type("x".to_string()).unwrap();
-    assert_eq!(memory.yeild_int_vec(t.location), [1, 2, 1].to_vec())
-}
-
-#[test]
 fn vec_int_push_var() {
     let mut memory: Memory = Memory::new();
     let mut registers: CPU = CPU::new();

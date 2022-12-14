@@ -295,9 +295,11 @@ pub fn vec(
         "len" => {
             let var = vars.get_type(cmd[1].to_string()).unwrap();
             if var.name == TypeName::Vector(Vector::Int) {
-                
+                let len = vars.vec_int_len(var.location, memory);
+                memory.set_int_to_stack(len);
             } else if var.name == TypeName::Vector(Vector::String) {
-
+                let len = vars.vec_str_len(var.location, memory);
+                memory.set_int_to_stack(len);
             } else {
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
             }
