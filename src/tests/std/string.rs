@@ -5,6 +5,10 @@ use crate::{memory::Memory, types::Vars, CPU};
 // split lxstring > " " = var
 // split var > "\n" = var
 
+// join var > "" = string
+// join var > " " = lxstring
+// join var > "\n" = var
+
 // concat string lxstring
 // concat string var
 
@@ -60,6 +64,51 @@ pub fn split_var() {
     split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location), ["hello", "world"]);
+}
+
+// join var > "" = string
+// join var > " " = lxstring
+// join var > "\n" = var
+
+#[test]
+fn join_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_str_vec("x".to_string(), "['hello', 'world']", &mut memory);
+    let statement = "join x > \"\" = string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    join(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    assert_eq!(registers.string, "helloworld".to_string());
+}
+
+#[test]
+fn join_lxstring() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_str_vec("x".to_string(), "['hello', 'world']", &mut memory);
+    let statement = "join x > \" \" = lxstring";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    join(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    assert_eq!(registers.string, "hello world".to_string());
+}
+
+#[test]
+fn join_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_str_vec("x".to_string(), "['hello', 'world']", &mut memory);
+    vars.set_string("y".to_string(), "''", &mut memory);
+    let statement = "join x > \"\n\" = y";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    join(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("y".to_string()).unwrap();
+    assert_eq!(memory.yeild_string(t.location), "hello\nworld".to_string());
 }
 
 #[test]

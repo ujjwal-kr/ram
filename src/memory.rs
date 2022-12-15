@@ -226,10 +226,13 @@ impl Memory {
             .expect("Illegal heap pointer");
 
         if idx < heap_value.len() / 4 {
-            let str_addr_bytes = heap_value.clone().drain(idx * 4..idx * 4 + 4).collect::<Vec<u8>>(); // needs testing
+            let str_addr_bytes = heap_value
+                .clone()
+                .drain(idx * 4..idx * 4 + 4)
+                .collect::<Vec<u8>>(); // needs testing
             let old_str_addr =
                 u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
-                println!("{:?}", str_addr.to_vec());
+            println!("{:?}", str_addr.to_vec());
             heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec()); // needs testing
             self.free(old_str_addr);
         } else {

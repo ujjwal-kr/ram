@@ -236,7 +236,6 @@ fn vec_get_var_idx_lx() {
     let statement = "vec lx = x[y]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
     stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
-    let t = vars.get_type("y".to_string()).unwrap();
     assert_eq!(registers.lx, 4);
 }
 

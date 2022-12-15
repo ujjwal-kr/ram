@@ -9,6 +9,9 @@ pub fn split(
     cmd: Vec<&str>,
     statement: &str,
 ) -> Result<(), ErrorKind> {
+    if cmd.len() < 6 {
+        return Err(ErrorKind::ArgErr);
+    }
     let var_str = statement.split('=').collect::<Vec<&str>>()[1].trim();
     let t = vars.get_type(var_str.to_string())?;
     if t.name != TypeName::Vector(Vector::String) {
@@ -41,6 +44,45 @@ pub fn split(
                 );
             } else {
                 return Err(ErrorKind::ExpectedStr(split_var_str.to_string()));
+            }
+        }
+    }
+    Ok(())
+}
+
+pub fn join(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut CPU,
+    cmd: Vec<&str>,
+    statement: &str,
+) -> Result<(), ErrorKind> {
+    if cmd.len() < 6 {
+        return Err(ErrorKind::ArgErr);
+    }
+    let assign_to = cmd[cmd.len() - 1].to_string();
+    let vec_str = cmd[1].to_string();
+    let del_exp = statement.split("=").collect::<Vec<&str>>()[0]
+        .trim()
+        .split(">")
+        .collect::<Vec<&str>>()[1]
+        .trim();
+    let delimiter: &str = &del_exp[1..del_exp.len() - 1];
+    let var = vars.get_type(vec_str.clone())?;
+    if var.name != TypeName::Vector(Vector::String) {
+        return Err(ErrorKind::ExpectedStr(vec_str));
+    }
+    match assign_to.trim() {
+        "string" => registers.string = memory.yeild_str_vec(var.location).join(delimiter),
+        "lxstring" => registers.string = memory.yeild_str_vec(var.location).join(delimiter),
+        _ => {
+            let t = vars.get_type(assign_to.clone())?;
+            if t.name == TypeName::String {
+                let heap_addr = u32::from_be_bytes(memory.load(t.location).try_into().unwrap());
+                let vec = memory.yeild_str_vec(var.location);
+                memory.heap_mod(heap_addr, vec.join(delimiter).as_bytes())
+            } else {
+                return Err(ErrorKind::ExpectedStr(assign_to));
             }
         }
     }

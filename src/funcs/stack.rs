@@ -449,13 +449,21 @@ pub fn vec(
                         _ => {
                             let assigned_var = vars.get_type(assign_to.to_string())?;
                             if assigned_var.name == TypeName::I32 {
-                                let vec_mod = vars.get_vec_int_mod(var, memory.yeild_i32(assigned_var.location), memory);
-                                match memory.mod_vec_int(&vec_mod.heap_addr, idx, &vec_mod.value_bytes) {
+                                let vec_mod = vars.get_vec_int_mod(
+                                    var,
+                                    memory.yeild_i32(assigned_var.location),
+                                    memory,
+                                );
+                                match memory.mod_vec_int(
+                                    &vec_mod.heap_addr,
+                                    idx,
+                                    &vec_mod.value_bytes,
+                                ) {
                                     Ok(()) => (),
                                     Err(()) => return Err(ErrorKind::VecLen(var_str.to_string())),
                                 }
                             } else {
-                                return Err(ErrorKind::ExpectedInt(assign_to.to_string()))
+                                return Err(ErrorKind::ExpectedInt(assign_to.to_string()));
                             }
                         }
                     }
@@ -463,28 +471,38 @@ pub fn vec(
                     match assign_to {
                         "string" => {
                             let vec_mod = vars.get_vec_str_mod(var, &registers.string, memory);
-                            match memory.mod_vec_str(&vec_mod.heap_addr, idx, &vec_mod.value_bytes) {
+                            match memory.mod_vec_str(&vec_mod.heap_addr, idx, &vec_mod.value_bytes)
+                            {
                                 Ok(()) => (),
                                 Err(()) => return Err(ErrorKind::VecLen(var_str.to_string())),
                             }
-                        },
+                        }
                         "lxstring" => {
                             let vec_mod = vars.get_vec_str_mod(var, &registers.lxstring, memory);
-                            match memory.mod_vec_str(&vec_mod.heap_addr, idx, &vec_mod.value_bytes) {
+                            match memory.mod_vec_str(&vec_mod.heap_addr, idx, &vec_mod.value_bytes)
+                            {
                                 Ok(()) => (),
                                 Err(()) => return Err(ErrorKind::VecLen(var_str.to_string())),
                             }
-                        },
+                        }
                         _ => {
                             let assigned_var = vars.get_type(assign_to.to_string())?;
                             if assigned_var.name == TypeName::String {
-                                let vec_mod = vars.get_vec_str_mod(var, memory.yeild_string(assigned_var.location).trim(), memory);
-                                match memory.mod_vec_str(&vec_mod.heap_addr, idx, &vec_mod.value_bytes) {
+                                let vec_mod = vars.get_vec_str_mod(
+                                    var,
+                                    memory.yeild_string(assigned_var.location).trim(),
+                                    memory,
+                                );
+                                match memory.mod_vec_str(
+                                    &vec_mod.heap_addr,
+                                    idx,
+                                    &vec_mod.value_bytes,
+                                ) {
                                     Ok(()) => (),
                                     Err(()) => return Err(ErrorKind::VecLen(var_str.to_string())),
                                 }
                             } else {
-                                return Err(ErrorKind::ExpectedStr(assign_to.to_string()))
+                                return Err(ErrorKind::ExpectedStr(assign_to.to_string()));
                             }
                         }
                     }
