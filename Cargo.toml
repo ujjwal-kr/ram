@@ -7,5 +7,4 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.4"
-colored = "2.0.0"
 regex = "1.5"

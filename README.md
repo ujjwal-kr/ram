@@ -1,8 +1,8 @@
 # The Ram programming language
-A stack-based programming language developed to experiment with my language development skills. It is capable of making some mathematical formulation and logic. Written in the Rust programming language.
+A stack-based programming language developed to experiment with my language development skills. Runs on a emulated virual machine, using custom memory, allocation and garbage collection methods.
 
 ## How to run
-1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v2.7/ram).
+1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/latest) [Only for windows and linux].
 2. Make it executable using `chmod +x ./ram`
 3. Make a .ram file with the following contents at the same directory as the binary:
 
@@ -12,7 +12,8 @@ main:
     ram 1
     add
     ram lx prev
-    print
+    print var lx
+    ram lx
     ram 500
     cmp
     je halt:
@@ -24,15 +25,15 @@ halt:
 
 4. run `./ram ./example.ram` and press enter.
 
-## How to test
-Run `cargo run test` to run the custom tests to test all the commands in the suit. Make sure to run this before pushing any PRs. The tests are automatically ran when there is a PR/commit on the master branch.
-
-![tests](https://media.discordapp.net/attachments/867819380464680980/947347676503089172/unknown.png?width=350&height=510)
-
 # Documentation
 
-The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation---v2.7)
+The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation-v3.0)
 
-# Contributing
+## How to test
+Run `cargo test` to run all the tests. This is the output of the test runner:
+
+![tests](https://cdn.discordapp.com/attachments/875733830542196768/1032414620377428059/unknown.png)
+
+# Contribution
 
 Im not accepting any braking changes to the specs, as the syntax of the language is still in development. But suggestions can be made using the issue tracker. All other types of contributions are welcome. Make sure to check the `dev` branch, PRs to che master branch wont be accepted.

@@ -2,7 +2,7 @@ name: Rust
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, dev ]
   pull_request:
     branches: [ master ]
 
@@ -19,6 +19,6 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Run unit test
-      run: cargo run test --verbose
-    - name: E2E
-      run: cargo run ./examples/default.ram --verbose
+      run: cargo test --verbose
+    # - name: E2E
+    #   run: cargo run ./examples/default.ram --verbose

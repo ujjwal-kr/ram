@@ -1,104 +1,49 @@
-pub fn print(
-    stack: &mut Vec<f64>,
-    cmd: Vec<&str>,
-    vars: &mut super::super::Vars,
-    hash_vars: &mut super::super::HashVars,
-    b: &str,
-    l: u32,
-) {
-    if cmd.len() == 1 {
-        if stack.is_empty() {
-            super::errors::stack_len_error(b, l);
-        } else {
-            println!("{}", stack[stack.len() - 1]);
-        }
-    } else {
-        match cmd[1].trim() {
-            "lx" => println!("{}", vars.lx),
-            "rv" => println!("{}", vars.rv),
-            "string" => println!("{}", vars.string.trim()),
-            "lxstring" => println!("{}", vars.lxstring.trim()),
-            "vec" => match cmd[2].trim() {
-                "str" => {
-                    if cmd.len() == 3 {
-                        println!("{:?}", vars.str_vec);
-                    }
-                }
-                "int" => {
-                    if cmd.len() == 3 {
-                        println!("{:?}", vars.num_vec);
-                    }
-                }
-                _ => super::errors::args_error(b, l),
-            },
-            "global_var" => match cmd[3].trim() {
-                "int" => {
-                    if cmd.len() == 5 && cmd[4] == "vec" {
-                        match hash_vars.hash_int_vec.get(cmd[2].trim()) {
-                            Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    } else {
-                        match hash_vars.hash_int.get(cmd[2].trim()) {
-                            Some(&value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    }
-                }
-                "str" => {
-                    if cmd.len() == 5 && cmd[4] == "vec" {
-                        match hash_vars.hash_str_vec.get(cmd[2].trim()) {
-                            Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[2], b, l),
-                        }
-                    } else {
-                        match hash_vars.hash_str.get(cmd[2].trim()) {
-                            Some(value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    }
-                }
-                _ => super::errors::args_error(b, l),
-            },
-            "var" => match cmd[3].trim() {
-                "int" => {
-                    if cmd.len() == 5 && cmd[4] == "vec" {
-                        match vars.var_int_vec.get(cmd[2].trim()) {
-                            Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    } else {
-                        match vars.var_int.get(cmd[2].trim()) {
-                            Some(&value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    }
-                }
-                "str" => {
-                    if cmd.len() == 5 && cmd[4] == "vec" {
-                        match vars.var_str_vec.get(cmd[2].trim()) {
-                            Some(value) => println!("{:?}", value),
-                            _ => super::errors::var_error(cmd[2], b, l),
-                        }
-                    } else {
-                        match vars.var_str.get(cmd[2].trim()) {
-                            Some(value) => println!("{}", value),
-                            _ => super::errors::var_error(cmd[2].trim(), b, l),
-                        }
-                    }
-                }
-                _ => super::errors::args_error(b, l),
-            },
-            _ => super::errors::args_error(b, l),
-        }
-    }
-}
+use crate::memory::Memory;
+use crate::types::{Type, TypeName, Vars, Vector};
+use crate::CPU;
 
-pub fn printc(cmd: Vec<&str>, statement: &str, b: &str, l: u32) {
-    if cmd.len() < 3 {
-        super::errors::args_error(b, l);
+use super::errors::ErrorKind;
+
+pub fn print(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut CPU,
+    cmd: Vec<&str>,
+) -> Result<(), ErrorKind> {
+    // print var <var_name> { lx/rv/string/lxstring/var-name }
+    // print hello world
+    if cmd.len() == 1 {
+        println!("{}", memory.get_int_from_stack()?);
+        Ok(())
+    } else if cmd[1] == "var" {
+        match cmd[2] {
+            "lx" => println!("{}", registers.lx),
+            "rv" => println!("{}", registers.rv),
+            "string" => println!("{}", registers.string),
+            "lxstring" => println!("{}", registers.lxstring),
+            _ => {
+                if cmd.len() == 3 {
+                    let _type: Type = vars.get_type(cmd[2].to_string())?;
+                    match _type.name {
+                        TypeName::I32 => println!("{}", memory.yeild_i32(_type.location)),
+                        TypeName::String => println!("{}", memory.yeild_string(_type.location)),
+                        TypeName::Vector(Vector::String) => {
+                            println!("{:?}", memory.yeild_str_vec(_type.location))
+                        }
+                        TypeName::Vector(Vector::Int) => {
+                            println!("{:?}", memory.yeild_int_vec(_type.location))
+                        }
+                    }
+                } else {
+                    let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();
+                    println!("{print_st}");
+                }
+            }
+        }
+        Ok(())
     } else {
-        let prntc_cmd: Vec<&str> = statement.split(">>").collect();
-        println!("{}", prntc_cmd[1].trim());
+        let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();
+        println!("{print_st}");
+        Ok(())
     }
 }
