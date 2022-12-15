@@ -1,8 +1,8 @@
 # The Ram programming language
-A stack-based programming language developed to experiment with my language development skills. It is capable of making some mathematical formulation and logic. Written in the Rust programming language.
+A stack-based programming language developed to experiment with my language development skills. Runs on a emulated virual machine, using custom memory, allocation and garbage collection methods.
 
 ## How to run
-1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v2.7/ram).
+1. Download the [release binary](https://github.com/ujjwal-kr/ram/releases/download/v3.0/ram).
 2. Make it executable using `chmod +x ./ram`
 3. Make a .ram file with the following contents at the same directory as the binary:
 
