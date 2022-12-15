@@ -10,7 +10,6 @@ pub fn stdin(
     cmd: Vec<&str>,
     statement: &str,
 ) -> Result<(), ErrorKind> {
-
     // stdin string = "input something: "
     // stdin lxstring = "kekw "
     // stdin var
@@ -21,7 +20,7 @@ pub fn stdin(
     let mut message: &str = "";
     if statement.contains("=") {
         let exp = statement.split("=").collect::<Vec<&str>>()[1].trim();
-        message = &exp[1..exp.len()-1];
+        message = &exp[1..exp.len() - 1];
     }
     print!("{}", message);
     io::stdout().flush().unwrap();
@@ -38,7 +37,7 @@ pub fn stdin(
                 let heap_addr = u32::from_be_bytes(memory.load(t.location).try_into().unwrap());
                 memory.heap_mod(heap_addr, buffer.as_bytes());
             } else {
-                return Err(ErrorKind::ExpectedStr(cmd[2].to_string()))
+                return Err(ErrorKind::ExpectedStr(cmd[2].to_string()));
             }
         }
     }

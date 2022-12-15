@@ -225,7 +225,7 @@ impl Memory {
             .expect("Illegal heap pointer");
 
         if idx < heap_value.len() / 4 {
-            let str_addr_bytes = &heap_value[idx * 4..idx * 4 +4];
+            let str_addr_bytes = &heap_value[idx * 4..idx * 4 + 4];
             let old_str_addr =
                 u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
             println!("{:?}", str_addr.to_vec());
