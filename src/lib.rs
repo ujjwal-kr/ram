@@ -147,6 +147,9 @@ impl CPU {
             if !self.jmp {
                 self.program_counter += 1;
             }
+            if self.program_counter == instructions.len() as u32 {
+                break;
+            }
         }
     }
 }
