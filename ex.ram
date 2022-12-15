@@ -1,3 +1,4 @@
 main:
-    stdin string
-    print var string
+    ram string = './ex2.ram'
+    stdfs open string = lxstring
+    print var lxstring
