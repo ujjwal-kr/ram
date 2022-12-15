@@ -79,6 +79,8 @@ impl CPU {
                 "split" => ret_val = stdf::string::split(memory, vars, self, cmd, statement),
                 "concat" => ret_val = stdf::string::concat(memory, vars, self, cmd),
                 "copy" => ret_val = stack::copy(memory, vars, self, cmd, statement),
+                "vec" => ret_val = stack::vec(memory, vars, self, cmd, statement),
+                "stdin" => ret_val = stdf::stdin::stdin(memory, vars, self, cmd, statement),
 
                 "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd),
                 "jmp" => ret_val = jump::jmp(self, cmd, label_map.clone()),

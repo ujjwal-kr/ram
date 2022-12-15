@@ -1,6 +1,3 @@
 main:
-    ram string = 'hello '
-    ram lxstring = 'world'
-    concat string lxstring
+    stdin string
     print var string
-    halt
