@@ -204,7 +204,7 @@ impl Memory {
             .expect("Illegal heap pointer");
 
         if idx < heap_value.len() / 4 {
-            heap_value.splice(idx * 4..idx * 4 + 4, value.to_vec()); // needs testing
+            heap_value.splice(idx * 4..idx * 4 + 4, value.to_vec());
         } else {
             return Err(());
         }
@@ -217,7 +217,6 @@ impl Memory {
         idx: usize,
         str_addr: &[u8],
     ) -> Result<(), ()> {
-        // let str_addr = self.malloc(value).to_be_bytes();
         let heap_value = &mut *self
             .heap
             .get_mut(&u32::from_be_bytes(
@@ -226,14 +225,11 @@ impl Memory {
             .expect("Illegal heap pointer");
 
         if idx < heap_value.len() / 4 {
-            let str_addr_bytes = heap_value
-                .clone()
-                .drain(idx * 4..idx * 4 + 4)
-                .collect::<Vec<u8>>(); // needs testing
+            let str_addr_bytes = &heap_value[idx * 4..idx * 4 +4];
             let old_str_addr =
                 u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
             println!("{:?}", str_addr.to_vec());
-            heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec()); // needs testing
+            heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec());
             self.free(old_str_addr);
         } else {
             return Err(());
@@ -265,7 +261,7 @@ impl Memory {
 
         let str_addr_bytes = heap_value
             .drain(heap_value.len() - 4..heap_value.len())
-            .collect::<Vec<u8>>(); // needs testing
+            .collect::<Vec<u8>>();
         let str_addr = u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
         self.free(str_addr);
     }
