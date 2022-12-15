@@ -332,6 +332,7 @@ fn vec_mod_var() {
     let mut registers: CPU = CPU::new();
     let mut vars: Vars = Vars::new();
     vars.set_int("y".to_string(), "5", &mut memory).unwrap();
+    vars.set_int("i".to_string(), "1", &mut memory).unwrap();
     vars.set_int_vec("x".to_string(), "[0, 1]", &mut memory)
         .unwrap();
     let statement = "vec x[i] = y";

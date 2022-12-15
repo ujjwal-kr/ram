@@ -263,7 +263,7 @@ impl Vars {
         }
     }
 
-    pub fn get_vec_str_mod(&mut self, t: Type, memory: &mut Memory, value: &str) -> VecMod {
+    pub fn get_vec_str_mod(&mut self, t: Type, value: &str, memory: &mut Memory) -> VecMod {
         let heap_addr = memory.load(t.location).to_vec();
         let value_bytes = memory.malloc(value.as_bytes()).to_be_bytes();
         VecMod {
