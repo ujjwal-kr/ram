@@ -7,7 +7,6 @@ use crate::funcs::errors::ErrorKind;
 pub struct Memory {
     pub stack: Vec<u8>,
     pub heap: HashMap<u32, Vec<u8>>,
-    pub ret: Vec<u8>,
 }
 
 #[derive(Clone, Debug)]
@@ -21,7 +20,6 @@ impl Memory {
         Self {
             stack: vec![],
             heap: HashMap::from([(0, vec![0, 0, 0, 0])]),
-            ret: vec![],
         }
     }
 
