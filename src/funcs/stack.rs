@@ -293,7 +293,7 @@ pub fn vec(
             }
         }
         "len" => {
-            let var = vars.get_type(cmd[1].to_string()).unwrap();
+            let var = vars.get_type(cmd[1].to_string())?;
             if var.name == TypeName::Vector(Vector::Int) {
                 let len = vars.vec_int_len(var.location, memory);
                 memory.set_int_to_stack(len);
@@ -302,6 +302,18 @@ pub fn vec(
                 memory.set_int_to_stack(len);
             } else {
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
+            }
+        },
+        "pop" => {
+            let var = vars.get_type(cmd[1].to_string())?;
+            if var.name == TypeName::Vector(Vector::String) {
+                let heap_data = vars.get_vec_str_mod(var, "", memory);
+                memory.pop_vec_str(&heap_data.heap_addr);
+            } else if var.name == TypeName::Vector(Vector::Int) {
+                let heap_data = vars.get_vec_int_mod(var, 0, memory);
+                memory.pop_vec_int(&heap_data.heap_addr);
+            } else {
+                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()))
             }
         }
         _ => {
