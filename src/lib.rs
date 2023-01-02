@@ -18,7 +18,6 @@ use std::process;
 pub struct CPU {
     pub lx: i32,
     pub rv: i32,
-    pub jmp: bool,
     pub string: String,
     pub lxstring: String,
     pub program_counter: u32,
@@ -30,7 +29,6 @@ impl CPU {
         Self {
             lx: 0,
             rv: 0,
-            jmp: false,
             string: String::new(),
             lxstring: String::new(),
             program_counter: 0u32,
@@ -49,7 +47,6 @@ impl CPU {
             let ret_val: Result<(), errors::ErrorKind>;
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
-            self.jmp = false;
             match cmd[0] {
                 "dbg" => {
                     println!("Stack: ");
@@ -145,9 +142,7 @@ impl CPU {
                     process::exit(1)
                 }
             }
-            if !self.jmp {
-                self.program_counter += 1;
-            }
+            self.program_counter += 1;
             if self.program_counter == instructions.len() as u32 {
                 break;
             }

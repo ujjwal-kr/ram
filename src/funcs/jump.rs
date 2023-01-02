@@ -22,8 +22,7 @@ pub fn jmp(
     let label = cmd[1].trim();
     let dest_counter = get_dest_counter(label_map, label)?;
     cpu.callstack.push(cpu.program_counter + 1);
-    cpu.program_counter = dest_counter as u32;
-    cpu.jmp = true;
+    cpu.program_counter = dest_counter as u32 - 1;
     Ok(())
 }
 
@@ -40,8 +39,7 @@ pub fn je(
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label)?;
         cpu.callstack.push(cpu.program_counter + 1);
-        cpu.program_counter = dest_counter as u32;
-        cpu.jmp = true;
+        cpu.program_counter = dest_counter as u32 - 1;
     }
     let sub = memory.stack.len().saturating_sub(4);
     memory.stack.truncate(sub);
@@ -61,8 +59,7 @@ pub fn jne(
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label)?;
         cpu.callstack.push(cpu.program_counter + 1);
-        cpu.program_counter = dest_counter as u32;
-        cpu.jmp = true;
+        cpu.program_counter = dest_counter as u32 - 1;
     }
     let sub = memory.stack.len().saturating_sub(4);
     memory.stack.truncate(sub);
@@ -82,8 +79,7 @@ pub fn jgr(
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label)?;
         cpu.callstack.push(cpu.program_counter + 1);
-        cpu.program_counter = dest_counter as u32;
-        cpu.jmp = true;
+        cpu.program_counter = dest_counter as u32 - 1;
     }
     let sub = memory.stack.len().saturating_sub(4);
     memory.stack.truncate(sub);
@@ -103,8 +99,7 @@ pub fn jsm(
         let label = cmd[1].trim();
         let dest_counter = get_dest_counter(label_map, label)?;
         cpu.callstack.push(cpu.program_counter + 1);
-        cpu.program_counter = dest_counter as u32;
-        cpu.jmp = true;
+        cpu.program_counter = dest_counter as u32 - 1;
     }
     let sub = memory.stack.len().saturating_sub(4);
     memory.stack.truncate(sub);
@@ -115,8 +110,7 @@ pub fn ret(cpu: &mut CPU) -> Result<(), ErrorKind> {
     if cpu.callstack.len() < 1 {
         return Err(ErrorKind::EmptyCallstack);
     }
-    cpu.jmp = true;
-    cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1];
+    cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1] -1 ;
     cpu.callstack.pop();
     Ok(())
 }
