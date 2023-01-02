@@ -110,7 +110,7 @@ pub fn ret(cpu: &mut CPU) -> Result<(), ErrorKind> {
     if cpu.callstack.len() < 1 {
         return Err(ErrorKind::EmptyCallstack);
     }
-    cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1] -1 ;
+    cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1] - 1;
     cpu.callstack.pop();
     Ok(())
 }

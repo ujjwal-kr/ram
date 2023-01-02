@@ -43,14 +43,14 @@ pub fn stdfs(
         "string" => registers.string = contents,
         "lxstring" => registers.lxstring = contents,
         _ => {
-            let t = vars.get_type(cmd[cmd.len()-1].to_string())?;
+            let t = vars.get_type(cmd[cmd.len() - 1].to_string())?;
             if t.name == TypeName::String {
                 let heap_addr = u32::from_be_bytes(memory.load(t.location).try_into().unwrap());
                 memory.heap_mod(heap_addr, contents.as_bytes())
             } else {
-                return Err(ErrorKind::ExpectedStr(cmd[cmd.len() -1].to_string()));
+                return Err(ErrorKind::ExpectedStr(cmd[cmd.len() - 1].to_string()));
             }
-        },
+        }
     }
 
     Ok(())

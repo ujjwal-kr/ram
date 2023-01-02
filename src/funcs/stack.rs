@@ -303,7 +303,7 @@ pub fn vec(
             } else {
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
             }
-        },
+        }
         "pop" => {
             let var = vars.get_type(cmd[1].to_string())?;
             if var.name == TypeName::Vector(Vector::String) {
@@ -313,7 +313,7 @@ pub fn vec(
                 let heap_data = vars.get_vec_int_mod(var, 0, memory);
                 memory.pop_vec_int(&heap_data.heap_addr);
             } else {
-                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()))
+                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
             }
         }
         _ => {
