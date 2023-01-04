@@ -7,7 +7,7 @@ use std::collections::HashMap;
 fn get_dest_counter(lmap: HashMap<String, usize>, label: &str) -> Result<usize, ErrorKind> {
     match lmap.get(label) {
         Some(&c) => Ok(c),
-        _ => return Err(ErrorKind::LabelNotFound(label.to_string())),
+        _ => Err(ErrorKind::LabelNotFound(label.to_string())),
     }
 }
 
@@ -107,7 +107,7 @@ pub fn jsm(
 }
 
 pub fn ret(cpu: &mut CPU) -> Result<(), ErrorKind> {
-    if cpu.callstack.len() < 1 {
+    if cpu.callstack.is_empty() {
         return Err(ErrorKind::EmptyCallstack);
     }
     cpu.program_counter = cpu.callstack[cpu.callstack.len() - 1] - 1;

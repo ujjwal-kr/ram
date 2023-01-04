@@ -18,8 +18,8 @@ pub fn stdin(
         return Err(ErrorKind::ArgErr);
     }
     let mut message: &str = "";
-    if statement.contains("=") {
-        let exp = statement.split("=").collect::<Vec<&str>>()[1].trim();
+    if statement.contains('=') {
+        let exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
         message = &exp[1..exp.len() - 1];
     }
     print!("{}", message);

@@ -245,10 +245,10 @@ pub fn cmp(
                         }
                         Ok(())
                     } else {
-                        return Err(ErrorKind::Casting {
+                        Err(ErrorKind::Casting {
                             src: cmd[1].to_string(),
                             dest: cmd[2].to_string(),
-                        });
+                        })
                     }
                 }
             },

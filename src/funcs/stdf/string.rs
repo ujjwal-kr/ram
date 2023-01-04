@@ -62,9 +62,9 @@ pub fn join(
     }
     let assign_to = cmd[cmd.len() - 1].to_string();
     let vec_str = cmd[1].to_string();
-    let del_exp = statement.split("=").collect::<Vec<&str>>()[0]
+    let del_exp = statement.split('=').collect::<Vec<&str>>()[0]
         .trim()
-        .split(">")
+        .split('>')
         .collect::<Vec<&str>>()[1]
         .trim();
     let delimiter: &str = &del_exp[1..del_exp.len() - 1];

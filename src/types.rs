@@ -34,7 +34,7 @@ pub struct CastStack {
 
 impl Vars {
     pub fn new() -> Self {
-        Vars { 0: HashMap::new() }
+        Vars(HashMap::new())
     }
 
     pub fn get_type(&mut self, name: String) -> Result<Type, ErrorKind> {
@@ -123,7 +123,7 @@ impl Vars {
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
             let item = item.trim();
-            let current_heap_addr = memory.malloc(&item[1..item.len() - 1].as_bytes());
+            let current_heap_addr = memory.malloc(item[1..item.len() - 1].as_bytes());
             let addr_bytes = current_heap_addr.to_be_bytes();
             for byte in addr_bytes {
                 heap_addrs_bytes.push(byte)
@@ -194,7 +194,7 @@ impl Vars {
             let src_heap_data = memory.heap_load(src_heap_addr);
 
             let dest_addr: [u8; 4] = memory
-                .load(destination.location.clone())
+                .load(destination.location)
                 .try_into()
                 .expect("Error converting location to addr");
             memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data);
@@ -223,7 +223,7 @@ impl Vars {
         if idx >= str_vec.len() {
             return Err(ErrorKind::VecLen(name));
         }
-        return Ok(str_vec[idx].clone());
+        Ok(str_vec[idx].clone())
     }
 
     pub fn vec_int_item(
@@ -237,7 +237,7 @@ impl Vars {
         if idx >= int_vec.len() {
             return Err(ErrorKind::VecLen(name));
         }
-        return Ok(int_vec[idx]);
+        Ok(int_vec[idx])
     }
 
     // return length

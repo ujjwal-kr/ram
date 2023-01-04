@@ -26,17 +26,17 @@ pub fn parse_lines(p_lines: Vec<&str>) -> LabelMap {
 
         // read the file
 
-        let mut file = fs::File::open(path).expect(format!("Error opening '{}'", path).trim());
+        let mut file = fs::File::open(path).unwrap_or_else(|_| { panic!("{}", format!("Error opening '{}'", path).trim().to_string()) });
         let mut contents = String::new();
 
         file.read_to_string(&mut contents)
-            .expect(format!("Error reading '{}'", path).trim());
+            .unwrap_or_else(|_| { panic!("{}", format!("Error reading '{}'", path).trim().to_string()) });
 
         final_contents += &contents;
         final_contents += "\n";
     }
 
-    let mut final_import_vec: Vec<&str> = final_contents.split("\n").collect();
+    let mut final_import_vec: Vec<&str> = final_contents.split('\n').collect();
     _final_lines.append(&mut final_import_vec);
     let program: LabelMap = populate_labels(_final_lines);
     program
@@ -47,10 +47,10 @@ pub fn has_includes(p_lines: Vec<&str>) -> Vec<&str> {
     let mut has_included: Vec<&str> = vec![];
     for mut line in p_lines {
         line = line.trim();
-        if line != "" {
+        if !line.is_empty() {
             let cmd = line.split_whitespace().collect::<Vec<&str>>();
             if cmd[0] == "include" {
-                let includes = &cmd[1].split("\"").collect::<Vec<&str>>()[1];
+                let includes = &cmd[1].split('\"').collect::<Vec<&str>>()[1];
                 has_included.push(includes);
             }
         }
@@ -68,25 +68,21 @@ pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
     for mut line in p_lines {
         let mut incr: bool = true;
         line = line.trim();
-        if line != "" && line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
+        if !line.is_empty() && line.split_whitespace().collect::<Vec<&str>>()[0] == "include" {
             incr = false;
             line = "";
-        } else if line.len() > 1 {
-            if &line[..2] == "//" {
-                incr = false;
-                line = "";
-            }
+        } else if line.len() > 1 && &line[..2] == "//" {
+            incr = false;
+            line = "";
         }
         if exp.is_match(line) {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
             }
             map.insert(line.to_string(), i as usize);
-        } else {
-            if line != "" && incr {
-                i = i + 1;
-                instructions.push(line.to_string())
-            }
+        } else if !line.is_empty() && incr {
+            i += 1;
+            instructions.push(line.to_string())
         }
     }
 

@@ -171,8 +171,8 @@ pub fn copy(
         _ => {
             match src {
                 "lx" => {
-                    let t: Type;
-                    t = vars.get_type(dest.to_string())?;
+                    
+                    let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.lx.to_be_bytes())
                     } else {
@@ -180,8 +180,8 @@ pub fn copy(
                     }
                 }
                 "rv" => {
-                    let t: Type;
-                    t = vars.get_type(dest.to_string())?;
+                    
+                    let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.rv.to_be_bytes())
                     } else {
@@ -189,8 +189,8 @@ pub fn copy(
                     }
                 }
                 "string" => {
-                    let t: Type;
-                    t = vars.get_type(dest.to_string())?;
+                    
+                    let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc
                         let addr: [u8; 4] = memory
@@ -205,8 +205,8 @@ pub fn copy(
                     }
                 }
                 "lxstring" => {
-                    let t: Type;
-                    t = vars.get_type(dest.to_string())?;
+                    
+                    let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc
                         let addr: [u8; 4] = memory
@@ -259,7 +259,7 @@ pub fn vec(
                     _ => {
                         let var2 = vars.get_type(value.to_string())?;
                         if var2.name == TypeName::I32 {
-                            let var2_int = memory.yeild_i32(var2.clone().location);
+                            let var2_int = memory.yeild_i32(var2.location);
                             let vec_mod = vars.get_vec_int_mod(var, var2_int, memory);
                             memory.vec_int_push(&vec_mod.heap_addr, vec_mod.value_bytes);
                         } else {
@@ -328,11 +328,11 @@ pub fn vec(
 
             if bracket_i > equal_i {
                 let to_assign = cmd[1];
-                let var_exp = statement.split("=").collect::<Vec<&str>>()[1].trim();
-                let var_str = var_exp.split("[").collect::<Vec<&str>>()[0].trim();
-                let idx_str = var_exp.split("[").collect::<Vec<&str>>()[1]
+                let var_exp = statement.split('=').collect::<Vec<&str>>()[1].trim();
+                let var_str = var_exp.split('[').collect::<Vec<&str>>()[0].trim();
+                let idx_str = var_exp.split('[').collect::<Vec<&str>>()[1]
                     .trim()
-                    .split("]")
+                    .split(']')
                     .collect::<Vec<&str>>()[0]
                     .trim();
                 let index: usize;
@@ -412,9 +412,9 @@ pub fn vec(
                     return Err(ErrorKind::ExpectedVec(var_str.to_string()));
                 }
             } else {
-                let var_exp = statement.split("=").collect::<Vec<&str>>()[0].trim();
-                let var_str_vec = var_exp.split("[").collect::<Vec<&str>>();
-                let idx_str = var_str_vec[1].split("]").collect::<Vec<&str>>()[0].trim();
+                let var_exp = statement.split('=').collect::<Vec<&str>>()[0].trim();
+                let var_str_vec = var_exp.split('[').collect::<Vec<&str>>();
+                let idx_str = var_str_vec[1].split(']').collect::<Vec<&str>>()[0].trim();
                 let var_str = var_str_vec[0]
                     .split_ascii_whitespace()
                     .collect::<Vec<&str>>()[1]
@@ -439,7 +439,7 @@ pub fn vec(
                     }
                 }
                 let var = vars.get_type(var_str.to_string())?;
-                let assign_to = statement.split("=").collect::<Vec<&str>>()[1].trim();
+                let assign_to = statement.split('=').collect::<Vec<&str>>()[1].trim();
                 if var.name == TypeName::Vector(Vector::Int) {
                     match assign_to {
                         "lx" => {

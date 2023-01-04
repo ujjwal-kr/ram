@@ -34,8 +34,8 @@ impl Memory {
     }
 
     pub fn load(&mut self, location: Location) -> &[u8] {
-        let slice = &self.stack[location.start..location.start + location.size];
-        slice
+        
+        &self.stack[location.start..location.start + location.size] as _
     }
 
     pub fn store(&mut self, val: &[u8]) -> Location {

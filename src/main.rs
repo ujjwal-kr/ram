@@ -24,7 +24,7 @@ fn main() {
     file.read_to_string(&mut contents)
         .expect("Error reading file");
 
-    let p_lines: Vec<&str> = contents.split("\n").collect();
+    let p_lines: Vec<&str> = contents.split('\n').collect();
     let program: LabelMap = parser::parse_lines(p_lines);
     let instructions = program.instructions;
     let label_map = program.map;

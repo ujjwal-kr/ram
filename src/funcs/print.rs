@@ -35,14 +35,14 @@ pub fn print(
                         }
                     }
                 } else {
-                    let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();
+                    let print_st = &cmd[1..cmd.len()].to_vec().join(" ");
                     println!("{print_st}");
                 }
             }
         }
         Ok(())
     } else {
-        let print_st = &cmd[1..cmd.len()].to_vec().join(" ").to_string();
+        let print_st = &cmd[1..cmd.len()].to_vec().join(" ");
         println!("{print_st}");
         Ok(())
     }
