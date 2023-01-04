@@ -41,7 +41,7 @@ impl Memory {
     pub fn store(&mut self, val: &[u8]) -> Location {
         let address = self.stack.len();
         for byte in val {
-            self.stack.push(byte.clone());
+            self.stack.push(*byte);
         }
 
         Location {

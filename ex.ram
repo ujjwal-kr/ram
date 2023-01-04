@@ -1,4 +1,12 @@
 main:
-    ram string = './ex2.ram'
-    stdfs open string = lxstring
-    print var lxstring
+    print main
+    ram i :int = 5
+    print var i
+    jmp test:
+    print hello from main again
+    halt
+
+test:
+    print hello from test
+    ret
+
