@@ -27,7 +27,7 @@ halt:
 
 # Documentation
 
-The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation-v3.0). You can read about the detailed working of the project in [my blog](https://crackhead-systems.vercel.app/tags/ram)
+The documentation for using the language is available in the [wiki](https://github.com/ujjwal-kr/ram/wiki/Documentation-v3.0). You can read about the detailed working of the project in [my blog](https://crackhead-systems.vercel.app/tags/ram).
 
 ## How to test
 Run `cargo test` to run all the tests. This is the output of the test runner:
