@@ -1,12 +1,3 @@
 main:
-    print main
-    ram i :int = 5
-    print var i
-    jmp test:
-    print hello from main again
-    halt
-
-test:
-    print hello from test
-    ret
-
+    ram x :vec :str = ['adddddddddddd', 'bddd', 'cddd']
+    dbg

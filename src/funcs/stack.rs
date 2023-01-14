@@ -171,7 +171,6 @@ pub fn copy(
         _ => {
             match src {
                 "lx" => {
-                    
                     let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.lx.to_be_bytes())
@@ -180,7 +179,6 @@ pub fn copy(
                     }
                 }
                 "rv" => {
-                    
                     let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::I32 {
                         memory.stack_mod(t.location, &registers.rv.to_be_bytes())
@@ -189,7 +187,6 @@ pub fn copy(
                     }
                 }
                 "string" => {
-                    
                     let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc
@@ -205,7 +202,6 @@ pub fn copy(
                     }
                 }
                 "lxstring" => {
-                    
                     let t: Type = vars.get_type(dest.to_string())?;
                     if t.name == TypeName::String {
                         // gc

@@ -26,11 +26,14 @@ pub fn parse_lines(p_lines: Vec<&str>) -> LabelMap {
 
         // read the file
 
-        let mut file = fs::File::open(path).unwrap_or_else(|_| { panic!("{}", format!("Error opening '{}'", path).trim().to_string()) });
+        let mut file = fs::File::open(path).unwrap_or_else(|_| {
+            panic!("{}", format!("Error opening '{}'", path).trim().to_string())
+        });
         let mut contents = String::new();
 
-        file.read_to_string(&mut contents)
-            .unwrap_or_else(|_| { panic!("{}", format!("Error reading '{}'", path).trim().to_string()) });
+        file.read_to_string(&mut contents).unwrap_or_else(|_| {
+            panic!("{}", format!("Error reading '{}'", path).trim().to_string())
+        });
 
         final_contents += &contents;
         final_contents += "\n";

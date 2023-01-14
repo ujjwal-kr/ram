@@ -36,7 +36,7 @@ pub fn get_label(pc: u32, map: HashMap<String, usize>) -> String {
         key_vec.push(k);
     }
     value_point_vec.sort();
-    
+
     let mut final_label = String::from("");
     let mut point_stack: Vec<usize> = vec![];
     for point in value_point_vec {

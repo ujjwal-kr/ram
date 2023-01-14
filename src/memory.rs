@@ -34,7 +34,6 @@ impl Memory {
     }
 
     pub fn load(&mut self, location: Location) -> &[u8] {
-        
         &self.stack[location.start..location.start + location.size] as _
     }
 
