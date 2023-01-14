@@ -36,17 +36,6 @@ impl CPU {
         }
     }
 
-    pub fn set_register(&mut self, name: &str, value: &str) -> Result<(), ErrorKind> {
-        match name {
-            "lx" => (),
-            "rv" => (),
-            "string" => (),
-            "lxstring" =>(),
-            _ => ()
-        }
-        todo!();
-    }
-
     pub fn execute(
         &mut self,
         instructions: Vec<String>,
