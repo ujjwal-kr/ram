@@ -5,7 +5,7 @@ use std::{fs, path::Path, process};
 
 #[derive(Debug)]
 pub struct LabelMap {
-    pub map: HashMap<String, usize>,
+    pub map: HashMap<String, isize>,
     pub instructions: Vec<String>,
 }
 
@@ -63,7 +63,7 @@ pub fn has_includes(p_lines: Vec<&str>) -> Vec<&str> {
 }
 
 pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
-    let mut map: HashMap<String, usize> = HashMap::new();
+    let mut map: HashMap<String, isize> = HashMap::new();
     let mut instructions: Vec<String> = vec![];
     let exp = Regex::new(r"^[a-zA-Z0-9_]+:$").unwrap();
     let mut i = 0u32;
@@ -82,7 +82,7 @@ pub fn populate_labels(p_lines: Vec<&str>) -> LabelMap {
             if i == 0 && line != "main:" {
                 panic!("No main label at the beginning of the file.");
             }
-            map.insert(line.to_string(), i as usize);
+            map.insert(line.to_string(), i as isize);
         } else if !line.is_empty() && incr {
             i += 1;
             instructions.push(line.to_string())
