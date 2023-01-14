@@ -20,8 +20,8 @@ pub struct CPU {
     pub rv: i32,
     pub string: String,
     pub lxstring: String,
-    pub program_counter: u32,
-    pub callstack: Vec<u32>,
+    pub program_counter: i32,
+    pub callstack: Vec<i32>,
 }
 
 impl CPU {
@@ -31,7 +31,7 @@ impl CPU {
             rv: 0,
             string: String::new(),
             lxstring: String::new(),
-            program_counter: 0u32,
+            program_counter: 0i32,
             callstack: vec![],
         }
     }
@@ -39,7 +39,7 @@ impl CPU {
     pub fn execute(
         &mut self,
         instructions: Vec<String>,
-        label_map: HashMap<String, usize>,
+        label_map: HashMap<String, isize>,
         memory: &mut Memory,
         vars: &mut Vars,
     ) {
@@ -143,7 +143,7 @@ impl CPU {
                 }
             }
             self.program_counter += 1;
-            if self.program_counter == instructions.len() as u32 {
+            if self.program_counter == instructions.len() as i32 {
                 break;
             }
         }
