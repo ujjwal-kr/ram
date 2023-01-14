@@ -83,9 +83,9 @@ impl CPU {
                 "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd),
                 "jmp" => ret_val = jump::jmp(self, cmd, label_map.clone()),
                 "je" => ret_val = jump::je(self, cmd, label_map.clone(), memory),
-                "jgr" => ret_val = jump::je(self, cmd, label_map.clone(), memory),
-                "jsm" => ret_val = jump::je(self, cmd, label_map.clone(), memory),
-                "jne" => ret_val = jump::je(self, cmd, label_map.clone(), memory),
+                "jgr" => ret_val = jump::jgr(self, cmd, label_map.clone(), memory),
+                "jsm" => ret_val = jump::jsm(self, cmd, label_map.clone(), memory),
+                "jne" => ret_val = jump::jne(self, cmd, label_map.clone(), memory),
                 "ret" => ret_val = jump::ret(self),
                 "halt" => process::exit(0),
                 _ => {

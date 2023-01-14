@@ -53,7 +53,7 @@ impl Memory {
         if data.len() != location.size {
             panic!("Illegal memory modification");
         }
-        self.stack.splice(location.start.., data.iter().cloned());
+        self.stack.splice(location.start..location.start+location.size, data.iter().cloned());
     }
 
     // heap operations
