@@ -1,17 +1,21 @@
 main:
-    printc >> Coin Flip
-    rand >> 0,1
-    round
+    print Coin Flip
+    rand [0,2]
+    ram lx prev
+    ram lx
     ram 1
     cmp
     je heads:
     pop
+    ram lx
     ram 0
     cmp
     je tails:
 
 heads:
-    printc >> Heads
+    print Heads
+    halt
 
 tails:
-    printc >> Tails
+    print Tails
+    halt
