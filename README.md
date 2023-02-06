@@ -36,4 +36,4 @@ Run `cargo test` to run all the tests. This is the output of the test runner:
 
 # Contribution
 
-Im not accepting any breaking changes to the specs, as the syntax of the language is still in development. But suggestions can be made using the issue tracker. All other types of contributions are welcome. Make sure to check the `dev` branch, PRs to the master branch wont be accepted.
+Im not accepting any breaking changes to the specs, as the syntax of the language is still in development. But suggestions can be made using the issue tracker. All other types of contributions are welcome. Make sure to check the `dev` branch, PRs to the master branch won't be accepted.
