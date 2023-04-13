@@ -3,28 +3,105 @@ main:
     ram i :int = 0
     ram lxstring = "./examples/interpreter/test.txt"
     stdfs open lxstring = string
-    ram cmd :vec :str = []
-    ram cmdlen :int = 0 
-    split string > "\n" = cmd
-    vec cmd len
+    ram program :vec :str = []
+    ram plen :int = 0 
+    split string > "\n" = program
+    vec program len
     ram lx prev
-    copy cmdlen = lx
+    copy plen = lx
     jmp main_loop:
     halt
 
 main_loop:
-    ram current :str = ""
-    vec current = cmd[i]
-    print var current
+    ram statement :str = ""
+    vec statement = program[i]
 
     ram lx 1
     add i lx
     ram lx prev
     copy i = lx
     
-    ram lx
-    copy rv = cmdlen
-    ram rv
-    cmp
+    jmp match:
+
+    cmp plen i
     jne main_loop:
+    ret
+
+match:
+    ram matchstr :str = ""
+    ram cmd :vec :str = [] 
+    split statement > " " = cmd
+    vec matchstr = cmd[0]
+
+    ram string = "push"
+    cmp string matchstr
+    je push:
+
+    ram string = "print"
+    cmp string matchstr
+    je print:
+
+    ram string = "add"
+    cmp string matchstr
+    je add:
+
+    ram string = "sub"
+    cmp string matchstr
+    je sub:
+
+    ram string = "mul"
+    cmp string matchstr
+    je mul:
+
+    ram string = "div"
+    cmp string matchstr
+    je div:
+
+
+    ret
+
+push:
+    ram numstr :str = ""
+    vec numstr = cmd[1]
+    parse numstr :int
+    vec stack push lx 
+    ret
+
+print:
+    vec stack len
+    ram 1
+    sub
+    ram lx prev
+    ram num :int = 0
+    vec num = stack[lx]
+    print var num
+    ret
+
+get_last_two:
+    ram n1 :int = 0
+    ram n2 :int = 0
+    vec stack len
+    ram 1
+    sub
+    ram lx prev
+    vec n1 = stack[lx]
+    vec stack len
+    ram 2
+    sub
+    ram lx prev
+    vec n2 = stack[lx]
+    ret
+
+add:
+    jmp get_last_two:
+    add n1 n2
+    ram lx prev
+    vec stack push lx
+    ret
+
+sub:
+    jmp get_last_two:
+    sub n2 n1
+    ram lx prev
+    vec stack push lx
     ret
