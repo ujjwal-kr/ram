@@ -52,8 +52,8 @@ pub fn split(
 }
 
 fn append_escapes(del: &str) -> String {
-   let mut x = del.replacen(r"\n", "\n", del.len());
-    x = x.replacen(r"\r", "\r", del.len()); 
+    let mut x = del.replacen(r"\n", "\n", del.len());
+    x = x.replacen(r"\r", "\r", del.len());
     x = x.replacen(r"\t", "\t", del.len());
     x
 }

@@ -47,7 +47,7 @@ impl CPU {
             let ret_val: Result<(), errors::ErrorKind>;
             let statement = instructions[self.program_counter as usize].trim();
             let cmd: Vec<&str> = statement.split_whitespace().collect();
-            match cmd[0] {
+            ret_val = match cmd[0] {
                 "dbg" => {
                     println!("Stack: ");
                     for i in memory.stack.chunks(8) {
@@ -55,44 +55,44 @@ impl CPU {
                     }
                     println!("{:#?} \n {:#?} \n HEAP: {:#?} \n", vars, self, memory.heap);
                     println!("{:?}", instructions);
-                    ret_val = Ok(());
+                    Ok(())
                 }
-                "print" => ret_val = print::print(memory, vars, self, cmd),
-                "ram" => ret_val = stack::ram(memory, vars, self, cmd, statement),
-                "add" => ret_val = operations::add::add(memory, vars, self, cmd),
-                "div" => ret_val = operations::div::div(memory, vars, self, cmd),
-                "sub" => ret_val = operations::sub::sub(memory, vars, self, cmd),
-                "mul" => ret_val = operations::mul::mul(memory, vars, self, cmd),
+                "print" => print::print(memory, vars, self, cmd),
+                "ram" => stack::ram(memory, vars, self, cmd, statement),
+                "add" => operations::add::add(memory, vars, self, cmd),
+                "div" => operations::div::div(memory, vars, self, cmd),
+                "sub" => operations::sub::sub(memory, vars, self, cmd),
+                "mul" => operations::mul::mul(memory, vars, self, cmd),
                 "reset" => {
                     memory.reset_stack();
-                    ret_val = Ok(());
+                    Ok(())
                 }
                 "pop" => {
                     memory.pop_stack();
-                    ret_val = Ok(());
+                    Ok(())
                 }
-                "parse" => ret_val = stdf::parse::parse(memory, vars, self, cmd),
-                "rand" => ret_val = stdf::rand::rand(memory, self, cmd, statement),
-                "split" => ret_val = stdf::string::split(memory, vars, self, cmd, statement),
-                "concat" => ret_val = stdf::string::concat(memory, vars, self, cmd),
-                "copy" => ret_val = stack::copy(memory, vars, self, cmd, statement),
-                "vec" => ret_val = stack::vec(memory, vars, self, cmd, statement),
-                "stdin" => ret_val = stdf::stdin::stdin(memory, vars, self, cmd, statement),
-                "stdfs" => ret_val = stdf::stdfs::stdfs(memory, vars, self, cmd),
+                "parse" => stdf::parse::parse(memory, vars, self, cmd),
+                "rand" => stdf::rand::rand(memory, self, cmd, statement),
+                "split" => stdf::string::split(memory, vars, self, cmd, statement),
+                "concat" => stdf::string::concat(memory, vars, self, cmd),
+                "copy" => stack::copy(memory, vars, self, cmd, statement),
+                "vec" => stack::vec(memory, vars, self, cmd, statement),
+                "stdin" => stdf::stdin::stdin(memory, vars, self, cmd, statement),
+                "stdfs" => stdf::stdfs::stdfs(memory, vars, self, cmd),
 
-                "cmp" => ret_val = operations::cmp::cmp(memory, vars, self, cmd),
-                "jmp" => ret_val = jump::jmp(self, cmd, label_map.clone()),
-                "je" => ret_val = jump::je(self, cmd, label_map.clone(), memory),
-                "jgr" => ret_val = jump::jgr(self, cmd, label_map.clone(), memory),
-                "jsm" => ret_val = jump::jsm(self, cmd, label_map.clone(), memory),
-                "jne" => ret_val = jump::jne(self, cmd, label_map.clone(), memory),
-                "ret" => ret_val = jump::ret(self),
+                "cmp" => operations::cmp::cmp(memory, vars, self, cmd),
+                "jmp" => jump::jmp(self, cmd, label_map.clone()),
+                "je" => jump::je(self, cmd, label_map.clone(), memory),
+                "jgr" => jump::jgr(self, cmd, label_map.clone(), memory),
+                "jsm" => jump::jsm(self, cmd, label_map.clone(), memory),
+                "jne" => jump::jne(self, cmd, label_map.clone(), memory),
+                "ret" => jump::ret(self),
                 "halt" => process::exit(0),
                 _ => {
                     println!("Cant recognize statement: {}", statement);
                     process::exit(1)
                 }
-            }
+            };
 
             match ret_val {
                 Ok(()) => (),
