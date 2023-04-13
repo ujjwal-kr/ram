@@ -19,8 +19,9 @@ pub fn split(
     }
     let del_str = statement.split('>').collect::<Vec<&str>>()[1];
     let final_str = del_str.split('=').collect::<Vec<&str>>()[0].trim();
-    let delimiter = &final_str[1..final_str.len() - 1];
-
+    let mut delimiter = &final_str[1..final_str.len() - 1];
+    let binding = append_escapes(&delimiter);
+    delimiter = binding.as_str();
     match cmd[1] {
         "string" => vars.set_raw_str_vec(
             var_str.to_string(),
@@ -48,6 +49,13 @@ pub fn split(
         }
     }
     Ok(())
+}
+
+fn append_escapes(del: &str) -> String {
+   let mut x = del.replacen(r"\n", "\n", del.len());
+    x = x.replacen(r"\r", "\r", del.len()); 
+    x = x.replacen(r"\t", "\t", del.len());
+    x
 }
 
 pub fn join(
