@@ -57,6 +57,9 @@ match:
     cmp string matchstr
     je div:
 
+    ram string = "pop"
+    cmp string matchstr
+    je pop:
 
     ret
 
@@ -66,6 +69,9 @@ push:
     parse numstr :int
     vec stack push lx 
     ret
+
+pop:
+    vec stack pop
 
 print:
     vec stack len
