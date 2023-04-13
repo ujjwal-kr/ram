@@ -1,0 +1,30 @@
+main:
+    ram stack :vec :int = []
+    ram i :int = 0
+    ram lxstring = "./examples/interpreter/test.txt"
+    stdfs open lxstring = string
+    ram cmd :vec :str = []
+    ram cmdlen :int = 0 
+    split string > "\n" = cmd
+    vec cmd len
+    ram lx prev
+    copy cmdlen = lx
+    jmp main_loop:
+    halt
+
+main_loop:
+    ram current :str = ""
+    vec current = cmd[i]
+    print var current
+
+    ram lx 1
+    add i lx
+    ram lx prev
+    copy i = lx
+    
+    ram lx
+    copy rv = cmdlen
+    ram rv
+    cmp
+    jne main_loop:
+    ret
