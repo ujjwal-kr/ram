@@ -61,6 +61,10 @@ match:
     cmp string matchstr
     je pop:
 
+    ram string = "cmp"
+    cmp string matchstr
+    je cmp:
+
     ret
 
 push:
@@ -110,5 +114,35 @@ sub:
     jmp get_last_two:
     sub n2 n1
     ram lx prev
+    vec stack push lx
+    ret
+
+cmp:
+    jmp get_last_two:
+    
+    cmp n2 n1
+    jgr cmp_gr:
+    
+    cmp n2 n1
+    je cmp_je:
+
+    cmp n2 n1
+    jsm cmp_sm:
+
+    ret
+
+cmp_gr:
+    ram lx 1
+    vec stack push lx
+    ret
+
+cmp_je:
+    ram lx 0
+    vec stack push lx
+    ret
+
+cmp_sm:
+    print smol
+    ram lx -1
     vec stack push lx
     ret
