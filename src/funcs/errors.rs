@@ -14,6 +14,7 @@ pub enum ErrorKind {
     EmptyCallstack,
     LabelNotFound(String),
     VecLen(String),
+    MapValueNotFound,
 }
 
 pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {

@@ -9,7 +9,7 @@ pub struct Memory {
     pub heap: HashMap<u32, Vec<u8>>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct Location {
     pub start: usize,
     pub size: usize,

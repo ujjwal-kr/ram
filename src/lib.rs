@@ -138,6 +138,7 @@ impl CPU {
                                 name, label, statement
                             )
                         }
+                        _ => todo!()
                     }
                     process::exit(1)
                 }

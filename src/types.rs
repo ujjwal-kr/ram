@@ -7,7 +7,7 @@ use std::collections::HashMap;
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Type {
     pub name: TypeName,
     pub location: Location,
@@ -18,13 +18,20 @@ pub enum TypeName {
     I32,
     String,
     Vector(Vector),
+    ButterFly(ButterFly),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ButterFly {
+    keys: Vec<Box<Type>>,   // left wing
+    values: Vec<Box<Type>>, // right wing
+    pub length: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Vector {
     String,
     Int,
-    // Vector(Box<Vector>),
 }
 
 pub struct CastStack {
@@ -282,4 +289,104 @@ impl Vars {
 pub struct VecMod {
     pub value_bytes: [u8; 4],
     pub heap_addr: Vec<u8>,
+}
+
+impl ButterFly {
+    pub fn new() -> Self {
+        Self {
+            keys: vec![],
+            values: vec![],
+            length: 0,
+        }
+    }
+
+    pub fn add_prop(&mut self, left: Type, right: Type) {
+        self.keys.push(Box::new(left));
+        self.values.push(Box::new(right));
+        self.length += 1;
+    }
+
+    pub fn get(
+        &mut self,
+        prop: String,
+        type_name: TypeName,
+        memory: &mut Memory,
+    ) -> Result<Type, ErrorKind> {
+        match type_name {
+            TypeName::I32 => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_name {
+                        let key = memory.yeild_i32(item.location);
+                        let i32_prop: i32;
+                        match prop.parse::<i32>() {
+                            Ok(n) => i32_prop = n,
+                            Err(_) => return Err(ErrorKind::ParseInt),
+                        }
+                        if key == i32_prop {
+                            return Ok(*self.values[i].clone());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::String => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_name {
+                        let key = memory.yeild_string(item.location);
+                        if key == prop {
+                            return Ok(*self.values[i].clone());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::Vector(_) => unimplemented!(), 
+            TypeName::ButterFly(_) => unimplemented!(),
+        }
+    }
+
+    pub fn remove(
+        &mut self,
+        prop: String,
+        type_name: TypeName,
+        memory: &mut Memory,
+    ) -> Result<(), ErrorKind> {
+        match type_name {
+            TypeName::I32 => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_name {
+                        let key = memory.yeild_i32(item.location);
+                        let i32_prop: i32;
+                        match prop.parse::<i32>() {
+                            Ok(n) => i32_prop = n,
+                            Err(_) => return Err(ErrorKind::ParseInt),
+                        }
+                        if key == i32_prop {
+                            self.keys.remove(i);
+                            self.values.remove(i);
+                            self.length -= 1;
+                            return Ok(());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::String => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_name {
+                        let key = memory.yeild_string(item.location);
+                        if key == prop {
+                            self.keys.remove(i);
+                            self.values.remove(i);
+                            self.length -= 1;
+                            return Ok(());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::Vector(_) => unimplemented!(),
+            TypeName::ButterFly(_) => unimplemented!(),
+        }
+    }
 }
