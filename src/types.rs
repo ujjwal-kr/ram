@@ -340,7 +340,7 @@ impl ButterFly {
                 }
                 return Err(ErrorKind::MapValueNotFound);
             }
-            TypeName::Vector(_) => unimplemented!(), 
+            TypeName::Vector(_) => unimplemented!(),
             TypeName::ButterFly(_) => unimplemented!(),
         }
     }
