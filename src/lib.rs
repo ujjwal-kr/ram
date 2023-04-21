@@ -76,7 +76,7 @@ impl CPU {
                 "split" => stdf::string::split(memory, vars, self, cmd, statement),
                 "concat" => stdf::string::concat(memory, vars, self, cmd),
                 "copy" => stack::copy(memory, vars, self, cmd, statement),
-                "vec" => stack::vec(memory, vars, self, cmd, statement),
+                "vec" => vec::vec(memory, vars, self, cmd, statement),
                 "stdin" => stdf::stdin::stdin(memory, vars, self, cmd, statement),
                 "stdfs" => stdf::stdfs::stdfs(memory, vars, self, cmd),
 
@@ -138,7 +138,7 @@ impl CPU {
                                 name, label, statement
                             )
                         }
-                        _ => todo!()
+                        _ => todo!(),
                     }
                     process::exit(1)
                 }
