@@ -2,6 +2,7 @@ use crate::{
     funcs::errors::ErrorKind,
     memory::{Location, Memory},
 };
+use rand::{distributions::Alphanumeric, Rng};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -301,6 +302,54 @@ impl Vars {
         };
         self.0.insert(name, t);
     }
+
+    fn parse_type_str(&mut self, val: String, memory: &mut Memory) -> Result<Type, ErrorKind> {
+        match val.parse::<i32>() {
+            Ok(n) => {
+                let name: String = rand::thread_rng()
+                    .sample_iter(&Alphanumeric)
+                    .take(10)
+                    .map(char::from)
+                    .collect();
+                self.set_int(name.clone(), n.to_string().as_str(), memory)?;
+                return Ok(self.get_type(name)?)
+            }
+            _ => {
+                let quote: &str = &val[0..1];
+                if quote == "\"" {
+                    let extracted_str = &val[1..val.len() - 1];
+                    let name: String = rand::thread_rng()
+                        .sample_iter(&Alphanumeric)
+                        .take(10)
+                        .map(char::from)
+                        .collect();
+                    self.set_string(name.clone(), extracted_str, memory);
+                    return Ok(self.get_type(name)?);
+                } else {
+                    return Ok(self.get_type(val)?);
+                }
+            }
+        }
+    }
+
+    pub fn insert(
+        &mut self,
+        name: String,
+        key: String,
+        value: String,
+        memory: &mut Memory,
+    ) -> Result<(), ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        match t.name {
+            TypeName::ButterFly(mut butterfly) => {
+                let left = self.parse_type_str(key, memory)?;
+                let right = self.parse_type_str(value, memory)?;
+                butterfly.insert(left, right);
+                Ok(())
+            }
+            _ => return Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
 }
 
 impl ButterFly {
@@ -312,7 +361,7 @@ impl ButterFly {
         }
     }
 
-    pub fn add_prop(&mut self, left: Type, right: Type) {
+    pub fn insert(&mut self, left: Type, right: Type) {
         self.keys.push(Box::new(left));
         self.values.push(Box::new(right));
         self.length += 1;
@@ -357,7 +406,7 @@ impl ButterFly {
         }
     }
 
-    pub fn remove(
+    pub fn delete(
         &mut self,
         prop: String,
         type_name: TypeName,

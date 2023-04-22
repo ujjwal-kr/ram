@@ -14,11 +14,11 @@ pub fn map(
     match cmd[0] {
         "ram" => {
             vars.add_map(cmd[1].to_string());
-        },
+        }
         "get" => todo!(),
         "insert" => todo!(),
         "delete" => todo!(),
-        _ => return Err(ErrorKind::ArgErr)
+        _ => return Err(ErrorKind::ArgErr),
     }
     Ok(())
 }
