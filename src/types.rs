@@ -312,7 +312,7 @@ impl Vars {
                     .map(char::from)
                     .collect();
                 self.set_int(name.clone(), n.to_string().as_str(), memory)?;
-                return Ok(self.get_type(name)?)
+                return Ok(self.get_type(name)?);
             }
             _ => {
                 let quote: &str = &val[0..1];
@@ -332,7 +332,7 @@ impl Vars {
         }
     }
 
-    pub fn insert(
+    pub fn insert_to_map(
         &mut self,
         name: String,
         key: String,
@@ -348,6 +348,34 @@ impl Vars {
                 Ok(())
             }
             _ => return Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+
+    pub fn get_from_map(
+        &mut self,
+        name: String,
+        key: String,
+        memory: &mut Memory,
+    ) -> Result<Type, ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        let key_type = self.get_type(key)?;
+        match t.name {
+            TypeName::ButterFly(mut butterfly) => butterfly.get(key_type, memory),
+            _ => Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+
+    pub fn remove_from_map(
+        &mut self,
+        name: String,
+        key: String,
+        memory: &mut Memory
+    ) -> Result<(), ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        let key_type = self.get_type(key)?;
+        match t.name {
+            TypeName::ButterFly(mut butterfly) => butterfly.delete(key_type, memory),
+            _ => Err(ErrorKind::ExpectedMap(name))
         }
     }
 }
@@ -367,22 +395,13 @@ impl ButterFly {
         self.length += 1;
     }
 
-    pub fn get(
-        &mut self,
-        prop: String,
-        type_name: TypeName,
-        memory: &mut Memory,
-    ) -> Result<Type, ErrorKind> {
-        match type_name {
+    pub fn get(&mut self, type_: Type, memory: &mut Memory) -> Result<Type, ErrorKind> {
+        match type_.name {
             TypeName::I32 => {
                 for (i, item) in self.keys.iter().enumerate() {
-                    if item.name == type_name {
+                    if item.name == type_.name {
                         let key = memory.yeild_i32(item.location);
-                        let i32_prop: i32;
-                        match prop.parse::<i32>() {
-                            Ok(n) => i32_prop = n,
-                            Err(_) => return Err(ErrorKind::ParseInt),
-                        }
+                        let i32_prop = memory.yeild_i32(type_.location);
                         if key == i32_prop {
                             return Ok(*self.values[i].clone());
                         }
@@ -392,8 +411,9 @@ impl ButterFly {
             }
             TypeName::String => {
                 for (i, item) in self.keys.iter().enumerate() {
-                    if item.name == type_name {
+                    if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
+                        let prop = memory.yeild_string(type_.location);
                         if key == prop {
                             return Ok(*self.values[i].clone());
                         }
@@ -406,22 +426,13 @@ impl ButterFly {
         }
     }
 
-    pub fn delete(
-        &mut self,
-        prop: String,
-        type_name: TypeName,
-        memory: &mut Memory,
-    ) -> Result<(), ErrorKind> {
-        match type_name {
+    pub fn delete(&mut self, type_: Type, memory: &mut Memory) -> Result<(), ErrorKind> {
+        match type_.name {
             TypeName::I32 => {
                 for (i, item) in self.keys.iter().enumerate() {
-                    if item.name == type_name {
+                    if item.name == type_.name {
                         let key = memory.yeild_i32(item.location);
-                        let i32_prop: i32;
-                        match prop.parse::<i32>() {
-                            Ok(n) => i32_prop = n,
-                            Err(_) => return Err(ErrorKind::ParseInt),
-                        }
+                        let i32_prop = memory.yeild_i32(type_.location);
                         if key == i32_prop {
                             self.keys.remove(i);
                             self.values.remove(i);
@@ -434,8 +445,9 @@ impl ButterFly {
             }
             TypeName::String => {
                 for (i, item) in self.keys.iter().enumerate() {
-                    if item.name == type_name {
+                    if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
+                        let prop = memory.yeild_string(type_.location);
                         if key == prop {
                             self.keys.remove(i);
                             self.values.remove(i);
