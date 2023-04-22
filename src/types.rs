@@ -345,15 +345,11 @@ impl Vars {
                 let left = self.parse_type_str(key, memory)?;
                 let right = self.parse_type_str(value, memory)?;
                 match self.0.get_mut(&name) {
-                    Some(t) => {
-                        match &mut t.name {
-                            TypeName::ButterFly(b) => {
-                                b.insert(left, right)
-                            },
-                            _ => return Err(ErrorKind::ExpectedMap(name))  
-                        }
+                    Some(t) => match &mut t.name {
+                        TypeName::ButterFly(b) => b.insert(left, right),
+                        _ => return Err(ErrorKind::ExpectedMap(name)),
                     },
-                    None => return Err(ErrorKind::ExpectedMap(name))
+                    None => return Err(ErrorKind::ExpectedMap(name)),
                 };
                 Ok(())
             }
@@ -382,9 +378,15 @@ impl Vars {
         memory: &mut Memory,
     ) -> Result<(), ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
-        let key_type = self.get_type(key)?;
+        let key_type = self.parse_type_str(key, memory)?;
         match t.name {
-            TypeName::ButterFly(mut butterfly) => butterfly.delete(key_type, memory),
+            TypeName::ButterFly(_) => match self.0.get_mut(&name) {
+                Some(t) => match &mut t.name {
+                    TypeName::ButterFly(b) => b.delete(key_type, memory),
+                    _ => return Err(ErrorKind::ExpectedMap(name)),
+                },
+                _ => return Err(ErrorKind::ExpectedMap(name)),
+            },
             _ => Err(ErrorKind::ExpectedMap(name)),
         }
     }
@@ -454,7 +456,7 @@ impl ButterFly {
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::String => {
-                for (i, item) in self.keys.iter().enumerate() {
+                for (i, item) in self.keys.iter_mut().enumerate() {
                     if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
                         let prop = memory.yeild_string(type_.location);

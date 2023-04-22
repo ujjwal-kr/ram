@@ -1,5 +1,5 @@
 use super::butterfly;
-use super::errors::{self, ErrorKind};
+use super::errors::ErrorKind;
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
