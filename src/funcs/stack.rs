@@ -35,9 +35,6 @@ pub fn ram(
                 registers.lx = memory.get_int_from_stack()?;
                 let sub = memory.stack.len().saturating_sub(4);
                 memory.stack.truncate(sub);
-            } else {
-                // parse cmd[2] as int
-                registers.lx = errors::parse_int(cmd[2])?
             }
         }
         "rv" => {
@@ -49,9 +46,6 @@ pub fn ram(
                 registers.rv = memory.get_int_from_stack()?;
                 let sub = memory.stack.len().saturating_sub(4);
                 memory.stack.truncate(sub);
-            } else {
-                // parse cmd[2] as int
-                registers.rv = errors::parse_int(cmd[2])?;
             }
         }
         "string" => {
@@ -64,6 +58,9 @@ pub fn ram(
             let _ = &exp[1..exp.len() - 1].clone_into(&mut registers.lxstring);
         }
         _ => {
+            if cmd[2] == ":map" {
+                return butterfly::map(memory, vars, registers, cmd.clone(), statement)
+            }
             if cmd.len() > 3 {
                 if &cmd[2][0..1] == ":" {
                     let name = cmd[1];
@@ -81,7 +78,7 @@ pub fn ram(
                             } else {
                                 return Err(ErrorKind::ArgErr);
                             }
-                        }
+                        },
                         _ => return Err(ErrorKind::ArgErr),
                     }
                 } else {

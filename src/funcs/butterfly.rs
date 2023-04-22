@@ -1,5 +1,5 @@
 use super::errors::ErrorKind;
-use crate::{memory::Memory, types::{Vars, Type, TypeName}, CPU};
+use crate::{memory::{Memory}, types::{Vars, Type, TypeName}, CPU};
 
 pub fn map(
     memory: &mut Memory,

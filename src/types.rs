@@ -341,10 +341,20 @@ impl Vars {
     ) -> Result<(), ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
         match t.name {
-            TypeName::ButterFly(mut butterfly) => {
+            TypeName::ButterFly(_) => {
                 let left = self.parse_type_str(key, memory)?;
                 let right = self.parse_type_str(value, memory)?;
-                butterfly.insert(left, right);
+                match self.0.get_mut(&name) {
+                    Some(t) => {
+                        match &mut t.name {
+                            TypeName::ButterFly(b) => {
+                                b.insert(left, right)
+                            },
+                            _ => return Err(ErrorKind::ExpectedMap(name))  
+                        }
+                    },
+                    None => return Err(ErrorKind::ExpectedMap(name))
+                };
                 Ok(())
             }
             _ => return Err(ErrorKind::ExpectedMap(name)),
