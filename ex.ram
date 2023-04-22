@@ -1,5 +1,6 @@
 main:
-   ram 1
-   ram 3
-   add
-   print 
+   ram x :map
+   insert x {1: "lmao"}
+   ram y :str = ""
+   get x 1 = y
+   print var y

@@ -368,7 +368,7 @@ impl Vars {
         memory: &mut Memory,
     ) -> Result<Type, ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
-        let key_type = self.get_type(key)?;
+        let key_type = self.parse_type_str(key, memory)?;
         match t.name {
             TypeName::ButterFly(mut butterfly) => butterfly.get(key_type, memory),
             _ => Err(ErrorKind::ExpectedMap(name)),
