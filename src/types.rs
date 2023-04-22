@@ -371,6 +371,17 @@ impl Vars {
         }
     }
 
+    pub fn replace_map(&mut self, name: String, assigned: Type) -> Result<(), ErrorKind> {
+        match assigned.name {
+            TypeName::ButterFly(_) => {
+                self.0.remove(&name);
+                self.0.insert(name, assigned);
+                Ok(())
+            },
+            _ => Err(ErrorKind::ExpectedMap(name))
+        }
+    }
+
     pub fn remove_from_map(
         &mut self,
         name: String,

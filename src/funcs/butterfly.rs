@@ -15,7 +15,7 @@ pub fn map(
         "ram" => vars.add_map(cmd[1].to_string()),
         "get" => {
             let t: Type = vars.get_from_map(cmd[1].to_string(), cmd[2].to_string(), memory)?;
-            let assign_var = vars.get_type(cmd[4].to_string())?;
+            let mut assign_var = vars.get_type(cmd[4].to_string())?;
             match t.name {
                 TypeName::String => {
                     let old_str_addr = memory.load(assign_var.location).to_owned();
@@ -26,6 +26,15 @@ pub fn map(
                 TypeName::I32 => {
                     let t_data = memory.load(t.location).to_owned();
                     memory.stack_mod(assign_var.location, &t_data);
+                },
+                TypeName::ButterFly(t_butterfly) => {
+                    match &mut assign_var.name {
+                        TypeName::ButterFly(b) => { 
+                            *b = t_butterfly;
+                            vars.replace_map(cmd[4].to_string(), assign_var)?
+                        },
+                        _ => return Err(ErrorKind::ExpectedMap(cmd[1].to_string()))
+                    }
                 },
                 _ => unimplemented!()
             }

@@ -1,6 +1,9 @@
 main:
    ram x :map
-   insert x {1: "lmao"}
-   ram y :str = ""
-   get x 1 = y
-   print var y
+   ram y :map
+   insert y { "hello": "world" }
+   insert x { "odj": y }
+   
+   ram z :map
+   get x "odj" = z
+   dbg
