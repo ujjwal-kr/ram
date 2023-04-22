@@ -369,13 +369,13 @@ impl Vars {
         &mut self,
         name: String,
         key: String,
-        memory: &mut Memory
+        memory: &mut Memory,
     ) -> Result<(), ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
         let key_type = self.get_type(key)?;
         match t.name {
             TypeName::ButterFly(mut butterfly) => butterfly.delete(key_type, memory),
-            _ => Err(ErrorKind::ExpectedMap(name))
+            _ => Err(ErrorKind::ExpectedMap(name)),
         }
     }
 }
