@@ -141,7 +141,15 @@ impl CPU {
                                 name, label, statement
                             )
                         }
-                        _ => todo!(),
+                        ErrorKind::ExpectedMap(name) => {
+                            println!(
+                                "Expected '{}' to be a map at {}: {}",
+                                name, label, statement
+                            )
+                        },
+                        ErrorKind::MapValueNotFound => println!(
+                            "Property Not found on map"
+                        )
                     }
                     process::exit(1)
                 }
