@@ -291,6 +291,18 @@ pub struct VecMod {
     pub heap_addr: Vec<u8>,
 }
 
+// butterfly
+impl Vars {
+    pub fn add_map(&mut self, name: String) {
+        let butterfly: ButterFly = ButterFly::new();
+        let t: Type = Type {
+            name: TypeName::ButterFly(butterfly),
+            location: Location { start: 0, size: 0 },
+        };
+        self.0.insert(name, t);
+    }
+}
+
 impl ButterFly {
     pub fn new() -> Self {
         Self {

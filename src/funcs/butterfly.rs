@@ -11,6 +11,14 @@ pub fn map(
     if cmd.len() < 3 {
         return Err(ErrorKind::ArgErr);
     }
-
-    todo!()
+    match cmd[0] {
+        "ram" => {
+            vars.add_map(cmd[1].to_string());
+        },
+        "get" => todo!(),
+        "insert" => todo!(),
+        "delete" => todo!(),
+        _ => return Err(ErrorKind::ArgErr)
+    }
+    Ok(())
 }
