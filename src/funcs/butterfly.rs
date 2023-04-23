@@ -1,5 +1,5 @@
 use super::errors::ErrorKind;
-use crate::{memory::{Memory}, types::{Vars, Type, TypeName}, CPU};
+use crate::{memory::Memory, types::{Vars, Type, TypeName}, CPU};
 
 pub fn map(
     memory: &mut Memory,
@@ -18,12 +18,18 @@ pub fn map(
             let mut assign_var = vars.get_type(cmd[4].to_string())?;
             match t.name {
                 TypeName::String => {
+                    if assign_var.name != TypeName::String {
+                        return Err(ErrorKind::ExpectedStr(cmd[4].to_string()))
+                    }
                     let old_str_addr = memory.load(assign_var.location).to_owned();
                     let t_addr = memory.load(t.location).to_owned();
                     memory.stack_mod(assign_var.location, &t_addr);
                     memory.free(u32::from_be_bytes(old_str_addr.try_into().unwrap()));
                 },
                 TypeName::I32 => {
+                    if assign_var.name != TypeName::I32 {
+                        return Err(ErrorKind::ExpectedInt(cmd[4].to_string()));
+                    }
                     let t_data = memory.load(t.location).to_owned();
                     memory.stack_mod(assign_var.location, &t_data);
                 },
