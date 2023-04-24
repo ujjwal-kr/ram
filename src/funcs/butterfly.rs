@@ -4,7 +4,6 @@ use crate::{memory::Memory, types::{Vars, Type, TypeName}, CPU};
 pub fn map(
     memory: &mut Memory,
     vars: &mut Vars,
-    registers: &mut CPU,
     cmd: Vec<&str>,
     statement: &str,
 ) -> Result<(), ErrorKind> {

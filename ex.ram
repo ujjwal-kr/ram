@@ -1,9 +1,6 @@
 main:
-   ram x :map
    ram y :map
-   insert y { "hello": "world" }
-   insert x { "odj": y }
-   
-   ram z :map
-   get x "odj" = z
+   ram x :map
+   insert y { x: 5 }
+   delete y x
    dbg
