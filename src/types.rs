@@ -482,7 +482,22 @@ impl ButterFly {
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::Vector(_) => unimplemented!(),
-            TypeName::ButterFly(_) => unimplemented!(),
+            TypeName::ButterFly(butterfly_type) => {
+                for (i, item) in self.keys.iter_mut().enumerate() {
+                    match item.name.clone() {
+                        TypeName::ButterFly(b) => {
+                            if b == butterfly_type {
+                                self.keys.remove(i);
+                                self.values.remove(i);
+                                self.length -= 1;
+                                return Ok(())
+                            }
+                        },
+                        _ => ()
+                    }
+                }
+                Ok(())
+            }
         }
     }
 }
