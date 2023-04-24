@@ -146,10 +146,8 @@ impl CPU {
                                 "Expected '{}' to be a map at {}: {}",
                                 name, label, statement
                             )
-                        },
-                        ErrorKind::MapValueNotFound => println!(
-                            "Property Not found on map"
-                        )
+                        }
+                        ErrorKind::MapValueNotFound => println!("Property Not found on map"),
                     }
                     process::exit(1)
                 }

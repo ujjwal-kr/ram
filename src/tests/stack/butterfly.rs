@@ -1,7 +1,7 @@
 use crate::funcs::butterfly;
 use crate::memory::Location;
 use crate::types::{ButterFly, Type};
-use crate::{memory::Memory, types::Vars, CPU};
+use crate::{memory::Memory, types::Vars};
 
 #[test]
 fn ram_map() {

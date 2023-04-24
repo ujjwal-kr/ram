@@ -59,7 +59,7 @@ pub fn ram(
         }
         _ => {
             if cmd[2] == ":map" {
-                return butterfly::map(memory, vars, cmd.clone(), statement)
+                return butterfly::map(memory, vars, cmd.clone(), statement);
             }
             if cmd.len() > 3 {
                 if &cmd[2][0..1] == ":" {
@@ -78,7 +78,7 @@ pub fn ram(
                             } else {
                                 return Err(ErrorKind::ArgErr);
                             }
-                        },
+                        }
                         _ => return Err(ErrorKind::ArgErr),
                     }
                 } else {

@@ -377,8 +377,8 @@ impl Vars {
                 self.0.remove(&name);
                 self.0.insert(name, assigned);
                 Ok(())
-            },
-            _ => Err(ErrorKind::ExpectedMap(name))
+            }
+            _ => Err(ErrorKind::ExpectedMap(name)),
         }
     }
 
@@ -490,10 +490,10 @@ impl ButterFly {
                                 self.keys.remove(i);
                                 self.values.remove(i);
                                 self.length -= 1;
-                                return Ok(())
+                                return Ok(());
                             }
-                        },
-                        _ => ()
+                        }
+                        _ => (),
                     }
                 }
                 Ok(())
