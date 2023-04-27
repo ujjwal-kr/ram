@@ -457,6 +457,15 @@ impl ButterFly {
                         let key = memory.yeild_i32(item.location);
                         let i32_prop = memory.yeild_i32(type_.location);
                         if key == i32_prop {
+                            let value_type = self.values[i].clone();
+                            match value_type.name {
+                                TypeName::ButterFly(b) => {
+                                    self.free_butterfly(b.keys, b.values, memory)
+                                }
+                                TypeName::String => self.free_heap(*value_type, memory),
+                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                _ => (),
+                            }
                             self.keys.remove(i);
                             self.values.remove(i);
                             self.length -= 1;
@@ -476,6 +485,15 @@ impl ButterFly {
                         if key == prop {
                             idx = i;
                             found = true;
+                            let value_type = self.values[i].clone();
+                            match value_type.name {
+                                TypeName::ButterFly(b) => {
+                                    self.free_butterfly(b.keys, b.values, memory)
+                                }
+                                TypeName::String => self.free_heap(*value_type, memory),
+                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                _ => (),
+                            }
                             self.free_heap(*item.clone(), memory);
                             self.free_heap(type_.clone(), memory);
                         }
@@ -496,6 +514,15 @@ impl ButterFly {
                     match item.name.clone() {
                         TypeName::ButterFly(b) => {
                             if b == butterfly_type {
+                                let value_type = self.values[i].clone();
+                                match value_type.name {
+                                    TypeName::ButterFly(b) => {
+                                        self.free_butterfly(b.keys, b.values, memory)
+                                    }
+                                    TypeName::String => self.free_heap(*value_type, memory),
+                                    TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                    _ => (),
+                                }
                                 self.free_butterfly(b.keys, b.values, memory);
                                 self.keys.remove(i);
                                 self.values.remove(i);
@@ -522,14 +549,14 @@ impl ButterFly {
         for item in left.iter() {
             match item.name {
                 TypeName::ButterFly(_) => (),
-                _ => self.free_heap(*item.clone(), memory)
+                _ => self.free_heap(*item.clone(), memory),
             }
         }
 
         for item in right.iter() {
             match item.name {
                 TypeName::ButterFly(_) => (),
-                _ => self.free_heap(*item.clone(), memory)
+                _ => self.free_heap(*item.clone(), memory),
             }
         }
     }
