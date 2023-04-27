@@ -467,19 +467,28 @@ impl ButterFly {
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::String => {
-                for (i, item) in self.keys.iter_mut().enumerate() {
+                let mut idx = 0usize;
+                let mut found = false;
+                for (i, item) in self.clone().keys.iter().enumerate() {
                     if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
                         let prop = memory.yeild_string(type_.location);
                         if key == prop {
-                            self.keys.remove(i);
-                            self.values.remove(i);
-                            self.length -= 1;
-                            return Ok(());
+                            idx = i;
+                            found = true;
+                            self.free_heap(*item.clone(), memory);
+                            self.free_heap(type_.clone(), memory);
                         }
                     }
                 }
-                return Err(ErrorKind::MapValueNotFound);
+                if found {
+                    self.keys.remove(idx);
+                    self.values.remove(idx);
+                    self.length -= 1;
+                    Ok(())
+                } else {
+                    return Err(ErrorKind::MapValueNotFound);
+                }
             }
             TypeName::Vector(_) => unimplemented!(),
             TypeName::ButterFly(butterfly_type) => {
@@ -487,6 +496,7 @@ impl ButterFly {
                     match item.name.clone() {
                         TypeName::ButterFly(b) => {
                             if b == butterfly_type {
+                                self.free_butterfly(b.keys, b.values, memory);
                                 self.keys.remove(i);
                                 self.values.remove(i);
                                 self.length -= 1;
@@ -496,8 +506,36 @@ impl ButterFly {
                         _ => (),
                     }
                 }
-                Ok(())
+                return Err(ErrorKind::MapValueNotFound);
             }
         }
+    }
+}
+
+impl ButterFly {
+    pub fn free_butterfly(
+        &mut self,
+        left: Vec<Box<Type>>,
+        right: Vec<Box<Type>>,
+        memory: &mut Memory,
+    ) {
+        for item in left.iter() {
+            match item.name {
+                TypeName::ButterFly(_) => (),
+                _ => self.free_heap(*item.clone(), memory)
+            }
+        }
+
+        for item in right.iter() {
+            match item.name {
+                TypeName::ButterFly(_) => (),
+                _ => self.free_heap(*item.clone(), memory)
+            }
+        }
+    }
+
+    pub fn free_heap(&mut self, _type: Type, memory: &mut Memory) {
+        let heap_addr = memory.load(_type.location).to_owned();
+        memory.free(u32::from_be_bytes(heap_addr.try_into().unwrap()));
     }
 }

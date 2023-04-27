@@ -1,6 +1,6 @@
 main:
    ram y :map
-   ram x :map
-   insert y { x: 5 }
-   delete y x
+   ram x :vec :int = [1, 2, 4]
+   insert y { "aaaabbbb": x }
+   delete y "aaaabbbb"
    dbg
