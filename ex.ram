@@ -1,31 +1,6 @@
 main:
-    ram nums :vec :int = [12, 22, 14, 10000]
-    ram largest :int = 0
-    vec largest = nums[0]
-    ram i :int = 0
-    ram curr :int = 0
-    jmp a:
-
-a:
-    vec curr = nums[i]
-    ram 1
-    add i
-    ram lx prev
-    copy i = lx
-    copy lx = curr
-    ram lx
-    copy lx = largest
-    ram lx
-    cmp
-    jgr swap:
-    copy lx = i
-    ram lx
-    vec nums len
-    cmp
-    jne a:
-    print var largest
-    halt
-
-swap:
-    copy largest = curr
-    ret
+   ram y :map
+   ram x :vec :int = [1, 2, 4]
+   insert y { "aaaabbbb": x }
+   delete y "aaaabbbb"
+   dbg

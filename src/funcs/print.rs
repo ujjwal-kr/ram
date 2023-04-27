@@ -33,6 +33,7 @@ pub fn print(
                         TypeName::Vector(Vector::Int) => {
                             println!("{:?}", memory.yeild_int_vec(_type.location))
                         }
+                        _ => unimplemented!(),
                     }
                 } else {
                     let print_st = &cmd[1..cmd.len()].to_vec().join(" ");

@@ -2,12 +2,13 @@ use crate::{
     funcs::errors::ErrorKind,
     memory::{Location, Memory},
 };
+use rand::{distributions::Alphanumeric, Rng};
 use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Type {
     pub name: TypeName,
     pub location: Location,
@@ -18,13 +19,20 @@ pub enum TypeName {
     I32,
     String,
     Vector(Vector),
+    ButterFly(ButterFly),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ButterFly {
+    keys: Vec<Box<Type>>,   // left wing
+    values: Vec<Box<Type>>, // right wing
+    pub length: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Vector {
     String,
     Int,
-    // Vector(Box<Vector>),
 }
 
 pub struct CastStack {
@@ -282,4 +290,279 @@ impl Vars {
 pub struct VecMod {
     pub value_bytes: [u8; 4],
     pub heap_addr: Vec<u8>,
+}
+
+// butterfly
+impl Vars {
+    pub fn add_map(&mut self, name: String) {
+        let butterfly: ButterFly = ButterFly::new();
+        let t: Type = Type {
+            name: TypeName::ButterFly(butterfly),
+            location: Location { start: 0, size: 0 },
+        };
+        self.0.insert(name, t);
+    }
+
+    fn parse_type_str(&mut self, val: String, memory: &mut Memory) -> Result<Type, ErrorKind> {
+        match val.parse::<i32>() {
+            Ok(n) => {
+                let name: String = rand::thread_rng()
+                    .sample_iter(&Alphanumeric)
+                    .take(10)
+                    .map(char::from)
+                    .collect();
+                self.set_int(name.clone(), n.to_string().as_str(), memory)?;
+                return Ok(self.get_type(name)?);
+            }
+            _ => {
+                let quote: &str = &val[0..1];
+                if quote == "\"" {
+                    let extracted_str = &val[1..val.len() - 1];
+                    let name: String = rand::thread_rng()
+                        .sample_iter(&Alphanumeric)
+                        .take(10)
+                        .map(char::from)
+                        .collect();
+                    self.set_string(name.clone(), extracted_str, memory);
+                    return Ok(self.get_type(name)?);
+                } else {
+                    return Ok(self.get_type(val)?);
+                }
+            }
+        }
+    }
+
+    pub fn insert_to_map(
+        &mut self,
+        name: String,
+        key: String,
+        value: String,
+        memory: &mut Memory,
+    ) -> Result<(), ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        match t.name {
+            TypeName::ButterFly(_) => {
+                let left = self.parse_type_str(key, memory)?;
+                let right = self.parse_type_str(value, memory)?;
+                match self.0.get_mut(&name) {
+                    Some(t) => match &mut t.name {
+                        TypeName::ButterFly(b) => b.insert(left, right),
+                        _ => return Err(ErrorKind::ExpectedMap(name)),
+                    },
+                    None => return Err(ErrorKind::ExpectedMap(name)),
+                };
+                Ok(())
+            }
+            _ => return Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+
+    pub fn get_from_map(
+        &mut self,
+        name: String,
+        key: String,
+        memory: &mut Memory,
+    ) -> Result<Type, ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        let key_type = self.parse_type_str(key, memory)?;
+        match t.name {
+            TypeName::ButterFly(mut butterfly) => butterfly.get(key_type, memory),
+            _ => Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+
+    pub fn replace_map(&mut self, name: String, assigned: Type) -> Result<(), ErrorKind> {
+        match assigned.name {
+            TypeName::ButterFly(_) => {
+                self.0.remove(&name);
+                self.0.insert(name, assigned);
+                Ok(())
+            }
+            _ => Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+
+    pub fn remove_from_map(
+        &mut self,
+        name: String,
+        key: String,
+        memory: &mut Memory,
+    ) -> Result<(), ErrorKind> {
+        let t: Type = self.get_type(name.clone())?;
+        let key_type = self.parse_type_str(key, memory)?;
+        match t.name {
+            TypeName::ButterFly(_) => match self.0.get_mut(&name) {
+                Some(t) => match &mut t.name {
+                    TypeName::ButterFly(b) => b.delete(key_type, memory),
+                    _ => return Err(ErrorKind::ExpectedMap(name)),
+                },
+                _ => return Err(ErrorKind::ExpectedMap(name)),
+            },
+            _ => Err(ErrorKind::ExpectedMap(name)),
+        }
+    }
+}
+
+impl ButterFly {
+    pub fn new() -> Self {
+        Self {
+            keys: vec![],
+            values: vec![],
+            length: 0,
+        }
+    }
+
+    pub fn insert(&mut self, left: Type, right: Type) {
+        self.keys.push(Box::new(left));
+        self.values.push(Box::new(right));
+        self.length += 1;
+    }
+
+    pub fn get(&mut self, type_: Type, memory: &mut Memory) -> Result<Type, ErrorKind> {
+        match type_.name {
+            TypeName::I32 => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_.name {
+                        let key = memory.yeild_i32(item.location);
+                        let i32_prop = memory.yeild_i32(type_.location);
+                        if key == i32_prop {
+                            return Ok(*self.values[i].clone());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::String => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_.name {
+                        let key = memory.yeild_string(item.location);
+                        let prop = memory.yeild_string(type_.location);
+                        if key == prop {
+                            return Ok(*self.values[i].clone());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::Vector(_) => unimplemented!(),
+            TypeName::ButterFly(_) => unimplemented!(),
+        }
+    }
+
+    pub fn delete(&mut self, type_: Type, memory: &mut Memory) -> Result<(), ErrorKind> {
+        match type_.name {
+            TypeName::I32 => {
+                for (i, item) in self.keys.iter().enumerate() {
+                    if item.name == type_.name {
+                        let key = memory.yeild_i32(item.location);
+                        let i32_prop = memory.yeild_i32(type_.location);
+                        if key == i32_prop {
+                            let value_type = self.values[i].clone();
+                            match value_type.name {
+                                TypeName::ButterFly(b) => {
+                                    self.free_butterfly(b.keys, b.values, memory)
+                                }
+                                TypeName::String => self.free_heap(*value_type, memory),
+                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                _ => (),
+                            }
+                            self.keys.remove(i);
+                            self.values.remove(i);
+                            self.length -= 1;
+                            return Ok(());
+                        }
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+            TypeName::String => {
+                let mut idx = 0usize;
+                let mut found = false;
+                for (i, item) in self.clone().keys.iter().enumerate() {
+                    if item.name == type_.name {
+                        let key = memory.yeild_string(item.location);
+                        let prop = memory.yeild_string(type_.location);
+                        if key == prop {
+                            idx = i;
+                            found = true;
+                            let value_type = self.values[i].clone();
+                            match value_type.name {
+                                TypeName::ButterFly(b) => {
+                                    self.free_butterfly(b.keys, b.values, memory)
+                                }
+                                TypeName::String => self.free_heap(*value_type, memory),
+                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                _ => (),
+                            }
+                            self.free_heap(*item.clone(), memory);
+                            self.free_heap(type_.clone(), memory);
+                        }
+                    }
+                }
+                if found {
+                    self.keys.remove(idx);
+                    self.values.remove(idx);
+                    self.length -= 1;
+                    Ok(())
+                } else {
+                    return Err(ErrorKind::MapValueNotFound);
+                }
+            }
+            TypeName::Vector(_) => unimplemented!(),
+            TypeName::ButterFly(butterfly_type) => {
+                for (i, item) in self.keys.iter_mut().enumerate() {
+                    match item.name.clone() {
+                        TypeName::ButterFly(b) => {
+                            if b == butterfly_type {
+                                let value_type = self.values[i].clone();
+                                match value_type.name {
+                                    TypeName::ButterFly(b) => {
+                                        self.free_butterfly(b.keys, b.values, memory)
+                                    }
+                                    TypeName::String => self.free_heap(*value_type, memory),
+                                    TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                    _ => (),
+                                }
+                                self.free_butterfly(b.keys, b.values, memory);
+                                self.keys.remove(i);
+                                self.values.remove(i);
+                                self.length -= 1;
+                                return Ok(());
+                            }
+                        }
+                        _ => (),
+                    }
+                }
+                return Err(ErrorKind::MapValueNotFound);
+            }
+        }
+    }
+}
+
+impl ButterFly {
+    pub fn free_butterfly(
+        &mut self,
+        left: Vec<Box<Type>>,
+        right: Vec<Box<Type>>,
+        memory: &mut Memory,
+    ) {
+        for item in left.iter() {
+            match item.name {
+                TypeName::ButterFly(_) => (),
+                _ => self.free_heap(*item.clone(), memory),
+            }
+        }
+
+        for item in right.iter() {
+            match item.name {
+                TypeName::ButterFly(_) => (),
+                _ => self.free_heap(*item.clone(), memory),
+            }
+        }
+    }
+
+    pub fn free_heap(&mut self, _type: Type, memory: &mut Memory) {
+        let heap_addr = memory.load(_type.location).to_owned();
+        memory.free(u32::from_be_bytes(heap_addr.try_into().unwrap()));
+    }
 }

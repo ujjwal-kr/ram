@@ -76,7 +76,10 @@ impl CPU {
                 "split" => stdf::string::split(memory, vars, self, cmd, statement),
                 "concat" => stdf::string::concat(memory, vars, self, cmd),
                 "copy" => stack::copy(memory, vars, self, cmd, statement),
-                "vec" => stack::vec(memory, vars, self, cmd, statement),
+                "vec" => vec::vec(memory, vars, self, cmd, statement),
+                "insert" => butterfly::map(memory, vars, cmd, statement),
+                "delete" => butterfly::map(memory, vars, cmd, statement),
+                "get" => butterfly::map(memory, vars, cmd, statement),
                 "stdin" => stdf::stdin::stdin(memory, vars, self, cmd, statement),
                 "stdfs" => stdf::stdfs::stdfs(memory, vars, self, cmd),
 
@@ -138,6 +141,13 @@ impl CPU {
                                 name, label, statement
                             )
                         }
+                        ErrorKind::ExpectedMap(name) => {
+                            println!(
+                                "Expected '{}' to be a map at {}: {}",
+                                name, label, statement
+                            )
+                        }
+                        ErrorKind::MapValueNotFound => println!("Property Not found on map"),
                     }
                     process::exit(1)
                 }

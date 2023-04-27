@@ -14,17 +14,16 @@ pub enum ErrorKind {
     EmptyCallstack,
     LabelNotFound(String),
     VecLen(String),
+    MapValueNotFound,
+    ExpectedMap(String),
 }
 
 pub fn parse_int(value: &str) -> Result<i32, ErrorKind> {
     let num: i32;
-
     match value.parse::<i32>() {
         Ok(n) => num = n,
-
         _parse_int_errorr => return Err(ErrorKind::ParseInt),
     }
-
     Ok(num)
 }
 
