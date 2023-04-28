@@ -1,5 +1,5 @@
-use super::butterfly;
 use super::errors::ErrorKind;
+use super::{butterfly, errors};
 use crate::types::{Type, TypeName, Vars};
 use crate::{memory::Memory, CPU};
 
@@ -30,22 +30,30 @@ pub fn ram(
             if cmd.len() == 2 {
                 // ram lx
                 vars.set_int_to_stack(memory, registers.lx.to_string().trim())?
-            } else if cmd[2] == "prev" {
+            } else if cmd.len() == 3 {
                 // ram lx prev
-                registers.lx = memory.get_int_from_stack()?;
-                let sub = memory.stack.len().saturating_sub(4);
-                memory.stack.truncate(sub);
+                if cmd[2] == "prev" {
+                    registers.lx = memory.get_int_from_stack()?;
+                    let sub = memory.stack.len().saturating_sub(4);
+                    memory.stack.truncate(sub);
+                } else {
+                    registers.lx = errors::parse_int(cmd[2])?
+                }
             }
         }
         "rv" => {
             if cmd.len() == 2 {
                 // ram rv
                 vars.set_int_to_stack(memory, registers.rv.to_string().trim())?;
-            } else if cmd[2] == "prev" {
-                // ram lx prev
-                registers.rv = memory.get_int_from_stack()?;
-                let sub = memory.stack.len().saturating_sub(4);
-                memory.stack.truncate(sub);
+            } else if cmd.len() == 3 {
+                if cmd[2] == "prev" {
+                    // ram lx prev
+                    registers.rv = memory.get_int_from_stack()?;
+                    let sub = memory.stack.len().saturating_sub(4);
+                    memory.stack.truncate(sub);
+                } else {
+                    registers.rv = errors::parse_int(cmd[2])?
+                }
             }
         }
         "string" => {
@@ -58,7 +66,7 @@ pub fn ram(
             let _ = &exp[1..exp.len() - 1].clone_into(&mut registers.lxstring);
         }
         _ => {
-            if cmd[2] == ":map" {
+            if cmd.len() == 3 && cmd[2] == ":map" {
                 return butterfly::map(memory, vars, cmd.clone(), statement);
             }
             if cmd.len() > 3 {
