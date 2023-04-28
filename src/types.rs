@@ -421,7 +421,7 @@ impl ButterFly {
     pub fn get(&mut self, type_: Type, memory: &mut Memory) -> Result<Type, ErrorKind> {
         match type_.name {
             TypeName::I32 => {
-                for (i, item) in self.keys.iter().enumerate() {
+                for (i, item) in self.keys.iter().enumerate().rev() {
                     if item.name == type_.name {
                         let key = memory.yeild_i32(item.location);
                         let i32_prop = memory.yeild_i32(type_.location);
@@ -433,7 +433,7 @@ impl ButterFly {
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::String => {
-                for (i, item) in self.keys.iter().enumerate() {
+                for (i, item) in self.keys.iter().enumerate().rev() {
                     if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
                         let prop = memory.yeild_string(type_.location);
