@@ -547,16 +547,34 @@ impl ButterFly {
         memory: &mut Memory,
     ) {
         for item in left.iter() {
-            match item.name {
-                TypeName::ButterFly(_) => (),
+            match item.name.clone() {
+                TypeName::ButterFly(b) => self.clean_left_wing(b.keys, memory),
                 _ => self.free_heap(*item.clone(), memory),
             }
         }
 
         for item in right.iter() {
-            match item.name {
-                TypeName::ButterFly(_) => (),
+            match item.name.clone() {
+                TypeName::ButterFly(b) => self.clean_right_wing(b.values, memory),
                 _ => self.free_heap(*item.clone(), memory),
+            }
+        }
+    }
+
+    pub fn clean_right_wing(&mut self, right: Vec<Box<Type>>, memory: &mut Memory) {
+        for item in right.iter() {
+            match item.name.clone() {
+                TypeName::ButterFly(b) => self.clean_right_wing(b.values, memory),
+                _ => self.free_heap(*item.clone(), memory)
+            }
+        }
+    }
+
+    pub fn clean_left_wing(&mut self, left: Vec<Box<Type>>, memory: &mut Memory) {
+        for item in left.iter() {
+            match item.name.clone() {
+                TypeName::ButterFly(b) => self.clean_left_wing(b.keys, memory),
+                _ => self.free_heap(*item.clone(), memory)
             }
         }
     }
