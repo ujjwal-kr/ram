@@ -548,32 +548,32 @@ impl ButterFly {
     ) {
         for item in left.iter() {
             match item.name.clone() {
-                TypeName::ButterFly(b) => self.clean_left_wing(b.keys, memory),
+                TypeName::ButterFly(b) => self.free_left_wing(b.keys, memory),
                 _ => self.free_heap(*item.clone(), memory),
             }
         }
 
         for item in right.iter() {
             match item.name.clone() {
-                TypeName::ButterFly(b) => self.clean_right_wing(b.values, memory),
+                TypeName::ButterFly(b) => self.free_right_wing(b.values, memory),
                 _ => self.free_heap(*item.clone(), memory),
             }
         }
     }
 
-    pub fn clean_right_wing(&mut self, right: Vec<Box<Type>>, memory: &mut Memory) {
+    pub fn free_right_wing(&mut self, right: Vec<Box<Type>>, memory: &mut Memory) {
         for item in right.iter() {
             match item.name.clone() {
-                TypeName::ButterFly(b) => self.clean_right_wing(b.values, memory),
+                TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 _ => self.free_heap(*item.clone(), memory)
             }
         }
     }
 
-    pub fn clean_left_wing(&mut self, left: Vec<Box<Type>>, memory: &mut Memory) {
+    pub fn free_left_wing(&mut self, left: Vec<Box<Type>>, memory: &mut Memory) {
         for item in left.iter() {
             match item.name.clone() {
-                TypeName::ButterFly(b) => self.clean_left_wing(b.keys, memory),
+                TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 _ => self.free_heap(*item.clone(), memory)
             }
         }
