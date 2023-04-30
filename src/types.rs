@@ -35,11 +35,6 @@ pub enum Vector {
     Int,
 }
 
-pub struct CastStack {
-    pub dest_location: Location,
-    pub src_data: Vec<u8>,
-}
-
 impl Vars {
     pub fn new() -> Self {
         Vars(HashMap::new())
@@ -172,52 +167,69 @@ impl Vars {
         self.0.insert(name, new_str_vec);
     }
 
+    pub fn set_owned_raw_str_vec(&mut self, name: String, items: Vec<String>, memory: &mut Memory) {
+        let mut heap_addrs_bytes: Vec<u8> = vec![];
+        for item in items {
+            let current_heap_addr = memory.malloc(item.trim().as_bytes());
+            let addr_bytes = current_heap_addr.to_be_bytes();
+            for byte in addr_bytes {
+                heap_addrs_bytes.push(byte)
+            }
+        }
+
+        let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
+        let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
+        let new_str_vec: Type = Type {
+            name: TypeName::Vector(Vector::String),
+            location,
+        };
+        self.0.insert(name, new_str_vec);
+    }
+
+    fn free_str_vec(&mut self, var: Type, memory: &mut Memory) {
+        let heap_addr = memory.load(var.location).to_owned();
+        let data = memory.heap_load(u32::from_be_bytes(heap_addr.try_into().unwrap()));
+        if data.len() >= 4 {
+            for bytes in data.chunks(4) {
+                let str_addr = u32::from_be_bytes(bytes.try_into().unwrap());
+                memory.free(str_addr)
+            }
+        }
+    }
+
     // Casting stuff
 
     pub fn cast(&mut self, src: &str, dest: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
-        // check if the type of both vars are same
-        let source: Type;
-        let destination: Type;
-        match self.0.get(src) {
-            Some(s) => source = s.clone(),
-            _ => panic!("Var {} not found", src),
-        }
-        match self.0.get(dest) {
-            Some(d) => destination = d.clone(),
-            _ => panic!("Var {} not found", src),
-        }
+        let source = self.get_type(src.to_string())?;
+        let destination = self.get_type(dest.to_string())?;
         if destination.name != source.name {
             return Err(ErrorKind::Casting {
                 src: src.to_string(),
                 dest: dest.to_string(),
             });
         }
-        if destination.name == TypeName::String
-            || destination.name == TypeName::Vector(Vector::String)
-        {
-            let src_addr: [u8; 4] = memory
-                .load(source.location)
-                .try_into()
-                .expect("Error converting location to addr");
-            let src_heap_addr = u32::from_be_bytes(src_addr);
-            let src_heap_data = memory.heap_load(src_heap_addr);
-
-            let dest_addr: [u8; 4] = memory
-                .load(destination.location)
-                .try_into()
-                .expect("Error converting location to addr");
-            memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data);
-            Ok(())
-        } else {
-            let src_addr: &[u8] = &memory.load(source.location).to_owned();
-            let heap_data = memory.heap_load(u32::from_be_bytes(src_addr.try_into().unwrap()));
-            let dest_addr: [u8; 4] = memory
-                .load(destination.location)
-                .try_into()
-                .unwrap();
-            memory.heap_mod(u32::from_be_bytes(dest_addr), &heap_data);
-            Ok(())
+        let src_addr: [u8; 4] = memory.load(source.location).try_into().unwrap();
+        if destination.name == TypeName::I32 {
+            memory.stack_mod(destination.location, &src_addr);
+            return Ok(());
         }
+        let src_heap_addr = u32::from_be_bytes(src_addr);
+        let src_heap_data = memory.heap_load(src_heap_addr);
+        let dest_addr: [u8; 4] = memory.load(destination.location).try_into().unwrap();
+        match destination.name {
+            TypeName::String => memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data),
+            TypeName::Vector(Vector::String) => {
+                self.free_str_vec(destination, memory);
+                memory.free(u32::from_be_bytes(dest_addr));
+                let new_vec = memory.yeild_str_vec(source.location);
+                self.set_owned_raw_str_vec(dest.to_string(), new_vec, memory);
+            }
+            TypeName::Vector(Vector::Int) => {
+                memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data)
+            }
+            _ => panic!("Cast performed on illegal items"),
+        }
+        Ok(())
     }
 }
 
