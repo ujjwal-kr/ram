@@ -220,12 +220,7 @@ pub fn copy(
                         return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
-                _ => match vars.cast(src, dest, memory)? {
-                    Some(cast_stack) => {
-                        memory.stack_mod(cast_stack.dest_location, &cast_stack.src_data)
-                    }
-                    None => (),
-                },
+                _ => vars.cast(src, dest, memory)? 
             }
         }
     }

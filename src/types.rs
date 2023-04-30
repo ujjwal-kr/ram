@@ -174,12 +174,7 @@ impl Vars {
 
     // Casting stuff
 
-    pub fn cast(
-        &mut self,
-        src: &str,
-        dest: &str,
-        memory: &mut Memory,
-    ) -> Result<Option<CastStack>, ErrorKind> {
+    pub fn cast(&mut self, src: &str, dest: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
         // check if the type of both vars are same
         let source: Type;
         let destination: Type;
@@ -212,13 +207,16 @@ impl Vars {
                 .try_into()
                 .expect("Error converting location to addr");
             memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data);
-            Ok(None)
+            Ok(())
         } else {
-            let data: &[u8] = memory.load(source.location);
-            Ok(Some(CastStack {
-                dest_location: destination.location,
-                src_data: data.to_vec(),
-            }))
+            let src_addr: &[u8] = &memory.load(source.location).to_owned();
+            let heap_data = memory.heap_load(u32::from_be_bytes(src_addr.try_into().unwrap()));
+            let dest_addr: [u8; 4] = memory
+                .load(destination.location)
+                .try_into()
+                .unwrap();
+            memory.heap_mod(u32::from_be_bytes(dest_addr), &heap_data);
+            Ok(())
         }
     }
 }
@@ -565,7 +563,7 @@ impl ButterFly {
         for item in right.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => self.free_heap(*item.clone(), memory)
+                _ => self.free_heap(*item.clone(), memory),
             }
         }
     }
@@ -574,7 +572,7 @@ impl ButterFly {
         for item in left.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => self.free_heap(*item.clone(), memory)
+                _ => self.free_heap(*item.clone(), memory),
             }
         }
     }
