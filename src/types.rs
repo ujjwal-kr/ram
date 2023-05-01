@@ -186,17 +186,6 @@ impl Vars {
         self.0.insert(name, new_str_vec);
     }
 
-    fn free_str_vec(&mut self, var: Type, memory: &mut Memory) {
-        let heap_addr = memory.load(var.location).to_owned();
-        let data = memory.heap_load(u32::from_be_bytes(heap_addr.try_into().unwrap()));
-        if data.len() >= 4 {
-            for bytes in data.chunks(4) {
-                let str_addr = u32::from_be_bytes(bytes.try_into().unwrap());
-                memory.free(str_addr)
-            }
-        }
-    }
-
     // Casting stuff
 
     pub fn cast(&mut self, src: &str, dest: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
@@ -219,7 +208,7 @@ impl Vars {
         match destination.name {
             TypeName::String => memory.heap_mod(u32::from_be_bytes(dest_addr), &src_heap_data),
             TypeName::Vector(Vector::String) => {
-                self.free_str_vec(destination, memory);
+                destination.free_str_vec(memory);
                 memory.free(u32::from_be_bytes(dest_addr));
                 let new_vec = memory.yeild_str_vec(source.location);
                 self.set_owned_raw_str_vec(dest.to_string(), new_vec, memory);
@@ -230,6 +219,27 @@ impl Vars {
             _ => panic!("Cast performed on illegal items"),
         }
         Ok(())
+    }
+}
+
+impl Type {
+    pub fn free_str_vec(&self, memory: &mut Memory) {
+        if self.name != TypeName::Vector(Vector::String) {
+            panic!("free_str_vec called on illegal type")
+        }
+        let heap_addr = memory.load(self.location).to_owned();
+        let data = memory.heap_load(u32::from_be_bytes(heap_addr.try_into().unwrap()));
+        if data.len() >= 4 {
+            for bytes in data.chunks(4) {
+                let str_addr = u32::from_be_bytes(bytes.try_into().unwrap());
+                memory.free(str_addr)
+            }
+        }
+    }
+
+    pub fn free_heap(&self, memory: &mut Memory) {
+        let str_addr = memory.load(self.location).to_owned();
+        memory.free(u32::from_be_bytes(str_addr.try_into().unwrap()));
     }
 }
 
@@ -436,6 +446,8 @@ impl ButterFly {
                         let key = memory.yeild_i32(item.location);
                         let i32_prop = memory.yeild_i32(type_.location);
                         if key == i32_prop {
+                            let sub = memory.stack.len().saturating_sub(4);
+                            memory.stack.truncate(sub);
                             return Ok(*self.values[i].clone());
                         }
                     }
@@ -448,6 +460,7 @@ impl ButterFly {
                         let key = memory.yeild_string(item.location);
                         let prop = memory.yeild_string(type_.location);
                         if key == prop {
+                            type_.free_heap(memory);
                             return Ok(*self.values[i].clone());
                         }
                     }
@@ -473,7 +486,13 @@ impl ButterFly {
                                     self.free_butterfly(b.keys, b.values, memory)
                                 }
                                 TypeName::String => self.free_heap(*value_type, memory),
-                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                TypeName::Vector(Vector::String) => {
+                                    value_type.free_str_vec(memory);
+                                    self.free_heap(*value_type, memory);
+                                }
+                                TypeName::Vector(Vector::Int) => {
+                                    self.free_heap(*value_type, memory)
+                                }
                                 _ => (),
                             }
                             self.keys.remove(i);
@@ -501,7 +520,13 @@ impl ButterFly {
                                     self.free_butterfly(b.keys, b.values, memory)
                                 }
                                 TypeName::String => self.free_heap(*value_type, memory),
-                                TypeName::Vector(_) => self.free_heap(*value_type, memory),
+                                TypeName::Vector(Vector::String) => {
+                                    value_type.free_str_vec(memory);
+                                    self.free_heap(*value_type, memory);
+                                }
+                                TypeName::Vector(Vector::Int) => {
+                                    self.free_heap(*value_type, memory)
+                                }
                                 _ => (),
                             }
                             self.free_heap(*item.clone(), memory);
