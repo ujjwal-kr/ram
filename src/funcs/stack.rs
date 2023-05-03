@@ -226,3 +226,14 @@ pub fn copy(
     }
     Ok(())
 }
+
+pub fn drop(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    cmd: Vec<&str>,
+) -> Result<(), ErrorKind> {
+    if cmd.len() < 2 {
+        return Err(ErrorKind::ArgErr)
+    }
+    vars.drop(cmd[1].to_string(), memory)
+}

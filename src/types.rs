@@ -220,6 +220,21 @@ impl Vars {
         }
         Ok(())
     }
+
+    // drop
+
+    pub fn drop(&mut self, name: String, memory: &mut Memory) -> Result<(), ErrorKind> {
+        let t = self.get_type(name.clone())?;
+        match t.name {
+            TypeName::I32 => {},
+            TypeName::String => t.free_heap(memory),
+            TypeName::Vector(Vector::String) => t.free_str_vec(memory),
+            TypeName::Vector(Vector::Int) => t.free_heap(memory),
+            TypeName::ButterFly(b) => b.clone().free_butterfly(b.keys, b.values, memory),
+        }
+        self.0.remove(&name);
+        Ok(())
+    }
 }
 
 impl Type {
@@ -532,41 +547,18 @@ impl ButterFly {
         right: Vec<Box<Type>>,
         memory: &mut Memory,
     ) {
-        for item in left.iter() {
-            match item.name.clone() {
-                TypeName::ButterFly(b) => self.free_left_wing(b.keys, memory),
-                _ => self.free_heap(*item.clone(), memory),
-            }
-        }
-
-        for item in right.iter() {
-            match item.name.clone() {
-                TypeName::ButterFly(b) => self.free_right_wing(b.values, memory),
-                _ => self.free_heap(*item.clone(), memory),
-            }
-        }
-    }
-
-    pub fn free_right_wing(&mut self, right: Vec<Box<Type>>, memory: &mut Memory) {
         for item in right.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => self.free_heap(*item.clone(), memory),
+                _ => item.free_heap(memory)
             }
         }
-    }
-
-    pub fn free_left_wing(&mut self, left: Vec<Box<Type>>, memory: &mut Memory) {
+        
         for item in left.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => self.free_heap(*item.clone(), memory),
+                _ => item.free_heap(memory)
             }
         }
-    }
-
-    pub fn free_heap(&mut self, _type: Type, memory: &mut Memory) {
-        let heap_addr = memory.load(_type.location).to_owned();
-        memory.free(u32::from_be_bytes(heap_addr.try_into().unwrap()));
     }
 }

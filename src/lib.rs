@@ -59,6 +59,7 @@ impl CPU {
                 }
                 "print" => print::print(memory, vars, self, cmd),
                 "ram" => stack::ram(memory, vars, self, cmd, statement),
+                "drop" => stack::drop(memory, vars, cmd),
                 "add" => operations::add::add(memory, vars, self, cmd),
                 "div" => operations::div::div(memory, vars, self, cmd),
                 "sub" => operations::sub::sub(memory, vars, self, cmd),
