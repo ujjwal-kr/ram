@@ -480,68 +480,29 @@ impl ButterFly {
                         let key = memory.yeild_i32(item.location);
                         let i32_prop = memory.yeild_i32(type_.location);
                         if key == i32_prop {
-                            let value_type = self.values[i].clone();
-                            match value_type.name {
-                                TypeName::ButterFly(b) => {
-                                    self.free_butterfly(b.keys, b.values, memory)
-                                }
-                                TypeName::String => self.free_heap(*value_type, memory),
-                                TypeName::Vector(Vector::String) => {
-                                    value_type.free_str_vec(memory);
-                                    self.free_heap(*value_type, memory);
-                                }
-                                TypeName::Vector(Vector::Int) => {
-                                    self.free_heap(*value_type, memory)
-                                }
-                                _ => (),
-                            }
                             self.keys.remove(i);
                             self.values.remove(i);
                             self.length -= 1;
                             return Ok(());
-                        }
                     }
                 }
+            }
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::String => {
-                let mut idx = 0usize;
-                let mut found = false;
                 for (i, item) in self.clone().keys.iter().enumerate() {
                     if item.name == type_.name {
                         let key = memory.yeild_string(item.location);
                         let prop = memory.yeild_string(type_.location);
                         if key == prop {
-                            idx = i;
-                            found = true;
-                            let value_type = self.values[i].clone();
-                            match value_type.name {
-                                TypeName::ButterFly(b) => {
-                                    self.free_butterfly(b.keys, b.values, memory)
-                                }
-                                TypeName::String => self.free_heap(*value_type, memory),
-                                TypeName::Vector(Vector::String) => {
-                                    value_type.free_str_vec(memory);
-                                    self.free_heap(*value_type, memory);
-                                }
-                                TypeName::Vector(Vector::Int) => {
-                                    self.free_heap(*value_type, memory)
-                                }
-                                _ => (),
-                            }
-                            self.free_heap(*item.clone(), memory);
-                            self.free_heap(type_.clone(), memory);
+                            self.keys.remove(i);
+                            self.values.remove(i);
+                            self.length -= 1;
+                            return Ok(())
                         }
                     }
                 }
-                if found {
-                    self.keys.remove(idx);
-                    self.values.remove(idx);
-                    self.length -= 1;
-                    Ok(())
-                } else {
-                    return Err(ErrorKind::MapValueNotFound);
-                }
+                return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::Vector(_) => unimplemented!(),
             TypeName::ButterFly(butterfly_type) => {
@@ -549,16 +510,6 @@ impl ButterFly {
                     match item.name.clone() {
                         TypeName::ButterFly(b) => {
                             if b == butterfly_type {
-                                let value_type = self.values[i].clone();
-                                match value_type.name {
-                                    TypeName::ButterFly(b) => {
-                                        self.free_butterfly(b.keys, b.values, memory)
-                                    }
-                                    TypeName::String => self.free_heap(*value_type, memory),
-                                    TypeName::Vector(_) => self.free_heap(*value_type, memory),
-                                    _ => (),
-                                }
-                                self.free_butterfly(b.keys, b.values, memory);
                                 self.keys.remove(i);
                                 self.values.remove(i);
                                 self.length -= 1;
