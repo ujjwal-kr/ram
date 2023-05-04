@@ -2,8 +2,7 @@ use crate::{
     funcs::errors::ErrorKind,
     memory::{Location, Memory},
 };
-use rand::{distributions::Alphanumeric, Rng};
-use std::collections::HashMap;
+use std::{collections::HashMap};
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
@@ -338,28 +337,29 @@ impl Vars {
         self.0.insert(name, t);
     }
 
-    fn parse_type_str(&mut self, val: String, memory: &mut Memory) -> Result<Type, ErrorKind> {
+    fn parse_type_str(&mut self, name: String, val: String, key: bool, memory: &mut Memory) -> Result<Type, ErrorKind> {
+        let val_name: String;
         match val.parse::<i32>() {
             Ok(n) => {
-                let name: String = rand::thread_rng()
-                    .sample_iter(&Alphanumeric)
-                    .take(10)
-                    .map(char::from)
-                    .collect();
-                self.set_int(name.clone(), n.to_string().as_str(), memory)?;
-                return Ok(self.get_type(name)?);
+                if key {
+                    val_name = format!("{}.n{}{}", name.clone().trim(), "k", val.trim());
+                } else {
+                    val_name = format!("{}.n{}{}", name.clone().trim(), "v", val.trim());
+                }
+                self.set_int(val_name.clone(), n.to_string().as_str(), memory)?;
+                return Ok(self.get_type(val_name)?);
             }
             _ => {
                 let quote: &str = &val[0..1];
-                if quote == "\"" {
+                if quote == "\"" || quote == "'" {
+                    if key {
+                        val_name = format!("{}.{}{}", name.clone().trim(), "k", val.trim())
+                    } else {
+                        val_name = format!("{}.{}{}", name.clone().trim(), "v", val.trim())
+                    }
                     let extracted_str = &val[1..val.len() - 1];
-                    let name: String = rand::thread_rng()
-                        .sample_iter(&Alphanumeric)
-                        .take(10)
-                        .map(char::from)
-                        .collect();
-                    self.set_string(name.clone(), extracted_str, memory);
-                    return Ok(self.get_type(name)?);
+                    self.set_string(val_name.clone(), extracted_str, memory);
+                    return Ok(self.get_type(val_name)?);
                 } else {
                     return Ok(self.get_type(val)?);
                 }
@@ -377,8 +377,8 @@ impl Vars {
         let t: Type = self.get_type(name.clone())?;
         match t.name {
             TypeName::ButterFly(_) => {
-                let left = self.parse_type_str(key, memory)?;
-                let right = self.parse_type_str(value, memory)?;
+                let left = self.parse_type_str(name.clone(), key, true, memory)?;
+                let right = self.parse_type_str(name.clone(), value, false, memory)?;
                 match self.0.get_mut(&name) {
                     Some(t) => match &mut t.name {
                         TypeName::ButterFly(b) => b.insert(left, right),
@@ -399,7 +399,7 @@ impl Vars {
         memory: &mut Memory,
     ) -> Result<Type, ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
-        let key_type = self.parse_type_str(key, memory)?;
+        let key_type = self.parse_type_str(name.clone(), key, true, memory)?;
         match t.name {
             TypeName::ButterFly(mut butterfly) => butterfly.get(key_type, memory),
             _ => Err(ErrorKind::ExpectedMap(name)),
@@ -424,7 +424,7 @@ impl Vars {
         memory: &mut Memory,
     ) -> Result<(), ErrorKind> {
         let t: Type = self.get_type(name.clone())?;
-        let key_type = self.parse_type_str(key, memory)?;
+        let key_type = self.parse_type_str(name.clone(), key, true, memory)?;
         match t.name {
             TypeName::ButterFly(_) => match self.0.get_mut(&name) {
                 Some(t) => match &mut t.name {
