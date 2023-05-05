@@ -565,6 +565,7 @@ impl ButterFly {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 TypeName::Vector(Vector::String) => item.free_str_vec(memory),
+                TypeName::I32 => {},
                 _ => item.free_heap(memory)
             }
         }
@@ -573,6 +574,7 @@ impl ButterFly {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 TypeName::Vector(Vector::String) => item.free_str_vec(memory),
+                TypeName::I32 => {},
                 _ => item.free_heap(memory),
             }
         }
