@@ -2,7 +2,7 @@ use crate::{
     funcs::errors::ErrorKind,
     memory::{Location, Memory},
 };
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
@@ -84,12 +84,20 @@ impl Vars {
 
     pub fn set_string(&mut self, name: String, value: &str, memory: &mut Memory) {
         let heap_addr = memory.malloc(value.as_bytes());
-        let location = memory.store(&heap_addr.to_be_bytes());
-        let new_string = Type {
-            name: TypeName::String,
-            location,
+        match self.0.get(&name) {
+            Some(old) => {
+                old.free_heap(memory);
+                memory.stack_mod(old.location, &heap_addr.to_be_bytes());
+            }
+            _ => {
+                let location = memory.store(&heap_addr.to_be_bytes());
+                let new_string = Type {
+                    name: TypeName::String,
+                    location,
+                };
+                self.0.insert(name, new_string);
+            }
         };
-        self.0.insert(name, new_string);
     }
 
     // vectors
@@ -225,7 +233,7 @@ impl Vars {
     pub fn drop(&mut self, name: String, memory: &mut Memory) -> Result<(), ErrorKind> {
         let t = self.get_type(name.clone())?;
         match t.name {
-            TypeName::I32 => {},
+            TypeName::I32 => {}
             TypeName::String => t.free_heap(memory),
             TypeName::Vector(Vector::String) => t.free_str_vec(memory),
             TypeName::Vector(Vector::Int) => t.free_heap(memory),
@@ -337,7 +345,13 @@ impl Vars {
         self.0.insert(name, t);
     }
 
-    fn parse_type_str(&mut self, name: String, val: String, key: bool, memory: &mut Memory) -> Result<Type, ErrorKind> {
+    fn parse_type_str(
+        &mut self,
+        name: String,
+        val: String,
+        key: bool,
+        memory: &mut Memory,
+    ) -> Result<Type, ErrorKind> {
         let val_name: String;
         match val.parse::<i32>() {
             Ok(n) => {
@@ -499,9 +513,9 @@ impl ButterFly {
                             self.values.remove(i);
                             self.length -= 1;
                             return Ok(());
+                        }
                     }
                 }
-            }
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::String => {
@@ -513,7 +527,7 @@ impl ButterFly {
                             self.keys.remove(i);
                             self.values.remove(i);
                             self.length -= 1;
-                            return Ok(())
+                            return Ok(());
                         }
                     }
                 }
@@ -550,14 +564,14 @@ impl ButterFly {
         for item in right.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => item.free_heap(memory)
+                _ => item.free_heap(memory),
             }
         }
-        
+
         for item in left.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => item.free_heap(memory)
+                _ => item.free_heap(memory),
             }
         }
     }
