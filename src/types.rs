@@ -64,12 +64,20 @@ impl Vars {
         memory: &mut Memory,
     ) -> Result<(), ErrorKind> {
         let int_bytes = self.parse_i32(value)?.to_be_bytes();
-        let location: Location = memory.store(&int_bytes);
-        let new_int = Type {
-            name: TypeName::I32,
-            location,
-        };
-        self.0.insert(name, new_int);
+        match self.0.get(&name) {
+            Some(old) => {
+                memory.stack_mod(old.location, &int_bytes)
+            }
+            _ => {
+                let location: Location = memory.store(&int_bytes);
+                let new_int = Type {
+                    name: TypeName::I32,
+                    location,
+                };
+                self.0.insert(name, new_int);
+            }
+        }
+
         Ok(())
     }
 
