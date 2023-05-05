@@ -120,14 +120,22 @@ impl Vars {
                 final_bytes.push(*bit);
             }
         }
-        let heap_addr: u32 = memory.malloc(&final_bytes);
-        let location: Location = memory.store(&heap_addr.to_be_bytes());
-        let new_int_vec = Type {
-            name: TypeName::Vector(Vector::Int),
-            location,
-        };
+        let heap_addr = memory.malloc(&final_bytes).to_be_bytes();
+        match self.0.get(&name) {
+            Some(old) => {
+                old.free_heap(memory);
+                memory.stack_mod(old.location, &heap_addr);
+            }
+            _ => {
+                let location: Location = memory.store(&heap_addr);
+                let new_int_vec = Type {
+                    name: TypeName::Vector(Vector::Int),
+                    location,
+                };
+                self.0.insert(name, new_int_vec);
+            }
+        }
 
-        self.0.insert(name, new_int_vec);
         Ok(())
     }
 
@@ -565,8 +573,8 @@ impl ButterFly {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 TypeName::Vector(Vector::String) => item.free_str_vec(memory),
-                TypeName::I32 => {},
-                _ => item.free_heap(memory)
+                TypeName::I32 => {}
+                _ => item.free_heap(memory),
             }
         }
 
@@ -574,7 +582,7 @@ impl ButterFly {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
                 TypeName::Vector(Vector::String) => item.free_str_vec(memory),
-                TypeName::I32 => {},
+                TypeName::I32 => {}
                 _ => item.free_heap(memory),
             }
         }
