@@ -153,14 +153,21 @@ impl Vars {
                 heap_addrs_bytes.push(byte)
             }
         }
-
-        let heap_addr_addr = memory.malloc(&heap_addrs_bytes);
-        let location: Location = memory.store(&heap_addr_addr.to_be_bytes());
-        let new_str_vec: Type = Type {
-            name: TypeName::Vector(Vector::String),
-            location,
-        };
-        self.0.insert(name, new_str_vec);
+        let heap_addr_addr = memory.malloc(&heap_addrs_bytes).to_be_bytes();
+        match self.0.get(&name) {
+            Some(old) => {
+                old.free_str_vec(memory);
+                memory.stack_mod(old.location, &heap_addr_addr);
+            }
+            _ => {
+                let location: Location = memory.store(&heap_addr_addr);
+                let new_str_vec: Type = Type {
+                    name: TypeName::Vector(Vector::String),
+                    location,
+                };
+                self.0.insert(name, new_str_vec);
+            }
+        }
     }
 
     pub fn set_raw_str_vec(&mut self, name: String, items: Vec<&str>, memory: &mut Memory) {
@@ -258,13 +265,14 @@ impl Type {
             panic!("free_str_vec called on illegal type")
         }
         let heap_addr = memory.load(self.location).to_owned();
-        let data = memory.heap_load(u32::from_be_bytes(heap_addr.try_into().unwrap()));
+        let data = memory.heap_load(u32::from_be_bytes(heap_addr.clone().try_into().unwrap()));
         if data.len() >= 4 {
             for bytes in data.chunks(4) {
                 let str_addr = u32::from_be_bytes(bytes.try_into().unwrap());
                 memory.free(str_addr)
             }
         }
+        memory.free(u32::from_be_bytes(heap_addr.try_into().unwrap()))
     }
 
     pub fn free_heap(&self, memory: &mut Memory) {
