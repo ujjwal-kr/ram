@@ -564,13 +564,15 @@ impl ButterFly {
         for item in right.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
-                _ => item.free_heap(memory),
+                TypeName::Vector(Vector::String) => item.free_str_vec(memory),
+                _ => item.free_heap(memory)
             }
         }
 
         for item in left.iter() {
             match item.name.clone() {
                 TypeName::ButterFly(b) => self.free_butterfly(b.keys, b.values, memory),
+                TypeName::Vector(Vector::String) => item.free_str_vec(memory),
                 _ => item.free_heap(memory),
             }
         }
