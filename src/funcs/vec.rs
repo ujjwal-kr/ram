@@ -75,16 +75,22 @@ pub fn vec(
                 return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
             }
         }
+        "shift" => {
+            let var = vars.get_type(cmd[1].to_string())?;
+            let heap_addr = memory.load(var.location).to_owned();
+            match var.name {
+                TypeName::Vector(Vector::String) => memory.shift_vec_str(&heap_addr),
+                TypeName::Vector(Vector::Int) => memory.shift_vec_int(&heap_addr),
+                _ => return Err(ErrorKind::ExpectedVec(cmd[1].to_string())),
+            }
+        }
         "pop" => {
             let var = vars.get_type(cmd[1].to_string())?;
-            if var.name == TypeName::Vector(Vector::String) {
-                let heap_data = vars.get_vec_str_mod(var, "", memory);
-                memory.pop_vec_str(&heap_data.heap_addr);
-            } else if var.name == TypeName::Vector(Vector::Int) {
-                let heap_data = vars.get_vec_int_mod(var, 0, memory);
-                memory.pop_vec_int(&heap_data.heap_addr);
-            } else {
-                return Err(ErrorKind::ExpectedVec(cmd[1].to_string()));
+            let heap_addr = memory.load(var.location).to_owned();
+            match var.name {
+                TypeName::Vector(Vector::String) => memory.pop_vec_str(&heap_addr),
+                TypeName::Vector(Vector::Int) => memory.pop_vec_int(&heap_addr),
+                _ => return Err(ErrorKind::ExpectedVec(cmd[1].to_string())),
             }
         }
         _ => {

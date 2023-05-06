@@ -265,4 +265,21 @@ impl Memory {
         let str_addr = u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
         self.free(str_addr);
     }
+
+    // shift
+
+    pub fn shift_vec_int(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self.heap.get_mut(
+            &u32::from_be_bytes(heap_bytes.try_into().unwrap())
+        ).unwrap();
+        heap_value.drain(0..4);
+    }
+
+    pub fn shift_vec_str(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self.heap.get_mut(
+            &u32::from_be_bytes(heap_bytes.try_into().unwrap())
+        ).unwrap();
+        let old_str_addr = heap_value.drain(0..4).collect::<Vec<u8>>();
+        self.free(u32::from_be_bytes(old_str_addr.try_into().unwrap()));
+    }
 }
