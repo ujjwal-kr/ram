@@ -1,10 +1,38 @@
 use crate::funcs::vec;
 use crate::{memory::Memory, types::Vars, CPU};
 
+// vec x pop
+// vec x shift
 // vec x push y
 // vec x len
 // vec y = x[1]
 // vec x[1] = y
+
+#[test]
+fn vec_int_shift() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_int_vec("x".to_string(), "[1,2]", &mut memory).unwrap();
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_int_vec(t.location), [2].to_vec());
+}
+
+#[test]
+fn vec_str_shift() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_str_vec("x".to_string(), "['a', 'b']", &mut memory);
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_str_vec(t.location), ["b"].to_vec());
+}
 
 #[test]
 fn vec_int_push_var() {
