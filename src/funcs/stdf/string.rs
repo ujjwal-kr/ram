@@ -160,3 +160,13 @@ pub fn concat(
     }
     Ok(())
 }
+
+
+pub fn trim(
+    memory: &mut Memory,
+    vars: &mut Vars,
+    registers: &mut CPU,
+    cmd: Vec<&str>
+) {
+    unimplemented!()
+}

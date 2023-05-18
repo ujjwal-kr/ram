@@ -18,6 +18,55 @@ use crate::{memory::Memory, types::Vars, CPU};
 // concat var string
 // concat var var
 
+// trim string
+// trim lxstring
+// trim var
+
+#[test]
+pub fn trim_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.string = " hello".to_string();
+    let statement = "trim string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd);
+    assert_eq!(registers.string, "hello".to_string());
+}
+
+#[test]
+pub fn trim_lxstring() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lxstring = " hello".to_string();
+    let statement = "trim string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd);
+    assert_eq!(registers.lxstring, "hello".to_string());
+}
+
+#[test]
+pub fn trim_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), " hello", &mut memory);
+    let statement = "trim x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd);
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_string(t.location), "hello".to_string());
+}
+
+
+
 #[test]
 pub fn split_string() {
     let mut memory: Memory = Memory::new();
