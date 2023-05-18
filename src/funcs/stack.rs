@@ -220,7 +220,7 @@ pub fn copy(
                         return Err(ErrorKind::ExpectedStr(dest.to_string()));
                     }
                 }
-                _ => vars.cast(src, dest, memory)?,
+                _ => vars.copy(src, dest, memory)?,
             }
         }
     }

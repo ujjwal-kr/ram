@@ -2,6 +2,7 @@ use crate::{
     funcs::errors::ErrorKind,
     memory::{Location, Memory},
 };
+use rand::{distributions::Alphanumeric, Rng};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -65,9 +66,7 @@ impl Vars {
     ) -> Result<(), ErrorKind> {
         let int_bytes = self.parse_i32(value)?.to_be_bytes();
         match self.0.get(&name) {
-            Some(old) => {
-                memory.stack_mod(old.location, &int_bytes)
-            }
+            Some(old) => memory.stack_mod(old.location, &int_bytes),
             _ => {
                 let location: Location = memory.store(&int_bytes);
                 let new_int = Type {
@@ -230,9 +229,9 @@ impl Vars {
         }
     }
 
-    // Casting stuff
+    // Copying stuff
 
-    pub fn cast(&mut self, src: &str, dest: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
+    pub fn copy(&mut self, src: &str, dest: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
         let source = self.get_type(src.to_string())?;
         let destination = self.get_type(dest.to_string())?;
         if destination.name != source.name {
@@ -413,7 +412,20 @@ impl Vars {
                     self.set_string(val_name.clone(), extracted_str, memory);
                     return Ok(self.get_type(val_name)?);
                 } else {
-                    return Ok(self.get_type(val)?);
+                    let val_name: String = rand::thread_rng()
+                        .sample_iter(&Alphanumeric)
+                        .take(10)
+                        .map(char::from)
+                        .collect();
+                    match self.get_type(val.clone())?.name {
+                        TypeName::I32 => self.set_int(val_name.clone(), "0", memory)?,
+                        TypeName::String => self.set_string(val_name.clone(), "", memory),
+                        TypeName::Vector(Vector::Int) => self.set_int_vec(val_name.clone(), "[]", memory)?,
+                        TypeName::Vector(Vector::String) => self.set_str_vec(val_name.clone(), "[]", memory),
+                        TypeName::ButterFly(_) => return self.get_type(val),
+                    }
+                    self.copy(&val, &val_name, memory)?;
+                    self.get_type(val_name)
                 }
             }
         }
