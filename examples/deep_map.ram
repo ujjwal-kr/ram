@@ -1,0 +1,51 @@
+main:
+    ram x :map
+
+    ram y :map
+    insert x { "randstring": y }
+
+    ram z :map
+    insert z { "randstring1": x }
+
+    ram a :map
+    insert a { "randstring2": z }
+
+    ram b :map
+    insert b { "randstring3": a }
+
+    ram c :map
+    insert c { "randstring4": b }
+
+    ram d :map
+    insert d { "randstring5": c }
+
+    ram e :map
+    insert e { "randstring6": d }
+
+    ram f :map
+    insert f { "randstring7": e }
+
+    ram g :map
+    insert g { "randstring8": f }
+
+    ram h :map
+    insert h { "randstring9": g }
+
+    ram i :map
+    insert i { "randstring10": h }
+
+    ram j :map
+    insert j { "randstring11": i }
+
+    ram k :map
+    insert k { "randstring12": j }
+
+    ram l :map
+    insert l { "randstring13": k }
+
+    ram m :map
+    insert m { "randstring14": l }
+
+    ram n :map
+    insert n { "randstring15": m }
+    dbg
