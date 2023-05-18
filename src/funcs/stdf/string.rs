@@ -161,12 +161,27 @@ pub fn concat(
     Ok(())
 }
 
-
 pub fn trim(
     memory: &mut Memory,
     vars: &mut Vars,
     registers: &mut CPU,
-    cmd: Vec<&str>
-) {
-    unimplemented!()
+    cmd: Vec<&str>,
+) -> Result<(), ErrorKind> {
+    if cmd.len() != 2 {
+        return Err(ErrorKind::ArgErr);
+    }
+    match cmd[1] {
+        "string" => registers.string = registers.string.trim().to_string(),
+        "lxstring" => registers.lxstring = registers.lxstring.trim().to_string(),
+        _ => {
+            let t = vars.get_type(cmd[1].to_string())?;
+            if t.name == TypeName::String {
+                let value = memory.yeild_string(t.location);
+                vars.set_string(cmd[1].to_string(), value.trim(), memory);
+            } else {
+                return Err(ErrorKind::ExpectedStr(cmd[1].to_string()));
+            }
+        }
+    }
+    Ok(())
 }

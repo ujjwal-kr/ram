@@ -32,7 +32,7 @@ pub fn trim_string() {
     let statement = "trim string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    trim(&mut memory, &mut vars, &mut registers, cmd);
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.string, "hello".to_string());
 }
 
@@ -43,10 +43,10 @@ pub fn trim_lxstring() {
     let mut vars: Vars = Vars::new();
 
     registers.lxstring = " hello".to_string();
-    let statement = "trim string";
+    let statement = "trim lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    trim(&mut memory, &mut vars, &mut registers, cmd);
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     assert_eq!(registers.lxstring, "hello".to_string());
 }
 
@@ -60,7 +60,7 @@ pub fn trim_var() {
     let statement = "trim x";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
 
-    trim(&mut memory, &mut vars, &mut registers, cmd);
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_string(t.location), "hello".to_string());
 }
