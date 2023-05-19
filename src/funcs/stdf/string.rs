@@ -22,15 +22,24 @@ pub fn split(
     let mut delimiter = &final_str[1..final_str.len() - 1];
     let binding = append_escapes(&delimiter);
     delimiter = binding.as_str();
+    println!("{}", delimiter);
     match cmd[1] {
         "string" => vars.set_raw_str_vec(
             var_str.to_string(),
-            registers.string.split(delimiter).collect::<Vec<&str>>(),
+            registers
+                .string
+                .split(delimiter)
+                .filter(|&x| x != delimiter)
+                .collect::<Vec<&str>>(),
             memory,
         ),
         "lxstring" => vars.set_raw_str_vec(
             var_str.to_string(),
-            registers.lxstring.split(delimiter).collect::<Vec<&str>>(),
+            registers
+                .lxstring
+                .split(delimiter)
+                .filter(|&x| x != delimiter)
+                .collect::<Vec<&str>>(),
             memory,
         ),
         _ => {
@@ -40,7 +49,10 @@ pub fn split(
                 let split_var = memory.yeild_string(split_var_str_type.location);
                 vars.set_raw_str_vec(
                     var_str.to_string(),
-                    split_var.split(delimiter).collect::<Vec<&str>>(),
+                    split_var
+                        .split(delimiter)
+                        .filter(|&x| x != delimiter)
+                        .collect::<Vec<&str>>(),
                     memory,
                 );
             } else {

@@ -180,7 +180,7 @@ impl Vars {
     pub fn set_raw_str_vec(&mut self, name: String, items: Vec<&str>, memory: &mut Memory) {
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
-            let current_heap_addr = memory.malloc(item.trim().as_bytes());
+            let current_heap_addr = memory.malloc(item.as_bytes());
             let addr_bytes = current_heap_addr.to_be_bytes();
             for byte in addr_bytes {
                 heap_addrs_bytes.push(byte)
@@ -206,7 +206,7 @@ impl Vars {
     pub fn set_owned_raw_str_vec(&mut self, name: String, items: Vec<String>, memory: &mut Memory) {
         let mut heap_addrs_bytes: Vec<u8> = vec![];
         for item in items {
-            let current_heap_addr = memory.malloc(item.trim().as_bytes());
+            let current_heap_addr = memory.malloc(item.as_bytes());
             let addr_bytes = current_heap_addr.to_be_bytes();
             for byte in addr_bytes {
                 heap_addrs_bytes.push(byte)
