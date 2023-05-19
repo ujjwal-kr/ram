@@ -1,4 +1,7 @@
-push 100
-push 200
-add
-print
+main:
+    push 6
+    push 7
+
+ok:
+    push 12
+    push 10

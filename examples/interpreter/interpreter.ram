@@ -1,4 +1,5 @@
 main:
+    ram labelMap :map
     ram stack :vec :int = []
     ram i :int = 0
     ram lxstring = "./examples/interpreter/test.txt"
@@ -15,6 +16,9 @@ main:
 main_loop:
     ram statement :str = ""
     vec statement = program[i]
+    trim statement
+
+    jmp parser:
 
     ram lx 1
     add i lx
@@ -25,6 +29,30 @@ main_loop:
 
     cmp plen i
     jne main_loop:
+    ret
+
+parser:
+    ram chars :vec :str = []
+    split statement > "" = chars
+    ram col :str = ""
+    vec chars len
+    ram 1
+    sub
+    ram lx prev
+    vec col = chars[lx]
+    ram string = ":"
+    cmp col string
+    je add_label:
+
+    vec chars len
+    print
+    print var chars
+
+    drop chars
+    ret
+
+add_label:
+    insert labelMap { statement: i}
     ret
 
 match:
@@ -71,7 +99,8 @@ push:
     ram numstr :str = ""
     vec numstr = cmd[1]
     parse numstr :int
-    vec stack push lx 
+    vec stack push lx
+    drop numstr
     ret
 
 pop:
@@ -86,6 +115,7 @@ print:
     ram num :int = 0
     vec num = stack[lx]
     print var num
+    drop num
     ret
 
 get_last_two:
@@ -108,6 +138,8 @@ add:
     add n1 n2
     ram lx prev
     vec stack push lx
+    drop n1
+    drop n2
     ret
 
 sub:
@@ -115,6 +147,8 @@ sub:
     sub n2 n1
     ram lx prev
     vec stack push lx
+    drop n1
+    drop n2
     ret
 
 cmp:
@@ -128,7 +162,8 @@ cmp:
 
     cmp n2 n1
     jsm cmp_sm:
-
+    drop n1
+    drop n2 
     ret
 
 cmp_gr:
@@ -142,7 +177,6 @@ cmp_je:
     ret
 
 cmp_sm:
-    print smol
     ram lx -1
     vec stack push lx
     ret
