@@ -228,7 +228,6 @@ impl Memory {
             let str_addr_bytes = &heap_value[idx * 4..idx * 4 + 4];
             let old_str_addr =
                 u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
-            println!("{:?}", str_addr.to_vec());
             heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec());
             self.free(old_str_addr);
         } else {

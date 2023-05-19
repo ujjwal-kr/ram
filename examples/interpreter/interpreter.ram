@@ -18,7 +18,7 @@ main_loop:
     vec statement = program[i]
     trim statement
 
-    jmp parser:
+    jmp parser_prolog:
 
     ram lx 1
     add i lx
@@ -31,24 +31,35 @@ main_loop:
     jne main_loop:
     ret
 
-parser:
+parser_prolog:
+    ram instructions :vec :str = []
     ram chars :vec :str = []
     split statement > "" = chars
-    ram col :str = ""
+    vec chars len
+    ram 0
+    cmp
+    jne parser_label:
+    ret
+
+parser_label:
     vec chars len
     ram 1
     sub
     ram lx prev
+    ram col :str = ""
     vec col = chars[lx]
     ram string = ":"
     cmp col string
     je add_label:
 
-    vec chars len
-    print
-    print var chars
-
+    cmp col string
+    jne push_instruction:
     drop chars
+    ret
+
+push_instruction:
+    print bruh
+    vec instructions push statement
     ret
 
 add_label:

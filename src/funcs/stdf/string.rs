@@ -22,7 +22,6 @@ pub fn split(
     let mut delimiter = &final_str[1..final_str.len() - 1];
     let binding = append_escapes(&delimiter);
     delimiter = binding.as_str();
-    println!("{}", delimiter);
     match cmd[1] {
         "string" => vars.set_raw_str_vec(
             var_str.to_string(),
