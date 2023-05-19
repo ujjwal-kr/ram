@@ -83,6 +83,23 @@ pub fn split_string() {
     assert_eq!(memory.yeild_str_vec(t.location), ["he", "llo"]);
 }
 
+
+#[test]
+pub fn split_string_char() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.string = "hello".to_string();
+    vars.set_str_vec("x".to_string(), "['']", &mut memory);
+    let statement = "split string > \"\" = x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_str_vec(t.location).len(), 5);
+}
+
 #[test]
 pub fn split_lxstring() {
     let mut memory: Memory = Memory::new();
