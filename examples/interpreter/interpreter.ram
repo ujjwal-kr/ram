@@ -1,7 +1,11 @@
+include "examples/interpreter/parser.ram"
+
 main:
     ram labelMap :map
     ram stack :vec :int = []
     ram i :int = 0
+    ram parser_ip :int = 0
+    ram pc :int = 0
     ram lxstring = "./examples/interpreter/test.txt"
     stdfs open lxstring = string
     ram program :vec :str = []
@@ -10,60 +14,25 @@ main:
     vec program len
     ram lx prev
     copy plen = lx
-    jmp main_loop:
+    ram instructions :vec :str = []
+    jmp parser_loop:
+    jmp program_loop:
+    print worked the fist time? or did it?
     halt
 
-main_loop:
+
+program_loop:
     ram statement :str = ""
-    vec statement = program[i]
-    trim statement
-
-    jmp parser_prolog:
-
-    ram lx 1
-    add i lx
-    ram lx prev
-    copy i = lx
-    
+    vec statement = instructions[pc]
     jmp match:
 
-    cmp plen i
-    jne main_loop:
-    ret
-
-parser_prolog:
-    ram instructions :vec :str = []
-    ram chars :vec :str = []
-    split statement > "" = chars
-    vec chars len
-    ram 0
-    cmp
-    jne parser_label:
-    ret
-
-parser_label:
-    vec chars len
-    ram 1
-    sub
+    ram lx 1
+    add lx pc
     ram lx prev
-    ram col :str = ""
-    vec col = chars[lx]
-    ram string = ":"
-    cmp col string
-    je add_label:
+    copy pc = lx
 
-    cmp col string
-    jne push_instruction:
-    drop chars
-    ret
-
-push_instruction:
-    print bruh
-    vec instructions push statement
-    ret
-
-add_label:
-    insert labelMap { statement: i}
+    cmp pc parser_ip
+    jne program_loop:
     ret
 
 match:
@@ -71,6 +40,7 @@ match:
     ram cmd :vec :str = [] 
     split statement > " " = cmd
     vec matchstr = cmd[0]
+    trim matchstr
 
     ram string = "push"
     cmp string matchstr
