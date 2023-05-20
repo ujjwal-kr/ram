@@ -1,8 +1,11 @@
 include "examples/interpreter/parser.ram"
+include "examples/interpreter/var.ram"
 
 main:
     ram labelMap :map
     ram stack :vec :int = []
+    ram vars_int :map
+    ram vars_str :map
     ram i :int = 0
     ram parser_ip :int = 0
     ram pc :int = 0
@@ -17,7 +20,6 @@ main:
     ram instructions :vec :str = []
     jmp parser_loop:
     jmp program_loop:
-    print worked the fist time? or did it?
     halt
 
 
@@ -69,6 +71,14 @@ match:
     ram string = "pop"
     cmp string matchstr
     je pop:
+
+    ram string = "halt"
+    cmp string matchstr
+    je halt:
+
+    ram string = "var"
+    cmp string matchstr
+    je var:
 
     ram string = "cmp"
     cmp string matchstr
@@ -131,6 +141,9 @@ sub:
     drop n1
     drop n2
     ret
+
+halt:
+    halt
 
 cmp:
     jmp get_last_two:

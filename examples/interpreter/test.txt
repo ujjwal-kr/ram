@@ -1,7 +1,2 @@
 main:
-    push 6
-    push 7
-
-ok:
-    push 12
-    push 10
+    var x str = aaaaaa
