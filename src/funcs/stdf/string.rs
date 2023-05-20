@@ -12,22 +12,29 @@ pub fn split(
     if cmd.len() < 6 {
         return Err(ErrorKind::ArgErr);
     }
-    let var_str = statement.split('=').collect::<Vec<&str>>()[1].trim();
+    let var_str = cmd[cmd.len() - 1].trim();
     let t = vars.get_type(var_str.to_string())?;
     if t.name != TypeName::Vector(Vector::String) {
         return Err(ErrorKind::ExpectedVec(var_str.to_string()));
     }
-    let del_str = statement.split('>').collect::<Vec<&str>>()[1];
-    let final_str = del_str.split('=').collect::<Vec<&str>>()[0].trim();
-    let mut delimiter = &final_str[1..final_str.len() - 1];
+    let mut qc = 0i32;
+    let mut delimiter = String::from("");
+    for c in statement.chars() {
+        if c == '"' {
+            qc += 1;
+        }
+        if qc == 1 && c != '"' {
+            delimiter.push(c)
+        }
+    }
     let binding = append_escapes(&delimiter);
-    delimiter = binding.as_str();
+    delimiter = binding;
     match cmd[1] {
         "string" => vars.set_raw_str_vec(
             var_str.to_string(),
             registers
                 .string
-                .split(delimiter)
+                .split(delimiter.as_str())
                 .filter(|&x| x != delimiter)
                 .collect::<Vec<&str>>(),
             memory,
@@ -36,7 +43,7 @@ pub fn split(
             var_str.to_string(),
             registers
                 .lxstring
-                .split(delimiter)
+                .split(delimiter.as_str())
                 .filter(|&x| x != delimiter)
                 .collect::<Vec<&str>>(),
             memory,
@@ -49,7 +56,7 @@ pub fn split(
                 vars.set_raw_str_vec(
                     var_str.to_string(),
                     split_var
-                        .split(delimiter)
+                        .split(delimiter.as_str())
                         .filter(|&x| x != delimiter)
                         .collect::<Vec<&str>>(),
                     memory,
