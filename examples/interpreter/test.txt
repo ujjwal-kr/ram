@@ -1,2 +1,13 @@
 main:
-    var x str = aaaaaa
+	push 10
+	push 23
+	add
+	print
+	
+	jmp ok:
+    println bye from main
+	halt
+
+ok:
+	println hello world
+	ret

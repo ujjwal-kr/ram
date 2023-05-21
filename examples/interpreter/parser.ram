@@ -15,6 +15,7 @@ parser_loop:
     ret
 
 parser_start:
+    ram isLabel :int = 0
     ram chars :vec :str = []
     split statement > "" = chars
     vec chars len
@@ -32,9 +33,9 @@ parser_label:
     vec col = chars[lx]
     ram string = ":"
     cmp col string
-    je add_label:
-
-    cmp col string
+    je add_label_check:
+    ram lx 1
+    cmp isLabel lx
     jne push_instruction:
     drop chars
     ret
@@ -47,7 +48,18 @@ push_instruction:
     vec instructions push statement
     ret
 
+add_label_check:
+    ram cmd :vec :str = []
+    split statement > " " = cmd
+    vec cmd len
+    ram 1
+    cmp
+    drop cmd
+    je add_label:
+    ret
+
 add_label:
+    ram isLabel :int = 1
     insert labelMap { statement: parser_ip }
     ret
 

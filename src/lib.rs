@@ -78,6 +78,7 @@ impl CPU {
                 "concat" => stdf::string::concat(memory, vars, self, cmd),
                 "copy" => stack::copy(memory, vars, self, cmd, statement),
                 "vec" => vec::vec(memory, vars, self, cmd, statement),
+                "join" => stdf::string::join(memory, vars, self, cmd, statement),
                 "trim" => stdf::string::trim(memory, vars, self, cmd),
                 "insert" => butterfly::map(memory, vars, cmd, statement),
                 "delete" => butterfly::map(memory, vars, cmd, statement),
