@@ -1,5 +1,6 @@
 include "examples/interpreter/parser.ram"
 include "examples/interpreter/var.ram"
+include "examples/interpreter/jump.ram"
 
 main:
     ram labelMap :map
@@ -20,7 +21,6 @@ main:
     copy plen = lx
     ram instructions :vec :str = []
     jmp parser_loop:
-    print var instructions
     jmp program_loop:
     halt
 
@@ -196,45 +196,3 @@ cmp_sm:
     ram lx -1
     vec stack push lx
     ret
-
-jmp:
-    ram labelName :str = ""
-    vec labelName = cmd[1]
-    jmp get_label_id:
-    jmp push_pc_callstack:
-    ram pc :int = 0
-    copy pc = label_id
-    ret
-
-get_label_id:
-    ram label_id :int = 0
-    get labelMap labelName = label_id
-    ram lx 1 
-    sub label_id lx
-    ram lx prev
-    copy label_id = lx
-    ret
-
-push_pc_callstack:
-    ram lx 1
-    add pc lx
-    ram lx prev
-    copy pc = lx
-    vec callstask push pc
-    drop pc
-    ret
-
-ret:
-   ram pc :int = 0
-   vec callstask len
-   ram 1
-   sub
-   ram lx prev
-   vec pc = callstask[lx]
-   copy lx = pc
-   ram lx
-   ram 1
-   sub
-   ram lx prev
-   copy pc = lx
-   ret
