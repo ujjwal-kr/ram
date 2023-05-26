@@ -7,6 +7,50 @@ jmp:
     copy pc = label_id
     ret
 
+jc_prepare:
+   vec stack len
+   ram 1
+   sub
+   ram lx prev
+   ram stack_int :int = 0
+   vec stack_int = stack[lx]
+   copy lx = stack_int
+   drop stack_int
+   vec stack pop
+   ret
+
+je:
+    jmp jc_prepare:
+    ram 0
+    ram lx
+    cmp
+    je jmp:
+    ret
+
+jne:
+    jmp jc_prepare:
+    ram 0
+    ram lx
+    cmp
+    jne jmp:
+    ret
+
+jsm:
+    jmp jc_prepare:
+    ram -1
+    ram lx
+    cmp
+    je jmp:
+    ret
+
+jgr:
+    jmp jc_prepare:
+    ram 1
+    ram lx
+    cmp
+    je jmp:
+    ret
+
 get_label_id:
     ram label_id :int = 0
     get labelMap labelName = label_id

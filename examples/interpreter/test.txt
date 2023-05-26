@@ -1,2 +1,9 @@
 main:
 	push 10
+	push 111
+	cmp
+	jne ok:
+	halt
+
+ok:
+	println bruh

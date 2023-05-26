@@ -93,6 +93,22 @@ match:
     cmp string matchstr
     je jmp:
 
+    ram string = "je"
+    cmp string matchstr
+    je je:
+
+    ram string = "jne"
+    cmp string matchstr
+    je jne:
+
+    ram string = "jgr"
+    cmp string matchstr
+    je jgr:
+
+    ram string = "jsm"
+    cmp string matchstr
+    je jsm:
+
     ram string = "ret"
     cmp string matchstr
     je ret:
