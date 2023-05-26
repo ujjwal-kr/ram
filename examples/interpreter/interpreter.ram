@@ -116,6 +116,28 @@ match:
     ret
 
 push:
+    vec cmd len
+    ram 2
+    cmp
+    jgr push_var:
+    vec cmd len
+    ram 2
+    cmp
+    je push_int:
+    ret
+
+push_var:
+    ram v_name :str = ""
+    vec v_name = cmd[2]
+    ram v_value :int = 0
+    get vars_int v_name = v_value
+    copy lx = v_value
+    vec stack push lx
+    drop v_name
+    drop v_value
+    ret
+
+push_int:
     ram numstr :str = ""
     vec numstr = cmd[1]
     parse numstr :int
