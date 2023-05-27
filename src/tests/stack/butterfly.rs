@@ -17,3 +17,23 @@ fn ram_map() {
     };
     assert_eq!(vars.get_type("x".to_string()).unwrap(), t)
 }
+
+#[test]
+fn insert_and_get_map() {
+    let mut memory: Memory = Memory::new();
+    let mut vars: Vars = Vars::new();
+
+    let statement: &str = "ram x :map";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    butterfly::map(&mut memory, &mut vars, cmd, statement).unwrap();
+    let statement: &str = "insert x { \"hello\": \"world\" } ";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    butterfly::map(&mut memory, &mut vars, cmd, statement).unwrap();
+    
+    vars.set_string("y".to_string(), "", &mut memory);
+    let statement: &str = "get x \"hello\" = y";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    butterfly::map(&mut memory, &mut vars, cmd, statement).unwrap();
+    let t = vars.get_type("y".to_string()).unwrap();
+    assert_eq!(memory.yeild_string(t.location), "world".to_string());
+}
