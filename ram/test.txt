@@ -1,4 +1,0 @@
-ram 200
-ram 300
-sub
-print

@@ -1,0 +1,65 @@
+parser_loop:
+    ram statement :str = ""
+    vec statement = program[i]
+    trim statement
+
+    jmp parser_start:
+
+    ram lx 1
+    add i lx
+    ram lx prev
+    copy i = lx
+
+    cmp plen i
+    jne parser_loop:
+    ret
+
+parser_start:
+    ram isLabel :int = 0
+    ram chars :vec :str = []
+    split statement > "" = chars
+    vec chars len
+    ram 0
+    cmp
+    jne parser_label:
+    ret
+
+parser_label:
+    vec chars len
+    ram 1
+    sub
+    ram lx prev
+    ram col :str = ""
+    vec col = chars[lx]
+    ram string = ":"
+    cmp col string
+    je add_label_check:
+    ram lx 1
+    cmp isLabel lx
+    jne push_instruction:
+    drop chars
+    ret
+
+push_instruction:
+    ram lx 1
+    add parser_ip lx
+    ram lx prev
+    copy parser_ip = lx
+    vec instructions push statement
+    ret
+
+add_label_check:
+    ram cmd :vec :str = []
+    split statement > " " = cmd
+    vec cmd len
+    ram 1
+    cmp
+    drop cmd
+    je add_label:
+    ret
+
+add_label:
+    ram isLabel :int = 1
+    insert labelMap { statement: parser_ip }
+    ret
+

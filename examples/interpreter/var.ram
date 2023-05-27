@@ -1,0 +1,49 @@
+var:
+    vec cmd len
+    ram 5
+    cmp
+    jsm var_len_err:
+    ram var_name :str = ""
+    ram type :str = ""
+    vec type = cmd[2]
+    vec var_name = cmd[1]
+    ram match_type :str = "str"
+    cmp type match_type
+    je var_add_str:
+
+    ram match_type :str = "int"
+    cmp type match_type
+    je var_add_int:
+
+    drop match_type
+    drop type
+    drop var_name
+    ret
+
+var_add_int:
+    ram int_str :str = ""
+    vec int_str = cmd[4]
+    parse int_str :int
+    ram temp_lx :int = 0
+    copy temp_lx = lx
+    insert vars_int { var_name: temp_lx }
+
+    drop temp_lx
+    drop int_str
+    ret
+
+var_add_str:
+    ram eq :vec :str = []
+    split statement > "=" = eq
+    ram value :str = ""
+    vec value = eq[1]
+    trim value
+    insert vars_str { var_name: value }
+
+    drop value
+    drop eq
+    ret
+
+var_len_err:
+    syntax error: bad args for var command
+    halt

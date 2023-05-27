@@ -9,7 +9,7 @@ pub struct Memory {
     pub heap: HashMap<u32, Vec<u8>>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct Location {
     pub start: usize,
     pub size: usize,
@@ -228,7 +228,6 @@ impl Memory {
             let str_addr_bytes = &heap_value[idx * 4..idx * 4 + 4];
             let old_str_addr =
                 u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
-            println!("{:?}", str_addr.to_vec());
             heap_value.splice(idx * 4..idx * 4 + 4, str_addr.to_vec());
             self.free(old_str_addr);
         } else {
@@ -264,5 +263,22 @@ impl Memory {
             .collect::<Vec<u8>>();
         let str_addr = u32::from_be_bytes(str_addr_bytes.try_into().expect("invalid heap addr"));
         self.free(str_addr);
+    }
+
+    // shift
+
+    pub fn shift_vec_int(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self.heap.get_mut(
+            &u32::from_be_bytes(heap_bytes.try_into().unwrap())
+        ).unwrap();
+        heap_value.drain(0..4);
+    }
+
+    pub fn shift_vec_str(&mut self, heap_bytes: &[u8]) {
+        let heap_value = &mut *self.heap.get_mut(
+            &u32::from_be_bytes(heap_bytes.try_into().unwrap())
+        ).unwrap();
+        let old_str_addr = heap_value.drain(0..4).collect::<Vec<u8>>();
+        self.free(u32::from_be_bytes(old_str_addr.try_into().unwrap()));
     }
 }

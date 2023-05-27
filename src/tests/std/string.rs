@@ -18,6 +18,55 @@ use crate::{memory::Memory, types::Vars, CPU};
 // concat var string
 // concat var var
 
+// trim string
+// trim lxstring
+// trim var
+
+#[test]
+pub fn trim_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.string = " hello".to_string();
+    let statement = "trim string";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
+    assert_eq!(registers.string, "hello".to_string());
+}
+
+#[test]
+pub fn trim_lxstring() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.lxstring = " hello".to_string();
+    let statement = "trim lxstring";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
+    assert_eq!(registers.lxstring, "hello".to_string());
+}
+
+#[test]
+pub fn trim_var() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), " hello", &mut memory);
+    let statement = "trim x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    trim(&mut memory, &mut vars, &mut registers, cmd).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_string(t.location), "hello".to_string());
+}
+
+
+
 #[test]
 pub fn split_string() {
     let mut memory: Memory = Memory::new();
@@ -32,6 +81,23 @@ pub fn split_string() {
     split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location), ["he", "llo"]);
+}
+
+
+#[test]
+pub fn split_string_char() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    registers.string = "hello".to_string();
+    vars.set_str_vec("x".to_string(), "['']", &mut memory);
+    let statement = "split string > \"\" = x";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    split(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_str_vec(t.location).len(), 5);
 }
 
 #[test]

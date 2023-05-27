@@ -59,6 +59,7 @@ impl CPU {
                 }
                 "print" => print::print(memory, vars, self, cmd),
                 "ram" => stack::ram(memory, vars, self, cmd, statement),
+                "drop" => stack::drop(memory, vars, cmd),
                 "add" => operations::add::add(memory, vars, self, cmd),
                 "div" => operations::div::div(memory, vars, self, cmd),
                 "sub" => operations::sub::sub(memory, vars, self, cmd),
@@ -76,7 +77,12 @@ impl CPU {
                 "split" => stdf::string::split(memory, vars, self, cmd, statement),
                 "concat" => stdf::string::concat(memory, vars, self, cmd),
                 "copy" => stack::copy(memory, vars, self, cmd, statement),
-                "vec" => stack::vec(memory, vars, self, cmd, statement),
+                "vec" => vec::vec(memory, vars, self, cmd, statement),
+                "join" => stdf::string::join(memory, vars, self, cmd, statement),
+                "trim" => stdf::string::trim(memory, vars, self, cmd),
+                "insert" => butterfly::map(memory, vars, cmd, statement),
+                "delete" => butterfly::map(memory, vars, cmd, statement),
+                "get" => butterfly::map(memory, vars, cmd, statement),
                 "stdin" => stdf::stdin::stdin(memory, vars, self, cmd, statement),
                 "stdfs" => stdf::stdfs::stdfs(memory, vars, self, cmd),
 
@@ -138,6 +144,13 @@ impl CPU {
                                 name, label, statement
                             )
                         }
+                        ErrorKind::ExpectedMap(name) => {
+                            println!(
+                                "Expected '{}' to be a map at {}: {}",
+                                name, label, statement
+                            )
+                        }
+                        ErrorKind::MapValueNotFound => println!("Property Not found on map"),
                     }
                     process::exit(1)
                 }

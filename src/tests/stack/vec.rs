@@ -1,10 +1,38 @@
-use crate::funcs::stack;
+use crate::funcs::vec;
 use crate::{memory::Memory, types::Vars, CPU};
 
+// vec x pop
+// vec x shift
 // vec x push y
 // vec x len
 // vec y = x[1]
 // vec x[1] = y
+
+#[test]
+fn vec_int_shift() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_int_vec("x".to_string(), "[1,2]", &mut memory).unwrap();
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_int_vec(t.location), [2].to_vec());
+}
+
+#[test]
+fn vec_str_shift() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_str_vec("x".to_string(), "['a', 'b']", &mut memory);
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    let t = vars.get_type("x".to_string()).unwrap();
+    assert_eq!(memory.yeild_str_vec(t.location), ["b"].to_vec());
+}
 
 #[test]
 fn vec_int_push_var() {
@@ -17,7 +45,7 @@ fn vec_int_push_var() {
     vars.set_int("y".to_string(), "1", &mut memory).unwrap();
     let statement = "vec x push y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location), [1, 2, 1].to_vec())
@@ -34,7 +62,7 @@ fn vec_int_push_lx() {
     registers.lx = 1;
     let statement = "vec x push lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location), [1, 2, 1].to_vec())
@@ -51,7 +79,7 @@ fn vec_int_push_rv() {
     registers.rv = 1;
     let statement = "vec x push rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location), [1, 2, 1].to_vec())
@@ -69,7 +97,7 @@ fn vec_str_push_string() {
     registers.string = "k".to_string();
     let statement = "vec x push string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(
@@ -88,7 +116,7 @@ fn vec_str_push_lxstring() {
     registers.lxstring = "k".to_string();
     let statement = "vec x push lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(
@@ -107,7 +135,7 @@ fn vec_str_push_var() {
     vars.set_string("y".to_string(), "k", &mut memory);
     let statement = "vec x push y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
 
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(
@@ -139,7 +167,7 @@ fn vec_get_lx_idx() {
         .unwrap();
     let statement = "vec lx = x[1]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lx, 2);
 }
 
@@ -153,7 +181,7 @@ fn vec_get_rv_idx() {
         .unwrap();
     let statement = "vec rv = x[1]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.rv, 2);
 }
 
@@ -168,7 +196,7 @@ fn vec_get_lx_rv_idx() {
         .unwrap();
     let statement = "vec lx = x[rv]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lx, 2);
 }
 
@@ -181,7 +209,7 @@ fn vec_get_string_idx() {
     vars.set_str_vec("x".to_string(), "['ok', 'omk']", &mut memory);
     let statement = "vec string = x[1]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.string, "omk".to_string());
 }
 
@@ -194,7 +222,7 @@ fn vec_get_lxstring_idx() {
     vars.set_str_vec("x".to_string(), "['ok', 'omk']", &mut memory);
     let statement = "vec lxstring = x[1]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lxstring, "omk".to_string());
 }
 
@@ -207,7 +235,7 @@ fn vec_get_string_idx_rv() {
     vars.set_str_vec("x".to_string(), "['ok', 'omk']", &mut memory);
     let statement = "vec string = x[rv]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.string, "omk".to_string());
 }
 
@@ -220,7 +248,7 @@ fn vec_get_var_idx() {
     vars.set_str_vec("x".to_string(), "['ok', 'omk']", &mut memory);
     let statement = "vec y = x[1]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("y".to_string()).unwrap();
     assert_eq!(memory.yeild_string(t.location), "omk".to_string());
 }
@@ -235,7 +263,7 @@ fn vec_get_var_idx_lx() {
         .unwrap();
     let statement = "vec lx = x[y]";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     assert_eq!(registers.lx, 4);
 }
 
@@ -260,7 +288,7 @@ fn vec_mod_lx() {
         .unwrap();
     let statement = "vec x[1] = lx";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location)[1], 5);
 }
@@ -276,7 +304,7 @@ fn vec_mod_lx_rv() {
         .unwrap();
     let statement = "vec x[lx] = rv";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location)[1], 5);
 }
@@ -290,7 +318,7 @@ fn vec_mod_string() {
     vars.set_str_vec("x".to_string(), "['a', 'k']", &mut memory);
     let statement = "vec x[1] = string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location)[1], "omk".to_string());
 }
@@ -305,7 +333,7 @@ fn vec_mod_lx_string() {
     vars.set_str_vec("x".to_string(), "['a', 'k']", &mut memory);
     let statement = "vec x[lx] = lxstring";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location)[1], "omk".to_string());
 }
@@ -320,7 +348,7 @@ fn vec_mod_var_string() {
     vars.set_str_vec("x".to_string(), "['a', 'k']", &mut memory);
     let statement = "vec x[y] = string";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_str_vec(t.location)[1], "omk".to_string());
 }
@@ -336,7 +364,7 @@ fn vec_mod_var() {
         .unwrap();
     let statement = "vec x[i] = y";
     let cmd: Vec<&str> = statement.split_whitespace().collect();
-    stack::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
     let t = vars.get_type("x".to_string()).unwrap();
     assert_eq!(memory.yeild_int_vec(t.location)[1], 5);
 }

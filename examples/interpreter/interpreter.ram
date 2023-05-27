@@ -1,6 +1,16 @@
+include "examples/interpreter/parser.ram"
+include "examples/interpreter/var.ram"
+include "examples/interpreter/jump.ram"
+
 main:
+    ram labelMap :map
     ram stack :vec :int = []
+    ram callstask :vec :int = []
+    ram vars_int :map
+    ram vars_str :map
     ram i :int = 0
+    ram parser_ip :int = 0
+    ram pc :int = 0
     ram lxstring = "./examples/interpreter/test.txt"
     stdfs open lxstring = string
     ram program :vec :str = []
@@ -9,22 +19,23 @@ main:
     vec program len
     ram lx prev
     copy plen = lx
-    jmp main_loop:
+    ram instructions :vec :str = []
+    jmp parser_loop:
+    jmp program_loop:
     halt
 
-main_loop:
+program_loop:
     ram statement :str = ""
-    vec statement = program[i]
-
-    ram lx 1
-    add i lx
-    ram lx prev
-    copy i = lx
-    
+    vec statement = instructions[pc]
     jmp match:
 
-    cmp plen i
-    jne main_loop:
+    ram lx 1
+    add lx pc
+    ram lx prev
+    copy pc = lx
+
+    cmp pc parser_ip
+    jne program_loop:
     ret
 
 match:
@@ -32,6 +43,7 @@ match:
     ram cmd :vec :str = [] 
     split statement > " " = cmd
     vec matchstr = cmd[0]
+    trim matchstr
 
     ram string = "push"
     cmp string matchstr
@@ -40,6 +52,10 @@ match:
     ram string = "print"
     cmp string matchstr
     je print:
+
+    ram string = "println"
+    cmp string matchstr
+    je println:
 
     ram string = "add"
     cmp string matchstr
@@ -61,17 +77,72 @@ match:
     cmp string matchstr
     je pop:
 
+    ram string = "halt"
+    cmp string matchstr
+    je halt:
+
+    ram string = "var"
+    cmp string matchstr
+    je var:
+
     ram string = "cmp"
     cmp string matchstr
     je cmp:
 
+    ram string = "jmp"
+    cmp string matchstr
+    je jmp:
+
+    ram string = "je"
+    cmp string matchstr
+    je je:
+
+    ram string = "jne"
+    cmp string matchstr
+    je jne:
+
+    ram string = "jgr"
+    cmp string matchstr
+    je jgr:
+
+    ram string = "jsm"
+    cmp string matchstr
+    je jsm:
+
+    ram string = "ret"
+    cmp string matchstr
+    je ret:
+
     ret
 
 push:
+    vec cmd len
+    ram 2
+    cmp
+    jgr push_var:
+    vec cmd len
+    ram 2
+    cmp
+    je push_int:
+    ret
+
+push_var:
+    ram v_name :str = ""
+    vec v_name = cmd[2]
+    ram v_value :int = 0
+    get vars_int v_name = v_value
+    copy lx = v_value
+    vec stack push lx
+    drop v_name
+    drop v_value
+    ret
+
+push_int:
     ram numstr :str = ""
     vec numstr = cmd[1]
     parse numstr :int
-    vec stack push lx 
+    vec stack push lx
+    drop numstr
     ret
 
 pop:
@@ -86,6 +157,14 @@ print:
     ram num :int = 0
     vec num = stack[lx]
     print var num
+    vec stack pop
+    drop num
+    ret
+
+println:
+    vec cmd shift
+    join cmd > " " = string
+    print var string
     ret
 
 get_last_two:
@@ -101,6 +180,8 @@ get_last_two:
     sub
     ram lx prev
     vec n2 = stack[lx]
+    vec stack pop
+    vec stack pop
     ret
 
 add:
@@ -108,6 +189,8 @@ add:
     add n1 n2
     ram lx prev
     vec stack push lx
+    drop n1
+    drop n2
     ret
 
 sub:
@@ -115,7 +198,12 @@ sub:
     sub n2 n1
     ram lx prev
     vec stack push lx
+    drop n1
+    drop n2
     ret
+
+halt:
+    halt
 
 cmp:
     jmp get_last_two:
@@ -128,7 +216,8 @@ cmp:
 
     cmp n2 n1
     jsm cmp_sm:
-
+    drop n1
+    drop n2 
     ret
 
 cmp_gr:
@@ -142,7 +231,6 @@ cmp_je:
     ret
 
 cmp_sm:
-    print smol
     ram lx -1
     vec stack push lx
     ret

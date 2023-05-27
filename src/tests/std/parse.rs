@@ -81,6 +81,20 @@ fn parse_var_int() {
 }
 
 #[test]
+#[should_panic]
+fn parse_int_err() {
+     let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+
+    vars.set_string("x".to_string(), "ww", &mut memory);
+    let statement: &str = "parse x :int";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+
+    parse(&mut memory, &mut vars, &mut registers, cmd).unwrap();
+}
+
+#[test]
 fn parse_var_str() {
     let mut memory: Memory = Memory::new();
     let mut registers: CPU = CPU::new();

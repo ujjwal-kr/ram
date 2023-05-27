@@ -1,4 +1,4 @@
-push 100
-push 200
-add
-print
+main:
+	var x int = 10
+	push var x
+	print
