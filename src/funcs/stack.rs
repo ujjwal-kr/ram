@@ -76,6 +76,7 @@ pub fn ram(
                     match &cmd[2][1..cmd[2].len()] {
                         "str" => vars.set_string(name.to_string(), &exp[1..exp.len() - 1], memory),
                         "int" => vars.set_int(name.to_string(), exp, memory)?,
+                        "float" => vars.set_float(name.to_string(), exp, memory)?,
                         "vec" => {
                             if &cmd[3][0..1] == ":" {
                                 match &cmd[3][1..cmd[3].len()] {

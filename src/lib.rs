@@ -151,6 +151,7 @@ impl CPU {
                             )
                         }
                         ErrorKind::MapValueNotFound => println!("Property Not found on map"),
+                        ErrorKind::ExpectedFloat => println!("Expected float/int at {}: {} ", label, statement)
                     }
                     process::exit(1)
                 }

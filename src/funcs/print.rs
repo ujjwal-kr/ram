@@ -33,6 +33,7 @@ pub fn print(
                         TypeName::Vector(Vector::Int) => {
                             println!("{:?}", memory.yeild_int_vec(_type.location))
                         }
+                        TypeName::Float => println!("{:?}", memory.yeild_float(_type.location)),
                         _ => unimplemented!(),
                     }
                 } else {

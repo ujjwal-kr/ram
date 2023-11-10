@@ -1,29 +1,4 @@
-main:
-   ram i :int = 0
-   jmp ok:
-
-ok:
-   ram lx 1
-   add i lx
-   ram lx prev
-   copy i = lx
-   ram v8 :map
-   insert v8 { "hp": 3000 }
-   insert v8 { "meow": 3000 }
-   insert v8 { "omk": "3000" }
-
-   ram car :map
-   insert car { "name": "d" }
-   insert car { "engine": v8 }
-
-   ram lx
-   ram 500000000
-   cmp
-   je halt:
-   drop car
-   jmp ok:
-
-halt:
-   dbg
-   halt
-
+main: 
+   ram a :int = 10
+   ram b :float = 20.13
+   print var b

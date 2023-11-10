@@ -3,7 +3,7 @@ use crate::{
     memory::{Location, Memory},
 };
 use rand::{distributions::Alphanumeric, Rng};
-use std::collections::HashMap;
+use std::{collections::HashMap, iter::FlatMap};
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
@@ -18,6 +18,7 @@ pub struct Type {
 pub enum TypeName {
     I32,
     String,
+    Float,
     Vector(Vector),
     ButterFly(ButterFly),
 }
@@ -52,6 +53,15 @@ impl Vars {
         match value.parse::<i32>() {
             Ok(n) => num = n,
             _parse_int_error => return Err(ErrorKind::ParseInt),
+        }
+        Ok(num)
+    }
+
+    fn parse_float(&mut self, value: &str) -> Result<f32, ErrorKind> {
+        let num: f32;
+        match value.parse::<f32>()  {
+            Ok(n) => num = n,
+            _err => return Err(ErrorKind::ExpectedFloat)
         }
         Ok(num)
     }
@@ -105,6 +115,28 @@ impl Vars {
                 self.0.insert(name, new_string);
             }
         };
+    }
+
+    // floats
+
+    pub fn set_float(&mut self, name: String, value: &str, memory: &mut Memory) -> Result<(), ErrorKind> {
+        let f = self.parse_float(value)?;
+        let heap_addr = memory.malloc(&f.to_be_bytes());
+        match self.0.get(&name) {
+            Some(old) => {
+                old.free_heap(memory);
+                memory.stack_mod(old.location, &heap_addr.to_be_bytes());
+            },
+            _ => {
+                let location = memory.store(&heap_addr.to_be_bytes());
+                let new_float = Type {
+                    name: TypeName::Float,
+                    location
+                };
+                self.0.insert(name, new_float);
+            }
+        }
+        Ok(())
     }
 
     // vectors
@@ -269,7 +301,8 @@ impl Vars {
     pub fn drop(&mut self, name: String, memory: &mut Memory) -> Result<(), ErrorKind> {
         let t = self.get_type(name.clone())?;
         match t.name {
-            TypeName::I32 => {}
+            TypeName::I32 => {},
+            TypeName::Float => {},
             TypeName::String => t.free_heap(memory),
             TypeName::Vector(Vector::String) => t.free_str_vec(memory),
             TypeName::Vector(Vector::Int) => t.free_heap(memory),
@@ -418,6 +451,7 @@ impl Vars {
                         .map(char::from)
                         .collect();
                     match self.get_type(val.clone())?.name {
+                        TypeName::Float => {todo!()},
                         TypeName::I32 => self.set_int(val_name.clone(), "0", memory)?,
                         TypeName::String => self.set_string(val_name.clone(), "", memory),
                         TypeName::Vector(Vector::Int) => self.set_int_vec(val_name.clone(), "[]", memory)?,
@@ -548,6 +582,7 @@ impl ButterFly {
             }
             TypeName::Vector(_) => unimplemented!(),
             TypeName::ButterFly(_) => unimplemented!(),
+            TypeName::Float => unimplemented!(),
         }
     }
 
@@ -584,6 +619,7 @@ impl ButterFly {
                 return Err(ErrorKind::MapValueNotFound);
             }
             TypeName::Vector(_) => unimplemented!(),
+            TypeName::Float => unimplemented!(),
             TypeName::ButterFly(butterfly_type) => {
                 for (i, item) in self.keys.iter_mut().enumerate() {
                     match item.name.clone() {

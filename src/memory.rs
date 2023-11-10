@@ -114,6 +114,14 @@ impl Memory {
         num
     }
 
+    pub fn yeild_float(&mut self, location: Location) -> f32 {
+        let addr_bytes = self.load(location);
+        let heap_addr = u32::from_be_bytes(addr_bytes.try_into().expect("Invalid head addr"));
+        let f32_bytes = self.heap_load(heap_addr);
+        let float = f32::from_be_bytes(f32_bytes.try_into().expect("Incorrect F32 format"));
+        float
+    }
+
     // heap yeilds
 
     // strings
