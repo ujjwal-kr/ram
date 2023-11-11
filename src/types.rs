@@ -3,7 +3,7 @@ use crate::{
     memory::{Location, Memory},
 };
 use rand::{distributions::Alphanumeric, Rng};
-use std::{collections::HashMap, iter::FlatMap};
+use std::{collections::HashMap};
 
 #[derive(Debug)]
 pub struct Vars(HashMap<String, Type>);
