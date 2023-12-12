@@ -26,7 +26,8 @@ impl Memory {
     // stack operations
 
     pub fn pop_stack(&mut self) {
-        self.stack.pop();
+        let sub = self.stack.len().saturating_sub(4);
+        self.stack.truncate(sub);
     }
 
     pub fn reset_stack(&mut self) {
