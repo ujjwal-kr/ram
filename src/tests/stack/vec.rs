@@ -35,6 +35,30 @@ fn vec_str_shift() {
 }
 
 #[test]
+fn vec_int_shift_pushes_to_stack() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_int_vec("x".to_string(), "[1,2]", &mut memory).unwrap();
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    assert_eq!(memory.get_int_from_stack().unwrap(), 1);
+}
+
+#[test]
+fn vec_str_shift_pushes_to_register_string() {
+    let mut memory: Memory = Memory::new();
+    let mut registers: CPU = CPU::new();
+    let mut vars: Vars = Vars::new();
+    vars.set_str_vec("x".to_string(), "['a','b']", &mut memory);
+    let statement = "vec x shift";
+    let cmd: Vec<&str> = statement.split_whitespace().collect();
+    vec::vec(&mut memory, &mut vars, &mut registers, cmd, statement).unwrap();
+    assert_eq!(registers.string, "a".to_string());
+}
+
+#[test]
 fn vec_int_push_var() {
     let mut memory: Memory = Memory::new();
     let mut registers: CPU = CPU::new();
