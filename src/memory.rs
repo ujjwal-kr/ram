@@ -280,7 +280,8 @@ impl Memory {
         let heap_value = &mut *self.heap.get_mut(
             &u32::from_be_bytes(heap_bytes.try_into().unwrap())
         ).unwrap();
-        heap_value.drain(0..4);
+        let old_int: Vec<u8> = heap_value.drain(0..4).collect();
+        self.stack.extend(old_int);
     }
 
     pub fn shift_vec_str(&mut self, heap_bytes: &[u8]) {
